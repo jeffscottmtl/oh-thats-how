@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-podcast-pipeline"
+version = "0.1.0"
+description = "Deterministic weekly AI podcast pipeline for The Signal"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "requests>=2.32.0",
+  "jsonschema>=4.23.0",
+  "Pillow>=10.4.0",
+  "rich>=13.0",
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+]
+
+[project.scripts]
+ai-podcast = "ai_podcast_pipeline.cli:main"
+
+[tool.setuptools]
+packages = ["ai_podcast_pipeline"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

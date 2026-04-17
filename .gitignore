@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.mamba/
+.tools/
+.cache/
+.venv-qwen3-tts/
+.env.qwen3-tts
+output/
+*.log
+.DS_Store
+third_party/
+ai_podcast_pipeline.egg-info/

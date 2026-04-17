@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+rich
+httpx
+feedparser
+openai
+mutagen
+pillow
+pydantic
+python-dateutil
+aiofiles
+jinja2
+python-multipart
+websockets

@@ -1,0 +1,16 @@
+clip_id,audio_path,transcript,duration_s,rms_dbfs,passed
+clip_01,voice_profiles/jeff_v3/clip_01.wav,"This week, three of the biggest names in tech quietly rewrote their AI policies, and somehow almost nobody seemed to notice.",7.27,-18.5,True
+clip_02,voice_profiles/jeff_v3/clip_02.wav,"Now, here's where the story takes a turn, because when you look at the data, it tells a very different narrative than the headlines.",5.65,-18.9,True
+clip_03,voice_profiles/jeff_v3/clip_03.wav,"Communications teams across every major industry are scrambling right now. And honestly, I don't think most of them are even close to ready.",7.40,-18.4,True
+clip_04,voice_profiles/jeff_v3/clip_04.wav,"Let's take a minute and break this down properly, because the implications here go way beyond what the surface level headlines would suggest.",6.67,-18.6,True
+clip_05,voice_profiles/jeff_v3/clip_05.wav,"The real question we should be asking isn't whether this is going to happen. It's how fast it's going to completely reshape the industry.",6.63,-18.6,True
+clip_06,voice_profiles/jeff_v3/clip_06.wav,"I've been quietly tracking this particular trend for months now, and this week it finally crossed what I'd call a critical threshold.",6.92,-19.3,True
+clip_07,voice_profiles/jeff_v3/clip_07.wav,"Here's some food for thought. What if the biggest risk we're facing isn't the AI itself, but the companies choosing how to deploy it?",7.17,-19.4,True
+clip_08,voice_profiles/jeff_v3/clip_08.wav,So what does all of this actually mean in practice for the people doing communications and strategy work every single day?,5.27,-18.0,True
+clip_09,voice_profiles/jeff_v3/clip_09.wav,"Behind the scenes, regulators in both Brussels and Washington are already drafting their formal response to this, and it could change everything.",7.47,-18.8,True
+clip_10,voice_profiles/jeff_v3/clip_10.wav,"This is one of those stories that sounds deeply technical on the surface, but carries massive real-world consequences for virtually everyone involved.",6.71,-18.5,True
+clip_11,voice_profiles/jeff_v3/clip_11.wav,And that brings us to what might be the single most surprising development we've seen in this entire space all year long.,5.75,-18.1,True
+clip_12,voice_profiles/jeff_v3/clip_12.wav,"The speed of adoption we're seeing here is genuinely unprecedented. We're talking weeks of rollout, not the usual months or even years.",7.00,-18.4,True
+clip_13,voice_profiles/jeff_v3/clip_13.wav,The landscape has fundamentally and permanently shifted underneath us.,4.54,-19.3,True
+clip_14,voice_profiles/jeff_v3/clip_14.wav,"That's the signal for this week. As always, thanks for listening, and I'll see you here.",4.23,-18.9,True
+clip_15,voice_profiles/jeff_v3/clip_15.wav,"That's the signal for this week, and as always, thanks for listening, and I will see you right here in the next episode.",5.65,-18.7,True

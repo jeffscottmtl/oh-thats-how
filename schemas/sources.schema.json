@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The Signal Sources",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generated_at",
+    "candidate_count",
+    "shortlist_count",
+    "shortlist",
+    "selected_indices",
+    "selected_stories"
+  ],
+  "properties": {
+    "generated_at": {"type": "string", "minLength": 1},
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "shortlist_count": {"type": "integer", "minimum": 0},
+    "shortlist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["index", "title", "url", "source_domain", "published_at", "summary", "scores"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 1},
+          "title": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "minLength": 1},
+          "source_domain": {"type": "string", "minLength": 1},
+          "published_at": {"type": ["string", "null"]},
+          "summary": {"type": "string"},
+          "scores": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "credibility",
+              "comms_relevance",
+              "freshness",
+              "ai_materiality",
+              "preferred_topic",
+              "total"
+            ],
+            "properties": {
+              "credibility": {"type": "integer", "minimum": 0, "maximum": 100},
+              "comms_relevance": {"type": "integer", "minimum": 0, "maximum": 100},
+              "freshness": {"type": "integer", "minimum": 0, "maximum": 100},
+              "ai_materiality": {"type": "integer", "minimum": 0, "maximum": 100},
+              "preferred_topic": {"type": "integer", "minimum": 0, "maximum": 100},
+              "total": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+          }
+        }
+      }
+    },
+    "selected_indices": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1},
+      "minItems": 1
+    },
+    "selected_stories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "url", "source_domain", "published_at", "verification"],
+        "properties": {
+          "title": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "minLength": 1},
+          "source_domain": {"type": "string", "minLength": 1},
+          "published_at": {"type": ["string", "null"]},
+          "verification": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["passed", "reason"],
+            "properties": {
+              "passed": {"type": "boolean"},
+              "reason": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

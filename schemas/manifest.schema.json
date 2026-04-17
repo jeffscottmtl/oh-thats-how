@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The Signal Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "episode_name",
+    "episode_number",
+    "timezone",
+    "audio_provider",
+    "created_at",
+    "run_status",
+    "selected_story_indices",
+    "selected_count",
+    "files",
+    "qa",
+    "notes"
+  ],
+  "properties": {
+    "episode_name": {"type": "string", "minLength": 1},
+    "episode_number": {"type": "integer", "minimum": 0},
+    "timezone": {"type": "string", "const": "America/Toronto"},
+    "audio_provider": {"type": "string", "enum": ["qwen", "elevenlabs", "elevenlabs-backup"]},
+    "created_at": {"type": "string", "minLength": 1},
+    "run_status": {"type": "string", "enum": ["success", "failed"]},
+    "selected_story_indices": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1},
+      "minItems": 1
+    },
+    "selected_count": {"type": "integer", "minimum": 1},
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["script_md", "script_json", "sources_json", "cover_png", "mp3", "manifest_json"],
+      "properties": {
+        "script_md": {"type": "string", "minLength": 1},
+        "script_json": {"type": "string", "minLength": 1},
+        "sources_json": {"type": "string", "minLength": 1},
+        "cover_png": {"type": "string", "minLength": 1},
+        "mp3": {"type": ["string", "null"]},
+        "manifest_json": {"type": "string", "minLength": 1}
+      }
+    },
+    "qa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "checks", "failures"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+        "failures": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}

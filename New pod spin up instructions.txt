@@ -1,0 +1,26 @@
+New pod spin up instructions
+
+Step 1 — Local: SSH in
+bash
+ssh root@103.196.86.163 -p 17843 -i ~/.ssh/id_ed25519
+
+Step 2 — Pod: Install rsync
+bash
+apt-get update && apt-get install -y rsync
+
+Step 3 — Local: Sync everything
+bash
+rsync -avz --no-owner --no-group \
+  --exclude='output/' --exclude='*.egg-info/' --exclude='__pycache__/' \
+  --exclude='.mamba/' --exclude='.tools/' --exclude='.cache/' \
+  --exclude='log.txt' --exclude='_originals/' --exclude='.DS_Store' \
+  ~/Downloads/the-signal/ \
+  root@103.196.86.163:/workspace/the-signal/ \
+  -e "ssh -p 17843 -i ~/.ssh/id_ed25519"
+
+Step 4 — Pod: Setup and run
+bash
+pip install -r /workspace/the-signal/requirements.txt
+echo 'cd /workspace/the-signal' >> ~/.bashrc
+cd /workspace/the-signal
+bash scripts/runpod_start.sh
