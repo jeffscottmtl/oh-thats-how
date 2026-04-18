@@ -131,6 +131,24 @@ PREFERRED_KEYWORDS = [
     "communications",
     "comms",
     "pr",
+    "prompt",
+    "prompting",
+    "chatgpt",
+    "claude",
+    "gemini",
+    "writing assistant",
+    "content tool",
+    "template",
+    "summarize",
+    "summarization",
+    "rewrite",
+    "brainstorm",
+    "ideation",
+    "first draft",
+    "how to use",
+    "tips",
+    "tutorial",
+    "use case",
 ]
 
 AI_KEYWORDS = [
@@ -162,6 +180,23 @@ COMMS_KEYWORDS = [
     "press release",
     "media relations",
     "corporate communications",
+    "writing",
+    "content creation",
+    "storytelling",
+    "presentation",
+    "speech",
+    "email",
+    "newsletter",
+    "digital signage",
+    "intranet",
+    "video",
+    "social media",
+    "editing",
+    "proofreading",
+    "tone",
+    "drafting",
+    "copywriting",
+    "content strategy",
 ]
 
 WORKPLACE_KEYWORDS = [
@@ -311,9 +346,9 @@ MAX_CANDIDATES_PER_FEED = 120
 MAX_SHORTLIST = 30
 MAX_PER_SOURCE_WEEK = 3
 
-TARGET_MIN_WORDS = 650
-TARGET_MAX_WORDS = 780
-HARD_MAX_WORDS = 800
+TARGET_MIN_WORDS = 700
+TARGET_MAX_WORDS = 850
+HARD_MAX_WORDS = 900
 MAX_REWRITES = 2
 
 TIMEZONE = "America/Toronto"
