@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 INTRO_TEXT = (
-    "Welcome to The Signal. I'm Jeff Scott, and this is a short weekly podcast for "
+    "Welcome to The Signal. I'm Jeff Scott, and this is a short podcast for "
     "communicators at CN — the people who write the stories, build the presentations, "
-    "draft the speeches, and send the emails. Each week, I pick one topic where AI "
+    "draft the speeches, and send the emails. Each episode, I pick one topic where AI "
     "and communications work overlap, and I dig into what's actually useful. "
     "Let's get into it."
 )
@@ -355,3 +355,6 @@ HARD_MAX_WORDS = 900
 MAX_REWRITES = 2
 
 TIMEZONE = "America/Toronto"
+
+THEME_COOLDOWN_DAYS = 30
+THEME_BANK_PATH = "data/theme_bank.json"

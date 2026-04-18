@@ -41,6 +41,24 @@ class ThemeCandidate:
 
 
 @dataclass
+class ThemeBankEntry:
+    id: str
+    name: str
+    description: str
+    tags: list[str]
+    last_used: str | None = None  # ISO date string or None
+    times_used: int = 0
+
+
+@dataclass
+class ThemeProposal:
+    name: str
+    pitch: str  # one-line pitch for user display
+    source_previews: list[str]  # 2-3 source titles/URLs spotted during scan
+    bank_id: str | None = None  # links back to theme bank entry, if from bank
+
+
+@dataclass
 class ScriptParts:
     # Theme-based fields (used by new theme pipeline)
     theme_name: str = ""
