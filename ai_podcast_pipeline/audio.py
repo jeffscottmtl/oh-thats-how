@@ -664,3 +664,96 @@ def synthesize_qwen_clone_mp3(
             logger.info("Qwen audio written to %s.", output_path.name)
         finally:
             wav_path.unlink(missing_ok=True)
+
+
+# ---------------------------------------------------------------------------
+# Fish Audio S2 TTS provider
+# ---------------------------------------------------------------------------
+
+class FishAudioError(RuntimeError):
+    pass
+
+
+def synthesize_fish_audio_mp3(
+    api_key: str,
+    text: str,
+    output_path: Path,
+    voice_id: str | None = None,
+    reference_audio_path: Path | None = None,
+    reference_transcript: str | None = None,
+    speed: float = 1.0,
+    cover_art_path: Path | None = None,
+    episode_name: str | None = None,
+    episode_number: int | None = None,
+    episode_dt: datetime | None = None,
+    timeout: int = 600,
+) -> None:
+    """Synthesize speech via Fish Audio S2 and write an MP3 with embedded metadata.
+
+    Uses either a pre-registered voice model (voice_id) or inline reference audio
+    for zero-shot voice cloning. If both are provided, voice_id takes precedence.
+    """
+    try:
+        from fish_audio_sdk import Session, TTSRequest, ReferenceAudio, Prosody
+    except ImportError as exc:
+        raise FishAudioError(
+            "fish-audio-sdk is required for Fish Audio TTS. "
+            "Install with: pip install fish-audio-sdk"
+        ) from exc
+
+    session = Session(api_key)
+
+    # Build references list for inline cloning (if no voice_id)
+    references = []
+    if not voice_id and reference_audio_path:
+        ref_path = Path(reference_audio_path)
+        if not ref_path.exists():
+            raise FishAudioError(f"Reference audio file not found: {ref_path}")
+        ref_bytes = ref_path.read_bytes()
+        references.append(ReferenceAudio(
+            audio=ref_bytes,
+            text=reference_transcript or "",
+        ))
+
+    # Preprocess text for TTS (same as other providers)
+    tts_text = _preprocess_tts_text(text)
+
+    prosody = Prosody(speed=speed) if abs(speed - 1.0) > 1e-6 else None
+
+    request = TTSRequest(
+        text=tts_text,
+        reference_id=voice_id or None,
+        references=references,
+        format="mp3",
+        mp3_bitrate=128,
+        latency="normal",
+        normalize=True,
+        prosody=prosody,
+    )
+
+    logger.info("Generating audio via Fish Audio S2 (voice=%s)…", voice_id or "inline-ref")
+    try:
+        audio_chunks = session.tts(request)
+        audio_data = b"".join(audio_chunks)
+    except Exception as exc:
+        raise FishAudioError(f"Fish Audio TTS failed: {exc}") from exc
+
+    if not audio_data or len(audio_data) < 100:
+        raise FishAudioError("Fish Audio returned empty or invalid audio data")
+
+    output_path.write_bytes(audio_data)
+    logger.info("Fish Audio raw MP3 written (%d bytes).", len(audio_data))
+
+    # Speed adjustment via ffmpeg (if prosody wasn't available or for fine-tuning)
+    # Fish Audio handles speed via prosody, so this is a no-op unless needed
+    # _retime_mp3(output_path, speed=speed, source_label="FishAudio", error_cls=FishAudioError)
+
+    _embed_mp3_metadata(
+        output_path=output_path,
+        cover_art_path=cover_art_path,
+        episode_name=episode_name,
+        episode_number=episode_number,
+        episode_dt=episode_dt,
+        error_cls=FishAudioError,
+    )
+    logger.info("Fish Audio episode written to %s.", output_path.name)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from argparse import Namespace
 from collections import defaultdict
@@ -24,7 +25,7 @@ from rich.progress import (
 _console = Console()
 
 from .artifacts import build_artifact_paths, resolve_episode_name, resolve_episode_number
-from .audio import QwenTTSError, synthesize_qwen_clone_mp3
+from .audio import FishAudioError, QwenTTSError, synthesize_fish_audio_mp3, synthesize_qwen_clone_mp3
 from .config import Settings, load_settings
 from .constants import (
     DEFAULT_STORY_COUNT,
@@ -853,12 +854,13 @@ def _stage_audio(
     auto_confirm: bool,
     explicit_fail_state: bool,
 ) -> tuple[bool, str, list[str], str | None]:
-    """Generate audio via Qwen TTS.
+    """Generate audio via the configured TTS provider.
 
     Returns (audio_generated, provider_used, notes, audio_error).
     audio_error is None when audio succeeded or was intentionally skipped;
     it is a non-empty string when generation was attempted but failed.
     """
+    provider = os.environ.get("TTS_PROVIDER", "qwen").strip().lower()
     notes: list[str] = []
 
     if explicit_fail_state:
@@ -866,12 +868,75 @@ def _stage_audio(
 
     if skip_audio:
         notes.append("Audio generation skipped by --skip-audio")
-        return False, "qwen", notes, None
+        return False, provider, notes, None
 
     if not (auto_confirm or _confirm_audio()):
         notes.append("Audio generation canceled by user")
-        return False, "qwen", notes, None
+        return False, provider, notes, None
 
+    if provider == "fish":
+        return _audio_fish(
+            script_markdown, mp3_path, cover_path,
+            episode_name, episode_number, episode_dt, notes,
+        )
+    else:
+        return _audio_qwen(
+            script_markdown, settings, mp3_path, cover_path,
+            episode_name, episode_number, episode_dt, notes,
+        )
+
+
+def _audio_fish(
+    script_markdown: str,
+    mp3_path: Path,
+    cover_path: Path,
+    episode_name: str,
+    episode_number: int,
+    episode_dt: datetime,
+    notes: list[str],
+) -> tuple[bool, str, list[str], str | None]:
+    """Generate audio via Fish Audio S2."""
+    api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+    voice_id = os.environ.get("FISH_AUDIO_VOICE_ID", "").strip() or None
+    speed = float(os.environ.get("FISH_AUDIO_SPEED", "1.0"))
+
+    if not api_key:
+        err = "FISH_AUDIO_API_KEY not set"
+        notes.append(f"Fish Audio skipped: {err}")
+        return False, "fish", notes, err
+
+    try:
+        synthesize_fish_audio_mp3(
+            api_key=api_key,
+            text=script_markdown,
+            output_path=mp3_path,
+            voice_id=voice_id,
+            speed=speed,
+            cover_art_path=cover_path,
+            episode_name=episode_name,
+            episode_number=episode_number,
+            episode_dt=episode_dt,
+        )
+        notes.append("Audio generated with provider: fish")
+        return True, "fish", notes, None
+    except FishAudioError as exc:
+        err = str(exc)
+        notes.append(f"Fish Audio failed: {err}")
+        logger.error("Fish Audio TTS failed: %s", exc)
+        return False, "fish", notes, err
+
+
+def _audio_qwen(
+    script_markdown: str,
+    settings: Settings,
+    mp3_path: Path,
+    cover_path: Path,
+    episode_name: str,
+    episode_number: int,
+    episode_dt: datetime,
+    notes: list[str],
+) -> tuple[bool, str, list[str], str | None]:
+    """Generate audio via Qwen TTS."""
     try:
         synthesize_qwen_clone_mp3(
             profile_manifest_path=Path(settings.qwen_profile_manifest),
