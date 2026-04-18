@@ -1,0 +1,1370 @@
+root@a750c27f95f2:/# cd /workspace/the-signal-v5
+chmod +x scripts/*.sh
+bash scripts/runpod_setup.sh
+
+  📡 The Signal v5 — RunPod Setup
+  ────────────────────────────────────
+  Project root : /workspace/the-signal-v5
+
+  [1/4] Installing system packages…
+Get:1 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64  InRelease [1581 B]
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+Get:4 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64  Packages [1246 kB]
+Get:5 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble InRelease [17.8 kB]
+Get:6 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [3300 kB]
+Get:7 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble/main amd64 Packages [40.2 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:10 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1260 kB]
+Get:11 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1895 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+Get:13 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [34.8 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+Get:15 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2025 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [38.1 kB]
+Get:19 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [3486 kB]
+Get:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [2282 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [34.6 kB]
+Get:22 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.5 kB]
+Fetched 37.9 MB in 3s (13.1 MB/s)
+Reading package lists...
+W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ffmpeg is already the newest version (7:6.1.1-3ubuntu5).
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+lsof is already the newest version (4.95.0-1build3).
+The following additional packages will be installed:
+  libcurl3t64-gnutls libcurl4-openssl-dev libcurl4t64 libltdl7 libopencore-amrnb0 libopencore-amrwb0 libsox-fmt-alsa libsox-fmt-base libsox3 libwavpack1
+Suggested packages:
+  libcurl4-doc libidn-dev libkrb5-dev libldap2-dev librtmp-dev libssh2-1-dev pkg-config libsox-fmt-all
+The following NEW packages will be installed:
+  libltdl7 libopencore-amrnb0 libopencore-amrwb0 libsox-fmt-alsa libsox-fmt-base libsox3 libwavpack1 sox
+The following packages will be upgraded:
+  curl libcurl3t64-gnutls libcurl4-openssl-dev libcurl4t64
+4 upgraded, 8 newly installed, 0 to remove and 175 not upgraded.
+Need to get 2011 kB of archives.
+After this operation, 2145 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4-openssl-dev amd64 8.5.0-2ubuntu10.7 [446 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.7 [227 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.7 [342 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl3t64-gnutls amd64 8.5.0-2ubuntu10.7 [334 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble/main amd64 libltdl7 amd64 2.4.7-7build1 [40.3 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/universe amd64 libopencore-amrnb0 amd64 0.1.6-1build1 [98.2 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble/universe amd64 libopencore-amrwb0 amd64 0.1.6-1build1 [53.2 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsox3 amd64 14.4.2+git20190427-4build4 [240 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsox-fmt-alsa amd64 14.4.2+git20190427-4build4 [11.1 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 libwavpack1 amd64 5.6.0-1build1 [84.6 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble/universe amd64 libsox-fmt-base amd64 14.4.2+git20190427-4build4 [33.6 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble/universe amd64 sox amd64 14.4.2+git20190427-4build4 [103 kB]
+Fetched 2011 kB in 1s (1619 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+(Reading database ... 49062 files and directories currently installed.)
+Preparing to unpack .../00-libcurl4-openssl-dev_8.5.0-2ubuntu10.7_amd64.deb ...
+Unpacking libcurl4-openssl-dev:amd64 (8.5.0-2ubuntu10.7) over (8.5.0-2ubuntu10.6) ...
+Preparing to unpack .../01-curl_8.5.0-2ubuntu10.7_amd64.deb ...
+Unpacking curl (8.5.0-2ubuntu10.7) over (8.5.0-2ubuntu10.6) ...
+Preparing to unpack .../02-libcurl4t64_8.5.0-2ubuntu10.7_amd64.deb ...
+Unpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.7) over (8.5.0-2ubuntu10.6) ...
+Preparing to unpack .../03-libcurl3t64-gnutls_8.5.0-2ubuntu10.7_amd64.deb ...
+Unpacking libcurl3t64-gnutls:amd64 (8.5.0-2ubuntu10.7) over (8.5.0-2ubuntu10.6) ...
+Selecting previously unselected package libltdl7:amd64.
+Preparing to unpack .../04-libltdl7_2.4.7-7build1_amd64.deb ...
+Unpacking libltdl7:amd64 (2.4.7-7build1) ...
+Selecting previously unselected package libopencore-amrnb0:amd64.
+Preparing to unpack .../05-libopencore-amrnb0_0.1.6-1build1_amd64.deb ...
+Unpacking libopencore-amrnb0:amd64 (0.1.6-1build1) ...
+Selecting previously unselected package libopencore-amrwb0:amd64.
+Preparing to unpack .../06-libopencore-amrwb0_0.1.6-1build1_amd64.deb ...
+Unpacking libopencore-amrwb0:amd64 (0.1.6-1build1) ...
+Selecting previously unselected package libsox3:amd64.
+Preparing to unpack .../07-libsox3_14.4.2+git20190427-4build4_amd64.deb ...
+Unpacking libsox3:amd64 (14.4.2+git20190427-4build4) ...
+Selecting previously unselected package libsox-fmt-alsa:amd64.
+Preparing to unpack .../08-libsox-fmt-alsa_14.4.2+git20190427-4build4_amd64.deb ...
+Unpacking libsox-fmt-alsa:amd64 (14.4.2+git20190427-4build4) ...
+Selecting previously unselected package libwavpack1:amd64.
+Preparing to unpack .../09-libwavpack1_5.6.0-1build1_amd64.deb ...
+Unpacking libwavpack1:amd64 (5.6.0-1build1) ...
+Selecting previously unselected package libsox-fmt-base:amd64.
+Preparing to unpack .../10-libsox-fmt-base_14.4.2+git20190427-4build4_amd64.deb ...
+Unpacking libsox-fmt-base:amd64 (14.4.2+git20190427-4build4) ...
+Selecting previously unselected package sox.
+Preparing to unpack .../11-sox_14.4.2+git20190427-4build4_amd64.deb ...
+Unpacking sox (14.4.2+git20190427-4build4) ...
+Setting up libcurl4t64:amd64 (8.5.0-2ubuntu10.7) ...
+Setting up libcurl3t64-gnutls:amd64 (8.5.0-2ubuntu10.7) ...
+Setting up libopencore-amrwb0:amd64 (0.1.6-1build1) ...
+Setting up libcurl4-openssl-dev:amd64 (8.5.0-2ubuntu10.7) ...
+Setting up libltdl7:amd64 (2.4.7-7build1) ...
+Setting up libwavpack1:amd64 (5.6.0-1build1) ...
+Setting up libopencore-amrnb0:amd64 (0.1.6-1build1) ...
+Setting up curl (8.5.0-2ubuntu10.7) ...
+Setting up libsox3:amd64 (14.4.2+git20190427-4build4) ...
+Setting up libsox-fmt-alsa:amd64 (14.4.2+git20190427-4build4) ...
+Setting up libsox-fmt-base:amd64 (14.4.2+git20190427-4build4) ...
+Setting up sox (14.4.2+git20190427-4build4) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+  [2/4] Installing Python pipeline dependencies…
+  [3/4] Installing Qwen3-TTS environment (~15 min first time)…
+info/files
+info/has_prefix
+info/index.json
+info/test/run_test.sh
+info/hash_input.json
+info/recipe/C_ARES_LICENSE.txt
+info/licenses/C_ARES_LICENSE.txt
+info/recipe/conda_build_config.yaml
+info/licenses/REPROC_LICENSE.txt
+info/recipe/REPROC_LICENSE.txt
+info/licenses/NLOHMANN_JSON_LICENSE.txt
+info/recipe/NLOHMANN_JSON_LICENSE.txt
+info/recipe/CURL_LICENSE.txt
+info/licenses/CURL_LICENSE.txt
+info/recipe/CPP_FILESYSTEM_LICENSE.txt
+info/recipe/ZLIB_LICENSE.txt
+info/licenses/ZLIB_LICENSE.txt
+info/licenses/LIBNGHTTP2_LICENSE.txt
+info/recipe/LIBNGHTTP2_LICENSE.txt
+info/paths.json
+info/recipe/LIBLZ4_LICENSE.txt
+info/licenses/LIBLZ4_LICENSE.txt
+info/recipe/SPDLOG_LICENSE.txt
+info/licenses/SPDLOG_LICENSE.txt
+info/licenses/FMT_LICENSE.txt
+info/recipe/FMT_LICENSE.txt
+info/licenses/LIBSOLV_LICENSE.txt
+info/recipe/LIBSOLV_LICENSE.txt
+info/licenses/mamba/LICENSE
+info/recipe/build.sh
+info/licenses/ZSTD_LICENSE.txt
+info/recipe/TERMCOLOR_CPP_LICENSE.txt
+info/recipe/ZSTD_LICENSE.txt
+info/recipe/recipe-scripts-license.txt
+info/recipe/CLI11_LICENSE.txt
+info/licenses/CLI11_LICENSE.txt
+info/recipe/bld.bat
+info/recipe/LIBEV_LICENSE.txt
+info/licenses/LIBEV_LICENSE.txt
+info/recipe/LIBARCHIVE_LICENSE.txt
+info/licenses/LIBARCHIVE_LICENSE.txt
+info/recipe/meta.yaml.template
+info/recipe/meta.yaml
+info/licenses/LIBOPENSSL_LICENSE.txt
+info/recipe/LIBOPENSSL_LICENSE.txt
+info/recipe/TL_EXPECTED_LICENSE.txt
+info/licenses/TL_EXPECTED_LICENSE.txt
+info/about.json
+info/licenses/LIBOPENSSL_3_LICENSE.txt
+info/recipe/LIBOPENSSL_3_LICENSE.txt
+info/recipe/SIMDJSON_LICENSE.txt
+info/licenses/KRB5_LICENSE.txt
+info/recipe/KRB5_LICENSE.txt
+info/git
+bin/micromamba
+lib/cmake/libmamba-spdlog/libmamba-spdlogConfig.cmake
+lib/cmake/libmamba-spdlog/libmamba-spdlogVersion.cmake
+lib/cmake/libmamba-spdlog/libmamba-spdlogTargets.cmake
+conda-forge/noarch                                  25.0MB @  16.0MB/s  1.6s
+conda-forge/linux-64                                51.5MB @  22.4MB/s  2.3s
+
+
+Transaction
+
+  Prefix: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+
+  Updating specs:
+
+   - python=3.12
+   - pip
+
+
+  Package               Version  Build                 Channel          Size
+──────────────────────────────────────────────────────────────────────────────
+  Install:
+──────────────────────────────────────────────────────────────────────────────
+
+  + _openmp_mutex           4.5  20_gnu                conda-forge      29kB
+  + bzip2                 1.0.8  hda65f42_9            conda-forge     260kB
+  + ca-certificates   2026.2.25  hbd8a1cb_0            conda-forge     147kB
+  + icu                    78.2  h33c6efd_0            conda-forge      13MB
+  + ld_impl_linux-64     2.45.1  default_hbd61a6d_101  conda-forge     726kB
+  + libexpat              2.7.4  hecca717_0            conda-forge      77kB
+  + libffi                3.5.2  h3435931_0            conda-forge      59kB
+  + libgcc               15.2.0  he0feb66_18           conda-forge       1MB
+  + libgcc-ng            15.2.0  h69a702a_18           conda-forge      28kB
+  + libgomp              15.2.0  he0feb66_18           conda-forge     603kB
+  + liblzma               5.8.2  hb03c661_0            conda-forge     113kB
+  + libnsl                2.0.1  hb9d3cd8_1            conda-forge      34kB
+  + libsqlite            3.51.2  hf4e2dac_0            conda-forge     943kB
+  + libstdcxx            15.2.0  h934c35e_18           conda-forge       6MB
+  + libuuid              2.41.3  h5347b49_0            conda-forge      40kB
+  + libxcrypt            4.4.36  hd590300_1            conda-forge     100kB
+  + libzlib               1.3.1  hb9d3cd8_2            conda-forge      61kB
+  + ncurses                 6.5  h2d0b736_3            conda-forge     892kB
+  + openssl               3.6.1  h35e630c_1            conda-forge       3MB
+  + packaging              26.0  pyhcf101f3_0          conda-forge      72kB
+  + pip                  26.0.1  pyh8b19718_0          conda-forge       1MB
+  + python              3.12.12  hd63d673_2_cpython    conda-forge      31MB
+  + readline                8.3  h853b02a_0            conda-forge     345kB
+  + setuptools           82.0.0  pyh332efcf_0          conda-forge     638kB
+  + tk                   8.6.13  noxft_h366c992_103    conda-forge       3MB
+  + tzdata                2025c  hc9c84f9_1            conda-forge     119kB
+  + wheel                0.46.3  pyhd8ed1ab_0          conda-forge      32kB
+  + zstd                  1.5.7  hb78ec9c_6            conda-forge     601kB
+
+  Summary:
+
+  Install: 28 packages
+
+  Total download: 65MB
+
+──────────────────────────────────────────────────────────────────────────────
+
+
+
+Transaction starting
+openssl                                              3.2MB @  14.1MB/s  0.1s
+tk                                                   3.3MB @   9.4MB/s  0.3s
+pip                                                  1.2MB @   6.1MB/s  0.2s
+libstdcxx                                            5.9MB @  14.2MB/s  0.4s
+libgcc                                               1.0MB @   4.0MB/s  0.1s
+libsqlite                                          942.8kB @   1.3MB/s  0.2s
+ncurses                                            891.6kB @   1.6MB/s  0.1s
+ld_impl_linux-64                                   725.5kB @   1.6MB/s  0.2s
+libgomp                                            603.3kB @   2.8MB/s  0.2s
+setuptools                                         637.5kB @   1.3MB/s  0.5s
+readline                                           345.1kB @   2.1MB/s  0.2s
+zstd                                               601.4kB @   1.4MB/s  0.4s
+ca-certificates                                    147.4kB @ 997.9kB/s  0.2s
+tzdata                                             119.1kB @   1.1MB/s  0.1s
+bzip2                                              260.2kB @ 657.5kB/s  0.3s
+liblzma                                            113.2kB @ 865.8kB/s  0.2s
+libxcrypt                                          100.4kB @ 686.4kB/s  0.2s
+libexpat                                            76.8kB @ 529.3kB/s  0.1s
+packaging                                           72.0kB @ 601.0kB/s  0.1s
+libzlib                                             61.0kB @ 486.7kB/s  0.1s
+libffi                                              58.6kB @ 427.2kB/s  0.1s
+libuuid                                             40.3kB @ 282.1kB/s  0.2s
+libnsl                                              33.7kB @ 231.7kB/s  0.2s
+wheel                                               31.9kB @ 228.6kB/s  0.1s
+_openmp_mutex                                       28.9kB @ 218.2kB/s  0.1s
+libgcc-ng                                           27.5kB @ 207.1kB/s  0.1s
+icu                                                 12.7MB @   4.5MB/s  2.8s
+python                                              31.5MB @   8.1MB/s  3.9s
+Linking tzdata-2025c-hc9c84f9_1
+Linking ca-certificates-2026.2.25-hbd8a1cb_0
+Linking libgomp-15.2.0-he0feb66_18
+Linking _openmp_mutex-4.5-20_gnu
+Linking libgcc-15.2.0-he0feb66_18
+Linking libstdcxx-15.2.0-h934c35e_18
+Linking libffi-3.5.2-h3435931_0
+Linking openssl-3.6.1-h35e630c_1
+Linking libzlib-1.3.1-hb9d3cd8_2
+Linking libgcc-ng-15.2.0-h69a702a_18
+Linking libnsl-2.0.1-hb9d3cd8_1
+Linking libexpat-2.7.4-hecca717_0
+Linking bzip2-1.0.8-hda65f42_9
+Linking ncurses-6.5-h2d0b736_3
+Linking libuuid-2.41.3-h5347b49_0
+Linking liblzma-5.8.2-hb03c661_0
+Linking icu-78.2-h33c6efd_0
+Linking tk-8.6.13-noxft_h366c992_103
+Linking zstd-1.5.7-hb78ec9c_6
+Linking libxcrypt-4.4.36-hd590300_1
+Linking readline-8.3-h853b02a_0
+Linking libsqlite-3.51.2-hf4e2dac_0
+Linking ld_impl_linux-64-2.45.1-default_hbd61a6d_101
+Linking python-3.12.12-hd63d673_2_cpython
+Linking pip-26.0.1-pyh8b19718_0
+Linking setuptools-82.0.0-pyh332efcf_0
+Linking packaging-26.0-pyhcf101f3_0
+Linking wheel-0.46.3-pyhd8ed1ab_0
+
+Transaction finished
+
+
+To activate this environment, use:
+
+    micromamba activate qwen3-tts
+
+Or to execute a single command in this environment, use:
+
+    micromamba run -n qwen3-tts mycommand
+
+conda-forge/linux-64                                        Using cache
+conda-forge/noarch                                          Using cache
+
+Pinned packages:
+
+  - python=3.12
+
+
+Transaction
+
+  Prefix: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+
+  Updating specs:
+
+   - sox
+
+
+  Package               Version  Build          Channel          Size
+───────────────────────────────────────────────────────────────────────
+  Install:
+───────────────────────────────────────────────────────────────────────
+
+  + gettext              0.25.1  h3f43e3d_1     conda-forge     541kB
+  + gettext-tools        0.25.1  h3f43e3d_1     conda-forge       4MB
+  + lame                  3.100  h166bdaf_1003  conda-forge     508kB
+  + libasprintf          0.25.1  h3f43e3d_1     conda-forge      54kB
+  + libasprintf-devel    0.25.1  h3f43e3d_1     conda-forge      35kB
+  + libflac               1.4.3  h59595ed_0     conda-forge     394kB
+  + libgettextpo         0.25.1  h3f43e3d_1     conda-forge     188kB
+  + libgettextpo-devel   0.25.1  h3f43e3d_1     conda-forge      37kB
+  + libiconv               1.18  h3b78370_2     conda-forge     790kB
+  + liblzma-devel         5.8.2  hb03c661_0     conda-forge     465kB
+  + libogg                1.3.5  hd0c01bc_1     conda-forge     218kB
+  + libopus               1.6.1  h280c20c_0     conda-forge     325kB
+  + libpng               1.6.55  h421ea60_0     conda-forge     318kB
+  + libsndfile            1.2.2  hc60ed4a_1     conda-forge     354kB
+  + libstdcxx-ng         15.2.0  hdf11a46_18    conda-forge      28kB
+  + libvorbis             1.3.7  h54a6638_2     conda-forge     286kB
+  + mad                 0.15.1b  h9c3ff4c_1     conda-forge     116kB
+  + mpg123               1.32.9  hc50e24c_0     conda-forge     491kB
+  + sox                  14.4.2  h59a48fd_1020  conda-forge     508kB
+  + zlib                  1.3.1  hb9d3cd8_2     conda-forge      92kB
+
+  Summary:
+
+  Install: 20 packages
+
+  Total download: 9MB
+
+───────────────────────────────────────────────────────────────────────
+
+
+
+Transaction starting
+sox                                                508.2kB @   1.1MB/s  0.1s
+libiconv                                           790.2kB @   1.1MB/s  0.2s
+lame                                               508.3kB @ 837.1kB/s  0.2s
+mpg123                                             491.1kB @   1.8MB/s  0.2s
+gettext                                            541.4kB @   1.4MB/s  0.4s
+liblzma-devel                                      465.1kB @   2.6MB/s  0.2s
+libflac                                            394.4kB @   2.3MB/s  0.2s
+libsndfile                                         354.4kB @   1.4MB/s  0.2s
+libopus                                            325.0kB @   1.8MB/s  0.2s
+gettext-tools                                        3.6MB @   5.0MB/s  0.7s
+libvorbis                                          285.9kB @   1.8MB/s  0.2s
+libogg                                             218.5kB @   1.6MB/s  0.2s
+libpng                                             317.7kB @   1.5MB/s  0.3s
+libgettextpo                                       188.3kB @   1.1MB/s  0.2s
+mad                                                116.2kB @ 672.7kB/s  0.3s
+zlib                                                92.3kB @ 328.9kB/s  0.3s
+libasprintf                                         53.6kB @ 187.1kB/s  0.3s
+libgettextpo-devel                                  37.4kB @ 300.9kB/s  0.1s
+libasprintf-devel                                   34.7kB @ 260.6kB/s  0.1s
+libstdcxx-ng                                        27.6kB @ 125.6kB/s  0.2s
+Linking libstdcxx-ng-15.2.0-hdf11a46_18
+Linking zlib-1.3.1-hb9d3cd8_2
+Linking liblzma-devel-5.8.2-hb03c661_0
+Linking libopus-1.6.1-h280c20c_0
+Linking libpng-1.6.55-h421ea60_0
+Linking lame-3.100-h166bdaf_1003
+Linking libogg-1.3.5-hd0c01bc_1
+Linking mpg123-1.32.9-hc50e24c_0
+Linking libasprintf-0.25.1-h3f43e3d_1
+Linking libiconv-1.18-h3b78370_2
+Linking mad-0.15.1b-h9c3ff4c_1
+Linking libvorbis-1.3.7-h54a6638_2
+Linking libasprintf-devel-0.25.1-h3f43e3d_1
+Linking libgettextpo-0.25.1-h3f43e3d_1
+Linking gettext-tools-0.25.1-h3f43e3d_1
+Linking libgettextpo-devel-0.25.1-h3f43e3d_1
+Linking gettext-0.25.1-h3f43e3d_1
+Linking libflac-1.4.3-h59595ed_0
+Linking libsndfile-1.2.2-hc60ed4a_1
+Linking sox-14.4.2-h59a48fd_1020
+
+Transaction finished
+
+Obtaining file:///workspace/the-signal-v5/third_party/Qwen3-TTS
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Collecting transformers==4.57.3 (from qwen-tts==0.1.1)
+  Downloading transformers-4.57.3-py3-none-any.whl.metadata (43 kB)
+Collecting accelerate==1.12.0 (from qwen-tts==0.1.1)
+  Downloading accelerate-1.12.0-py3-none-any.whl.metadata (19 kB)
+Collecting gradio (from qwen-tts==0.1.1)
+  Downloading gradio-6.8.0-py3-none-any.whl.metadata (16 kB)
+Collecting librosa (from qwen-tts==0.1.1)
+  Downloading librosa-0.11.0-py3-none-any.whl.metadata (8.7 kB)
+Collecting torchaudio (from qwen-tts==0.1.1)
+  Downloading torchaudio-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (6.9 kB)
+Collecting soundfile (from qwen-tts==0.1.1)
+  Downloading soundfile-0.13.1-py2.py3-none-manylinux_2_28_x86_64.whl.metadata (16 kB)
+Collecting sox (from qwen-tts==0.1.1)
+  Downloading sox-1.5.0.tar.gz (63 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting onnxruntime (from qwen-tts==0.1.1)
+  Downloading onnxruntime-1.24.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.0 kB)
+Collecting einops (from qwen-tts==0.1.1)
+  Downloading einops-0.8.2-py3-none-any.whl.metadata (13 kB)
+Collecting numpy>=1.17 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading numpy-2.4.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Requirement already satisfied: packaging>=20.0 in ./.mamba/envs/qwen3-tts/lib/python3.12/site-packages (from accelerate==1.12.0->qwen-tts==0.1.1) (26.0)
+Collecting psutil (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting pyyaml (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting torch>=2.0.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading torch-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (31 kB)
+Collecting huggingface_hub>=0.21.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading huggingface_hub-1.5.0-py3-none-any.whl.metadata (13 kB)
+Collecting safetensors>=0.4.3 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+Collecting filelock (from transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading filelock-3.25.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting huggingface_hub>=0.21.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Collecting regex!=2019.12.17 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading regex-2026.2.28-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting requests (from transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Collecting tqdm>=4.27 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+Collecting fsspec>=2023.5.0 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading fsspec-2026.2.0-py3-none-any.whl.metadata (10 kB)
+Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading hf_xet-1.3.2-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Collecting typing-extensions>=3.7.4.3 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: setuptools in ./.mamba/envs/qwen3-tts/lib/python3.12/site-packages (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1) (82.0.0)
+Collecting sympy>=1.13.3 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+Collecting networkx>=2.5.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading networkx-3.6.1-py3-none-any.whl.metadata (6.8 kB)
+Collecting jinja2 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting cuda-bindings==12.9.4 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading cuda_bindings-12.9.4-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.6 kB)
+Collecting nvidia-cuda-nvrtc-cu12==12.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-runtime-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-cupti-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cudnn-cu12==9.10.2.21 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cublas-cu12==12.8.4.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufft-cu12==11.3.3.83 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-curand-cu12==10.3.9.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cusolver-cu12==11.7.3.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparse-cu12==12.5.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparselt-cu12==0.7.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl.metadata (7.0 kB)
+Collecting nvidia-nccl-cu12==2.27.5 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_nccl_cu12-2.27.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+Collecting nvidia-nvshmem-cu12==3.4.5 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.1 kB)
+Collecting nvidia-nvtx-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-nvjitlink-cu12==12.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufile-cu12==1.13.1.3 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting triton==3.6.0 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+Collecting cuda-pathfinder~=1.1 (from cuda-bindings==12.9.4->torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading cuda_pathfinder-1.4.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+Collecting aiofiles<25.0,>=22.0 (from gradio->qwen-tts==0.1.1)
+  Downloading aiofiles-24.1.0-py3-none-any.whl.metadata (10 kB)
+Collecting anyio<5.0,>=3.0 (from gradio->qwen-tts==0.1.1)
+  Downloading anyio-4.12.1-py3-none-any.whl.metadata (4.3 kB)
+Collecting brotli>=1.1.0 (from gradio->qwen-tts==0.1.1)
+  Downloading brotli-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.1 kB)
+Collecting fastapi<1.0,>=0.115.2 (from gradio->qwen-tts==0.1.1)
+  Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+Collecting ffmpy (from gradio->qwen-tts==0.1.1)
+  Downloading ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting gradio-client==2.2.0 (from gradio->qwen-tts==0.1.1)
+  Downloading gradio_client-2.2.0-py3-none-any.whl.metadata (7.1 kB)
+Collecting groovy~=0.1 (from gradio->qwen-tts==0.1.1)
+  Downloading groovy-0.1.2-py3-none-any.whl.metadata (6.1 kB)
+Collecting httpx<1.0,>=0.24.1 (from gradio->qwen-tts==0.1.1)
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting markupsafe<4.0,>=2.0 (from gradio->qwen-tts==0.1.1)
+  Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting orjson~=3.0 (from gradio->qwen-tts==0.1.1)
+  Downloading orjson-3.11.7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (41 kB)
+Collecting pandas<4.0,>=1.0 (from gradio->qwen-tts==0.1.1)
+  Downloading pandas-3.0.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+Collecting pillow<13.0,>=8.0 (from gradio->qwen-tts==0.1.1)
+  Downloading pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (8.8 kB)
+Collecting pydantic<=3.0,>=2.0 (from gradio->qwen-tts==0.1.1)
+  Using cached pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+Collecting pydub (from gradio->qwen-tts==0.1.1)
+  Downloading pydub-0.25.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting python-multipart>=0.0.18 (from gradio->qwen-tts==0.1.1)
+  Downloading python_multipart-0.0.22-py3-none-any.whl.metadata (1.8 kB)
+Collecting pytz>=2017.2 (from gradio->qwen-tts==0.1.1)
+  Downloading pytz-2026.1.post1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting safehttpx<0.2.0,>=0.1.7 (from gradio->qwen-tts==0.1.1)
+  Downloading safehttpx-0.1.7-py3-none-any.whl.metadata (4.2 kB)
+Collecting semantic-version~=2.0 (from gradio->qwen-tts==0.1.1)
+  Downloading semantic_version-2.10.0-py2.py3-none-any.whl.metadata (9.7 kB)
+Collecting starlette<1.0,>=0.40.0 (from gradio->qwen-tts==0.1.1)
+  Using cached starlette-0.52.1-py3-none-any.whl.metadata (6.3 kB)
+Collecting tomlkit<0.14.0,>=0.12.0 (from gradio->qwen-tts==0.1.1)
+  Downloading tomlkit-0.13.3-py3-none-any.whl.metadata (2.8 kB)
+Collecting typer<1.0,>=0.12 (from gradio->qwen-tts==0.1.1)
+  Downloading typer-0.24.1-py3-none-any.whl.metadata (16 kB)
+Collecting uvicorn>=0.14.0 (from gradio->qwen-tts==0.1.1)
+  Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+Collecting idna>=2.8 (from anyio<5.0,>=3.0->gradio->qwen-tts==0.1.1)
+  Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+Collecting typing-inspection>=0.4.2 (from fastapi<1.0,>=0.115.2->gradio->qwen-tts==0.1.1)
+  Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi<1.0,>=0.115.2->gradio->qwen-tts==0.1.1)
+  Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting certifi (from httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Downloading certifi-2026.2.25-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting python-dateutil>=2.8.2 (from pandas<4.0,>=1.0->gradio->qwen-tts==0.1.1)
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<=3.0,>=2.0->gradio->qwen-tts==0.1.1)
+  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.41.5 (from pydantic<=3.0,>=2.0->gradio->qwen-tts==0.1.1)
+  Using cached pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Collecting click>=8.2.1 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached click-8.3.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting shellingham>=1.3.0 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting rich>=12.3.0 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached rich-14.3.3-py3-none-any.whl.metadata (18 kB)
+Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas<4.0,>=1.0->gradio->qwen-tts==0.1.1)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached markdown_it_py-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Downloading pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting audioread>=2.1.9 (from librosa->qwen-tts==0.1.1)
+  Downloading audioread-3.1.0-py3-none-any.whl.metadata (9.0 kB)
+Collecting numba>=0.51.0 (from librosa->qwen-tts==0.1.1)
+  Downloading numba-0.64.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.9 kB)
+Collecting scipy>=1.6.0 (from librosa->qwen-tts==0.1.1)
+  Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting scikit-learn>=1.1.0 (from librosa->qwen-tts==0.1.1)
+  Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+Collecting joblib>=1.0 (from librosa->qwen-tts==0.1.1)
+  Downloading joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+Collecting decorator>=4.3.0 (from librosa->qwen-tts==0.1.1)
+  Downloading decorator-5.2.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting pooch>=1.1 (from librosa->qwen-tts==0.1.1)
+  Downloading pooch-1.9.0-py3-none-any.whl.metadata (10 kB)
+Collecting soxr>=0.3.2 (from librosa->qwen-tts==0.1.1)
+  Downloading soxr-1.0.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.6 kB)
+Collecting lazy_loader>=0.1 (from librosa->qwen-tts==0.1.1)
+  Downloading lazy_loader-0.4-py3-none-any.whl.metadata (7.6 kB)
+Collecting msgpack>=1.0 (from librosa->qwen-tts==0.1.1)
+  Downloading msgpack-1.1.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.1 kB)
+Collecting llvmlite<0.47,>=0.46.0dev0 (from numba>=0.51.0->librosa->qwen-tts==0.1.1)
+  Downloading llvmlite-0.46.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.0 kB)
+Collecting platformdirs>=2.5.0 (from pooch>=1.1->librosa->qwen-tts==0.1.1)
+  Downloading platformdirs-4.9.2-py3-none-any.whl.metadata (4.7 kB)
+Collecting charset_normalizer<4,>=2 (from requests->transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+Collecting urllib3<3,>=1.21.1 (from requests->transformers==4.57.3->qwen-tts==0.1.1)
+  Downloading urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+Collecting threadpoolctl>=3.2.0 (from scikit-learn>=1.1.0->librosa->qwen-tts==0.1.1)
+  Downloading threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+Collecting cffi>=1.0 (from soundfile->qwen-tts==0.1.1)
+  Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting pycparser (from cffi>=1.0->soundfile->qwen-tts==0.1.1)
+  Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting flatbuffers (from onnxruntime->qwen-tts==0.1.1)
+  Downloading flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+Collecting protobuf (from onnxruntime->qwen-tts==0.1.1)
+  Downloading protobuf-7.34.0-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Downloading accelerate-1.12.0-py3-none-any.whl (380 kB)
+Downloading transformers-4.57.3-py3-none-any.whl (12.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 26.4 MB/s  0:00:00
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 2.0 MB/s  0:00:00
+Downloading hf_xet-1.3.2-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 39.2 MB/s  0:00:00
+Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 40.4 MB/s  0:00:00
+Downloading fsspec-2026.2.0-py3-none-any.whl (202 kB)
+Downloading numpy-2.4.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.6/16.6 MB 90.6 MB/s  0:00:00
+Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 17.2 MB/s  0:00:00
+Downloading regex-2026.2.28-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (802 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 802.0/802.0 kB 11.2 MB/s  0:00:00
+Downloading safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (507 kB)
+Downloading torch-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl (915.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 915.7/915.7 MB 72.4 MB/s  0:00:07
+Downloading cuda_bindings-12.9.4-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.2/12.2 MB 84.1 MB/s  0:00:00
+Downloading nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl (594.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 594.3/594.3 MB 79.8 MB/s  0:00:05
+Downloading nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 90.9 MB/s  0:00:00
+Downloading nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (88.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.0/88.0 MB 115.2 MB/s  0:00:00
+Downloading nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (954 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 954.8/954.8 kB 22.9 MB/s  0:00:00
+Downloading nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl (706.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 706.8/706.8 MB 78.2 MB/s  0:00:06
+Downloading nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (193.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 193.1/193.1 MB 115.0 MB/s  0:00:01
+Downloading nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 36.1 MB/s  0:00:00
+Downloading nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl (63.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.6/63.6 MB 115.0 MB/s  0:00:00
+Downloading nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl (267.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 267.5/267.5 MB 107.8 MB/s  0:00:02
+Downloading nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (288.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 288.2/288.2 MB 113.5 MB/s  0:00:02
+Downloading nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl (287.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 287.2/287.2 MB 116.9 MB/s  0:00:02
+Downloading nvidia_nccl_cu12-2.27.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (322.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 322.3/322.3 MB 90.3 MB/s  0:00:03
+Downloading nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (39.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.3/39.3 MB 85.7 MB/s  0:00:00
+Downloading nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (139.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 139.1/139.1 MB 96.6 MB/s  0:00:01
+Downloading nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (89 kB)
+Downloading triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (188.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 188.3/188.3 MB 97.7 MB/s  0:00:01
+Downloading cuda_pathfinder-1.4.0-py3-none-any.whl (38 kB)
+Downloading networkx-3.6.1-py3-none-any.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 20.9 MB/s  0:00:00
+Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 62.5 MB/s  0:00:00
+Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 9.2 MB/s  0:00:00
+Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Downloading einops-0.8.2-py3-none-any.whl (65 kB)
+Downloading filelock-3.25.0-py3-none-any.whl (26 kB)
+Downloading gradio-6.8.0-py3-none-any.whl (24.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.2/24.2 MB 78.0 MB/s  0:00:00
+Downloading gradio_client-2.2.0-py3-none-any.whl (58 kB)
+Downloading aiofiles-24.1.0-py3-none-any.whl (15 kB)
+Downloading anyio-4.12.1-py3-none-any.whl (113 kB)
+Using cached fastapi-0.135.1-py3-none-any.whl (116 kB)
+Downloading groovy-0.1.2-py3-none-any.whl (14 kB)
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Downloading orjson-3.11.7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (133 kB)
+Downloading pandas-3.0.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (10.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.9/10.9 MB 72.9 MB/s  0:00:00
+Downloading pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.0/7.0 MB 43.2 MB/s  0:00:00
+Using cached pydantic-2.12.5-py3-none-any.whl (463 kB)
+Using cached pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+Downloading safehttpx-0.1.7-py3-none-any.whl (9.0 kB)
+Downloading semantic_version-2.10.0-py2.py3-none-any.whl (15 kB)
+Using cached starlette-0.52.1-py3-none-any.whl (74 kB)
+Downloading tomlkit-0.13.3-py3-none-any.whl (38 kB)
+Downloading typer-0.24.1-py3-none-any.whl (56 kB)
+Using cached annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading brotli-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 29.6 MB/s  0:00:00
+Using cached click-8.3.1-py3-none-any.whl (108 kB)
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading idna-3.11-py3-none-any.whl (71 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading python_multipart-0.0.22-py3-none-any.whl (24 kB)
+Downloading pytz-2026.1.post1-py2.py3-none-any.whl (510 kB)
+Using cached rich-14.3.3-py3-none-any.whl (310 kB)
+Downloading pygments-2.19.2-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 38.3 MB/s  0:00:00
+Using cached markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Using cached typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Using cached uvicorn-0.41.0-py3-none-any.whl (68 kB)
+Downloading certifi-2026.2.25-py3-none-any.whl (153 kB)
+Downloading ffmpy-1.0.0-py3-none-any.whl (5.6 kB)
+Downloading librosa-0.11.0-py3-none-any.whl (260 kB)
+Downloading audioread-3.1.0-py3-none-any.whl (23 kB)
+Downloading decorator-5.2.1-py3-none-any.whl (9.2 kB)
+Downloading joblib-1.5.3-py3-none-any.whl (309 kB)
+Downloading lazy_loader-0.4-py3-none-any.whl (12 kB)
+Downloading msgpack-1.1.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (427 kB)
+Downloading numba-0.64.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.8/3.8 MB 55.3 MB/s  0:00:00
+Downloading llvmlite-0.46.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (56.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 MB 92.0 MB/s  0:00:00
+Downloading pooch-1.9.0-py3-none-any.whl (67 kB)
+Downloading platformdirs-4.9.2-py3-none-any.whl (21 kB)
+Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+Downloading charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)
+Downloading urllib3-2.6.3-py3-none-any.whl (131 kB)
+Downloading scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (8.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.9/8.9 MB 79.6 MB/s  0:00:00
+Downloading scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.2/35.2 MB 89.0 MB/s  0:00:00
+Downloading soundfile-0.13.1-py2.py3-none-manylinux_2_28_x86_64.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 36.7 MB/s  0:00:00
+Downloading cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+Downloading soxr-1.0.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (238 kB)
+Downloading threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+Downloading onnxruntime-1.24.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (17.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 17.1/17.1 MB 72.1 MB/s  0:00:00
+Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Downloading protobuf-7.34.0-cp310-abi3-manylinux2014_x86_64.whl (324 kB)
+Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Downloading pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Downloading torchaudio-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl (1.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 38.0 MB/s  0:00:00
+Building wheels for collected packages: qwen-tts, sox
+  Building editable for qwen-tts (pyproject.toml) ... done
+  Created wheel for qwen-tts: filename=qwen_tts-0.1.1-0.editable-py3-none-any.whl size=19594 sha256=423c3b92aa38a23c4a34007c74f09a825a442ddac6b6a6f6129ab68c351e70b5
+  Stored in directory: /tmp/pip-ephem-wheel-cache-tu17dgv2/wheels/dd/1d/4e/f6f59684cc8ff17d48d153878218166eb0511fa67a43fd8744
+  Building wheel for sox (pyproject.toml) ... done
+  Created wheel for sox: filename=sox-1.5.0-py3-none-any.whl size=40129 sha256=f880e5ab618436d89dc68675bb73dae3cfb501b70c7edff74a20ae3030d2dddb
+  Stored in directory: /workspace/.cache/pip/wheels/8c/c7/e7/baea1f7e79b9eb53addc81cc9b827424f4a7d8c9cc18c03659
+Successfully built qwen-tts sox
+Installing collected packages: pytz, pydub, nvidia-cusparselt-cu12, mpmath, flatbuffers, brotli, urllib3, typing-extensions, triton, tqdm, tomlkit, threadpoolctl, sympy, six, shellingham, semantic-version, safetensors, regex, pyyaml, python-multipart, pygments, pycparser, psutil, protobuf, platformdirs, pillow, orjson, nvidia-nvtx-cu12, nvidia-nvshmem-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufile-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, numpy, networkx, msgpack, mdurl, markupsafe, llvmlite, lazy_loader, joblib, idna, hf-xet, h11, groovy, fsspec, filelock, ffmpy, einops, decorator, cuda-pathfinder, click, charset_normalizer, certifi, audioread, annotated-types, annotated-doc, aiofiles, uvicorn, typing-inspection, soxr, sox, scipy, requests, python-dateutil, pydantic-core, onnxruntime, nvidia-cusparse-cu12, nvidia-cufft-cu12, nvidia-cudnn-cu12, numba, markdown-it-py, jinja2, httpcore, cuda-bindings, cffi, anyio, starlette, soundfile, scikit-learn, rich, pydantic, pooch, pandas, nvidia-cusolver-cu12, huggingface_hub, httpx, typer, torch, tokenizers, safehttpx, librosa, gradio-client, fastapi, transformers, torchaudio, gradio, accelerate, qwen-tts
+Successfully installed accelerate-1.12.0 aiofiles-24.1.0 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.12.1 audioread-3.1.0 brotli-1.2.0 certifi-2026.2.25 cffi-2.0.0 charset_normalizer-3.4.4 click-8.3.1 cuda-bindings-12.9.4 cuda-pathfinder-1.4.0 decorator-5.2.1 einops-0.8.2 fastapi-0.135.1 ffmpy-1.0.0 filelock-3.25.0 flatbuffers-25.12.19 fsspec-2026.2.0 gradio-6.8.0 gradio-client-2.2.0 groovy-0.1.2 h11-0.16.0 hf-xet-1.3.2 httpcore-1.0.9 httpx-0.28.1 huggingface_hub-0.36.2 idna-3.11 jinja2-3.1.6 joblib-1.5.3 lazy_loader-0.4 librosa-0.11.0 llvmlite-0.46.0 markdown-it-py-4.0.0 markupsafe-3.0.3 mdurl-0.1.2 mpmath-1.3.0 msgpack-1.1.2 networkx-3.6.1 numba-0.64.0 numpy-2.4.2 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.10.2.21 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.27.5 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvshmem-cu12-3.4.5 nvidia-nvtx-cu12-12.8.90 onnxruntime-1.24.2 orjson-3.11.7 pandas-3.0.1 pillow-12.1.1 platformdirs-4.9.2 pooch-1.9.0 protobuf-7.34.0 psutil-7.2.2 pycparser-3.0 pydantic-2.12.5 pydantic-core-2.41.5 pydub-0.25.1 pygments-2.19.2 python-dateutil-2.9.0.post0 python-multipart-0.0.22 pytz-2026.1.post1 pyyaml-6.0.3 qwen-tts-0.1.1 regex-2026.2.28 requests-2.32.5 rich-14.3.3 safehttpx-0.1.7 safetensors-0.7.0 scikit-learn-1.8.0 scipy-1.17.1 semantic-version-2.10.0 shellingham-1.5.4 six-1.17.0 soundfile-0.13.1 sox-1.5.0 soxr-1.0.0 starlette-0.52.1 sympy-1.14.0 threadpoolctl-3.6.0 tokenizers-0.22.2 tomlkit-0.13.3 torch-2.10.0 torchaudio-2.10.0 tqdm-4.67.3 transformers-4.57.3 triton-3.6.0 typer-0.24.1 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.6.3 uvicorn-0.41.0
+Qwen3-TTS is installed in env: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+Next:
+  1) cp .env.qwen3-tts.example .env.qwen3-tts
+  2) ./scripts/qwen3_tts_demo.sh
+  [4/4] Pre-downloading Qwen3-TTS-12Hz-1.7B-Base model weights…
+        (this caches them to the network volume — skip on subsequent runs)
+  Downloading Qwen/Qwen3-TTS-12Hz-1.7B-Base …
+Traceback (most recent call last):
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 399, in http_get
+    import hf_transfer  # type: ignore[no-redef]
+    ^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'hf_transfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 330, in snapshot_download
+    _inner_hf_hub_download(file)
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+    return hf_hub_download(
+           ^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1175, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1742, in _download_to_tmp_and_move
+    http_get(
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 401, in http_get
+    raise ValueError(
+ValueError: Fast download using 'hf_transfer' is enabled (HF_HUB_ENABLE_HF_TRANSFER=1) but 'hf_transfer' package is not available in your environment. Try `pip install hf_transfer`.
+root@a750c27f95f2:/workspace/the-signal-v5# pip install hf_transfer
+Collecting hf_transfer
+  Downloading hf_transfer-0.1.9-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.7 kB)
+Downloading hf_transfer-0.1.9-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 49.3 MB/s  0:00:00
+Installing collected packages: hf_transfer
+Successfully installed hf_transfer-0.1.9
+root@a750c27f95f2:/workspace/the-signal-v5# bash scripts/runpod_setup.sh
+
+  📡 The Signal v5 — RunPod Setup
+  ────────────────────────────────────
+  Project root : /workspace/the-signal-v5
+
+  [1/4] Installing system packages…
+Hit:1 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64  InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu noble InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists...
+W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+sox is already the newest version (14.4.2+git20190427-4build4).
+ffmpeg is already the newest version (7:6.1.1-3ubuntu5).
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+curl is already the newest version (8.5.0-2ubuntu10.7).
+lsof is already the newest version (4.95.0-1build3).
+0 upgraded, 0 newly installed, 0 to remove and 175 not upgraded.
+  [2/4] Installing Python pipeline dependencies…
+  [3/4] Installing Qwen3-TTS environment (~15 min first time)…
+conda-forge/linux-64                                        Using cache
+conda-forge/noarch                                          Using cache
+
+
+Transaction
+
+  Prefix: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+
+  Updating specs:
+
+   - python=3.12
+   - pip
+
+
+  Package               Version  Build                 Channel           Size
+───────────────────────────────────────────────────────────────────────────────
+  Install:
+───────────────────────────────────────────────────────────────────────────────
+
+  + _openmp_mutex           4.5  20_gnu                conda-forge     Cached
+  + bzip2                 1.0.8  hda65f42_9            conda-forge     Cached
+  + ca-certificates   2026.2.25  hbd8a1cb_0            conda-forge     Cached
+  + icu                    78.2  h33c6efd_0            conda-forge     Cached
+  + ld_impl_linux-64     2.45.1  default_hbd61a6d_101  conda-forge     Cached
+  + libexpat              2.7.4  hecca717_0            conda-forge     Cached
+  + libffi                3.5.2  h3435931_0            conda-forge     Cached
+  + libgcc               15.2.0  he0feb66_18           conda-forge     Cached
+  + libgcc-ng            15.2.0  h69a702a_18           conda-forge     Cached
+  + libgomp              15.2.0  he0feb66_18           conda-forge     Cached
+  + liblzma               5.8.2  hb03c661_0            conda-forge     Cached
+  + libnsl                2.0.1  hb9d3cd8_1            conda-forge     Cached
+  + libsqlite            3.51.2  hf4e2dac_0            conda-forge     Cached
+  + libstdcxx            15.2.0  h934c35e_18           conda-forge     Cached
+  + libuuid              2.41.3  h5347b49_0            conda-forge     Cached
+  + libxcrypt            4.4.36  hd590300_1            conda-forge     Cached
+  + libzlib               1.3.1  hb9d3cd8_2            conda-forge     Cached
+  + ncurses                 6.5  h2d0b736_3            conda-forge     Cached
+  + openssl               3.6.1  h35e630c_1            conda-forge     Cached
+  + packaging              26.0  pyhcf101f3_0          conda-forge     Cached
+  + pip                  26.0.1  pyh8b19718_0          conda-forge     Cached
+  + python              3.12.12  hd63d673_2_cpython    conda-forge     Cached
+  + readline                8.3  h853b02a_0            conda-forge     Cached
+  + setuptools           82.0.0  pyh332efcf_0          conda-forge     Cached
+  + tk                   8.6.13  noxft_h366c992_103    conda-forge     Cached
+  + tzdata                2025c  hc9c84f9_1            conda-forge     Cached
+  + wheel                0.46.3  pyhd8ed1ab_0          conda-forge     Cached
+  + zstd                  1.5.7  hb78ec9c_6            conda-forge     Cached
+
+  Summary:
+
+  Install: 28 packages
+
+  Total download: 0 B
+
+───────────────────────────────────────────────────────────────────────────────
+
+
+
+Transaction starting
+Linking tzdata-2025c-hc9c84f9_1
+Linking ca-certificates-2026.2.25-hbd8a1cb_0
+Linking libgomp-15.2.0-he0feb66_18
+Linking _openmp_mutex-4.5-20_gnu
+Linking libgcc-15.2.0-he0feb66_18
+Linking libstdcxx-15.2.0-h934c35e_18
+Linking libffi-3.5.2-h3435931_0
+Linking openssl-3.6.1-h35e630c_1
+Linking libzlib-1.3.1-hb9d3cd8_2
+Linking libgcc-ng-15.2.0-h69a702a_18
+Linking libnsl-2.0.1-hb9d3cd8_1
+Linking libexpat-2.7.4-hecca717_0
+Linking bzip2-1.0.8-hda65f42_9
+Linking ncurses-6.5-h2d0b736_3
+Linking libuuid-2.41.3-h5347b49_0
+Linking liblzma-5.8.2-hb03c661_0
+Linking icu-78.2-h33c6efd_0
+Linking tk-8.6.13-noxft_h366c992_103
+Linking zstd-1.5.7-hb78ec9c_6
+Linking libxcrypt-4.4.36-hd590300_1
+Linking readline-8.3-h853b02a_0
+Linking libsqlite-3.51.2-hf4e2dac_0
+Linking ld_impl_linux-64-2.45.1-default_hbd61a6d_101
+Linking python-3.12.12-hd63d673_2_cpython
+Linking packaging-26.0-pyhcf101f3_0
+Linking setuptools-82.0.0-pyh332efcf_0
+Linking wheel-0.46.3-pyhd8ed1ab_0
+Linking pip-26.0.1-pyh8b19718_0
+
+Transaction finished
+
+
+To activate this environment, use:
+
+    micromamba activate qwen3-tts
+
+Or to execute a single command in this environment, use:
+
+    micromamba run -n qwen3-tts mycommand
+
+conda-forge/linux-64                                        Using cache
+conda-forge/noarch                                          Using cache
+
+Pinned packages:
+
+  - python=3.12
+
+
+Transaction
+
+  Prefix: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+
+  Updating specs:
+
+   - sox
+
+
+  Package               Version  Build          Channel           Size
+────────────────────────────────────────────────────────────────────────
+  Install:
+────────────────────────────────────────────────────────────────────────
+
+  + gettext              0.25.1  h3f43e3d_1     conda-forge     Cached
+  + gettext-tools        0.25.1  h3f43e3d_1     conda-forge     Cached
+  + lame                  3.100  h166bdaf_1003  conda-forge     Cached
+  + libasprintf          0.25.1  h3f43e3d_1     conda-forge     Cached
+  + libasprintf-devel    0.25.1  h3f43e3d_1     conda-forge     Cached
+  + libflac               1.4.3  h59595ed_0     conda-forge     Cached
+  + libgettextpo         0.25.1  h3f43e3d_1     conda-forge     Cached
+  + libgettextpo-devel   0.25.1  h3f43e3d_1     conda-forge     Cached
+  + libiconv               1.18  h3b78370_2     conda-forge     Cached
+  + liblzma-devel         5.8.2  hb03c661_0     conda-forge     Cached
+  + libogg                1.3.5  hd0c01bc_1     conda-forge     Cached
+  + libopus               1.6.1  h280c20c_0     conda-forge     Cached
+  + libpng               1.6.55  h421ea60_0     conda-forge     Cached
+  + libsndfile            1.2.2  hc60ed4a_1     conda-forge     Cached
+  + libstdcxx-ng         15.2.0  hdf11a46_18    conda-forge     Cached
+  + libvorbis             1.3.7  h54a6638_2     conda-forge     Cached
+  + mad                 0.15.1b  h9c3ff4c_1     conda-forge     Cached
+  + mpg123               1.32.9  hc50e24c_0     conda-forge     Cached
+  + sox                  14.4.2  h59a48fd_1020  conda-forge     Cached
+  + zlib                  1.3.1  hb9d3cd8_2     conda-forge     Cached
+
+  Summary:
+
+  Install: 20 packages
+
+  Total download: 0 B
+
+────────────────────────────────────────────────────────────────────────
+
+
+
+Transaction starting
+Linking libstdcxx-ng-15.2.0-hdf11a46_18
+Linking zlib-1.3.1-hb9d3cd8_2
+Linking liblzma-devel-5.8.2-hb03c661_0
+Linking libopus-1.6.1-h280c20c_0
+Linking libpng-1.6.55-h421ea60_0
+Linking lame-3.100-h166bdaf_1003
+Linking libogg-1.3.5-hd0c01bc_1
+Linking mpg123-1.32.9-hc50e24c_0
+Linking libasprintf-0.25.1-h3f43e3d_1
+Linking libiconv-1.18-h3b78370_2
+Linking mad-0.15.1b-h9c3ff4c_1
+Linking libvorbis-1.3.7-h54a6638_2
+Linking libasprintf-devel-0.25.1-h3f43e3d_1
+Linking libgettextpo-0.25.1-h3f43e3d_1
+Linking gettext-tools-0.25.1-h3f43e3d_1
+Linking libgettextpo-devel-0.25.1-h3f43e3d_1
+Linking gettext-0.25.1-h3f43e3d_1
+Linking libflac-1.4.3-h59595ed_0
+Linking libsndfile-1.2.2-hc60ed4a_1
+Linking sox-14.4.2-h59a48fd_1020
+
+Transaction finished
+
+Obtaining file:///workspace/the-signal-v5/third_party/Qwen3-TTS
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Collecting transformers==4.57.3 (from qwen-tts==0.1.1)
+  Using cached transformers-4.57.3-py3-none-any.whl.metadata (43 kB)
+Collecting accelerate==1.12.0 (from qwen-tts==0.1.1)
+  Using cached accelerate-1.12.0-py3-none-any.whl.metadata (19 kB)
+Collecting gradio (from qwen-tts==0.1.1)
+  Using cached gradio-6.8.0-py3-none-any.whl.metadata (16 kB)
+Collecting librosa (from qwen-tts==0.1.1)
+  Using cached librosa-0.11.0-py3-none-any.whl.metadata (8.7 kB)
+Collecting torchaudio (from qwen-tts==0.1.1)
+  Using cached torchaudio-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (6.9 kB)
+Collecting soundfile (from qwen-tts==0.1.1)
+  Using cached soundfile-0.13.1-py2.py3-none-manylinux_2_28_x86_64.whl.metadata (16 kB)
+Collecting sox (from qwen-tts==0.1.1)
+  Using cached sox-1.5.0-py3-none-any.whl
+Collecting onnxruntime (from qwen-tts==0.1.1)
+  Using cached onnxruntime-1.24.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.0 kB)
+Collecting einops (from qwen-tts==0.1.1)
+  Using cached einops-0.8.2-py3-none-any.whl.metadata (13 kB)
+Collecting numpy>=1.17 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached numpy-2.4.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Requirement already satisfied: packaging>=20.0 in ./.mamba/envs/qwen3-tts/lib/python3.12/site-packages (from accelerate==1.12.0->qwen-tts==0.1.1) (26.0)
+Collecting psutil (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting pyyaml (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting torch>=2.0.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached torch-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (31 kB)
+Collecting huggingface_hub>=0.21.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached huggingface_hub-1.5.0-py3-none-any.whl.metadata (13 kB)
+Collecting safetensors>=0.4.3 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+Collecting filelock (from transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached filelock-3.25.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting huggingface_hub>=0.21.0 (from accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Collecting regex!=2019.12.17 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached regex-2026.2.28-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting requests (from transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Collecting tqdm>=4.27 (from transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+Collecting fsspec>=2023.5.0 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached fsspec-2026.2.0-py3-none-any.whl.metadata (10 kB)
+Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached hf_xet-1.3.2-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Collecting typing-extensions>=3.7.4.3 (from huggingface_hub>=0.21.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: setuptools in ./.mamba/envs/qwen3-tts/lib/python3.12/site-packages (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1) (82.0.0)
+Collecting sympy>=1.13.3 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+Collecting networkx>=2.5.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached networkx-3.6.1-py3-none-any.whl.metadata (6.8 kB)
+Collecting jinja2 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting cuda-bindings==12.9.4 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached cuda_bindings-12.9.4-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.6 kB)
+Collecting nvidia-cuda-nvrtc-cu12==12.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-runtime-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-cupti-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cudnn-cu12==9.10.2.21 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cublas-cu12==12.8.4.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufft-cu12==11.3.3.83 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-curand-cu12==10.3.9.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cusolver-cu12==11.7.3.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparse-cu12==12.5.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparselt-cu12==0.7.1 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl.metadata (7.0 kB)
+Collecting nvidia-nccl-cu12==2.27.5 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_nccl_cu12-2.27.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+Collecting nvidia-nvshmem-cu12==3.4.5 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.1 kB)
+Collecting nvidia-nvtx-cu12==12.8.90 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-nvjitlink-cu12==12.8.93 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufile-cu12==1.13.1.3 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting triton==3.6.0 (from torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+Collecting cuda-pathfinder~=1.1 (from cuda-bindings==12.9.4->torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached cuda_pathfinder-1.4.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch>=2.0.0->accelerate==1.12.0->qwen-tts==0.1.1)
+  Using cached mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+Collecting aiofiles<25.0,>=22.0 (from gradio->qwen-tts==0.1.1)
+  Using cached aiofiles-24.1.0-py3-none-any.whl.metadata (10 kB)
+Collecting anyio<5.0,>=3.0 (from gradio->qwen-tts==0.1.1)
+  Using cached anyio-4.12.1-py3-none-any.whl.metadata (4.3 kB)
+Collecting brotli>=1.1.0 (from gradio->qwen-tts==0.1.1)
+  Using cached brotli-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.1 kB)
+Collecting fastapi<1.0,>=0.115.2 (from gradio->qwen-tts==0.1.1)
+  Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+Collecting ffmpy (from gradio->qwen-tts==0.1.1)
+  Using cached ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting gradio-client==2.2.0 (from gradio->qwen-tts==0.1.1)
+  Using cached gradio_client-2.2.0-py3-none-any.whl.metadata (7.1 kB)
+Collecting groovy~=0.1 (from gradio->qwen-tts==0.1.1)
+  Using cached groovy-0.1.2-py3-none-any.whl.metadata (6.1 kB)
+Collecting httpx<1.0,>=0.24.1 (from gradio->qwen-tts==0.1.1)
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting markupsafe<4.0,>=2.0 (from gradio->qwen-tts==0.1.1)
+  Using cached markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting orjson~=3.0 (from gradio->qwen-tts==0.1.1)
+  Using cached orjson-3.11.7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (41 kB)
+Collecting pandas<4.0,>=1.0 (from gradio->qwen-tts==0.1.1)
+  Using cached pandas-3.0.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+Collecting pillow<13.0,>=8.0 (from gradio->qwen-tts==0.1.1)
+  Using cached pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (8.8 kB)
+Collecting pydantic<=3.0,>=2.0 (from gradio->qwen-tts==0.1.1)
+  Using cached pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+Collecting pydub (from gradio->qwen-tts==0.1.1)
+  Using cached pydub-0.25.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting python-multipart>=0.0.18 (from gradio->qwen-tts==0.1.1)
+  Using cached python_multipart-0.0.22-py3-none-any.whl.metadata (1.8 kB)
+Collecting pytz>=2017.2 (from gradio->qwen-tts==0.1.1)
+  Using cached pytz-2026.1.post1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting safehttpx<0.2.0,>=0.1.7 (from gradio->qwen-tts==0.1.1)
+  Using cached safehttpx-0.1.7-py3-none-any.whl.metadata (4.2 kB)
+Collecting semantic-version~=2.0 (from gradio->qwen-tts==0.1.1)
+  Using cached semantic_version-2.10.0-py2.py3-none-any.whl.metadata (9.7 kB)
+Collecting starlette<1.0,>=0.40.0 (from gradio->qwen-tts==0.1.1)
+  Using cached starlette-0.52.1-py3-none-any.whl.metadata (6.3 kB)
+Collecting tomlkit<0.14.0,>=0.12.0 (from gradio->qwen-tts==0.1.1)
+  Using cached tomlkit-0.13.3-py3-none-any.whl.metadata (2.8 kB)
+Collecting typer<1.0,>=0.12 (from gradio->qwen-tts==0.1.1)
+  Using cached typer-0.24.1-py3-none-any.whl.metadata (16 kB)
+Collecting uvicorn>=0.14.0 (from gradio->qwen-tts==0.1.1)
+  Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+Collecting idna>=2.8 (from anyio<5.0,>=3.0->gradio->qwen-tts==0.1.1)
+  Using cached idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+Collecting typing-inspection>=0.4.2 (from fastapi<1.0,>=0.115.2->gradio->qwen-tts==0.1.1)
+  Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi<1.0,>=0.115.2->gradio->qwen-tts==0.1.1)
+  Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting certifi (from httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Using cached certifi-2026.2.25-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio->qwen-tts==0.1.1)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting python-dateutil>=2.8.2 (from pandas<4.0,>=1.0->gradio->qwen-tts==0.1.1)
+  Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<=3.0,>=2.0->gradio->qwen-tts==0.1.1)
+  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.41.5 (from pydantic<=3.0,>=2.0->gradio->qwen-tts==0.1.1)
+  Using cached pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Collecting click>=8.2.1 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached click-8.3.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting shellingham>=1.3.0 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting rich>=12.3.0 (from typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached rich-14.3.3-py3-none-any.whl.metadata (18 kB)
+Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas<4.0,>=1.0->gradio->qwen-tts==0.1.1)
+  Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached markdown_it_py-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=12.3.0->typer<1.0,>=0.12->gradio->qwen-tts==0.1.1)
+  Using cached mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting audioread>=2.1.9 (from librosa->qwen-tts==0.1.1)
+  Using cached audioread-3.1.0-py3-none-any.whl.metadata (9.0 kB)
+Collecting numba>=0.51.0 (from librosa->qwen-tts==0.1.1)
+  Using cached numba-0.64.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.9 kB)
+Collecting scipy>=1.6.0 (from librosa->qwen-tts==0.1.1)
+  Using cached scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting scikit-learn>=1.1.0 (from librosa->qwen-tts==0.1.1)
+  Using cached scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+Collecting joblib>=1.0 (from librosa->qwen-tts==0.1.1)
+  Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+Collecting decorator>=4.3.0 (from librosa->qwen-tts==0.1.1)
+  Using cached decorator-5.2.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting pooch>=1.1 (from librosa->qwen-tts==0.1.1)
+  Using cached pooch-1.9.0-py3-none-any.whl.metadata (10 kB)
+Collecting soxr>=0.3.2 (from librosa->qwen-tts==0.1.1)
+  Using cached soxr-1.0.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (5.6 kB)
+Collecting lazy_loader>=0.1 (from librosa->qwen-tts==0.1.1)
+  Using cached lazy_loader-0.4-py3-none-any.whl.metadata (7.6 kB)
+Collecting msgpack>=1.0 (from librosa->qwen-tts==0.1.1)
+  Using cached msgpack-1.1.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.1 kB)
+Collecting llvmlite<0.47,>=0.46.0dev0 (from numba>=0.51.0->librosa->qwen-tts==0.1.1)
+  Using cached llvmlite-0.46.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.0 kB)
+Collecting platformdirs>=2.5.0 (from pooch>=1.1->librosa->qwen-tts==0.1.1)
+  Using cached platformdirs-4.9.2-py3-none-any.whl.metadata (4.7 kB)
+Collecting charset_normalizer<4,>=2 (from requests->transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+Collecting urllib3<3,>=1.21.1 (from requests->transformers==4.57.3->qwen-tts==0.1.1)
+  Using cached urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+Collecting threadpoolctl>=3.2.0 (from scikit-learn>=1.1.0->librosa->qwen-tts==0.1.1)
+  Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+Collecting cffi>=1.0 (from soundfile->qwen-tts==0.1.1)
+  Using cached cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting pycparser (from cffi>=1.0->soundfile->qwen-tts==0.1.1)
+  Using cached pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting flatbuffers (from onnxruntime->qwen-tts==0.1.1)
+  Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+Collecting protobuf (from onnxruntime->qwen-tts==0.1.1)
+  Using cached protobuf-7.34.0-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+Using cached accelerate-1.12.0-py3-none-any.whl (380 kB)
+Using cached transformers-4.57.3-py3-none-any.whl (12.0 MB)
+Using cached huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+Using cached hf_xet-1.3.2-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.2 MB)
+Using cached tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+Using cached fsspec-2026.2.0-py3-none-any.whl (202 kB)
+Using cached numpy-2.4.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+Using cached pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+Using cached regex-2026.2.28-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (802 kB)
+Using cached safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (507 kB)
+Using cached torch-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl (915.7 MB)
+Using cached cuda_bindings-12.9.4-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.2 MB)
+Using cached nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl (594.3 MB)
+Using cached nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.2 MB)
+Using cached nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (88.0 MB)
+Using cached nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (954 kB)
+Using cached nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl (706.8 MB)
+Using cached nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (193.1 MB)
+Using cached nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+Using cached nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl (63.6 MB)
+Using cached nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl (267.5 MB)
+Using cached nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (288.2 MB)
+Using cached nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl (287.2 MB)
+Using cached nvidia_nccl_cu12-2.27.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (322.3 MB)
+Using cached nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (39.3 MB)
+Using cached nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (139.1 MB)
+Using cached nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (89 kB)
+Using cached triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (188.3 MB)
+Using cached cuda_pathfinder-1.4.0-py3-none-any.whl (38 kB)
+Using cached networkx-3.6.1-py3-none-any.whl (2.1 MB)
+Using cached sympy-1.14.0-py3-none-any.whl (6.3 MB)
+Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+Using cached tqdm-4.67.3-py3-none-any.whl (78 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Using cached einops-0.8.2-py3-none-any.whl (65 kB)
+Using cached filelock-3.25.0-py3-none-any.whl (26 kB)
+Using cached gradio-6.8.0-py3-none-any.whl (24.2 MB)
+Using cached gradio_client-2.2.0-py3-none-any.whl (58 kB)
+Using cached aiofiles-24.1.0-py3-none-any.whl (15 kB)
+Using cached anyio-4.12.1-py3-none-any.whl (113 kB)
+Using cached fastapi-0.135.1-py3-none-any.whl (116 kB)
+Using cached groovy-0.1.2-py3-none-any.whl (14 kB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Using cached markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Using cached orjson-3.11.7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (133 kB)
+Using cached pandas-3.0.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (10.9 MB)
+Using cached pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.0 MB)
+Using cached pydantic-2.12.5-py3-none-any.whl (463 kB)
+Using cached pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+Using cached safehttpx-0.1.7-py3-none-any.whl (9.0 kB)
+Using cached semantic_version-2.10.0-py2.py3-none-any.whl (15 kB)
+Using cached starlette-0.52.1-py3-none-any.whl (74 kB)
+Using cached tomlkit-0.13.3-py3-none-any.whl (38 kB)
+Using cached typer-0.24.1-py3-none-any.whl (56 kB)
+Using cached annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Using cached brotli-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.4 MB)
+Using cached click-8.3.1-py3-none-any.whl (108 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached idna-3.11-py3-none-any.whl (71 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Using cached python_multipart-0.0.22-py3-none-any.whl (24 kB)
+Using cached pytz-2026.1.post1-py2.py3-none-any.whl (510 kB)
+Using cached rich-14.3.3-py3-none-any.whl (310 kB)
+Using cached pygments-2.19.2-py3-none-any.whl (1.2 MB)
+Using cached markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Using cached shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+Using cached typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Using cached uvicorn-0.41.0-py3-none-any.whl (68 kB)
+Using cached certifi-2026.2.25-py3-none-any.whl (153 kB)
+Using cached ffmpy-1.0.0-py3-none-any.whl (5.6 kB)
+Using cached librosa-0.11.0-py3-none-any.whl (260 kB)
+Using cached audioread-3.1.0-py3-none-any.whl (23 kB)
+Using cached decorator-5.2.1-py3-none-any.whl (9.2 kB)
+Using cached joblib-1.5.3-py3-none-any.whl (309 kB)
+Using cached lazy_loader-0.4-py3-none-any.whl (12 kB)
+Using cached msgpack-1.1.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (427 kB)
+Using cached numba-0.64.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.8 MB)
+Using cached llvmlite-0.46.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (56.3 MB)
+Using cached pooch-1.9.0-py3-none-any.whl (67 kB)
+Using cached platformdirs-4.9.2-py3-none-any.whl (21 kB)
+Using cached requests-2.32.5-py3-none-any.whl (64 kB)
+Using cached charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)
+Using cached urllib3-2.6.3-py3-none-any.whl (131 kB)
+Using cached scikit_learn-1.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (8.9 MB)
+Using cached scipy-1.17.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.2 MB)
+Using cached soundfile-0.13.1-py2.py3-none-manylinux_2_28_x86_64.whl (1.3 MB)
+Using cached cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+Using cached soxr-1.0.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (238 kB)
+Using cached threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+Using cached onnxruntime-1.24.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (17.1 MB)
+Using cached flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Using cached protobuf-7.34.0-cp310-abi3-manylinux2014_x86_64.whl (324 kB)
+Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+Using cached pycparser-3.0-py3-none-any.whl (48 kB)
+Using cached pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Using cached torchaudio-2.10.0-cp312-cp312-manylinux_2_28_x86_64.whl (1.9 MB)
+Building wheels for collected packages: qwen-tts
+  Building editable for qwen-tts (pyproject.toml) ... done
+  Created wheel for qwen-tts: filename=qwen_tts-0.1.1-0.editable-py3-none-any.whl size=19594 sha256=cb221fc38775549082a598c3154ed0611f4c4f6b5c03043924b28d791845176e
+  Stored in directory: /tmp/pip-ephem-wheel-cache-n53ok1wg/wheels/dd/1d/4e/f6f59684cc8ff17d48d153878218166eb0511fa67a43fd8744
+Successfully built qwen-tts
+Installing collected packages: pytz, pydub, nvidia-cusparselt-cu12, mpmath, flatbuffers, brotli, urllib3, typing-extensions, triton, tqdm, tomlkit, threadpoolctl, sympy, six, shellingham, semantic-version, safetensors, regex, pyyaml, python-multipart, pygments, pycparser, psutil, protobuf, platformdirs, pillow, orjson, nvidia-nvtx-cu12, nvidia-nvshmem-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufile-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, numpy, networkx, msgpack, mdurl, markupsafe, llvmlite, lazy_loader, joblib, idna, hf-xet, h11, groovy, fsspec, filelock, ffmpy, einops, decorator, cuda-pathfinder, click, charset_normalizer, certifi, audioread, annotated-types, annotated-doc, aiofiles, uvicorn, typing-inspection, soxr, sox, scipy, requests, python-dateutil, pydantic-core, onnxruntime, nvidia-cusparse-cu12, nvidia-cufft-cu12, nvidia-cudnn-cu12, numba, markdown-it-py, jinja2, httpcore, cuda-bindings, cffi, anyio, starlette, soundfile, scikit-learn, rich, pydantic, pooch, pandas, nvidia-cusolver-cu12, huggingface_hub, httpx, typer, torch, tokenizers, safehttpx, librosa, gradio-client, fastapi, transformers, torchaudio, gradio, accelerate, qwen-tts
+Successfully installed accelerate-1.12.0 aiofiles-24.1.0 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.12.1 audioread-3.1.0 brotli-1.2.0 certifi-2026.2.25 cffi-2.0.0 charset_normalizer-3.4.4 click-8.3.1 cuda-bindings-12.9.4 cuda-pathfinder-1.4.0 decorator-5.2.1 einops-0.8.2 fastapi-0.135.1 ffmpy-1.0.0 filelock-3.25.0 flatbuffers-25.12.19 fsspec-2026.2.0 gradio-6.8.0 gradio-client-2.2.0 groovy-0.1.2 h11-0.16.0 hf-xet-1.3.2 httpcore-1.0.9 httpx-0.28.1 huggingface_hub-0.36.2 idna-3.11 jinja2-3.1.6 joblib-1.5.3 lazy_loader-0.4 librosa-0.11.0 llvmlite-0.46.0 markdown-it-py-4.0.0 markupsafe-3.0.3 mdurl-0.1.2 mpmath-1.3.0 msgpack-1.1.2 networkx-3.6.1 numba-0.64.0 numpy-2.4.2 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.10.2.21 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.27.5 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvshmem-cu12-3.4.5 nvidia-nvtx-cu12-12.8.90 onnxruntime-1.24.2 orjson-3.11.7 pandas-3.0.1 pillow-12.1.1 platformdirs-4.9.2 pooch-1.9.0 protobuf-7.34.0 psutil-7.2.2 pycparser-3.0 pydantic-2.12.5 pydantic-core-2.41.5 pydub-0.25.1 pygments-2.19.2 python-dateutil-2.9.0.post0 python-multipart-0.0.22 pytz-2026.1.post1 pyyaml-6.0.3 qwen-tts-0.1.1 regex-2026.2.28 requests-2.32.5 rich-14.3.3 safehttpx-0.1.7 safetensors-0.7.0 scikit-learn-1.8.0 scipy-1.17.1 semantic-version-2.10.0 shellingham-1.5.4 six-1.17.0 soundfile-0.13.1 sox-1.5.0 soxr-1.0.0 starlette-0.52.1 sympy-1.14.0 threadpoolctl-3.6.0 tokenizers-0.22.2 tomlkit-0.13.3 torch-2.10.0 torchaudio-2.10.0 tqdm-4.67.3 transformers-4.57.3 triton-3.6.0 typer-0.24.1 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.6.3 uvicorn-0.41.0
+Qwen3-TTS is installed in env: /workspace/the-signal-v5/.mamba/envs/qwen3-tts
+Next:
+  1) cp .env.qwen3-tts.example .env.qwen3-tts
+  2) ./scripts/qwen3_tts_demo.sh
+  [4/4] Pre-downloading Qwen3-TTS-12Hz-1.7B-Base model weights…
+        (this caches them to the network volume — skip on subsequent runs)
+  Downloading Qwen/Qwen3-TTS-12Hz-1.7B-Base …
+Traceback (most recent call last):
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 399, in http_get
+    import hf_transfer  # type: ignore[no-redef]
+    ^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'hf_transfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 330, in snapshot_download
+    _inner_hf_hub_download(file)
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+    return hf_hub_download(
+           ^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1175, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1742, in _download_to_tmp_and_move
+    http_get(
+  File "/workspace/the-signal-v5/.mamba/envs/qwen3-tts/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 401, in http_get
+    raise ValueError(
+ValueError: Fast download using 'hf_transfer' is enabled (HF_HUB_ENABLE_HF_TRANSFER=1) but 'hf_transfer' package is not available in your environment. Try `pip install hf_transfer`.
+root@a750c27f95f2:/workspace/the-signal-v5# pip install hf_transfer
+Requirement already satisfied: hf_transfer in /usr/local/lib/python3.12/dist-packages (0.1.9)
+root@a750c27f95f2:/workspace/the-signal-v5# 
