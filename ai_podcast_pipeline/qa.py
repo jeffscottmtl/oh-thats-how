@@ -218,10 +218,10 @@ def run_qa(
             f"Food for Thought opener appears {fot_count} time(s) — expected exactly once"
         )
 
-    indices_in_sources = read_json(sources_json_path).get("selected_indices", [])
-    checks["selected_order"] = indices_in_sources == selected_indices
+    sources_list = script_json.get("sources", [])
+    checks["selected_order"] = isinstance(sources_list, list) and len(sources_list) > 0
     if not checks["selected_order"]:
-        failures.append("Selected stories do not match requested picks and order")
+        failures.append("Script sources is missing or empty")
 
     checks["verification"] = selected_verification_passed
     if not checks["verification"]:

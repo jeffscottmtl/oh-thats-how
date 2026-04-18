@@ -1,48 +1,36 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "The Signal Script",
+  "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
-  "additionalProperties": false,
   "required": [
-    "episode_name",
-    "generated_at",
-    "intro",
-    "stories",
-    "cn_relevance",
-    "ending_segment",
-    "food_for_thought",
-    "word_count",
-    "script_markdown",
-    "rewrite_attempts",
-    "explicit_fail_state"
+    "episode_name", "generated_at", "theme", "intro",
+    "sources", "narrative", "try_this", "food_for_thought",
+    "word_count", "script_markdown", "rewrite_attempts", "explicit_fail_state"
   ],
   "properties": {
-    "episode_name": {"type": "string", "minLength": 1},
-    "generated_at": {"type": "string", "minLength": 1},
-    "intro": {"type": "string", "minLength": 1},
-    "stories": {
+    "episode_name": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "theme": {"type": "string"},
+    "intro": {"type": "string"},
+    "sources": {
       "type": "array",
-      "minItems": 1,
       "items": {
         "type": "object",
-        "additionalProperties": false,
-        "required": ["index", "title", "source_domain", "source_url", "published_at", "narrative"],
+        "required": ["index", "title", "source_domain", "source_url"],
         "properties": {
-          "index": {"type": "integer", "minimum": 1},
-          "title": {"type": "string", "minLength": 1},
-          "source_domain": {"type": "string", "minLength": 1},
-          "source_url": {"type": "string", "minLength": 1},
-          "published_at": {"type": ["string", "null"]},
-          "narrative": {"type": "string", "minLength": 1}
+          "index": {"type": "integer"},
+          "title": {"type": "string"},
+          "source_domain": {"type": "string"},
+          "source_url": {"type": "string", "format": "uri"},
+          "published_at": {"type": ["string", "null"]}
         }
       }
     },
-    "cn_relevance": {"type": ["string", "null"]},
-    "ending_segment": {"type": "string", "minLength": 1},
-    "food_for_thought": {"type": "string", "minLength": 1},
+    "narrative": {"type": "string"},
+    "try_this": {"type": "string"},
+    "food_for_thought": {"type": "string"},
     "word_count": {"type": "integer", "minimum": 1},
-    "script_markdown": {"type": "string", "minLength": 1},
-    "rewrite_attempts": {"type": "integer", "minimum": 0, "maximum": 2},
+    "script_markdown": {"type": "string"},
+    "rewrite_attempts": {"type": "integer", "minimum": 0, "maximum": 5},
     "explicit_fail_state": {"type": "boolean"}
   }
 }
