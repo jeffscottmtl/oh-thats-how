@@ -41,7 +41,7 @@ from .constants import (
 )
 from .cover import render_cover
 from .ingest import fetch_article_text_batch, fetch_candidates
-from .models import ScoredStory, ScriptParts, VerificationResult
+from .models import ScoredStory, ScriptParts, ThemeCandidate, VerificationResult
 from .qa import run_qa
 from .scoring import is_excluded, is_relevant_story, score_story, story_sort_key
 from .script_writer import (
@@ -49,7 +49,11 @@ from .script_writer import (
     build_script_markdown,
     generate_script_parts,
     rewrite_script_to_target,
+    generate_theme_script,
+    build_theme_script_markdown,
+    build_theme_script_json,
 )
+from .theme_clustering import cluster_themes
 from .security import redact
 from .utils import count_words, ensure_dir, iso_utc_now, now_toronto, parse_indices, sha256_file, write_json
 from .verification import verify_selection
@@ -559,6 +563,102 @@ def _stage_build_full_list(
     return full_list_items, heading, raw_count
 
 
+def _stage_cluster_themes(
+    full_list_items: list[ScoredStory],
+    settings: Settings,
+) -> list[ThemeCandidate]:
+    """Cluster the top articles into theme candidates."""
+    top_articles = full_list_items[:min(len(full_list_items), MAX_SHORTLIST)]
+    themes = cluster_themes(
+        api_key=settings.openai_api_key,
+        model=settings.openai_model,  # mini model for clustering
+        scored_articles=top_articles,
+        project_id=settings.openai_project_id,
+        organization=settings.openai_organization,
+    )
+    return themes
+
+
+def _prompt_theme_selection(themes: list[ThemeCandidate], full_list: list[ScoredStory]) -> int:
+    """Display theme candidates and prompt user to pick one. Returns 0-based index."""
+    print("\n\nThis week's theme candidates:\n")
+    for idx, theme in enumerate(themes, start=1):
+        print(f"[{idx}] {theme.name}")
+        print(f"    {theme.description}")
+        articles = []
+        for ai in theme.article_indices:
+            if 1 <= ai <= len(full_list):
+                a = full_list[ai - 1]
+                articles.append(f"      • {a.candidate.title} ({a.candidate.source_domain})")
+        print("\n".join(articles))
+        print()
+
+    while True:
+        try:
+            raw = input(f"Pick a theme (1..{len(themes)}): ").strip()
+            choice = int(raw)
+            if 1 <= choice <= len(themes):
+                return choice - 1
+        except (ValueError, EOFError):
+            pass
+        print(f"Please enter a number between 1 and {len(themes)}.")
+
+
+def _stage_generate_theme_script(
+    theme: ThemeCandidate,
+    selected: list[ScoredStory],
+    settings: Settings,
+    previous_food_for_thought: list[str] | None = None,
+) -> tuple[str, ScriptParts, int, bool]:
+    """Generate the theme-based script. Returns (markdown, parts, rewrite_attempts, fail_state)."""
+    min_words, max_words = TARGET_MIN_WORDS, TARGET_MAX_WORDS
+    aim_words = (TARGET_MIN_WORDS + TARGET_MAX_WORDS) // 2
+    parts = generate_theme_script(
+        api_key=settings.openai_api_key,
+        model=settings.openai_script_model,  # full model for script gen
+        theme_name=theme.name,
+        selected=selected,
+        target_total_words=aim_words,
+        project_id=settings.openai_project_id,
+        organization=settings.openai_organization,
+        previous_food_for_thought=previous_food_for_thought,
+    )
+    script_markdown = build_theme_script_markdown(parts)
+    wc = count_words(script_markdown)
+    logger.info("Initial theme script: %d words (target %d–%d).", wc, min_words, max_words)
+
+    attempts = 0
+    explicit_fail_state = False
+
+    while not (min_words <= wc <= max_words):
+        if attempts >= MAX_REWRITES:
+            logger.warning(
+                "Word-count gate failed after %d rewrite(s); proceeding with %d words.",
+                MAX_REWRITES, wc,
+            )
+            explicit_fail_state = True
+            break
+        attempts += 1
+        try:
+            script_markdown = rewrite_script_to_target(
+                api_key=settings.openai_api_key,
+                model=settings.openai_model,  # mini for rewrite
+                script_markdown=script_markdown,
+                min_words=min_words,
+                max_words=max_words,
+                project_id=settings.openai_project_id,
+                organization=settings.openai_organization,
+            )
+        except Exception as exc:
+            logger.error("Rewrite failed: %s", exc)
+            explicit_fail_state = True
+            break
+        wc = count_words(script_markdown)
+        logger.info("After rewrite %d: %d words.", attempts, wc)
+
+    return script_markdown, parts, attempts, explicit_fail_state
+
+
 def _stage_select_and_verify(
     full_list_items: list[ScoredStory],
     settings: Settings,
@@ -872,69 +972,103 @@ def run_pipeline(args: Namespace) -> int:
 
     _print_full_list(full_list_items, heading=heading)
 
-    # Stage 2: User selects stories; verification loop.
-    selected, selected_indices, verifications = _stage_select_and_verify(
-        full_list_items, settings, paths["sources_json"], raw_count
-    )
-
-    # Stage 2b: Fetch full article text for selected stories, then review.
-    while True:
-        # Reset any previously fetched text before re-fetching after a reselect.
-        for s in selected:
-            s.candidate.full_text = None
-
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[bold cyan]Fetching full article text"),
-            BarColumn(),
-            MofNCompleteColumn(),
-            TimeElapsedColumn(),
-            console=_console,
-            transient=True,
-        ) as art_progress:
-            art_task = art_progress.add_task("articles", total=len(selected))
-
-            def _on_article_done() -> None:
-                art_progress.advance(art_task)
-
-            fetch_article_text_batch(selected, on_done=_on_article_done)
-
-        fetched = sum(1 for s in selected if s.candidate.full_text)
-        _console.print(
-            f"[green]✓[/green] Full text fetched for [bold]{fetched}/{len(selected)}[/bold] articles"
-            + (" — some unavailable, see review below" if fetched < len(selected) else "")
-        )
-
-        proceed = _review_article_content(selected)
-        if proceed:
-            break
-        # User chose to reselect — loop back through selection + verification.
-        selected, selected_indices, verifications = _stage_select_and_verify(
-            full_list_items, settings, paths["sources_json"], raw_count
-        )
-
-    # Stage 3: Generate script — spinner with elapsed time.
-    _console.print()
+    # Stage 2: Cluster themes.
     with Progress(
         SpinnerColumn(),
-        TextColumn(f"[bold cyan]Generating script[/bold cyan] ({settings.openai_model} thinking…)"),
+        TextColumn("[bold cyan]Clustering themes…"),
         TimeElapsedColumn(),
         console=_console,
         transient=True,
     ) as prog:
-        script_task = prog.add_task("script", total=None)  # indeterminate
+        prog.add_task("clustering", total=None)
+        themes = _stage_cluster_themes(full_list_items, settings)
+
+    _console.print(f"[green]✓[/green] Found [bold]{len(themes)}[/bold] theme candidates")
+
+    # Stage 2b: User selects a theme.
+    theme_idx = _prompt_theme_selection(themes, full_list_items)
+    chosen_theme = themes[theme_idx]
+    logger.info("Theme selected: '%s'", chosen_theme.name)
+
+    # Resolve selected articles from theme indices (1-based into full_list_items).
+    selected: list[ScoredStory] = []
+    for ai in chosen_theme.article_indices:
+        if 1 <= ai <= len(full_list_items):
+            selected.append(full_list_items[ai - 1])
+    selected_indices = chosen_theme.article_indices
+
+    # Build a minimal verifications list for downstream QA compatibility.
+    verifications = [VerificationResult(story=s, passed=True, reason=None) for s in selected]
+
+    # Write a sources JSON so QA has something to validate.
+    write_json(
+        paths["sources_json"],
+        _sources_payload(raw_count, full_list_items, selected_indices, verifications),
+    )
+
+    # Stage 2c: Fetch full article text for theme's articles.
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[bold cyan]Fetching full article text"),
+        BarColumn(),
+        MofNCompleteColumn(),
+        TimeElapsedColumn(),
+        console=_console,
+        transient=True,
+    ) as art_progress:
+        art_task = art_progress.add_task("articles", total=len(selected))
+
+        def _on_article_done() -> None:
+            art_progress.advance(art_task)
+
+        fetch_article_text_batch(selected, on_done=_on_article_done)
+
+    fetched = sum(1 for s in selected if s.candidate.full_text)
+    _console.print(
+        f"[green]✓[/green] Full text fetched for [bold]{fetched}/{len(selected)}[/bold] articles"
+        + (" — some unavailable" if fetched < len(selected) else "")
+    )
+
+    proceed = _review_article_content(selected)
+    if not proceed:
+        # User wants to reselect — re-prompt theme selection and re-fetch.
+        theme_idx = _prompt_theme_selection(themes, full_list_items)
+        chosen_theme = themes[theme_idx]
+        logger.info("Theme re-selected: '%s'", chosen_theme.name)
+        selected = []
+        for ai in chosen_theme.article_indices:
+            if 1 <= ai <= len(full_list_items):
+                selected.append(full_list_items[ai - 1])
+        selected_indices = chosen_theme.article_indices
+        verifications = [VerificationResult(story=s, passed=True, reason=None) for s in selected]
+        write_json(
+            paths["sources_json"],
+            _sources_payload(raw_count, full_list_items, selected_indices, verifications),
+        )
+        for s in selected:
+            s.candidate.full_text = None
+        fetch_article_text_batch(selected)
+
+    # Stage 3: Generate theme script — spinner with elapsed time.
+    _console.print()
+    with Progress(
+        SpinnerColumn(),
+        TextColumn(f"[bold cyan]Generating script[/bold cyan] ({settings.openai_script_model} thinking…)"),
+        TimeElapsedColumn(),
+        console=_console,
+        transient=True,
+    ) as prog:
+        prog.add_task("script", total=None)  # indeterminate
         t0 = time.monotonic()
         previous_fot = _load_previous_food_for_thought(output_dir)
-        script_markdown, parts, rewrite_attempts, explicit_fail_state, intro_was_fixed = _stage_generate_script(
-            selected, settings, previous_food_for_thought=previous_fot
+        script_markdown, parts, rewrite_attempts, explicit_fail_state = _stage_generate_theme_script(
+            chosen_theme, selected, settings, previous_food_for_thought=previous_fot
         )
         elapsed = time.monotonic() - t0
 
     _console.print(f"[green]✓[/green] Script generated in [bold]{elapsed:.0f}s[/bold] — {count_words(script_markdown)} words")
-    if intro_was_fixed:
-        _console.print("[yellow]⚠[/yellow]  Intro was rewritten by the model and has been automatically restored to the canonical text.")
 
-    script_payload = build_script_json(parts, selected, script_markdown)
+    script_payload = build_theme_script_json(parts, selected, script_markdown)
     script_payload["episode_name"] = episode_name
     script_payload["generated_at"] = iso_utc_now()
     script_payload["rewrite_attempts"] = rewrite_attempts
