@@ -34,10 +34,20 @@ class VerificationResult:
 
 
 @dataclass
+class ThemeCandidate:
+    name: str
+    description: str
+    article_indices: list[int]
+
+
+@dataclass
 class ScriptParts:
-    story_narratives: list[str]
-    cn_relevance: str | None
+    theme_name: str
+    narrative: str
+    try_this: str
     food_for_thought: str
+    cn_relevance: str | None = None
+    story_narratives: list[str] = field(default_factory=list)
 
 
 @dataclass
