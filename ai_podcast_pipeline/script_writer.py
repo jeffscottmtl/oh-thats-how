@@ -756,3 +756,208 @@ Script:
     if not isinstance(rewritten, str) or not rewritten.strip():
         raise OpenAIError("rewrite response missing script_markdown")
     return rewritten.strip() + "\n"
+
+
+# ---------------------------------------------------------------------------
+# Theme-based script generation (Task 4)
+# ---------------------------------------------------------------------------
+
+AUDIENCE_DESCRIPTION = (
+    "Your audience is your colleagues — communications professionals who spend their days "
+    "writing stories, building presentations, drafting speeches, creating emails, and managing "
+    "content across channels like intranets and digital signage. They want to know how AI can "
+    "make their daily work better — not enterprise deployment strategy. Keep it practical, "
+    "specific, and useful. They are not technologists. They've heard of ChatGPT, they may have "
+    "tried it, but they don't think in terms of models or prompts. They think in terms of: "
+    "I have a draft due Thursday and I'm stuck on the opening."
+)
+
+
+def _theme_articles_blob(selected: list[ScoredStory]) -> str:
+    """Format selected articles for the theme-based script prompt."""
+    rows: list[str] = []
+    for idx, story in enumerate(selected, start=1):
+        c = story.candidate
+        published = c.published_at.isoformat() if c.published_at else "unknown"
+        rows.append(
+            f"{idx}. title={c.title}\n"
+            f"   source={_pub_name(c.source_domain)}\n"
+            f"   published_at={published}\n"
+            f"   full_article_text={c.full_text or c.summary}"
+        )
+    return "\n\n".join(rows)
+
+
+def generate_theme_script(
+    api_key: str,
+    model: str,
+    theme_name: str,
+    selected: list[ScoredStory],
+    target_total_words: int,
+    project_id: str | None = None,
+    organization: str | None = None,
+    previous_food_for_thought: list[str] | None = None,
+) -> ScriptParts:
+    """Generate a cohesive theme-based script from supporting articles."""
+    articles_blob = _theme_articles_blob(selected)
+    fot_history = _build_fot_history_block(previous_food_for_thought or [])
+    content_words = target_total_words - 70  # subtract intro/outro
+
+    prompt = f"""You are the host of a friendly, upbeat weekly podcast called The Signal.
+
+{AUDIENCE_DESCRIPTION}
+
+This week's theme: "{theme_name}"
+
+Write ONE cohesive podcast script about this theme. Do NOT summarize articles one by one.
+Weave insights from the supporting articles into a single flowing narrative. Sources are
+evidence supporting your points — not standalone segments.
+
+Episode structure (follow this order):
+1. THEME INTRO — state the theme in plain terms, why it caught your attention this week
+2. WHY IT MATTERS — connect it directly to the audience's daily work (writing, editing, presenting, emailing)
+3. 2-3 ANGLES — each illuminating a different facet of the theme, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
+4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps.
+5. FOOD FOR THOUGHT — a parting idea to sit with. Can connect to the theme or stand alone.
+
+Voice and tone:
+- Conversational, warm, plain language. You're a colleague sharing something useful, not a news anchor.
+- Use contractions: "it's", "you'll", "I've", "couldn't", "that's", "here's".
+- Never read articles verbatim. Synthesize and put everything in your own words.
+- No jargon. If you must use a technical term, explain it immediately in plain English.
+- No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
+
+Delivery cues (MANDATORY for text-to-speech):
+- Em dashes (—) for mid-sentence pivots and pauses: at least 4-5 across the full script
+- Rhetorical questions for vocal inflection: at least 2-3 across the full script
+- Short impact sentences (5 words or fewer) after longer buildups
+- *Italicized emphasis* for vocal stress on key words: at least 2-3 across the full script
+
+Perspective:
+- Third person when referencing articles: "the author argues", "the piece describes"
+- First person for your own reactions, the try-this segment, and food for thought
+- NEVER start a paragraph with a publication name or source attribution
+
+Return ONLY valid JSON with exactly these keys:
+- narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
+- try_this: string (the concrete technique segment)
+- food_for_thought: string
+{fot_history}Length: aim for ~{content_words} words total across all three fields combined (narrative + try_this + food_for_thought).
+Prioritize quality and natural flow over exact count.
+
+Supporting articles:
+{articles_blob}""".strip()
+
+    messages = [
+        {"role": "system", "content": (
+            "You are a natural, confident podcast host who explains things the way you'd "
+            "share something useful with a colleague over coffee. You genuinely understand "
+            "the material and focus on what's practical. You must output strict JSON only."
+        )},
+        {"role": "user", "content": prompt},
+    ]
+
+    logger.info("Generating theme script for '%s' via %s…", theme_name, model)
+    try:
+        content = chat_completion(
+            api_key=api_key,
+            model=model,
+            messages=messages,
+            project_id=project_id,
+            organization=organization,
+            temperature=0.5,
+        )
+        data = parse_json_response(content)
+        narrative = data.get("narrative", "")
+        try_this = data.get("try_this", "")
+        food = data.get("food_for_thought", "")
+
+        if not narrative or not try_this or not food:
+            raise OpenAIError("Theme script response missing required fields")
+
+        food = _clean_food_for_thought(food)
+
+        # Validate delivery cues on the narrative
+        cue_issues = _validate_delivery_cues_text(narrative)
+        if cue_issues:
+            logger.warning("Delivery cue issues in theme narrative (%d).", len(cue_issues))
+
+        logger.info("Theme script generated successfully.")
+        return ScriptParts(
+            theme_name=theme_name,
+            narrative=narrative.strip(),
+            try_this=try_this.strip(),
+            food_for_thought=food,
+        )
+    except OpenAIError:
+        raise
+    except Exception as exc:
+        raise OpenAIError(f"Theme script generation failed: {exc}") from exc
+
+
+def _validate_delivery_cues_text(text: str) -> list[str]:
+    """Validate delivery cues on a single text block (not per-story)."""
+    issues: list[str] = []
+    dashes = _count_em_dashes(text)
+    questions = _count_questions(text)
+    if dashes < 4:
+        issues.append(f"Only {dashes} em dashes in narrative (need ≥4)")
+    if questions < 2:
+        issues.append(f"Only {questions} rhetorical questions (need ≥2)")
+    if _count_italic_emphasis(text) < 2:
+        issues.append("Fewer than 2 italicized emphasis instances")
+    return issues
+
+
+def build_theme_script_markdown(parts: ScriptParts) -> str:
+    """Assemble the theme-based episode into final markdown."""
+    from .constants import INTRO_TEXT, OUTRO_TEXT
+
+    sections = [
+        INTRO_TEXT,
+        "",
+        parts.narrative,
+        "",
+        parts.try_this,
+        "",
+        parts.food_for_thought,
+        "",
+        OUTRO_TEXT,
+        "",
+    ]
+    return "\n".join(sections)
+
+
+def build_theme_script_json(
+    parts: ScriptParts,
+    selected: list[ScoredStory],
+    script_markdown: str,
+) -> dict[str, Any]:
+    """Build the JSON payload for a theme-based episode."""
+    from .constants import INTRO_TEXT
+    from .utils import count_words
+    from datetime import datetime, timezone
+
+    return {
+        "episode_name": "",  # filled by caller
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "theme": parts.theme_name,
+        "intro": INTRO_TEXT,
+        "sources": [
+            {
+                "index": i + 1,
+                "title": s.candidate.title,
+                "source_domain": s.candidate.source_domain,
+                "source_url": s.candidate.url,
+                "published_at": s.candidate.published_at.isoformat() if s.candidate.published_at else None,
+            }
+            for i, s in enumerate(selected)
+        ],
+        "narrative": parts.narrative,
+        "try_this": parts.try_this,
+        "food_for_thought": parts.food_for_thought,
+        "word_count": count_words(script_markdown),
+        "script_markdown": script_markdown,
+        "rewrite_attempts": 0,
+        "explicit_fail_state": False,
+    }
