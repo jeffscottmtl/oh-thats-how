@@ -20,7 +20,7 @@
     "episode_name": {"type": "string", "minLength": 1},
     "episode_number": {"type": "integer", "minimum": 0},
     "timezone": {"type": "string", "const": "America/Toronto"},
-    "audio_provider": {"type": "string", "enum": ["qwen", "elevenlabs", "elevenlabs-backup"]},
+    "audio_provider": {"type": "string", "enum": ["qwen", "elevenlabs", "elevenlabs-backup", "fish"]},
     "created_at": {"type": "string", "minLength": 1},
     "run_status": {"type": "string", "enum": ["success", "failed"]},
     "selected_story_indices": {
