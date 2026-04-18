@@ -30,6 +30,7 @@ class Settings:
     qwen_tts_speed: float
     qwen_tts_timeout_seconds: int
     openai_model: str
+    openai_script_model: str
     story_count: int
     user_approved_domains: set[str]
     skip_verification: bool = False
@@ -119,6 +120,7 @@ def load_settings(
     qwen_tts_speed = _parse_float_env("QWEN_TTS_SPEED", default=0.93, min_value=0.7, max_value=1.3)
     qwen_tts_timeout_seconds = _parse_int_env("QWEN_TTS_TIMEOUT_SECONDS", default=1800, min_value=60, max_value=7200)
     openai_model = os.getenv("OPENAI_MODEL", "gpt-5.3-chat-latest").strip() or "gpt-5.3-chat-latest"
+    openai_script_model = os.getenv("OPENAI_SCRIPT_MODEL", "gpt-5.4").strip() or "gpt-5.4"
 
     missing = []
     if not openai_api_key:
@@ -165,6 +167,7 @@ def load_settings(
         qwen_tts_speed=qwen_tts_speed,
         qwen_tts_timeout_seconds=qwen_tts_timeout_seconds,
         openai_model=openai_model,
+        openai_script_model=openai_script_model,
         story_count=story_count,
         user_approved_domains=approved_domains,
         skip_verification=skip_verification,
