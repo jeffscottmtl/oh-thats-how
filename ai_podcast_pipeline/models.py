@@ -42,11 +42,14 @@ class ThemeCandidate:
 
 @dataclass
 class ScriptParts:
-    theme_name: str
-    narrative: str
-    try_this: str
-    food_for_thought: str
+    # Theme-based fields (used by new theme pipeline)
+    theme_name: str = ""
+    narrative: str = ""
+    try_this: str = ""
+    # Shared
+    food_for_thought: str = ""
     cn_relevance: str | None = None
+    # Legacy news-roundup fields (kept for backward compat)
     story_narratives: list[str] = field(default_factory=list)
 
 
