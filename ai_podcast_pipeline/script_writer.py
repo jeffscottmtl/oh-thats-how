@@ -838,6 +838,13 @@ Perspective:
 - First person for your own reactions, the try-this segment, and food for thought
 - NEVER start a paragraph with a publication name or source attribution
 
+Source introductions — IMPORTANT:
+- The audience does NOT read tech press or follow AI developers. They will not recognize most publication or author names.
+- Every time you mention a source, add a brief contextual intro: "the tech magazine Wired", "TechCrunch, a tech news site", "the MIT Sloan Management Review, a business journal"
+- For people: "Simon Willison, a software developer who writes about AI tools", "Steven Levy, a longtime tech journalist"
+- Keep the intros short (3-8 words) and natural — just enough so the listener isn't lost
+- You only need to introduce a source once per episode. After the first mention, use just the name.
+
 Return ONLY valid JSON with exactly these keys:
 - narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
 - try_this: string (the concrete technique segment)
