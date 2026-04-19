@@ -193,14 +193,16 @@ async def research(request: Request):
 
     sources = []
     for c in results:
+        is_gartner = "gartner.com" in c.source_domain.lower()
         sources.append({
             "title": c.title,
             "url": c.url,
             "source_domain": c.source_domain,
             "published_at": c.published_at.isoformat() if c.published_at else None,
             "summary": c.summary,
-            "full_text": c.full_text,
-            "word_count": len(c.full_text.split()) if c.full_text else 0,
+            "full_text": None if is_gartner else c.full_text,  # Gartner needs manual paste
+            "word_count": len(c.full_text.split()) if c.full_text and not is_gartner else 0,
+            "requires_auth": is_gartner,
         })
 
     return JSONResponse({"theme_name": theme_name, "sources": sources})

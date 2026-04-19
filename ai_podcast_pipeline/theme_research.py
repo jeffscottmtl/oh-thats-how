@@ -163,6 +163,8 @@ def _web_search_for_theme(
     import requests as _requests
 
     queries = _build_search_queries(theme_name)
+    # Add a Gartner-specific query.
+    queries.append(f"site:gartner.com AI {theme_name} communications")
 
     # Ask the LLM to search and return structured results.
     search_prompt = (
@@ -171,14 +173,14 @@ def _web_search_for_theme(
         f"present, and create content at work. Find articles about how AI relates to "
         f"this specific topic — not AI or writing in general.\n\n"
         f"Use these search queries:\n"
-        + "\n".join(f"- {q}" for q in queries[:5]) + "\n\n"
+        + "\n".join(f"- {q}" for q in queries) + "\n\n"
         f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
         f"- \"title\": article title\n"
         f"- \"url\": full URL\n"
         f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
         f"- \"summary\": 1-2 sentence summary of the article\n\n"
         f"Return up to 15 articles. Only include real articles with real URLs.\n"
-        f"EXCLUDE gartner.com results (they require authentication).\n"
+        f"Include up to 3 gartner.com results if relevant — mark them clearly.\n"
         f"EXCLUDE duplicate articles that appear on multiple domains.\n"
         f"Every article must be specifically relevant to \"{theme_name}\" — reject generic AI articles."
     )
@@ -221,9 +223,6 @@ def _web_search_for_theme(
             url = a.get("url", "").strip()
             domain = a.get("source_domain", "").strip()
             if not url or not domain:
-                continue
-            # Skip Gartner — requires authentication, user adds manually.
-            if "gartner.com" in domain:
                 continue
             candidates.append(CandidateStory(
                 title=a.get("title", "").strip(),
@@ -405,7 +404,8 @@ REJECT articles that are:
 - About unrelated products, announcements, funding, or corporate news
 - Only tangentially connected via a shared word
 - About a technology (like TTS, image generation, etc.) unless it directly helps communicators with "{theme_name}"
-- Gartner articles (these require authentication — exclude any gartner.com results)
+
+Note: Gartner articles ARE allowed if relevant — they'll be flagged for the user to provide full text via login.
 
 PREVIOUSLY USED ARTICLES:
 Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.

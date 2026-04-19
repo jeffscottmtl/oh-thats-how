@@ -226,17 +226,33 @@ const app = {
   },
 
   renderSources() {
-    const cards = this.state.sources.map((s, i) => `
-      <div class="source-card ${s.included ? '' : 'excluded'}">
-        <div class="source-toggle">
-          <input type="checkbox" ${s.included ? 'checked' : ''} onchange="app.toggleSource(${i})">
-          <h4>${s.title}</h4>
-        </div>
-        <div class="meta">${s.source_domain} &middot; ${s.word_count} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}</div>
-        <div class="preview" id="preview-${i}">${(s.full_text || s.summary || 'No text available').substring(0, 300)}...</div>
-        <button class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>
-      </div>
-    `).join("");
+    const cards = this.state.sources.map((s, i) => {
+      const isGartner = s.requires_auth;
+      const needsText = isGartner && !s.full_text;
+      const badge = isGartner ? `<span class="ep-badge" style="background:rgba(139,92,246,0.15);color:#7c3aed;margin-left:8px">Gartner</span>` : '';
+
+      const gartnerPanel = needsText ? `
+        <div class="gartner-panel" style="margin-top:8px; padding:10px; background:rgba(139,92,246,0.05); border:1px dashed #7c3aed; border-radius:6px;">
+          <p style="font-size:11px; color:var(--text-dim); margin-bottom:6px;">Log in to Gartner, copy the article text, and paste it below.</p>
+          <a href="${s.url}" target="_blank" class="btn btn-sm btn-secondary" style="margin-bottom:8px;">Open in Gartner &rarr;</a>
+          <textarea id="gartner-paste-${i}" class="theme-input" placeholder="Paste article text here after logging in..." style="margin-top:0; min-height:80px; resize:vertical;"></textarea>
+          <button class="btn btn-sm btn-primary" style="margin-top:6px;" onclick="app.captureGartnerText(${i})">Save Text</button>
+        </div>` : '';
+
+      const previewText = s.full_text || s.summary || (isGartner ? 'Requires Gartner login — click to open and paste content' : 'No text available');
+
+      return `
+        <div class="source-card ${s.included ? '' : 'excluded'}">
+          <div class="source-toggle">
+            <input type="checkbox" ${s.included ? 'checked' : ''} onchange="app.toggleSource(${i})">
+            <h4>${s.title}${badge}</h4>
+          </div>
+          <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}</div>
+          <div class="preview" id="preview-${i}">${previewText.substring(0, 300)}${previewText.length > 300 ? '...' : ''}</div>
+          ${!isGartner ? `<button class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>` : ''}
+          ${gartnerPanel}
+        </div>`;
+    }).join("");
 
     const included = this.state.sources.filter(s => s.included).length;
 
@@ -268,6 +284,15 @@ const app = {
 
   toggleSource(index) {
     this.state.sources[index].included = !this.state.sources[index].included;
+    this.renderSources();
+  },
+
+  captureGartnerText(index) {
+    const textarea = document.getElementById(`gartner-paste-${index}`);
+    if (!textarea || !textarea.value.trim()) { alert("Please paste the article text first."); return; }
+    const text = textarea.value.trim();
+    this.state.sources[index].full_text = text;
+    this.state.sources[index].word_count = text.split(/\s+/).length;
     this.renderSources();
   },
 
