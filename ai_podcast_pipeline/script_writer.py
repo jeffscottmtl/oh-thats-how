@@ -390,6 +390,8 @@ Story narrative guidelines:
 - NEVER lead with or echo the article headline. Open with the actual substance — what the story is really about, in plain human terms. Bad: "The Globe and Mail reports that when it comes to AI adoption, training isn't nearly enough." Good: "A Globe and Mail piece makes a compelling case that the anxiety people feel about AI at work doesn't go away just because you run a training session." The headline is source material, not your opening line.
 - Never adopt the article author's voice. You are paraphrasing their work in third person — "the author argues", "she describes", "the report found", "he writes". The only first-person voice in a story narrative is your own brief editorial reaction ("what struck me about this", "I think this one's worth sitting with"), clearly distinct from the article content.
 - Never repeat the same information twice in consecutive sentences. If you've just said what a story is about, don't restate it in the next sentence with slightly different words.
+- If multiple articles come from the same source, attribute the first one normally, then vary: "the same outlet," "another piece from that site," or weave the insight in without re-attributing. Don't name the same publication more than twice.
+- Never use the same word 3+ times in 2 consecutive sentences. If you catch it, rewrite to vary the language.
 
 EXAMPLE NARRATIVES — study the opening of each one carefully.
 Rule: the source NEVER appears in the first sentence. Notice how each example opens.
@@ -431,6 +433,7 @@ Self-validation (check BEFORE returning JSON):
 - Verify no raw domain names appear anywhere (e.g. "nytimes.com") — only proper publication names.
 - Verify none of these banned phrases appear: "subscribe", "newsletter", "sign up", "continue reading", "in your inbox", "read more", "click here", "this story originally appeared", "Source:", "What happened:", "Why this matters:".
 - Verify no 4+ word phrase is repeated within 30 words of itself.
+- Verify no single word appears 3+ times within 2 consecutive sentences. If it does, rewrite to vary the language.
 - Verify the total word count of story_narratives + cn_relevance + food_for_thought is roughly {target_total_words - 70} words (between {round((target_total_words - 70) * 0.9)} and {round((target_total_words - 70) * 1.1)}).
 - DELIVERY CUE CHECKS (mandatory — rewrite any narrative that fails):
   * Each story narrative must contain at least 2 em dashes (—). Count them.
@@ -867,17 +870,27 @@ Source introductions — IMPORTANT:
 - For people: "Simon Willison, a software developer who writes about AI tools", "Steven Levy, a longtime tech journalist"
 - Keep the intros short (3-8 words) and natural — just enough so the listener isn't lost
 - You only need to introduce a source once per episode. After the first mention, use just the name.
+- If multiple articles come from the same source, attribute the first one normally, then vary: "the same outlet," "another piece from that site," or just weave the insight in without re-attributing. Don't name the same publication more than twice.
 
 Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
 - Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
 
+AI integration — this is critical:
+- This is a podcast about AI and communications. The AI angle should be woven throughout the episode, not isolated in one paragraph near the end.
+- When discussing a challenge (attention, access, trust, etc.), show how AI relates to it right there — don't save all AI mentions for a separate "and here's where AI fits in" section.
+- The listener should come away understanding the theme AND how AI changes their approach to it. These two threads should be braided together, not stacked.
+
 Fish Audio expression tags — use these for natural TTS delivery:
 - [pause] for a brief beat, [long pause] for a longer break
 - [emphasis] before a word or phrase you want stressed
 - [soft] for a gentler, more reflective tone
 - Use sparingly but deliberately — 3-5 tags per episode makes speech feel human, not robotic.
+
+Transitions and segment intros:
+- Vary how you introduce the try-this segment. Don't always use "So, what's the practical takeaway?" Rotate among natural transitions: "Here's something worth trying," "One thing I'd suggest," "If you want to put this into practice," or just flow directly into the technique.
+- Same for food for thought — the "Here's some food for thought." opener is required, but the transition INTO it should feel organic, not formulaic.
 
 Return ONLY valid JSON with exactly these keys:
 - narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
