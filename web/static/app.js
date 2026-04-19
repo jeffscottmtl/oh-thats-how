@@ -115,6 +115,7 @@ const app = {
   // ── Step 2: Research ────────────────────────────────────────────────
 
   async startResearch() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     $main().innerHTML = `
       ${this.renderSteps(1)}
       <div class="step-header">
@@ -189,6 +190,7 @@ const app = {
 
   async generateScript() {
     const includedSources = this.state.sources.filter(s => s.included);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     $main().innerHTML = `
       ${this.renderSteps(2)}
@@ -287,6 +289,7 @@ const app = {
   // ── Step 4: Audio ───────────────────────────────────────────────────
 
   async generateAudio() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     $main().innerHTML = `
       ${this.renderSteps(3)}
       <div class="step-header">
