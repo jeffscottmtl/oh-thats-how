@@ -277,7 +277,7 @@ NEVER start a narrative with any of these patterns:
 ALWAYS lead with the finding, tension, question, implication, or scene:
   ✓ "Enterprise AI might have less to do with the model and more to do with everything around it..."
   ✓ "There's a fault line in how most teams are rolling out AI — and it's not the technology."
-  ✓ "What does it actually take to make AI useful inside a large organization?"
+  ✓ "What does it take to make AI useful inside a large organization?"
   ✓ "Lawyers are getting a warning they didn't expect — and it's coming from a federal court."
   ✓ "The anxiety employees feel about AI at work doesn't go away just because you run a training session."
 
@@ -290,6 +290,7 @@ Voice and tone:
 - Use contractions naturally throughout: "it's", "you'll", "I've", "couldn't", "didn't", "that's", "here's". Avoid stiff constructions like "it is" or "I could not" where a contraction sounds more natural in speech.
 - Never read articles verbatim or near-verbatim. Synthesize, interpret, and put everything in your own words.
 - Strip out any redundant, repetitive, or boilerplate phrasing pulled from the source material (e.g., "In a world where…", "It's more important than ever…", "As we navigate…"). Cut anything that sounds like filler.
+- AVOID the word "actually" — it's a crutch that adds nothing. Use it at most once in the entire script, and only if it genuinely adds emphasis. Never use "actually" in questions ("what does it actually mean") or as filler ("you can actually use this").
 
 Delivery and pacing — THIS IS MANDATORY, not optional styling:
 This script is read aloud by a text-to-speech engine. The formatting below directly controls vocal expressiveness. Scripts that lack these elements sound flat and robotic. You MUST include all of the following in every narrative:
@@ -300,7 +301,7 @@ This script is read aloud by a text-to-speech engine. The formatting below direc
 
 2. Rhetorical questions to create natural vocal inflection. Use at least 1 per story narrative.
    FLAT: "This matters because communications teams will need to adapt quickly."
-   EXPRESSIVE: "So what does that actually mean for comms teams? It means adapting — and fast."
+   EXPRESSIVE: "So what does that mean for comms teams? It means adapting — and fast."
 
 3. Varied sentence length — short punchy sentences after longer ones. Every narrative must have at least one sentence of 5 words or fewer for impact.
    FLAT: "The author argues that organizations need to rethink their approach to internal messaging when deploying AI tools."
@@ -344,7 +345,7 @@ Perspective rules — this is critical:
 - Bad: "I was a newcomer, negotiating all of the usual classroom difficulties." (this is the article author's voice, not yours)
 - Good: "The author describes being a complete newcomer — navigating all the usual classroom challenges while also trying to figure out what to do about the AI in every student's pocket."
 - Bad: "I couldn't believe how quickly things changed." (ambiguous — whose experience?)
-- Good: "What struck me reading this is how quickly the author's skepticism shifted once she was actually in the room." (narrator's reaction, clearly attributed)
+- Good: "What struck me reading this is how quickly the author's skepticism shifted once she was in the room." (narrator's reaction, clearly attributed)
 
 Return ONLY valid JSON with exactly these keys:
 - story_narratives: array of exactly {len(selected)} strings, one per story, in the exact order provided
@@ -413,7 +414,7 @@ cn_relevance guidelines:
 
 food_for_thought guidelines:
 - This is a standalone closing segment — it doesn't need to connect to the week's stories at all.
-- Topic: something about AI and communications work that's novel, curious, funny, insightful, or practically useful — a workflow tip, a prompting trick, a "try this on Monday" idea. Something the listener probably hasn't heard before and could actually use.
+- Topic: something about AI and communications work that's novel, curious, funny, insightful, or practically useful — a workflow tip, a prompting trick, a "try this on Monday" idea. Something the listener probably hasn't heard before and could use right away.
 - Begin the string with exactly the words "Here's some food for thought." followed by a space, then straight into the content. Do NOT add a "Food for Thought" heading or label before or after — just start with those words. Never start with "Across these stories" or any callback to the stories above.
 - It can be a surprising fact, a counterintuitive idea, a workflow tip, a thought experiment, a bit of history, or something genuinely funny — as long as it earns the listener's attention.
 - Write in first person. Aim for 3–5 sentences. No filler, no generic observations.
@@ -847,6 +848,7 @@ Voice and tone:
 - Never read articles verbatim. Synthesize and put everything in your own words.
 - No jargon. If you must use a technical term, explain it immediately in plain English.
 - No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
+- Avoid the word "actually" — it's a crutch. Use it at most once in the entire script.
 
 Delivery cues (MANDATORY for text-to-speech):
 - Em dashes (—) for mid-sentence pivots and pauses: at least 4-5 across the full script
