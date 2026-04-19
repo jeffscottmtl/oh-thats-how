@@ -72,23 +72,29 @@ const app = {
   },
 
   renderProposals() {
-    const cards = this.state.proposals.map((p, i) => `
-      <div class="card" onclick="app.selectTheme(${i})">
-        <h3>${p.name}</h3>
-        <p>${p.pitch}</p>
-        <div class="sources">
-          ${(p.source_previews || []).map(s => `<span>&#8226; ${s}</span>`).join("")}
-        </div>
-      </div>
-    `).join("");
+    const cards = this.state.proposals.map((p, i) => {
+      const used = p.times_used && p.times_used > 0;
+      const badge = used
+        ? `<span class="badge used">${p.times_used}x used · last ${p.last_used || '?'}</span>`
+        : `<span class="badge fresh">New</span>`;
+      return `
+        <div class="card" onclick="app.selectTheme(${i})">
+          <h3>${p.name}</h3>
+          <p>${p.pitch}</p>
+          ${badge}
+          <div class="sources">
+            ${(p.source_previews || []).map(s => `<span>&#8226; ${s}</span>`).join("")}
+          </div>
+        </div>`;
+    }).join("");
 
     $main().innerHTML = `
       ${this.renderSteps(0)}
       <div class="step-header">
         <h1>Pick a Theme</h1>
-        <p>Choose one of these themes, or type your own topic below.</p>
+        <p>Choose one of these 20 themes, or type your own topic below.</p>
       </div>
-      ${cards}
+      <div class="card-grid">${cards}</div>
       <input class="theme-input" id="custom-theme" placeholder="Or type your own topic here..." onkeydown="if(event.key==='Enter')app.selectCustomTheme()">
       <div class="actions">
         <button class="btn btn-secondary" onclick="app.selectCustomTheme()">Use Custom Topic</button>

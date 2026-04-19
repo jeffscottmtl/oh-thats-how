@@ -153,15 +153,20 @@ async def propose():
         organization=settings.openai_organization,
     )
 
-    return JSONResponse([
-        {
+    # Look up usage stats from bank for each proposal.
+    bank_lookup = {e.id: e for e in bank_entries}
+    result = []
+    for p in proposals:
+        entry = bank_lookup.get(p.bank_id) if p.bank_id else None
+        result.append({
             "name": p.name,
             "pitch": p.pitch,
             "source_previews": p.source_previews,
             "bank_id": p.bank_id,
-        }
-        for p in proposals
-    ])
+            "times_used": entry.times_used if entry else 0,
+            "last_used": entry.last_used if entry else None,
+        })
+    return JSONResponse(result)
 
 
 @app.post("/api/research")
@@ -195,6 +200,21 @@ async def research(request: Request):
         })
 
     return JSONResponse({"theme_name": theme_name, "sources": sources})
+
+
+def _load_previous_episodes(output_dir: Path) -> list[dict]:
+    """Load previous episode themes and scripts for overlap avoidance."""
+    episodes = []
+    for script_json in sorted(output_dir.glob("*Script.json")):
+        try:
+            data = json.loads(script_json.read_text(encoding="utf-8"))
+            theme = data.get("theme", "")
+            script = data.get("script_markdown", "")
+            if theme or script:
+                episodes.append({"theme": theme, "script": script})
+        except Exception:
+            continue
+    return episodes
 
 
 def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> dict:
@@ -243,8 +263,13 @@ def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> d
     chosen_theme = ThemeCandidate(name=theme_name, description="", article_indices=selected_indices)
     previous_fot = _load_previous_food_for_thought(_OUTPUT_DIR)
 
+    # Load previous episode scripts for overlap avoidance.
+    previous_episodes = _load_previous_episodes(_OUTPUT_DIR)
+
     script_markdown, parts, rewrite_attempts, explicit_fail_state = _stage_generate_theme_script(
-        chosen_theme, selected, settings, previous_food_for_thought=previous_fot,
+        chosen_theme, selected, settings,
+        previous_food_for_thought=previous_fot,
+        previous_episodes=previous_episodes,
     )
 
     script_payload = build_theme_script_json(parts, selected, script_markdown)

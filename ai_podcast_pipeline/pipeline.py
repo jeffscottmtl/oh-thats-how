@@ -577,6 +577,7 @@ def _stage_generate_theme_script(
     selected: list[ScoredStory],
     settings: Settings,
     previous_food_for_thought: list[str] | None = None,
+    previous_episodes: list[dict] | None = None,
 ) -> tuple[str, ScriptParts, int, bool]:
     """Generate the theme-based script. Returns (markdown, parts, rewrite_attempts, fail_state)."""
     min_words, max_words = TARGET_MIN_WORDS, TARGET_MAX_WORDS
@@ -590,6 +591,7 @@ def _stage_generate_theme_script(
         project_id=settings.openai_project_id,
         organization=settings.openai_organization,
         previous_food_for_thought=previous_food_for_thought,
+        previous_episodes=previous_episodes,
     )
     script_markdown = build_theme_script_markdown(parts)
     wc = count_words(script_markdown)

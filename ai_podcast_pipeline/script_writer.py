@@ -825,21 +825,41 @@ def generate_theme_script(
     project_id: str | None = None,
     organization: str | None = None,
     previous_food_for_thought: list[str] | None = None,
+    previous_episodes: list[dict] | None = None,
 ) -> ScriptParts:
     """Generate a cohesive theme-based script from supporting articles."""
     articles_blob = _theme_articles_blob(selected)
     fot_history = _build_fot_history_block(previous_food_for_thought or [])
     content_words = target_total_words - 70  # subtract intro/outro
 
-    prompt = f"""You are the host of a friendly, upbeat weekly podcast called The Signal.
+    # Build previous episodes context so the LLM avoids overlap.
+    prev_eps_block = ""
+    if previous_episodes:
+        eps_lines = []
+        for ep in previous_episodes[-8:]:  # last 8 episodes max
+            theme = ep.get("theme", "unknown")
+            summary = ep.get("script", "")[:400]  # first 400 chars as summary
+            eps_lines.append(f"- Theme: \"{theme}\"\n  Summary: {summary}...")
+        prev_eps_block = (
+            "\n\nPREVIOUS EPISODES — review these to avoid repetition:\n"
+            "Do NOT repeat the same advice, examples, or framing used in past episodes.\n"
+            "If this episode covers similar ground to a previous one, acknowledge the evolution:\n"
+            "\"We talked about [topic] before — here's what's changed\" or \"Last time we looked at X,\n"
+            "but this week the angle is different because...\"\n"
+            "If information contradicts a previous episode, explain why thinking has evolved.\n\n"
+            + "\n".join(eps_lines) + "\n"
+        )
+
+    prompt = f"""You are the host of a friendly, upbeat podcast called The Signal.
 
 {AUDIENCE_DESCRIPTION}
 
-This week's theme: "{theme_name}"
+This episode's theme: "{theme_name}"
 
 Write ONE cohesive podcast script about this theme. Do NOT summarize articles one by one.
 Weave insights from the supporting articles into a single flowing narrative. Sources are
 evidence supporting your points — not standalone segments.
+{prev_eps_block}
 
 Episode structure (follow this order):
 1. THEME INTRO — state the theme in plain terms, why it caught your attention
