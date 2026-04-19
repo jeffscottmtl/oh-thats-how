@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 INTRO_TEXT = (
-    "Welcome to The Signal. I'm Jeff Scott, and this is a short podcast for "
-    "communicators at CN — the people who write the stories, build the presentations, "
-    "draft the speeches, and send the emails. Each episode, I pick one topic where AI "
-    "and communications work overlap, and I dig into what's actually useful. "
-    "Let's get into it."
+    "Welcome to The Signal, a short podcast for communicators at CN — the people "
+    "who write the stories, build the presentations, draft the speeches, and send "
+    "the emails that connect us. I'm Jeff Scott, and each episode, I'll pick one "
+    "topic where AI and communications overlap to dig into what's actually useful "
+    "for our work. Let's get into it."
 )
 
 ENDING_TOKEN = "Food for Thought"
 OUTRO_TEXT = (
     "That's it for this week. If you've got a topic you'd like me to explore, "
     "or you tried something that worked, drop it in the CN GPT Teams channel. "
-    "I'm Jeff Scott, and this has been The Signal. See you next week."
+    "I'm Jeff Scott, and this has been The Signal."
 )
 
 # Paragraphs used to pad a script that falls below TARGET_MIN_WORDS.

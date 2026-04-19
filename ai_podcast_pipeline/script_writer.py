@@ -320,6 +320,24 @@ This script is read aloud by a text-to-speech engine. The formatting below direc
 
 8. Natural breathing points — if a sentence runs past 30 words, break it up.
 
+Source introductions — IMPORTANT:
+- The audience does NOT read tech press or follow AI developers. They will not recognize most publication or author names.
+- Every time you mention a source, add a brief contextual intro: "the tech magazine Wired", "TechCrunch, a tech news site", "the MIT Sloan Management Review, a business journal"
+- For people: "Simon Willison, a software developer who writes about AI tools", "Steven Levy, a longtime tech journalist"
+- Keep the intros short (3-8 words) and natural — just enough so the listener isn't lost
+- You only need to introduce a source once per episode. After the first mention, use just the name.
+
+Internal audience — this is non-negotiable:
+- This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
+- Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
+- The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
+
+Fish Audio expression tags — use these for natural TTS delivery:
+- [pause] for a brief beat, [long pause] for a longer break
+- [emphasis] before a word or phrase you want stressed
+- [soft] for a gentler, more reflective tone
+- Use sparingly but deliberately — 3-5 tags per episode makes speech feel human, not robotic.
+
 Perspective rules — this is critical:
 - When covering a story, you are the narrator summarizing an article for your listeners. Always write in third person about the article, its author, and its subject matter. Use attribution: "the author argues", "she describes", "they found", "the piece explains", "according to the report". Never slip into the article author's voice.
 - First person ("I", "I've", "I found") is ONLY for: (a) your own editorial reaction to a story ("I found this one really striking"), (b) the intro, (c) the food for thought segment, and (d) the outro. It is never used to describe what an article says or what someone in an article experienced.
@@ -702,6 +720,9 @@ Rules:
 - Use contractions naturally — "it's", "you'll", "I've", "couldn't", "didn't". Avoid stiff constructions like "it is" or "I could not".
 - Never reproduce article text verbatim. Strip any redundant or boilerplate phrasing ("In a world where…", "It's more important than ever…", "As we navigate…").
 - Perspective: story narratives are always in third person about the article and its subject — "the author argues", "she describes", "the report found". First person ("I", "I've") is only for the narrator's own reactions and commentary, the intro, food for thought, and the outro. Never let the narrator speak in the voice of the article author.
+- Source introductions: the audience doesn't read tech press. Every source needs a brief contextual intro on first mention — "the tech magazine Wired", "TechCrunch, a tech news site". For people: "Simon Willison, a software developer who writes about AI tools". After the first mention, just use the name.
+- Internal audience: never say "your organization", "your company", or "your workplace" — this podcast is for CN colleagues. Say "here at CN" or "at work" instead.
+- Fish Audio expression tags: use [pause], [long pause], [emphasis], [soft] sparingly (3-5 per episode) for natural TTS delivery.
 - CRITICAL: The first sentence of every story narrative must NOT contain any publication name, company name, or source attribution. Lead with the substance — the finding, tension, question, or implication. Attribution goes mid-sentence or later, never in the opening clause.
   Bad: "MIT Technology Review argues that enterprise AI depends on..." / "CNBC reports that Anthropic is..."
   Good: "Enterprise AI success might depend less on the model and more on everything wrapped around it — that's the case MIT Technology Review makes this week."
@@ -844,6 +865,17 @@ Source introductions — IMPORTANT:
 - For people: "Simon Willison, a software developer who writes about AI tools", "Steven Levy, a longtime tech journalist"
 - Keep the intros short (3-8 words) and natural — just enough so the listener isn't lost
 - You only need to introduce a source once per episode. After the first mention, use just the name.
+
+Internal audience — this is non-negotiable:
+- This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
+- Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
+- The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
+
+Fish Audio expression tags — use these for natural TTS delivery:
+- [pause] for a brief beat, [long pause] for a longer break
+- [emphasis] before a word or phrase you want stressed
+- [soft] for a gentler, more reflective tone
+- Use sparingly but deliberately — 3-5 tags per episode makes speech feel human, not robotic.
 
 Return ONLY valid JSON with exactly these keys:
 - narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
