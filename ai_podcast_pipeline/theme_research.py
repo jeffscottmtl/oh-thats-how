@@ -192,18 +192,26 @@ def _score_source(
 # ---------------------------------------------------------------------------
 
 
+_MIN_SOURCE_SCORE = 25  # Sources below this threshold are too weak to use.
+
+
 def _rank_sources(
     candidates: list[CandidateStory],
     theme_name: str,
     max_results: int = 8,
 ) -> list[CandidateStory]:
-    """Return up to *max_results* candidates ranked by theme relevance score."""
-    scored = sorted(
-        candidates,
-        key=lambda c: _score_source(c.title, c.published_at, c.source_domain, theme_name),
-        reverse=True,
-    )
-    return scored[:max_results]
+    """Return up to *max_results* candidates ranked by theme relevance score.
+
+    Sources scoring below _MIN_SOURCE_SCORE are filtered out entirely.
+    """
+    scored = [
+        (c, _score_source(c.title, c.published_at, c.source_domain, theme_name))
+        for c in candidates
+    ]
+    # Filter out low-quality matches.
+    scored = [(c, s) for c, s in scored if s >= _MIN_SOURCE_SCORE]
+    scored.sort(key=lambda x: x[1], reverse=True)
+    return [c for c, _ in scored[:max_results]]
 
 
 # ---------------------------------------------------------------------------
@@ -215,20 +223,32 @@ def _filter_rss_for_theme(
     theme_name: str,
     on_feed_done: Callable[[], None] | None = None,
 ) -> list[CandidateStory]:
-    """Fetch RSS feeds and return candidates that share at least one meaningful
-    word with the theme name (checked against title and summary).
+    """Fetch RSS feeds and return candidates that are meaningfully related
+    to the theme. Requires at least 2 matching content words, OR 1 match
+    if the theme has very few tokens. Also requires AI relevance.
     """
     theme_tokens = set(_tokenise(theme_name))
     if not theme_tokens:
         return []
 
+    # Require at least 2 word overlap for themes with 3+ tokens,
+    # otherwise 1 is fine (short themes like "AI anxiety").
+    min_overlap = 2 if len(theme_tokens) >= 3 else 1
+
     all_candidates = fetch_candidates(on_feed_done=on_feed_done)
+
+    # AI-related keywords — at least one must appear for the article to qualify.
+    _ai_signals = {"ai", "artificial", "intelligence", "llm", "chatgpt", "gpt",
+                   "generative", "machine", "learning", "copilot", "claude",
+                   "gemini", "model", "prompt", "automation", "chatbot"}
 
     matched: list[CandidateStory] = []
     for candidate in all_candidates:
         text = (candidate.title + " " + (candidate.summary or "")).lower()
-        text_tokens = set(re.findall(r"[a-zA-Z]+", text))
-        if theme_tokens & text_tokens:
+        text_tokens = set(_tokenise(text))
+        overlap = theme_tokens & text_tokens
+        has_ai = bool(_ai_signals & text_tokens)
+        if len(overlap) >= min_overlap and has_ai:
             matched.append(candidate)
 
     logger.info(
