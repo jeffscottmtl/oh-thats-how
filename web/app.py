@@ -125,13 +125,24 @@ async def get_episode(name: str):
     return JSONResponse(result)
 
 
+import asyncio
+from functools import partial
+
+
+def _run_sync(fn, *args, **kwargs):
+    """Run a blocking function in a thread pool so it doesn't block the event loop."""
+    loop = asyncio.get_event_loop()
+    return loop.run_in_executor(None, partial(fn, *args, **kwargs))
+
+
 @app.post("/api/propose")
 async def propose():
     """Scan RSS + theme bank, propose 4-5 themes."""
     settings = _get_settings()
     theme_bank_path = Path(THEME_BANK_PATH)
 
-    proposals, bank_entries = propose_themes(
+    proposals, bank_entries = await _run_sync(
+        propose_themes,
         api_key=settings.openai_api_key,
         model=settings.openai_model,
         theme_bank_path=theme_bank_path,
@@ -159,7 +170,8 @@ async def research(request: Request):
         return JSONResponse({"error": "theme_name required"}, status_code=400)
 
     settings = _get_settings()
-    results = research_theme(
+    results = await _run_sync(
+        research_theme,
         theme_name=theme_name,
         api_key=settings.openai_api_key,
         model=settings.openai_model,
@@ -182,23 +194,15 @@ async def research(request: Request):
     return JSONResponse({"theme_name": theme_name, "sources": sources})
 
 
-@app.post("/api/generate")
-async def generate(request: Request):
-    """Generate script + companion materials."""
-    body = await request.json()
-    theme_name = body.get("theme_name", "")
-    sources = body.get("sources", [])
-
-    if not theme_name:
-        return JSONResponse({"error": "theme_name required"}, status_code=400)
-
-    settings = _get_settings()
-    ensure_dir(_OUTPUT_DIR)
-
+def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> dict:
+    """Blocking script generation — runs in a thread pool."""
     from datetime import datetime
     from zoneinfo import ZoneInfo
     from ai_podcast_pipeline.constants import TIMEZONE
     from ai_podcast_pipeline.models import CandidateStory
+
+    settings = _get_settings()
+    ensure_dir(_OUTPUT_DIR)
 
     episode_dt = datetime.now(ZoneInfo(TIMEZONE))
     episode_number = resolve_episode_number(_OUTPUT_DIR)
@@ -206,7 +210,6 @@ async def generate(request: Request):
     paths = build_artifact_paths(_OUTPUT_DIR, episode_name)
 
     # Rebuild CandidateStory objects from source data.
-    from ai_podcast_pipeline.utils import parse_datetime
     candidates = []
     for s in sources:
         pub = None
@@ -254,16 +257,17 @@ async def generate(request: Request):
     _generate_companion_materials(parts, script_markdown, episode_name, paths)
 
     # Render cover.
-    from ai_podcast_pipeline.pipeline import _stage_render_cover
-    cover_probe_hash = _stage_render_cover(
-        episode_name=episode_name,
-        episode_dt=episode_dt,
-        episode_number=episode_number,
-        cover_path=paths["cover_png"],
-    )
+    try:
+        _stage_render_cover(
+            episode_name=episode_name,
+            episode_dt=episode_dt,
+            episode_number=episode_number,
+            cover_path=paths["cover_png"],
+        )
+    except Exception as exc:
+        logger.warning("Cover render failed: %s", exc)
 
     # Update theme bank.
-    bank_id = body.get("bank_id")
     if bank_id:
         theme_bank_path = Path(THEME_BANK_PATH)
         bank_entries = load_theme_bank(theme_bank_path)
@@ -284,14 +288,34 @@ async def generate(request: Request):
     teams_post = paths["teams_post"].read_text(encoding="utf-8") if paths["teams_post"].exists() else ""
     try_this = paths["try_this"].read_text(encoding="utf-8") if paths["try_this"].exists() else ""
 
-    return JSONResponse({
+    return {
         "episode_name": episode_name,
         "script": script_markdown,
         "teams_post": teams_post,
         "try_this": try_this,
         "word_count": count_words(script_markdown),
         "cover_url": f"/api/files/{episode_name} - Cover.png",
-    })
+    }
+
+
+@app.post("/api/generate")
+async def generate(request: Request):
+    """Generate script + companion materials."""
+    body = await request.json()
+    theme_name = body.get("theme_name", "")
+    sources = body.get("sources", [])
+
+    if not theme_name:
+        return JSONResponse({"error": "theme_name required"}, status_code=400)
+
+    try:
+        result = await _run_sync(
+            _do_generate, theme_name, sources, body.get("bank_id"),
+        )
+        return JSONResponse(result)
+    except Exception as exc:
+        logger.exception("Script generation failed")
+        return JSONResponse({"error": str(exc)}, status_code=500)
 
 
 @app.post("/api/audio")
@@ -317,7 +341,8 @@ async def generate_audio(request: Request):
     episode_dt = datetime.now(ZoneInfo(TIMEZONE))
     episode_number = resolve_episode_number(_OUTPUT_DIR)
 
-    audio_generated, provider, notes, audio_error = _stage_audio(
+    audio_generated, provider, notes, audio_error = await _run_sync(
+        _stage_audio,
         script_markdown=script_markdown,
         settings=settings,
         mp3_path=paths["mp3"],
@@ -338,6 +363,17 @@ async def generate_audio(request: Request):
         "provider": provider,
         "notes": notes,
     })
+
+
+@app.put("/api/files/{path:path}")
+async def save_file(path: str, request: Request):
+    """Save edits to an output file (e.g., script markdown)."""
+    file_path = _OUTPUT_DIR / path
+    if not file_path.parent.exists():
+        return JSONResponse({"error": "Directory not found"}, status_code=404)
+    body = await request.body()
+    file_path.write_text(body.decode("utf-8"), encoding="utf-8")
+    return JSONResponse({"saved": True})
 
 
 @app.get("/api/files/{path:path}")

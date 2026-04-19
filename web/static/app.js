@@ -204,6 +204,9 @@ const app = {
         }),
       });
       const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || `Server error (${res.status})`);
+      }
       this.state.episodeName = data.episode_name;
       this.state.script = data.script;
       this.state.teamsPost = data.teams_post;
@@ -212,11 +215,24 @@ const app = {
       this.state.wordCount = data.word_count;
       this.renderScript("script");
     } catch (e) {
-      $main().innerHTML = `<p style="color:var(--danger)">Error generating script: ${e.message}</p>`;
+      $main().innerHTML = `
+        ${this.renderSteps(2)}
+        <div class="step-header"><h1>Script Generation Failed</h1></div>
+        <p style="color:var(--danger); margin-bottom:16px">${e.message}</p>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="app.newEpisode()">Start Over</button>
+          <button class="btn btn-primary" onclick="app.generateScript()">Retry</button>
+        </div>`;
     }
   },
 
   renderScript(activeTab = "script") {
+    // Save editor content if switching away from script tab.
+    const editor = document.getElementById("script-editor");
+    if (editor) {
+      this.state.script = editor.value;
+    }
+
     const content = {
       script: this.state.script,
       teams: this.state.teamsPost,
@@ -234,12 +250,32 @@ const app = {
         <button class="tab ${activeTab === 'teams' ? 'active' : ''}" onclick="app.renderScript('teams')">Teams Post</button>
         <button class="tab ${activeTab === 'trythis' ? 'active' : ''}" onclick="app.renderScript('trythis')">Try This</button>
       </div>
-      <div class="script-display">${content[activeTab] || '(empty)'}</div>
+      <textarea class="script-display" id="script-editor" style="width:100%;min-height:400px;resize:vertical;${activeTab === 'script' ? '' : 'display:none;'}">${this.state.script || ''}</textarea>
+      <div class="script-display" id="script-readonly" style="${activeTab !== 'script' ? '' : 'display:none;'}">${content[activeTab] || '(empty)'}</div>
       <div class="actions">
         <button class="btn btn-secondary" onclick="app.finish()">Skip Audio & Finish</button>
-        <button class="btn btn-primary" onclick="app.generateAudio()">Generate Audio</button>
+        <button class="btn btn-primary" onclick="app.saveAndGenerateAudio()">Generate Audio</button>
       </div>
     `;
+  },
+
+  async saveAndGenerateAudio() {
+    // Save any edits from the script editor before generating audio.
+    const editor = document.getElementById("script-editor");
+    if (editor) {
+      this.state.script = editor.value;
+      // Persist edits to the server so TTS uses the edited version.
+      try {
+        await fetch(`/api/files/${encodeURIComponent(this.state.episodeName)} - Script.md`, {
+          method: "PUT",
+          headers: { "Content-Type": "text/plain" },
+          body: this.state.script,
+        });
+      } catch (e) {
+        console.warn("Could not save script edits:", e);
+      }
+    }
+    this.generateAudio();
   },
 
   // ── Step 4: Audio ───────────────────────────────────────────────────
