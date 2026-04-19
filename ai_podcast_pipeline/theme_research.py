@@ -144,6 +144,106 @@ def _build_search_queries(theme_name: str) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+# 1b. Web search via OpenAI Responses API
+# ---------------------------------------------------------------------------
+
+_MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
+
+
+def _web_search_for_theme(
+    theme_name: str,
+    api_key: str,
+    model: str = "gpt-4.1-mini",
+) -> list[CandidateStory]:
+    """Run web searches for a theme using OpenAI's web_search_preview tool.
+
+    Returns CandidateStory objects with title, URL, source_domain, and summary.
+    Full text is NOT fetched here — that happens later in the pipeline.
+    """
+    import requests as _requests
+
+    queries = _build_search_queries(theme_name)
+    # Add a Gartner-specific query (capped at 1 result later).
+    queries.append(f"site:gartner.com AI {theme_name} communications")
+
+    # Ask the LLM to search and return structured results.
+    search_prompt = (
+        f"Search the web for recent, high-quality articles about: \"{theme_name}\"\n\n"
+        f"Focus on articles relevant to communications professionals who write, edit, "
+        f"present, and create content at work. Find articles about how AI relates to this topic.\n\n"
+        f"Use these search queries:\n"
+        + "\n".join(f"- {q}" for q in queries[:5]) + "\n\n"
+        f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
+        f"- \"title\": article title\n"
+        f"- \"url\": full URL\n"
+        f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
+        f"- \"summary\": 1-2 sentence summary of the article\n\n"
+        f"Return up to 15 articles. Only include real articles with real URLs. "
+        f"Include at most 1 result from gartner.com."
+    )
+
+    try:
+        resp = _requests.post(
+            "https://api.openai.com/v1/responses",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": model,
+                "tools": [{"type": "web_search_preview"}],
+                "input": search_prompt,
+            },
+            timeout=60,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        # Extract the text output and parse JSON from it.
+        text_content = ""
+        for item in data.get("output", []):
+            if item.get("type") == "message":
+                for c in item.get("content", []):
+                    if c.get("type") == "output_text":
+                        text_content += c["text"]
+
+        if not text_content:
+            logger.warning("Web search returned no text content.")
+            return []
+
+        # Parse the JSON from the response.
+        articles_data = parse_json_response(text_content)
+        raw_articles = articles_data.get("articles", [])
+
+        candidates = []
+        gartner_count = 0
+        for a in raw_articles:
+            url = a.get("url", "").strip()
+            domain = a.get("source_domain", "").strip()
+            if not url or not domain:
+                continue
+            # Enforce Gartner cap.
+            if "gartner.com" in domain:
+                if gartner_count >= _MAX_GARTNER_SOURCES:
+                    continue
+                gartner_count += 1
+            candidates.append(CandidateStory(
+                title=a.get("title", "").strip(),
+                url=url,
+                source_domain=domain,
+                published_at=None,  # Web search doesn't reliably give dates.
+                summary=a.get("summary", "").strip(),
+            ))
+
+        logger.info("Web search found %d candidates for theme '%s'.", len(candidates), theme_name)
+        return candidates
+
+    except Exception as exc:
+        logger.warning("Web search failed: %s — continuing with RSS only.", exc)
+        return []
+
+
+# ---------------------------------------------------------------------------
 # 2. Scoring
 # ---------------------------------------------------------------------------
 
@@ -387,11 +487,17 @@ def research_theme(
     _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
     _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
 
-    # Step 1: Gather broad RSS pool.
+    # Step 1a: Web search (primary discovery — finds blogs, news, Gartner).
+    web_search_results = []
+    if _api_key:
+        logger.info("Running web search for theme '%s'…", theme_name)
+        web_search_results = _web_search_for_theme(theme_name, api_key=_api_key)
+
+    # Step 1b: Gather RSS pool (catches recent posts from known feeds).
     rss_candidates = _gather_rss_candidates(on_feed_done=on_feed_done)
 
-    # Step 2: Merge with web results.
-    all_candidates: list[CandidateStory] = list(rss_candidates)
+    # Step 2: Merge all sources — web search + RSS + any externally provided.
+    all_candidates: list[CandidateStory] = list(web_search_results) + list(rss_candidates)
     if web_results:
         all_candidates.extend(web_results)
 

@@ -167,6 +167,18 @@ const app = {
         <p>${included} sources selected for "${this.state.selectedTheme}". Uncheck any you want to exclude.</p>
       </div>
       ${cards}
+      <div class="source-card" style="border-style:dashed; text-align:center; padding:16px;">
+        <button class="btn btn-sm btn-secondary" onclick="app.showAddSource()">+ Add Source Manually</button>
+        <div id="add-source-form" style="display:none; text-align:left; margin-top:12px;">
+          <input id="add-src-title" class="theme-input" placeholder="Article title" style="margin-top:0; margin-bottom:8px;">
+          <input id="add-src-url" class="theme-input" placeholder="URL" style="margin-top:0; margin-bottom:8px;">
+          <input id="add-src-domain" class="theme-input" placeholder="Source (e.g. gartner.com)" style="margin-top:0; margin-bottom:8px;">
+          <textarea id="add-src-text" class="theme-input" placeholder="Paste article text here (for paywalled content like Gartner)" style="margin-top:0; min-height:100px; resize:vertical;"></textarea>
+          <div class="actions" style="margin-top:8px;">
+            <button class="btn btn-sm btn-primary" onclick="app.addManualSource()">Add</button>
+          </div>
+        </div>
+      </div>
       <div class="actions">
         <button class="btn btn-secondary" onclick="app.newEpisode()">Start Over</button>
         <button class="btn btn-primary" onclick="app.generateScript()" ${included < 1 ? 'disabled' : ''}>Generate Script</button>
@@ -176,6 +188,26 @@ const app = {
 
   toggleSource(index) {
     this.state.sources[index].included = !this.state.sources[index].included;
+    this.renderSources();
+  },
+
+  showAddSource() {
+    const form = document.getElementById("add-source-form");
+    if (form) form.style.display = form.style.display === "none" ? "block" : "none";
+  },
+
+  addManualSource() {
+    const title = (document.getElementById("add-src-title")?.value || "").trim();
+    const url = (document.getElementById("add-src-url")?.value || "").trim();
+    const domain = (document.getElementById("add-src-domain")?.value || "").trim();
+    const text = (document.getElementById("add-src-text")?.value || "").trim();
+    if (!title) { alert("Title is required."); return; }
+    this.state.sources.push({
+      title, url: url || "#manual", source_domain: domain || "manual",
+      published_at: null, summary: text ? text.substring(0, 200) : "",
+      full_text: text || null, word_count: text ? text.split(/\s+/).length : 0,
+      included: true,
+    });
     this.renderSources();
   },
 
