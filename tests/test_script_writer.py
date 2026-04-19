@@ -49,11 +49,11 @@ class TestBuildScriptMarkdown(unittest.TestCase):
         md = build_script_markdown(parts, selected)
         self.assertIn(OUTRO_TEXT, md)
 
-    def test_contains_food_for_thought_token(self):
+    def test_contains_food_for_thought_opener(self):
         selected = [_scored("Story A")]
         parts = _parts(1)
         md = build_script_markdown(parts, selected)
-        self.assertIn(ENDING_TOKEN, md)
+        self.assertIn("food for thought", md.lower())
 
     def test_no_story_labels(self):
         selected = [_scored("Story A"), _scored("Story B"), _scored("Story C")]
@@ -67,8 +67,9 @@ class TestBuildScriptMarkdown(unittest.TestCase):
         selected = [_scored("Story A"), _scored("Story B")]
         parts = _parts(2)
         md = build_script_markdown(parts, selected)
-        self.assertIn("Narrative for story 1.", md)
-        self.assertIn("Narrative for story 2.", md)
+        # _lc_first lowercases the first character of each narrative
+        self.assertIn("narrative for story 1.", md)
+        self.assertIn("narrative for story 2.", md)
 
     def test_cn_relevance_included_when_set(self):
         selected = [_scored("Story A")]
@@ -90,7 +91,7 @@ class TestBuildScriptMarkdown(unittest.TestCase):
         selected = [_scored("Story A")]
         parts = _parts(1)
         md = build_script_markdown(parts, selected)
-        fft_pos = md.index(ENDING_TOKEN)
+        fft_pos = md.lower().index("food for thought")
         outro_pos = md.index(OUTRO_TEXT)
         self.assertLess(fft_pos, outro_pos)
 

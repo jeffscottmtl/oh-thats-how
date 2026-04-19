@@ -38,6 +38,7 @@ from .constants import (
     RSS_FEEDS,
     TARGET_MAX_WORDS,
     TARGET_MIN_WORDS,
+    THEME_BANK_PATH,
     TIMEZONE,
 )
 from .cover import render_cover
@@ -54,7 +55,13 @@ from .script_writer import (
     build_theme_script_markdown,
     build_theme_script_json,
 )
-from .theme_clustering import cluster_themes
+from .theme_proposal import (
+    propose_themes,
+    load_theme_bank,
+    save_theme_bank,
+    mark_theme_used,
+)
+from .theme_research import research_theme
 from .security import redact
 from .utils import count_words, ensure_dir, iso_utc_now, now_toronto, parse_indices, sha256_file, write_json
 from .verification import verify_selection
@@ -564,46 +571,6 @@ def _stage_build_full_list(
     return full_list_items, heading, raw_count
 
 
-def _stage_cluster_themes(
-    full_list_items: list[ScoredStory],
-    settings: Settings,
-) -> list[ThemeCandidate]:
-    """Cluster the top articles into theme candidates."""
-    top_articles = full_list_items[:min(len(full_list_items), MAX_SHORTLIST)]
-    themes = cluster_themes(
-        api_key=settings.openai_api_key,
-        model=settings.openai_model,  # mini model for clustering
-        scored_articles=top_articles,
-        project_id=settings.openai_project_id,
-        organization=settings.openai_organization,
-    )
-    return themes
-
-
-def _prompt_theme_selection(themes: list[ThemeCandidate], full_list: list[ScoredStory]) -> int:
-    """Display theme candidates and prompt user to pick one. Returns 0-based index."""
-    print("\n\nThis week's theme candidates:\n")
-    for idx, theme in enumerate(themes, start=1):
-        print(f"[{idx}] {theme.name}")
-        print(f"    {theme.description}")
-        articles = []
-        for ai in theme.article_indices:
-            if 1 <= ai <= len(full_list):
-                a = full_list[ai - 1]
-                articles.append(f"      • {a.candidate.title} ({a.candidate.source_domain})")
-        print("\n".join(articles))
-        print()
-
-    while True:
-        try:
-            raw = input(f"Pick a theme (1..{len(themes)}): ").strip()
-            choice = int(raw)
-            if 1 <= choice <= len(themes):
-                return choice - 1
-        except (ValueError, EOFError):
-            pass
-        print(f"Please enter a number between 1 and {len(themes)}.")
-
 
 def _stage_generate_theme_script(
     theme: ThemeCandidate,
@@ -967,6 +934,107 @@ def _audio_qwen(
 
 
 # ---------------------------------------------------------------------------
+# Theme-first helpers
+# ---------------------------------------------------------------------------
+
+def _display_theme_proposals(proposals: list) -> None:
+    """Display theme proposals for user selection."""
+    print("\n\nEpisode theme suggestions:\n")
+    for idx, p in enumerate(proposals, start=1):
+        print(f"[{idx}] {p.name}")
+        print(f"    {p.pitch}")
+        if p.source_previews:
+            for src in p.source_previews:
+                print(f"      • {src}")
+        print()
+
+
+def _prompt_theme_choice(count: int) -> str | int:
+    """Prompt user to pick a theme or type their own. Returns 0-based index or a string."""
+    while True:
+        raw = input(f"Pick a theme (1..{count}), or type your own topic: ").strip()
+        if not raw:
+            continue
+        try:
+            choice = int(raw)
+            if 1 <= choice <= count:
+                return choice - 1
+        except ValueError:
+            if len(raw) > 5:
+                return raw
+        print(f"Enter a number 1-{count} or type a topic (at least 6 characters).")
+
+
+# ---------------------------------------------------------------------------
+# Companion materials for Teams distribution
+# ---------------------------------------------------------------------------
+
+def _generate_companion_materials(
+    parts: ScriptParts,
+    script_markdown: str,
+    episode_name: str,
+    paths: dict[str, Path],
+) -> None:
+    """Generate companion files for Microsoft Teams distribution.
+
+    Creates two files:
+    1. Teams Post — short description with bullet points for the Teams announcement.
+    2. Try This — extracted steps/prompts from the try_this segment.
+    """
+    # --- Teams Post ---
+    # Build a concise announcement with theme and key takeaways.
+    theme_line = f"**{parts.theme_name}**" if parts.theme_name else ""
+    teams_lines = [
+        f"🎙️ **New Episode: {episode_name}**",
+        "",
+    ]
+    if theme_line:
+        teams_lines.append(f"This week's theme: {theme_line}")
+        teams_lines.append("")
+
+    # Extract a one-liner from the narrative (first sentence).
+    if parts.narrative:
+        first_sentence = parts.narrative.split(".")[0].strip() + "."
+        # Strip any Fish Audio tags for the Teams post.
+        first_sentence = _strip_fish_tags(first_sentence)
+        teams_lines.append(first_sentence)
+        teams_lines.append("")
+
+    teams_lines.append("**In this episode:**")
+    # Pull key points from the narrative — use paragraph starts as bullets.
+    paragraphs = [p.strip() for p in parts.narrative.split("\n\n") if p.strip()]
+    for para in paragraphs[:4]:
+        # Take first sentence of each paragraph as a bullet.
+        bullet = para.split(".")[0].strip()
+        bullet = _strip_fish_tags(bullet)
+        if bullet and len(bullet) > 15:
+            teams_lines.append(f"- {bullet}")
+
+    teams_lines.extend(["", "🎧 Listen to the episode and share your thoughts below!"])
+    paths["teams_post"].write_text("\n".join(teams_lines) + "\n", encoding="utf-8")
+
+    # --- Try This ---
+    try_this_lines = [
+        f"# Try This — {episode_name}",
+        "",
+    ]
+    if parts.try_this:
+        clean_try_this = _strip_fish_tags(parts.try_this)
+        try_this_lines.append(clean_try_this)
+    else:
+        try_this_lines.append("*(No try-this segment in this episode.)*")
+
+    try_this_lines.append("")
+    paths["try_this"].write_text("\n".join(try_this_lines) + "\n", encoding="utf-8")
+
+
+def _strip_fish_tags(text: str) -> str:
+    """Remove Fish Audio inline expression tags like [pause], [emphasis], etc."""
+    import re
+    return re.sub(r'\[(pause|long pause|emphasis|soft|laugh|clear throat)\]', '', text).strip()
+
+
+# ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
 
@@ -996,123 +1064,100 @@ def run_pipeline(args: Namespace) -> int:
 
     logger.info("Starting pipeline — episode '%s' (#%d).", episode_name, episode_number)
 
-    # Resolve date window.
-    window_start_raw = getattr(args, "window_start", None)
-    window_end_raw = getattr(args, "window_end", None)
-    has_custom_window = bool(window_start_raw or window_end_raw)
-    if bool(window_start_raw) ^ bool(window_end_raw):
-        raise PipelineError("Both --window-start and --window-end must be provided together.")
+    # Stage 1: Propose themes — bank + RSS scan + web search → LLM.
+    theme_bank_path = Path(THEME_BANK_PATH)
+    bank_id: str | None = None
 
-    if has_custom_window:
-        window_start = _parse_date_flag(window_start_raw, "--window-start")
-        window_end = _parse_date_flag(window_end_raw, "--window-end")
-        if window_end < window_start:
-            raise PipelineError("--window-end must be on or after --window-start.")
-        date_window = (window_start, window_end)
-    else:
-        # Default: always limit to the past 7 days ending on the episode date.
-        week_end = episode_dt.date()
-        week_start = week_end - timedelta(days=6)
-        date_window = (week_start, week_end)
-
-    # Stage 1: Fetch, score, filter — with a live feed progress bar.
-    feed_count = len(RSS_FEEDS)
     with Progress(
         SpinnerColumn(),
-        TextColumn("[bold cyan]Fetching feeds"),
-        BarColumn(),
-        MofNCompleteColumn(),
-        TimeElapsedColumn(),
-        console=_console,
-        transient=True,
-    ) as feed_progress:
-        feed_task = feed_progress.add_task("feeds", total=feed_count)
-
-        def _on_feed_done() -> None:
-            feed_progress.advance(feed_task)
-
-        full_list_items, heading, raw_count = _stage_build_full_list(
-            settings, date_window, on_feed_done=_on_feed_done
-        )
-
-    _print_full_list(full_list_items, heading=heading)
-
-    # Stage 2: Cluster themes.
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[bold cyan]Clustering themes…"),
+        TextColumn("[bold cyan]Scanning sources and proposing themes…"),
         TimeElapsedColumn(),
         console=_console,
         transient=True,
     ) as prog:
-        prog.add_task("clustering", total=None)
-        themes = _stage_cluster_themes(full_list_items, settings)
+        prog.add_task("proposals", total=None)
+        proposals, bank_entries = propose_themes(
+            api_key=settings.openai_api_key,
+            model=settings.openai_model,
+            theme_bank_path=theme_bank_path,
+            project_id=settings.openai_project_id,
+            organization=settings.openai_organization,
+        )
 
-    _console.print(f"[green]✓[/green] Found [bold]{len(themes)}[/bold] theme candidates")
+    _console.print(f"[green]✓[/green] Proposed [bold]{len(proposals)}[/bold] themes")
 
-    # Stage 2b: User selects a theme.
-    theme_idx = _prompt_theme_selection(themes, full_list_items)
-    chosen_theme = themes[theme_idx]
-    logger.info("Theme selected: '%s'", chosen_theme.name)
+    # Stage 1b: User picks a theme or types their own.
+    _display_theme_proposals(proposals)
+    choice = _prompt_theme_choice(len(proposals))
 
-    # Resolve selected articles from theme indices (1-based into full_list_items).
-    selected: list[ScoredStory] = []
-    for ai in chosen_theme.article_indices:
-        if 1 <= ai <= len(full_list_items):
-            selected.append(full_list_items[ai - 1])
-    selected_indices = chosen_theme.article_indices
+    if isinstance(choice, int):
+        chosen_proposal = proposals[choice]
+        theme_name = chosen_proposal.name
+        bank_id = chosen_proposal.bank_id
+    else:
+        theme_name = choice
+        bank_id = None
 
-    # Build a minimal verifications list for downstream QA compatibility.
-    verifications = [VerificationResult(story=s, passed=True, reason=None) for s in selected]
+    logger.info("Theme chosen: '%s'", theme_name)
 
-    # Write a sources JSON so QA has something to validate.
-    write_json(
-        paths["sources_json"],
-        _sources_payload(raw_count, full_list_items, selected_indices, verifications),
-    )
-
-    # Stage 2c: Fetch full article text for theme's articles.
+    # Stage 2: Deep research — find sources for the chosen theme.
     with Progress(
         SpinnerColumn(),
-        TextColumn("[bold cyan]Fetching full article text"),
-        BarColumn(),
-        MofNCompleteColumn(),
+        TextColumn(f"[bold cyan]Researching '{theme_name}'…"),
         TimeElapsedColumn(),
         console=_console,
         transient=True,
-    ) as art_progress:
-        art_task = art_progress.add_task("articles", total=len(selected))
+    ) as prog:
+        prog.add_task("research", total=None)
+        research_results = research_theme(theme_name=theme_name)
 
-        def _on_article_done() -> None:
-            art_progress.advance(art_task)
-
-        fetch_article_text_batch(selected, on_done=_on_article_done)
-
-    fetched = sum(1 for s in selected if s.candidate.full_text)
+    fetched = sum(1 for r in research_results if r.full_text)
     _console.print(
-        f"[green]✓[/green] Full text fetched for [bold]{fetched}/{len(selected)}[/bold] articles"
-        + (" — some unavailable" if fetched < len(selected) else "")
+        f"[green]✓[/green] Found [bold]{len(research_results)}[/bold] sources "
+        f"({fetched} with full text)"
+    )
+
+    # Convert research results to ScoredStory for downstream compatibility.
+    selected: list[ScoredStory] = [score_story(c) for c in research_results]
+    selected_indices = list(range(1, len(selected) + 1))
+
+    # Build verifications list for QA compatibility.
+    verifications = [VerificationResult(story=s, passed=True, reason=None) for s in selected]
+
+    # Write sources JSON.
+    write_json(
+        paths["sources_json"],
+        _sources_payload(len(research_results), selected, selected_indices, verifications),
+    )
+
+    # Build a ThemeCandidate for downstream script generation.
+    chosen_theme = ThemeCandidate(
+        name=theme_name,
+        description="",
+        article_indices=selected_indices,
     )
 
     proceed = _review_article_content(selected)
     if not proceed:
-        # User wants to reselect — re-prompt theme selection and re-fetch.
-        theme_idx = _prompt_theme_selection(themes, full_list_items)
-        chosen_theme = themes[theme_idx]
-        logger.info("Theme re-selected: '%s'", chosen_theme.name)
-        selected = []
-        for ai in chosen_theme.article_indices:
-            if 1 <= ai <= len(full_list_items):
-                selected.append(full_list_items[ai - 1])
-        selected_indices = chosen_theme.article_indices
+        _display_theme_proposals(proposals)
+        choice = _prompt_theme_choice(len(proposals))
+        if isinstance(choice, int):
+            chosen_proposal = proposals[choice]
+            theme_name = chosen_proposal.name
+            bank_id = chosen_proposal.bank_id
+        else:
+            theme_name = choice
+            bank_id = None
+        logger.info("Theme re-selected: '%s'", theme_name)
+        research_results = research_theme(theme_name=theme_name)
+        selected = [score_story(c) for c in research_results]
+        selected_indices = list(range(1, len(selected) + 1))
+        chosen_theme = ThemeCandidate(name=theme_name, description="", article_indices=selected_indices)
         verifications = [VerificationResult(story=s, passed=True, reason=None) for s in selected]
         write_json(
             paths["sources_json"],
-            _sources_payload(raw_count, full_list_items, selected_indices, verifications),
+            _sources_payload(len(research_results), selected, selected_indices, verifications),
         )
-        for s in selected:
-            s.candidate.full_text = None
-        fetch_article_text_batch(selected)
 
     # Stage 3: Generate theme script — spinner with elapsed time.
     _console.print()
@@ -1144,6 +1189,16 @@ def run_pipeline(args: Namespace) -> int:
 
     print("\nGenerated script:\n")
     print(script_markdown)
+
+    # Stage 3b: Generate companion materials for Teams distribution.
+    _generate_companion_materials(parts, script_markdown, episode_name, paths)
+    _console.print("[green]✓[/green] Companion materials generated (Teams post + Try This)")
+
+    # Update theme bank — mark theme as used.
+    if bank_id:
+        mark_theme_used(bank_entries, bank_id)
+        save_theme_bank(theme_bank_path, bank_entries)
+        logger.info("Theme bank updated: '%s' marked as used.", theme_name)
 
     # Stage 4: Render cover — spinner.
     with Progress(
@@ -1226,6 +1281,8 @@ def run_pipeline(args: Namespace) -> int:
             "cover_png": str(paths["cover_png"]),
             "mp3": str(paths["mp3"]) if audio_generated else None,
             "manifest_json": str(paths["manifest_json"]),
+            "teams_post": str(paths["teams_post"]),
+            "try_this": str(paths["try_this"]),
         },
         "qa": {"passed": False, "checks": {}, "failures": []},
         "notes": notes,
