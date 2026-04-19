@@ -1,17 +1,17 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #121520;
-  --surface: #1e2230;
-  --surface-hover: #2a2f40;
-  --border: #3a4055;
-  --text: #f0f1f5;
-  --text-dim: #b8bcc8;
-  --accent: #14b8bb;
-  --accent-hover: #1dd1d4;
-  --accent-bg: rgba(20, 184, 187, 0.15);
-  --danger: #f87171;
-  --success: #4ade80;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-hover: #f0f1f4;
+  --border: #dde0e6;
+  --text: #1a1d27;
+  --text-dim: #5f6578;
+  --accent: #0a7e80;
+  --accent-hover: #096668;
+  --accent-bg: rgba(10, 126, 128, 0.08);
+  --danger: #dc2626;
+  --success: #16a34a;
   --radius: 10px;
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
@@ -30,7 +30,7 @@ body {
 
 .sidebar {
   width: 280px;
-  background: var(--surface);
+  background: #ebedf2;
   border-right: 1px solid var(--border);
   padding: 24px 16px;
   overflow-y: auto;
@@ -112,11 +112,11 @@ body {
 }
 
 .btn-secondary {
-  background: var(--surface-hover);
+  background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
 }
-.btn-secondary:hover { background: var(--border); }
+.btn-secondary:hover { background: var(--surface-hover); }
 
 .btn-sm {
   padding: 6px 14px;
@@ -151,8 +151,7 @@ body {
 
 .card p {
   font-size: 13px;
-  color: var(--text);
-  opacity: 0.8;
+  color: var(--text-dim);
   margin-bottom: 8px;
 }
 
@@ -192,8 +191,7 @@ body {
 
 .source-card .preview {
   font-size: 12px;
-  color: var(--text);
-  opacity: 0.85;
+  color: var(--text-dim);
   max-height: 80px;
   overflow: hidden;
   line-height: 1.5;
@@ -303,7 +301,7 @@ body {
 .theme-input {
   width: 100%;
   padding: 12px 16px;
-  background: var(--surface);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text);
@@ -322,7 +320,7 @@ body {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--border);
+  border: 2px solid #ccc;
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
