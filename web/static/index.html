@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Signal</title>
-  <link rel="stylesheet" href="/static/style.css?v=11">
+  <link rel="stylesheet" href="/static/style.css?v=12">
 </head>
 <body>
   <div class="app">
@@ -12,6 +12,7 @@
       <div class="logo">The Signal</div>
       <div class="logo-sub">AI Podcast for Communicators</div>
       <button class="btn btn-primary" style="width:100%; margin-bottom: 16px;" onclick="app.newEpisode()">+ New Episode</button>
+      <button class="btn btn-secondary" style="width:100%; margin-bottom: 16px; font-size:12px;" onclick="app.showThemeBank()">Theme Bank</button>
       <input class="sidebar-search" id="ep-search" placeholder="Search episodes..." oninput="app.filterEpisodes()">
       <div class="filter-bar" id="filter-bar">
         <button class="filter-btn active" data-filter="all" onclick="app.setFilter('all')">All</button>
@@ -29,6 +30,6 @@
       </div>
     </main>
   </div>
-  <script src="/static/app.js?v=11"></script>
+  <script src="/static/app.js?v=12"></script>
 </body>
 </html>

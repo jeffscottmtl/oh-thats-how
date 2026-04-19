@@ -640,6 +640,111 @@ const app = {
     }
   },
 
+  // ── Theme Bank ──────────────────────────────────────────────────────
+
+  async showThemeBank() {
+    $main().innerHTML = `<div class="loading-msg"><div class="spinner"></div> Loading theme bank...</div>`;
+    try {
+      const res = await fetch("/api/theme-bank");
+      const themes = await res.json();
+      this._themeBank = themes;
+      this.renderThemeBank();
+    } catch (e) {
+      $main().innerHTML = `<p style="color:var(--danger)">Error loading theme bank: ${e.message}</p>`;
+    }
+  },
+
+  renderThemeBank() {
+    const themes = this._themeBank || [];
+    const rows = themes.map(t => {
+      const tags = (t.tags || []).join(", ");
+      const used = t.times_used > 0
+        ? `<span class="ep-badge used" style="font-size:10px">${t.times_used}x · ${t.last_used || '?'}</span>`
+        : `<span class="ep-badge fresh" style="font-size:10px">Never used</span>`;
+      const esc = t.id.replace(/'/g, "\\'");
+      return `
+        <div class="source-card" style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="flex:1;">
+            <h4 id="name-display-${t.id}">${t.name}</h4>
+            <div style="font-size:12px; color:var(--text-dim); margin:4px 0;">${t.description}</div>
+            <div style="font-size:11px; color:var(--text-dim);">${tags ? 'Tags: ' + tags : ''}</div>
+            ${used}
+          </div>
+          <div style="display:flex; gap:4px; flex-shrink:0;">
+            <button class="btn btn-sm btn-secondary" onclick="app.editTheme('${esc}')">Edit</button>
+            <button class="btn btn-sm btn-secondary" style="color:var(--danger);" onclick="app.deleteTheme('${esc}')">Delete</button>
+          </div>
+        </div>`;
+    }).join("");
+
+    $main().innerHTML = `
+      <div class="step-header">
+        <h1>Theme Bank</h1>
+        <p>${themes.length} themes. Click Edit to modify, or add a new one below.</p>
+      </div>
+      ${rows}
+      <div class="source-card" style="border-style:dashed;">
+        <h4 style="margin-bottom:8px;">Add New Theme</h4>
+        <input id="new-theme-name" class="theme-input" placeholder="Theme name" style="margin-top:0; margin-bottom:8px;">
+        <input id="new-theme-desc" class="theme-input" placeholder="Description — one sentence about what this theme covers" style="margin-top:0; margin-bottom:8px;">
+        <input id="new-theme-tags" class="theme-input" placeholder="Tags (comma-separated)" style="margin-top:0; margin-bottom:8px;">
+        <button class="btn btn-sm btn-primary" onclick="app.addTheme()">Add Theme</button>
+      </div>
+    `;
+  },
+
+  async editTheme(themeId) {
+    const theme = (this._themeBank || []).find(t => t.id === themeId);
+    if (!theme) return;
+    const name = prompt("Theme name:", theme.name);
+    if (name === null) return;
+    const desc = prompt("Description:", theme.description);
+    if (desc === null) return;
+    const tagsStr = prompt("Tags (comma-separated):", (theme.tags || []).join(", "));
+    if (tagsStr === null) return;
+    const tags = tagsStr.split(",").map(t => t.trim()).filter(Boolean);
+    try {
+      await fetch(`/api/theme-bank/${encodeURIComponent(themeId)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, description: desc, tags }),
+      });
+      this.showThemeBank();
+    } catch (e) {
+      alert("Failed to update: " + e.message);
+    }
+  },
+
+  async deleteTheme(themeId) {
+    if (!confirm("Delete this theme from the bank?")) return;
+    try {
+      await fetch(`/api/theme-bank/${encodeURIComponent(themeId)}`, { method: "DELETE" });
+      this.showThemeBank();
+    } catch (e) {
+      alert("Failed to delete: " + e.message);
+    }
+  },
+
+  async addTheme() {
+    const name = (document.getElementById("new-theme-name")?.value || "").trim();
+    const desc = (document.getElementById("new-theme-desc")?.value || "").trim();
+    const tagsStr = (document.getElementById("new-theme-tags")?.value || "").trim();
+    if (!name) { alert("Theme name is required."); return; }
+    const tags = tagsStr ? tagsStr.split(",").map(t => t.trim()).filter(Boolean) : [];
+    try {
+      const res = await fetch("/api/theme-bank", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, description: desc, tags }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      this.showThemeBank();
+    } catch (e) {
+      alert("Failed to add: " + e.message);
+    }
+  },
+
   async generateAudioForEpisode(name) {
     $main().innerHTML = `
       <div class="step-header"><h1>Generating Audio</h1><p>${name}</p></div>

@@ -76,6 +76,90 @@ async def index():
 
 # ── API ────────────────────────────────────────────────────────────────
 
+# ── Theme Bank API ─────────────────────────────────────────────────────
+
+@app.get("/api/theme-bank")
+async def get_theme_bank():
+    """Return all themes in the bank."""
+    theme_bank_path = Path(THEME_BANK_PATH)
+    entries = load_theme_bank(theme_bank_path)
+    return JSONResponse([
+        {
+            "id": e.id,
+            "name": e.name,
+            "description": e.description,
+            "tags": e.tags,
+            "last_used": e.last_used,
+            "times_used": e.times_used,
+        }
+        for e in entries
+    ])
+
+
+@app.put("/api/theme-bank/{theme_id}")
+async def update_theme(theme_id: str, request: Request):
+    """Update a theme in the bank."""
+    body = await request.json()
+    theme_bank_path = Path(THEME_BANK_PATH)
+    entries = load_theme_bank(theme_bank_path)
+    for e in entries:
+        if e.id == theme_id:
+            if "name" in body:
+                e.name = body["name"]
+            if "description" in body:
+                e.description = body["description"]
+            if "tags" in body:
+                e.tags = body["tags"]
+            save_theme_bank(theme_bank_path, entries)
+            return JSONResponse({"updated": True})
+    return JSONResponse({"error": "Theme not found"}, status_code=404)
+
+
+@app.post("/api/theme-bank")
+async def add_theme(request: Request):
+    """Add a new theme to the bank."""
+    body = await request.json()
+    name = body.get("name", "").strip()
+    if not name:
+        return JSONResponse({"error": "name required"}, status_code=400)
+    theme_id = name.lower().replace(" ", "-")[:40]
+    # Remove non-alphanumeric except hyphens.
+    import re as _re
+    theme_id = _re.sub(r"[^a-z0-9\-]", "", theme_id)
+
+    theme_bank_path = Path(THEME_BANK_PATH)
+    entries = load_theme_bank(theme_bank_path)
+
+    # Check for duplicate ID.
+    if any(e.id == theme_id for e in entries):
+        return JSONResponse({"error": "Theme with this ID already exists"}, status_code=409)
+
+    from ai_podcast_pipeline.models import ThemeBankEntry
+    entries.append(ThemeBankEntry(
+        id=theme_id,
+        name=name,
+        description=body.get("description", ""),
+        tags=body.get("tags", []),
+    ))
+    save_theme_bank(theme_bank_path, entries)
+    return JSONResponse({"id": theme_id, "added": True})
+
+
+@app.delete("/api/theme-bank/{theme_id}")
+async def delete_theme(theme_id: str):
+    """Delete a theme from the bank."""
+    theme_bank_path = Path(THEME_BANK_PATH)
+    entries = load_theme_bank(theme_bank_path)
+    before = len(entries)
+    entries = [e for e in entries if e.id != theme_id]
+    if len(entries) == before:
+        return JSONResponse({"error": "Theme not found"}, status_code=404)
+    save_theme_bank(theme_bank_path, entries)
+    return JSONResponse({"deleted": True})
+
+
+# ── Episodes API ───────────────────────────────────────────────────────
+
 @app.get("/api/episodes")
 async def list_episodes():
     """List past episodes from output/ manifests."""
