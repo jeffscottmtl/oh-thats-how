@@ -437,12 +437,6 @@ const app = {
         ${stateButtons}
       </div>
     `;
-
-      // Stash for tab switching.
-      this._viewData = data;
-    } catch (e) {
-      $main().innerHTML = `<p style="color:var(--danger)">Error loading episode: ${e.message}</p>`;
-    }
   },
 
   async setEpisodeState(name, state) {
