@@ -1,7 +1,7 @@
 """Theme proposal module.
 
 Loads the theme bank, filters eligible themes by cooldown, scans RSS headlines,
-and asks the LLM to propose exactly 5 episode themes.
+and asks the LLM to propose exactly 10 episode themes.
 """
 from __future__ import annotations
 
@@ -164,7 +164,7 @@ def _build_prompt(
         "of people who write the stories, build the presentations, draft the speeches, and "
         "send the emails — non-technical professionals who care about how AI can make their "
         "daily writing and communications work better, faster, and smarter.\n\n"
-        "Your job is to propose exactly 5 episode themes that would resonate with this "
+        "Your job is to propose exactly 10 episode themes that would resonate with this "
         "audience. Each theme should feel immediately practical and relevant to someone who "
         "drafts, edits, presents, or publishes content for a living.\n\n"
         "Return ONLY a JSON object with this schema — no markdown, no explanation:\n"
@@ -179,7 +179,7 @@ def _build_prompt(
         "  ]\n"
         "}\n\n"
         "Rules:\n"
-        "- Propose exactly 5 themes.\n"
+        "- Propose exactly 10 themes.\n"
         "- source_previews must contain 2-3 items drawn from the headlines below.\n"
         "- If a theme maps to a theme bank entry, set bank_id to its id; otherwise null.\n"
         "- Avoid politics, layoffs, sports, and gadget reviews.\n"
@@ -217,7 +217,7 @@ def _build_prompt(
         f"{bank_section}"
         f"{rss_section}"
         f"{web_section}"
-        "Based on the above, propose exactly 5 episode themes for The Signal. "
+        "Based on the above, propose exactly 10 episode themes for The Signal. "
         "Return the JSON object described in the system prompt."
     )
 
