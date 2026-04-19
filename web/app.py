@@ -158,7 +158,14 @@ async def research(request: Request):
     if not theme_name:
         return JSONResponse({"error": "theme_name required"}, status_code=400)
 
-    results = research_theme(theme_name=theme_name)
+    settings = _get_settings()
+    results = research_theme(
+        theme_name=theme_name,
+        api_key=settings.openai_api_key,
+        model=settings.openai_model,
+        project_id=settings.openai_project_id,
+        organization=settings.openai_organization,
+    )
 
     sources = []
     for c in results:

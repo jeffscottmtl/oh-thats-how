@@ -14,6 +14,7 @@ from typing import Callable
 
 from .constants import SOURCE_ALLOWLIST_BASELINE
 from .ingest import fetch_article_text, fetch_candidates
+from .llm import chat_completion, parse_json_response, OpenAIError
 from .models import CandidateStory
 
 logger = logging.getLogger(__name__)
@@ -215,53 +216,92 @@ def _rank_sources(
 
 
 # ---------------------------------------------------------------------------
-# 4. RSS filtering
+# 4. LLM-based source validation
 # ---------------------------------------------------------------------------
 
 
-def _filter_rss_for_theme(
+def _llm_filter_sources(
     theme_name: str,
+    candidates: list[CandidateStory],
+    api_key: str,
+    model: str,
+    project_id: str | None = None,
+    organization: str | None = None,
+    max_keep: int = 8,
+) -> list[int]:
+    """Ask the LLM to pick the most relevant articles for a theme.
+
+    Returns a list of 0-based indices into `candidates` that the LLM
+    considers relevant. This is the key quality gate — keyword matching
+    is too loose, so we let the LLM judge semantic relevance.
+    """
+    article_lines = []
+    for idx, c in enumerate(candidates):
+        pub = c.published_at.strftime("%Y-%m-%d") if c.published_at else "unknown"
+        summary = (c.summary or "")[:200]
+        article_lines.append(f"[{idx}] {c.title} ({c.source_domain}, {pub})\n    {summary}")
+
+    article_block = "\n".join(article_lines)
+
+    prompt = f"""You are selecting articles for a podcast episode about: "{theme_name}"
+
+The podcast is for communications professionals — people who write, edit, present,
+and create content at work. The episode should help them understand how AI relates
+to this theme in their daily work.
+
+Below is a list of candidate articles. Select ONLY articles that are genuinely
+relevant to the theme "{theme_name}" AND relate to AI, technology, or how
+professionals work. Be strict — reject articles that are:
+- About unrelated products (phones, gaming, hardware reviews)
+- About layoffs, funding rounds, or corporate drama
+- Only tangentially connected via a shared word
+- Clickbait or listicles with no substance
+
+Return JSON with a single key "selected_indices" — an array of the index numbers
+(the [N] values) of the articles worth using. Pick at most {max_keep}.
+If none are relevant, return an empty array.
+
+Candidate articles:
+{article_block}"""
+
+    try:
+        content = chat_completion(
+            api_key=api_key,
+            model=model,
+            messages=[
+                {"role": "system", "content": "Output strict JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            project_id=project_id,
+            organization=organization,
+            temperature=0.1,
+        )
+        data = parse_json_response(content)
+        indices = data.get("selected_indices", [])
+        valid = [int(i) for i in indices if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
+        logger.info("LLM selected %d/%d candidates for theme '%s'.", len(valid), len(candidates), theme_name)
+        return valid
+    except Exception as exc:
+        logger.warning("LLM source filtering failed: %s — falling back to all candidates.", exc)
+        return list(range(min(max_keep, len(candidates))))
+
+
+# ---------------------------------------------------------------------------
+# 5. RSS gathering (broad, then LLM filters)
+# ---------------------------------------------------------------------------
+
+
+def _gather_rss_candidates(
     on_feed_done: Callable[[], None] | None = None,
 ) -> list[CandidateStory]:
-    """Fetch RSS feeds and return candidates that are meaningfully related
-    to the theme. Requires at least 2 matching content words, OR 1 match
-    if the theme has very few tokens. Also requires AI relevance.
-    """
-    theme_tokens = set(_tokenise(theme_name))
-    if not theme_tokens:
-        return []
-
-    # Require at least 2 word overlap for themes with 3+ tokens,
-    # otherwise 1 is fine (short themes like "AI anxiety").
-    min_overlap = 2 if len(theme_tokens) >= 3 else 1
-
+    """Fetch all RSS candidates. No keyword filtering — the LLM decides relevance."""
     all_candidates = fetch_candidates(on_feed_done=on_feed_done)
-
-    # AI-related keywords — at least one must appear for the article to qualify.
-    _ai_signals = {"ai", "artificial", "intelligence", "llm", "chatgpt", "gpt",
-                   "generative", "machine", "learning", "copilot", "claude",
-                   "gemini", "model", "prompt", "automation", "chatbot"}
-
-    matched: list[CandidateStory] = []
-    for candidate in all_candidates:
-        text = (candidate.title + " " + (candidate.summary or "")).lower()
-        text_tokens = set(_tokenise(text))
-        overlap = theme_tokens & text_tokens
-        has_ai = bool(_ai_signals & text_tokens)
-        if len(overlap) >= min_overlap and has_ai:
-            matched.append(candidate)
-
-    logger.info(
-        "RSS filter: %d/%d candidates matched theme '%s'",
-        len(matched),
-        len(all_candidates),
-        theme_name,
-    )
-    return matched
+    logger.info("Gathered %d RSS candidates for LLM filtering.", len(all_candidates))
+    return all_candidates
 
 
 # ---------------------------------------------------------------------------
-# 5. Main entry point
+# 6. Main entry point
 # ---------------------------------------------------------------------------
 
 
@@ -271,19 +311,27 @@ def research_theme(
     on_feed_done: Callable[[], None] | None = None,
     on_article_done: Callable[[], None] | None = None,
     max_sources: int = 8,
+    api_key: str | None = None,
+    model: str | None = None,
+    project_id: str | None = None,
+    organization: str | None = None,
 ) -> list[CandidateStory]:
     """Research a theme and return the top sources with full text fetched.
 
-    Steps:
-    1. Fetch RSS candidates that match the theme.
-    2. Merge with any externally-supplied *web_results*.
-    3. Deduplicate by URL.
-    4. Rank by theme relevance score.
-    5. Fetch full article text in parallel (6 workers).
-    6. Return ranked candidates (with full_text populated where possible).
+    Two-pass approach:
+    1. Gather a broad pool of RSS candidates + web results.
+    2. Use keyword scoring to pre-filter to top ~30 candidates.
+    3. LLM validates which are actually relevant (if api_key provided).
+    4. Fetch full article text for the winners.
     """
-    # Step 1: RSS candidates matching the theme.
-    rss_candidates = _filter_rss_for_theme(theme_name, on_feed_done=on_feed_done)
+    import os
+
+    # Resolve API credentials from args or environment.
+    _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
+    _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
+
+    # Step 1: Gather broad RSS pool.
+    rss_candidates = _gather_rss_candidates(on_feed_done=on_feed_done)
 
     # Step 2: Merge with web results.
     all_candidates: list[CandidateStory] = list(rss_candidates)
@@ -298,13 +346,29 @@ def research_theme(
             seen_urls.add(candidate.url)
             deduped.append(candidate)
 
-    # Step 4: Rank by theme relevance.
-    ranked = _rank_sources(deduped, theme_name, max_results=max_sources)
+    # Step 4: Pre-filter with keyword scoring to top ~30 (keeps LLM prompt small).
+    pre_ranked = _rank_sources(deduped, theme_name, max_results=30)
 
-    # Step 5: Fetch full text in parallel.
+    # Step 5: LLM validation — the LLM picks the actually relevant ones.
+    if _api_key and pre_ranked:
+        selected_indices = _llm_filter_sources(
+            theme_name=theme_name,
+            candidates=pre_ranked,
+            api_key=_api_key,
+            model=_model,
+            project_id=project_id,
+            organization=organization,
+            max_keep=max_sources,
+        )
+        final = [pre_ranked[i] for i in selected_indices]
+    else:
+        # No API key — fall back to keyword scoring only.
+        final = pre_ranked[:max_sources]
+
+    # Step 6: Fetch full text in parallel.
     with ThreadPoolExecutor(max_workers=6) as pool:
         future_to_candidate = {
-            pool.submit(fetch_article_text, c.url): c for c in ranked
+            pool.submit(fetch_article_text, c.url): c for c in final
         }
         for future in as_completed(future_to_candidate):
             candidate = future_to_candidate[future]
@@ -317,6 +381,6 @@ def research_theme(
                 on_article_done()
 
     logger.info(
-        "research_theme('%s'): returning %d sources", theme_name, len(ranked)
+        "research_theme('%s'): returning %d sources", theme_name, len(final)
     )
-    return ranked
+    return final
