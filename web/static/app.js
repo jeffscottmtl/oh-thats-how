@@ -136,9 +136,9 @@ const app = {
       ${this.renderSteps(0)}
       <div class="step-header">
         <h1>Proposing Themes</h1>
-        <p>Scanning RSS feeds and theme bank...</p>
+        <p>Searching the web, scanning feeds, and checking the theme bank...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> Scanning sources and generating theme proposals. This takes about 15 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Finding fresh topics for your next episode. This takes about 15 seconds.</div>
     `;
 
     try {
@@ -206,9 +206,9 @@ const app = {
       ${this.renderSteps(1)}
       <div class="step-header">
         <h1>Researching: ${this.state.selectedTheme}</h1>
-        <p>Finding and ranking sources...</p>
+        <p>Searching the web and feeds for the best sources...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> Searching RSS feeds and fetching full article text. This takes about 30 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Running web searches, scanning feeds, and fetching full articles. This takes about 30 seconds.</div>
     `;
 
     try {
