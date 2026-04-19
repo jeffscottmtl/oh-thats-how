@@ -4,7 +4,7 @@ INTRO_TEXT = (
     "Welcome to The Signal, a short podcast for communicators at CN — the people "
     "who write the stories, build the presentations, draft the speeches, and send "
     "the emails that connect us. I'm Jeff Scott, and each episode, I'll pick one "
-    "topic where AI and communications overlap to dig into what's actually useful "
+    "topic where AI and communications overlap to dig into what's useful "
     "for our work. Let's get into it."
 )
 

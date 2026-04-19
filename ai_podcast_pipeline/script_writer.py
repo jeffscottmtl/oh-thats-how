@@ -290,7 +290,7 @@ Voice and tone:
 - Use contractions naturally throughout: "it's", "you'll", "I've", "couldn't", "didn't", "that's", "here's". Avoid stiff constructions like "it is" or "I could not" where a contraction sounds more natural in speech.
 - Never read articles verbatim or near-verbatim. Synthesize, interpret, and put everything in your own words.
 - Strip out any redundant, repetitive, or boilerplate phrasing pulled from the source material (e.g., "In a world where…", "It's more important than ever…", "As we navigate…"). Cut anything that sounds like filler.
-- AVOID the word "actually" — it's a crutch that adds nothing. Use it at most once in the entire script, and only if it genuinely adds emphasis. Never use "actually" in questions ("what does it actually mean") or as filler ("you can actually use this").
+- NEVER use the word "actually" — it is banned from this script entirely. Zero occurrences. It's a crutch that adds nothing. If you catch yourself writing "actually," delete it — the sentence is always better without it.
 
 Delivery and pacing — THIS IS MANDATORY, not optional styling:
 This script is read aloud by a text-to-speech engine. The formatting below directly controls vocal expressiveness. Scripts that lack these elements sound flat and robotic. You MUST include all of the following in every narrative:
@@ -434,6 +434,7 @@ Self-validation (check BEFORE returning JSON):
 - Verify none of these banned phrases appear: "subscribe", "newsletter", "sign up", "continue reading", "in your inbox", "read more", "click here", "this story originally appeared", "Source:", "What happened:", "Why this matters:".
 - Verify no 4+ word phrase is repeated within 30 words of itself.
 - Verify no single word appears 3+ times within 2 consecutive sentences. If it does, rewrite to vary the language.
+- Verify the word "actually" does not appear anywhere in the output. If it does, remove it — the sentence is always better without it.
 - Verify the total word count of story_narratives + cn_relevance + food_for_thought is roughly {target_total_words - 70} words (between {round((target_total_words - 70) * 0.9)} and {round((target_total_words - 70) * 1.1)}).
 - DELIVERY CUE CHECKS (mandatory — rewrite any narrative that fails):
   * Each story narrative must contain at least 2 em dashes (—). Count them.
@@ -851,7 +852,7 @@ Voice and tone:
 - Never read articles verbatim. Synthesize and put everything in your own words.
 - No jargon. If you must use a technical term, explain it immediately in plain English.
 - No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
-- Avoid the word "actually" — it's a crutch. Use it at most once in the entire script.
+- NEVER use the word "actually" — it is banned entirely. Zero occurrences.
 
 Delivery cues (MANDATORY for text-to-speech):
 - Em dashes (—) for mid-sentence pivots and pauses: at least 4-5 across the full script
