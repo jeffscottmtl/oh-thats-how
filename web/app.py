@@ -39,6 +39,7 @@ from ai_podcast_pipeline.pipeline import (
     _strip_fish_tags,
 )
 from ai_podcast_pipeline.qa import run_qa
+from ai_podcast_pipeline.theme_research import record_used_articles
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -280,6 +281,10 @@ def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> d
 
     paths["script_md"].write_text(script_markdown, encoding="utf-8")
     write_json(paths["script_json"], script_payload)
+
+    # Record used articles so future episodes avoid reusing them.
+    used_urls = [c.url for c in candidates if c.url]
+    record_used_articles(used_urls, episode_name)
 
     # Companion materials.
     _generate_companion_materials(parts, script_markdown, episode_name, paths)

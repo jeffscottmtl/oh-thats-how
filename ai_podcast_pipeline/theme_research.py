@@ -12,12 +12,47 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from typing import Callable
 
+from pathlib import Path
+
 from .constants import SOURCE_ALLOWLIST_BASELINE
 from .ingest import fetch_article_text, fetch_candidates
 from .llm import chat_completion, parse_json_response, OpenAIError
 from .models import CandidateStory
 
 logger = logging.getLogger(__name__)
+
+_USED_ARTICLES_PATH = Path("data/used_articles.json")
+
+
+def _load_used_articles() -> dict[str, list[str]]:
+    """Load the used articles tracker. Returns {url: [episode_name, ...]}."""
+    import json
+    if _USED_ARTICLES_PATH.exists():
+        try:
+            return json.loads(_USED_ARTICLES_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _save_used_articles(used: dict[str, list[str]]) -> None:
+    """Save the used articles tracker."""
+    import json
+    _USED_ARTICLES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _USED_ARTICLES_PATH.write_text(
+        json.dumps(used, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+
+def record_used_articles(urls: list[str], episode_name: str) -> None:
+    """Record that these article URLs were used in an episode."""
+    used = _load_used_articles()
+    for url in urls:
+        if url not in used:
+            used[url] = []
+        if episode_name not in used[url]:
+            used[url].append(episode_name)
+    _save_used_articles(used)
 
 # Words to strip when tokenising theme names for matching.
 _STOPWORDS = frozenset(
@@ -235,11 +270,15 @@ def _llm_filter_sources(
     considers relevant. This is the key quality gate — keyword matching
     is too loose, so we let the LLM judge semantic relevance.
     """
+    used_articles = _load_used_articles()
+
     article_lines = []
     for idx, c in enumerate(candidates):
         pub = c.published_at.strftime("%Y-%m-%d") if c.published_at else "unknown"
         summary = (c.summary or "")[:200]
-        article_lines.append(f"[{idx}] {c.title} ({c.source_domain}, {pub})\n    {summary}")
+        used_in = used_articles.get(c.url, [])
+        used_tag = f" ⚠️ PREVIOUSLY USED in: {', '.join(used_in)}" if used_in else ""
+        article_lines.append(f"[{idx}] {c.title} ({c.source_domain}, {pub}){used_tag}\n    {summary}")
 
     article_block = "\n".join(article_lines)
 
@@ -266,6 +305,14 @@ REJECT articles that are:
 - Only tangentially connected via a shared word (e.g., "email" in a marketing spam article)
 - Pure announcements with no substance to synthesize ("Company X launched Y")
 - Clickbait or listicles with no depth
+
+PREVIOUSLY USED ARTICLES:
+Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.
+- Strongly prefer fresh, unused articles over previously used ones.
+- Only select a previously used article if it has a genuinely different angle for THIS theme
+  that wasn't explored before. Different elements of a story appearing in multiple episodes
+  is acceptable, but the same article as a primary source is not.
+- If no unused articles are relevant, it's better to return fewer results than to reuse sources.
 
 Return JSON with a single key "selected_indices" — an array of the index numbers
 (the [N] values) of the articles worth using. Pick at most {max_keep}.
