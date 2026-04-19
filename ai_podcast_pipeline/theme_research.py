@@ -163,14 +163,13 @@ def _web_search_for_theme(
     import requests as _requests
 
     queries = _build_search_queries(theme_name)
-    # Add a Gartner-specific query (capped at 1 result later).
-    queries.append(f"site:gartner.com AI {theme_name} communications")
 
     # Ask the LLM to search and return structured results.
     search_prompt = (
-        f"Search the web for recent, high-quality articles about: \"{theme_name}\"\n\n"
+        f"Search the web for recent, high-quality articles specifically about: \"{theme_name}\"\n\n"
         f"Focus on articles relevant to communications professionals who write, edit, "
-        f"present, and create content at work. Find articles about how AI relates to this topic.\n\n"
+        f"present, and create content at work. Find articles about how AI relates to "
+        f"this specific topic — not AI or writing in general.\n\n"
         f"Use these search queries:\n"
         + "\n".join(f"- {q}" for q in queries[:5]) + "\n\n"
         f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
@@ -178,8 +177,10 @@ def _web_search_for_theme(
         f"- \"url\": full URL\n"
         f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
         f"- \"summary\": 1-2 sentence summary of the article\n\n"
-        f"Return up to 15 articles. Only include real articles with real URLs. "
-        f"Include at most 1 result from gartner.com."
+        f"Return up to 15 articles. Only include real articles with real URLs.\n"
+        f"EXCLUDE gartner.com results (they require authentication).\n"
+        f"EXCLUDE duplicate articles that appear on multiple domains.\n"
+        f"Every article must be specifically relevant to \"{theme_name}\" — reject generic AI articles."
     )
 
     try:
@@ -216,17 +217,14 @@ def _web_search_for_theme(
         raw_articles = articles_data.get("articles", [])
 
         candidates = []
-        gartner_count = 0
         for a in raw_articles:
             url = a.get("url", "").strip()
             domain = a.get("source_domain", "").strip()
             if not url or not domain:
                 continue
-            # Enforce Gartner cap.
+            # Skip Gartner — requires authentication, user adds manually.
             if "gartner.com" in domain:
-                if gartner_count >= _MAX_GARTNER_SOURCES:
-                    continue
-                gartner_count += 1
+                continue
             candidates.append(CandidateStory(
                 title=a.get("title", "").strip(),
                 url=url,
@@ -393,18 +391,21 @@ CONTEXT:
 THIS EPISODE'S THEME: "{theme_name}"
 
 YOUR TASK:
-Select articles that would help build a compelling, useful episode about this theme for this specific audience. A good source:
-- Directly relates to "{theme_name}" — not just shares a keyword
-- Connects to AI, technology, or how professionals work with these tools
-- Contains insights, research, practical advice, or a real example a communicator could learn from
-- Could be synthesized into advice like "here's how this affects the way you write/present/draft/edit"
+Select articles that would help build a compelling, useful episode specifically about "{theme_name}" for this audience.
+
+Be STRICT about relevance. Ask yourself for each article: "Could a communicator read this and learn something specific about {theme_name}?" If the answer is no — or if the connection is vague — reject it.
+
+A good source:
+- Is specifically about "{theme_name}" — not just about AI or writing in general
+- Contains insights, research, practical advice, or a real example directly tied to this theme
+- Could be synthesized into advice like "here's how {theme_name} works better when you..."
 
 REJECT articles that are:
-- About unrelated products (phones, gaming, hardware, consumer reviews)
-- About layoffs, funding rounds, stock prices, or corporate drama
-- Only tangentially connected via a shared word (e.g., "email" in a marketing spam article)
-- Pure announcements with no substance to synthesize ("Company X launched Y")
-- Clickbait or listicles with no depth
+- About AI or writing in general but NOT specifically about "{theme_name}"
+- About unrelated products, announcements, funding, or corporate news
+- Only tangentially connected via a shared word
+- About a technology (like TTS, image generation, etc.) unless it directly helps communicators with "{theme_name}"
+- Gartner articles (these require authentication — exclude any gartner.com results)
 
 PREVIOUSLY USED ARTICLES:
 Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.
@@ -501,13 +502,20 @@ def research_theme(
     if web_results:
         all_candidates.extend(web_results)
 
-    # Step 3: Deduplicate by URL.
+    # Step 3: Deduplicate by URL AND by title (catches same article across subdomains).
     seen_urls: set[str] = set()
+    seen_titles: set[str] = set()
     deduped: list[CandidateStory] = []
     for candidate in all_candidates:
-        if candidate.url not in seen_urls:
-            seen_urls.add(candidate.url)
-            deduped.append(candidate)
+        title_key = candidate.title.strip().lower()[:80]
+        if candidate.url in seen_urls:
+            continue
+        if title_key and title_key in seen_titles:
+            continue
+        seen_urls.add(candidate.url)
+        if title_key:
+            seen_titles.add(title_key)
+        deduped.append(candidate)
 
     # Step 4: Pre-filter with keyword scoring to top ~30 (keeps LLM prompt small).
     pre_ranked = _rank_sources(deduped, theme_name, max_results=30)

@@ -248,7 +248,7 @@ const app = {
       </div>
       ${cards}
       <div class="source-card" style="border-style:dashed; text-align:center; padding:16px;">
-        <button class="btn btn-sm btn-secondary" onclick="app.showAddSource()">+ Add Source Manually</button>
+        <button class="btn btn-sm btn-secondary" onclick="app.showAddSource()">+ Add Source (Gartner, paywalled, or other)</button>
         <div id="add-source-form" style="display:none; text-align:left; margin-top:12px;">
           <input id="add-src-title" class="theme-input" placeholder="Article title" style="margin-top:0; margin-bottom:8px;">
           <input id="add-src-url" class="theme-input" placeholder="URL" style="margin-top:0; margin-bottom:8px;">
