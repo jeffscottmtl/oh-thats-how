@@ -243,23 +243,33 @@ def _llm_filter_sources(
 
     article_block = "\n".join(article_lines)
 
-    prompt = f"""You are selecting articles for a podcast episode about: "{theme_name}"
+    prompt = f"""You are selecting articles for an episode of "The Signal," an internal AI podcast at CN.
 
-The podcast is for communications professionals — people who write, edit, present,
-and create content at work. The episode should help them understand how AI relates
-to this theme in their daily work.
+CONTEXT:
+- The Signal is a short podcast (~5-6 minutes) for communications professionals at CN.
+- The audience writes stories for the intranet, builds PowerPoint presentations for executives, drafts speeches, writes emails and newsletters, and manages digital signage content.
+- They are NOT technologists. They've heard of ChatGPT, they may have tried it, but they think in terms of "I have a draft due Thursday" — not models or prompts.
+- The podcast's job is to help them feel confident about AI, give them practical techniques, and keep them aware of what's changing — in that order.
 
-Below is a list of candidate articles. Select ONLY articles that are genuinely
-relevant to the theme "{theme_name}" AND relate to AI, technology, or how
-professionals work. Be strict — reject articles that are:
-- About unrelated products (phones, gaming, hardware reviews)
-- About layoffs, funding rounds, or corporate drama
-- Only tangentially connected via a shared word
-- Clickbait or listicles with no substance
+THIS EPISODE'S THEME: "{theme_name}"
+
+YOUR TASK:
+Select articles that would help build a compelling, useful episode about this theme for this specific audience. A good source:
+- Directly relates to "{theme_name}" — not just shares a keyword
+- Connects to AI, technology, or how professionals work with these tools
+- Contains insights, research, practical advice, or a real example a communicator could learn from
+- Could be synthesized into advice like "here's how this affects the way you write/present/draft/edit"
+
+REJECT articles that are:
+- About unrelated products (phones, gaming, hardware, consumer reviews)
+- About layoffs, funding rounds, stock prices, or corporate drama
+- Only tangentially connected via a shared word (e.g., "email" in a marketing spam article)
+- Pure announcements with no substance to synthesize ("Company X launched Y")
+- Clickbait or listicles with no depth
 
 Return JSON with a single key "selected_indices" — an array of the index numbers
 (the [N] values) of the articles worth using. Pick at most {max_keep}.
-If none are relevant, return an empty array.
+If none are relevant, return an empty array — better to find nothing than to recommend junk.
 
 Candidate articles:
 {article_block}"""
