@@ -239,7 +239,8 @@ const app = {
           <button class="btn btn-sm btn-primary" style="margin-top:6px;" onclick="app.captureGartnerText(${i})">Save Text</button>
         </div>` : '';
 
-      const previewText = s.full_text || s.summary || (isGartner ? 'Requires Gartner login — click to open and paste content' : 'No text available');
+      // Show summary first (has theme-relevant context from search), then fall back to full text excerpt.
+      const previewText = s.summary || (s.full_text ? s.full_text.substring(0, 300) : (isGartner ? 'Requires Gartner login — click to open and paste content' : 'No text available'));
 
       return `
         <div class="source-card ${s.included ? '' : 'excluded'}">

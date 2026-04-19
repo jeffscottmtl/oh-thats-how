@@ -126,10 +126,11 @@ def _build_search_queries(theme_name: str) -> list[str]:
     queries = [
         f"AI {theme_phrase} communications professionals",
         f"AI tools for {keyword_str} at work",
-        f"{keyword_str} AI productivity tips",
-        f"how to use AI for {keyword_str}",
-        f"generative AI {keyword_str} workplace",
-        f"AI writing assistant {keyword_str}",
+        f"how to use AI for {keyword_str} internal communications",
+        f"ChatGPT {keyword_str} corporate communications",
+        f"generative AI {keyword_str} workplace writing",
+        f"{keyword_str} AI tips for communicators",
+        f"AI {keyword_str} enterprise communications 2025 2026",
     ]
 
     # Deduplicate while preserving order.
@@ -163,26 +164,31 @@ def _web_search_for_theme(
     import requests as _requests
 
     queries = _build_search_queries(theme_name)
-    # Add a Gartner-specific query.
-    queries.append(f"site:gartner.com AI {theme_name} communications")
+    # Add Gartner-specific queries targeting the theme.
+    queries.append(f"site:gartner.com {theme_name}")
+    queries.append(f"site:gartner.com AI {theme_name}")
 
     # Ask the LLM to search and return structured results.
     search_prompt = (
         f"Search the web for recent, high-quality articles specifically about: \"{theme_name}\"\n\n"
-        f"Focus on articles relevant to communications professionals who write, edit, "
-        f"present, and create content at work. Find articles about how AI relates to "
-        f"this specific topic — not AI or writing in general.\n\n"
-        f"Use these search queries:\n"
+        f"The audience is communications professionals at a large company who write internal "
+        f"stories, build presentations, draft speeches, write emails, and manage content. "
+        f"Find articles about how AI can help with \"{theme_name}\" specifically.\n\n"
+        f"Use ALL of these search queries:\n"
         + "\n".join(f"- {q}" for q in queries) + "\n\n"
         f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
         f"- \"title\": article title\n"
         f"- \"url\": full URL\n"
         f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
-        f"- \"summary\": 1-2 sentence summary of the article\n\n"
-        f"Return up to 15 articles. Only include real articles with real URLs.\n"
-        f"Include up to 3 gartner.com results if relevant — mark them clearly.\n"
+        f"- \"summary\": 2-3 sentences explaining what the article covers and how it "
+        f"relates to \"{theme_name}\" for communications professionals\n\n"
+        f"Return up to 20 articles. Only include real articles with real URLs.\n"
+        f"Include up to 3 gartner.com results if relevant.\n"
+        f"SOURCE DIVERSITY: No single domain should account for more than 3 results. "
+        f"Spread across different publications, blogs, and sources.\n"
         f"EXCLUDE duplicate articles that appear on multiple domains.\n"
-        f"Every article must be specifically relevant to \"{theme_name}\" — reject generic AI articles."
+        f"Every article must be specifically relevant to \"{theme_name}\" AND to AI or "
+        f"communications work — reject generic articles."
     )
 
     try:
@@ -359,7 +365,7 @@ def _llm_filter_sources(
     model: str,
     project_id: str | None = None,
     organization: str | None = None,
-    max_keep: int = 8,
+    max_keep: int = 15,
 ) -> list[int]:
     """Ask the LLM to pick the most relevant articles for a theme.
 
@@ -468,7 +474,7 @@ def research_theme(
     web_results: list[CandidateStory] | None = None,
     on_feed_done: Callable[[], None] | None = None,
     on_article_done: Callable[[], None] | None = None,
-    max_sources: int = 8,
+    max_sources: int = 15,
     api_key: str | None = None,
     model: str | None = None,
     project_id: str | None = None,
@@ -517,8 +523,8 @@ def research_theme(
             seen_titles.add(title_key)
         deduped.append(candidate)
 
-    # Step 4: Pre-filter with keyword scoring to top ~30 (keeps LLM prompt small).
-    pre_ranked = _rank_sources(deduped, theme_name, max_results=30)
+    # Step 4: Pre-filter with keyword scoring to top ~50 (keeps LLM prompt manageable).
+    pre_ranked = _rank_sources(deduped, theme_name, max_results=50)
 
     # Step 5: LLM validation — the LLM picks the actually relevant ones.
     if _api_key and pre_ranked:
@@ -533,8 +539,21 @@ def research_theme(
         )
         final = [pre_ranked[i] for i in selected_indices]
     else:
-        # No API key — fall back to keyword scoring only.
         final = pre_ranked[:max_sources]
+
+    # Step 5b: Enforce per-domain diversity — max 2 results from any single domain.
+    _MAX_PER_DOMAIN = 2
+    domain_counts: dict[str, int] = {}
+    diverse_final: list[CandidateStory] = []
+    for c in final:
+        domain = c.source_domain.lower()
+        count = domain_counts.get(domain, 0)
+        if count < _MAX_PER_DOMAIN:
+            diverse_final.append(c)
+            domain_counts[domain] = count + 1
+    if len(diverse_final) < len(final):
+        logger.info("Source diversity cap removed %d/%d sources.", len(final) - len(diverse_final), len(final))
+    final = diverse_final
 
     # Step 6: Fetch full text in parallel.
     with ThreadPoolExecutor(max_workers=6) as pool:

@@ -41,9 +41,9 @@ class TestBuildSearchQueries(unittest.TestCase):
         queries = _build_search_queries("Getting unstuck on first drafts")
         self.assertGreaterEqual(len(queries), 4)
 
-    def test_returns_at_most_six_queries(self):
+    def test_returns_at_most_eight_queries(self):
         queries = _build_search_queries("Getting unstuck on first drafts")
-        self.assertLessEqual(len(queries), 6)
+        self.assertLessEqual(len(queries), 8)
 
     def test_includes_ai_angle(self):
         queries = _build_search_queries("Getting unstuck on first drafts")
