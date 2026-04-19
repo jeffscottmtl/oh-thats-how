@@ -295,7 +295,7 @@ Voice and tone:
 Delivery and pacing — THIS IS MANDATORY, not optional styling:
 This script is read aloud by a text-to-speech engine. The formatting below directly controls vocal expressiveness. Scripts that lack these elements sound flat and robotic. You MUST include all of the following in every narrative:
 
-1. Em dashes (—) for mid-sentence pivots, asides, and dramatic pauses. Use at least 2–3 per story narrative.
+1. Em dashes (—) for mid-sentence pivots, asides, and dramatic pauses. Use 1–2 per story narrative — no more, overuse sounds breathless.
    FLAT: "The report found that most teams are not ready for this shift. The implications are significant."
    EXPRESSIVE: "The report found that most teams — even the ones that think they're ready — are nowhere close. And the implications? Significant."
 
@@ -307,9 +307,9 @@ This script is read aloud by a text-to-speech engine. The formatting below direc
    FLAT: "The author argues that organizations need to rethink their approach to internal messaging when deploying AI tools."
    EXPRESSIVE: "The author's argument is clear — organizations need to completely rethink internal messaging when they roll out AI tools. And most haven't even started."
 
-4. Italicized emphasis (*word*) to signal vocal stress on a key word. Use at least 1–2 per story narrative.
+4. Fish Audio expression tags for vocal stress and pacing. Use [emphasis] before key words, [pause] for beats, [soft] for reflective moments. Do NOT use *italicized emphasis* — use Fish Audio tags instead.
    FLAT: "The issue isn't whether AI will change the workflow, it's how fast."
-   EXPRESSIVE: "The issue isn't *whether* AI will change the workflow — it's *how fast*."
+   EXPRESSIVE: "The issue isn't [emphasis] whether AI will change the workflow — it's [emphasis] how fast."
 
 5. Isolated impact sentences — when a point deserves emphasis, give it its own short sentence.
    FLAT: "This is a significant development that teams should pay attention to."
@@ -332,6 +332,7 @@ Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
 - Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
+- When describing what communicators at CN do, stick to: writing stories for the intranet, building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories" or "media outreach" — those aren't part of this team's work.
 
 Fish Audio expression tags — use these for natural TTS delivery:
 - [pause] for a brief beat, [long pause] for a longer break
@@ -398,16 +399,16 @@ Rule: the source NEVER appears in the first sentence. Notice how each example op
 Do not copy these; use them as structural models only.
 
 Example A — INSIGHT opening (surprising conclusion first, source mid-sentence):
-"The first draft might be the easiest part of your job to hand to AI — but only if you know how to ask. That's the takeaway from a piece in Fast Company this week, and the advice is specific: don't ask for a finished product, ask for *raw material* you can shape. A rough speech outline. Three angles on a story. A list of subject lines you'd never think of at 4pm. The author argues the best results come from treating AI like a brainstorming partner, not a ghostwriter. For anyone who writes for a living, that reframe changes everything."
+"The first draft might be the easiest part of your job to hand to AI — but only if you know how to ask. That's the takeaway from a piece in Fast Company this week, and the advice is specific: don't ask for a finished product, ask for [emphasis] raw material you can shape. A rough speech outline. Three angles on a story. A list of subject lines you'd never think of at 4pm. The author argues the best results come from treating AI like a brainstorming partner, not a ghostwriter. [pause] For anyone who writes for a living, that reframe changes everything."
 
 Example B — TENSION opening (counterintuitive collision, source late):
-"Here's something that shouldn't make sense but does: the communicators getting the most out of AI are the ones who give it *more* context, not less. Longer prompts. Background documents. Style examples. The instinct is to keep it short, but that's backwards — the tool can't match your voice if it's never heard it. A sharp analysis from Wired backs this up, and it lines up with what a lot of writing teams are quietly finding. The practical takeaway: if your AI drafts sound generic, the fix isn't a better tool. It's a better brief."
+"Here's something that shouldn't make sense but does: the communicators getting the most out of AI are the ones who give it [emphasis] more context, not less. Longer prompts. Background documents. Style examples. The instinct is to keep it short, but that's backwards — the tool can't match your voice if it's never heard it. A sharp analysis from Wired backs this up, and it lines up with what a lot of writing teams are quietly finding. [pause] If your AI drafts sound generic, the fix isn't a better tool. It's a better brief."
 
 Example C — QUESTION opening (source early-middle, after the question is posed):
-"What if the most useful thing AI could do for your next presentation isn't write the slides — but challenge the structure? MIT Technology Review walks through exactly that idea in a recent piece. The author tested asking AI to poke holes in a draft deck, and the feedback was surprisingly sharp — weak transitions, buried leads, redundant points. The real value wasn't the polish. It was the *edit*. For anyone building presentations for senior leaders, that's a workflow worth trying."
+"What if the most useful thing AI could do for your next presentation isn't write the slides — but challenge the structure? MIT Technology Review walks through exactly that idea in a recent piece. The author tested asking AI to poke holes in a draft deck, and the feedback was surprisingly sharp — weak transitions, buried leads, redundant points. The real value wasn't the polish. It was the [emphasis] edit. For anyone building presentations for senior leaders, that's a workflow worth trying."
 
 Example D — IMPLICATION opening (lead with what it means for the listener, source parenthetical):
-"If you've ever spent an hour rewriting the same email three ways for three different audiences, there's a shortcut worth knowing. A Globe and Mail piece this week walks through how communicators are using AI to generate tone variants — formal for the regulator, conversational for the team, concise for the exec — all from the same source material. The trick is giving the tool a *persona* for each audience. That's not laziness. That's efficiency. And honestly, it's the kind of thing that saves real time on a Thursday afternoon."
+"If you've ever spent an hour rewriting the same email three ways for three different audiences, there's a shortcut worth knowing. A Globe and Mail piece this week walks through how communicators are using AI to generate tone variants — formal for the regulator, conversational for the team, concise for the exec — all from the same source material. The trick is giving the tool a [emphasis] persona for each audience. That's not laziness. That's efficiency. And honestly, it's the kind of thing that saves real time on a Thursday afternoon."
 
 cn_relevance guidelines:
 - Optional. Include only when there's a genuinely specific angle for CN communicators' daily work — drafting internal stories, building presentations for senior leaders, writing speeches, creating email campaigns, managing intranet or digital signage content.
@@ -440,7 +441,8 @@ Self-validation (check BEFORE returning JSON):
   * Each story narrative must contain at least 2 em dashes (—). Count them.
   * Each story narrative must contain at least 1 rhetorical question (sentence ending with ?).
   * Each story narrative must contain at least 1 sentence of 5 words or fewer.
-  * The full output (all narratives combined) must contain at least 1 instance of *italicized emphasis*.
+  * The full output must contain at least 2 Fish Audio expression tags ([emphasis], [pause], [soft], [long pause]).
+  * Do NOT use *italicized emphasis* — use Fish Audio tags instead.
   * If any narrative fails these checks, rewrite it to include the missing elements before returning.
 - If any check fails, fix it before returning.
 
@@ -840,11 +842,10 @@ Weave insights from the supporting articles into a single flowing narrative. Sou
 evidence supporting your points — not standalone segments.
 
 Episode structure (follow this order):
-1. THEME INTRO — state the theme in plain terms, why it caught your attention this week
+1. THEME INTRO — state the theme in plain terms, why it caught your attention
 2. WHY IT MATTERS — connect it directly to the audience's daily work (writing, editing, presenting, emailing)
 3. 2-3 ANGLES — each illuminating a different facet of the theme, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
-4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps.
-5. FOOD FOR THOUGHT — a parting idea to sit with. Can connect to the theme or stand alone.
+4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps. This is the closing segment before the outro.
 
 Voice and tone:
 - Conversational, warm, plain language. You're a colleague sharing something useful, not a news anchor.
@@ -855,10 +856,10 @@ Voice and tone:
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
 
 Delivery cues (MANDATORY for text-to-speech):
-- Em dashes (—) for mid-sentence pivots and pauses: at least 4-5 across the full script
+- Em dashes (—) for mid-sentence pivots and pauses: 2-3 across the full script (no more — overuse feels breathless)
 - Rhetorical questions for vocal inflection: at least 2-3 across the full script
 - Short impact sentences (5 words or fewer) after longer buildups
-- *Italicized emphasis* for vocal stress on key words: at least 2-3 across the full script
+- Use Fish Audio expression tags for vocal variety: [emphasis] before key words, [pause] for beats, [long pause] for weight, [soft] for reflective moments. Aim for 4-6 tags across the full script. Do NOT use *italicized emphasis* — use Fish Audio tags instead.
 
 Perspective:
 - Third person when referencing articles: "the author argues", "the piece describes"
@@ -877,6 +878,7 @@ Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
 - Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
+- When describing what communicators at CN do, stick to: writing stories for the intranet, building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories" or "media outreach" — those aren't part of this team's work.
 
 AI integration — this is critical:
 - This is a podcast about AI and communications. The AI angle should be woven throughout the episode, not isolated in one paragraph near the end.
@@ -891,13 +893,11 @@ Fish Audio expression tags — use these for natural TTS delivery:
 
 Transitions and segment intros:
 - Vary how you introduce the try-this segment. Don't always use "So, what's the practical takeaway?" Rotate among natural transitions: "Here's something worth trying," "One thing I'd suggest," "If you want to put this into practice," or just flow directly into the technique.
-- Same for food for thought — the "Here's some food for thought." opener is required, but the transition INTO it should feel organic, not formulaic.
-
 Return ONLY valid JSON with exactly these keys:
 - narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
-- try_this: string (the concrete technique segment)
-- food_for_thought: string
-{fot_history}Length: aim for ~{content_words} words total across all three fields combined (narrative + try_this + food_for_thought).
+- try_this: string (the concrete technique segment — this is the final segment before the outro)
+
+Length: aim for ~{content_words} words total across both fields combined (narrative + try_this).
 Prioritize quality and natural flow over exact count.
 
 Supporting articles:
@@ -925,12 +925,9 @@ Supporting articles:
         data = parse_json_response(content)
         narrative = data.get("narrative", "")
         try_this = data.get("try_this", "")
-        food = data.get("food_for_thought", "")
 
-        if not narrative or not try_this or not food:
+        if not narrative or not try_this:
             raise OpenAIError("Theme script response missing required fields")
-
-        food = _clean_food_for_thought(food)
 
         # Validate delivery cues on the narrative
         cue_issues = _validate_delivery_cues_text(narrative)
@@ -942,7 +939,7 @@ Supporting articles:
             theme_name=theme_name,
             narrative=narrative.strip(),
             try_this=try_this.strip(),
-            food_for_thought=food,
+            food_for_thought="",
         )
     except OpenAIError:
         raise
@@ -975,11 +972,13 @@ def build_theme_script_markdown(parts: ScriptParts) -> str:
         "",
         parts.try_this,
         "",
-        parts.food_for_thought,
-        "",
         OUTRO_TEXT,
         "",
     ]
+    # Include food_for_thought only if non-empty (legacy episodes may have it).
+    if parts.food_for_thought:
+        sections.insert(-2, parts.food_for_thought)
+        sections.insert(-2, "")
     return "\n".join(sections)
 
 
