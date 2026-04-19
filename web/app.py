@@ -87,6 +87,7 @@ async def list_episodes():
                 "name": data.get("episode_name", manifest_path.stem),
                 "number": data.get("episode_number"),
                 "status": data.get("run_status", "unknown"),
+                "episode_state": data.get("episode_state", "draft"),
                 "created_at": data.get("created_at"),
                 "files": data.get("files", {}),
             })
@@ -104,11 +105,13 @@ async def get_episode(name: str):
     teams_path = _OUTPUT_DIR / f"{name} - Teams Post.md"
     try_this_path = _OUTPUT_DIR / f"{name} - Try This.md"
 
-    result = {"name": name}
+    result = {"name": name, "episode_state": "draft"}
     if script_path.exists():
         result["script"] = script_path.read_text(encoding="utf-8")
     if manifest_path.exists():
-        result["manifest"] = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        result["manifest"] = manifest_data
+        result["episode_state"] = manifest_data.get("episode_state", "draft")
     if teams_path.exists():
         result["teams_post"] = teams_path.read_text(encoding="utf-8")
     if try_this_path.exists():
@@ -280,6 +283,8 @@ def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> d
         "episode_number": episode_number,
         "created_at": iso_utc_now(),
         "run_status": "success",
+        "episode_state": "draft",
+        "theme": theme_name,
         "files": {k: str(v) for k, v in paths.items()},
         "notes": [],
     }
@@ -363,6 +368,104 @@ async def generate_audio(request: Request):
         "provider": provider,
         "notes": notes,
     })
+
+
+@app.put("/api/episodes/{name:path}/state")
+async def update_episode_state(name: str, request: Request):
+    """Update an episode's state: draft, ready, or shared."""
+    body = await request.json()
+    new_state = body.get("state", "")
+    if new_state not in ("draft", "ready", "shared"):
+        return JSONResponse({"error": "state must be draft, ready, or shared"}, status_code=400)
+
+    manifest_path = _OUTPUT_DIR / f"{name} - Manifest.json"
+    if not manifest_path.exists():
+        return JSONResponse({"error": "Episode not found"}, status_code=404)
+
+    data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    data["episode_state"] = new_state
+    manifest_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return JSONResponse({"episode_state": new_state})
+
+
+@app.post("/api/regenerate")
+async def regenerate(request: Request):
+    """Regenerate script for an existing episode (same sources, fresh script)."""
+    body = await request.json()
+    episode_name = body.get("episode_name", "")
+    if not episode_name:
+        return JSONResponse({"error": "episode_name required"}, status_code=400)
+
+    paths = build_artifact_paths(_OUTPUT_DIR, episode_name)
+    sources_path = paths["sources_json"]
+    manifest_path = paths["manifest_json"]
+
+    if not sources_path.exists():
+        return JSONResponse({"error": "Sources not found for this episode"}, status_code=404)
+    if not manifest_path.exists():
+        return JSONResponse({"error": "Manifest not found"}, status_code=404)
+
+    # Load existing manifest for theme name.
+    manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    # Load sources JSON to rebuild candidates.
+    sources_data = json.loads(sources_path.read_text(encoding="utf-8"))
+
+    # Get theme from manifest or script JSON.
+    theme_name = manifest_data.get("theme", "")
+    if not theme_name:
+        script_json_path = paths["script_json"]
+        if script_json_path.exists():
+            script_data = json.loads(script_json_path.read_text(encoding="utf-8"))
+            theme_name = script_data.get("theme", body.get("theme_name", "Unknown"))
+
+    # Rebuild sources from the sources JSON selected_stories.
+    from datetime import datetime as _dt
+    from ai_podcast_pipeline.models import CandidateStory
+    candidates = []
+    for s in sources_data.get("selected_stories", []):
+        pub = None
+        if s.get("published_at"):
+            try:
+                pub = _dt.fromisoformat(s["published_at"])
+            except Exception:
+                pass
+        candidates.append(CandidateStory(
+            title=s.get("title", ""),
+            url=s.get("url", ""),
+            source_domain=s.get("source_domain", ""),
+            published_at=pub,
+            summary="",
+            full_text=None,
+        ))
+
+    # If we have candidates, fetch their full text.
+    if candidates:
+        from ai_podcast_pipeline.ingest import fetch_article_text
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            futures = {pool.submit(fetch_article_text, c.url): c for c in candidates}
+            for f in as_completed(futures):
+                c = futures[f]
+                try:
+                    c.full_text = f.result()
+                except Exception:
+                    pass
+
+    try:
+        result = await _run_sync(
+            _do_generate, theme_name, [
+                {
+                    "title": c.title, "url": c.url, "source_domain": c.source_domain,
+                    "published_at": c.published_at.isoformat() if c.published_at else None,
+                    "summary": c.summary, "full_text": c.full_text,
+                }
+                for c in candidates
+            ], body.get("bank_id"),
+        )
+        return JSONResponse(result)
+    except Exception as exc:
+        logger.exception("Script regeneration failed")
+        return JSONResponse({"error": str(exc)}, status_code=500)
 
 
 @app.put("/api/files/{path:path}")

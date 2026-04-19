@@ -23,12 +23,18 @@ const app = {
       const res = await fetch("/api/episodes");
       const episodes = await res.json();
       const list = $("#episode-list");
-      list.innerHTML = episodes.map(ep => `
-        <li onclick="app.viewEpisode('${ep.name.replace(/'/g, "\\'")}')">
-          ${ep.name.replace("The Signal – ", "")}
-          <span class="ep-date">${ep.status === "success" ? "Completed" : ep.status}</span>
-        </li>
-      `).join("");
+      const stateLabel = { draft: "Draft", ready: "Ready", shared: "Shared" };
+      const stateColor = { draft: "#ee9b00", ready: "#27ae60", shared: "#0a9396" };
+      list.innerHTML = episodes.map(ep => {
+        const state = ep.episode_state || "draft";
+        const color = stateColor[state] || "#8b8fa3";
+        const label = stateLabel[state] || state;
+        return `
+          <li onclick="app.viewEpisode('${ep.name.replace(/'/g, "\\'")}')">
+            ${ep.name.replace("The Signal – ", "")}
+            <span class="ep-date"><span style="color:${color}; font-weight:600">${label}</span></span>
+          </li>`;
+      }).join("");
     } catch (e) {
       console.error("Failed to load episodes:", e);
     }
@@ -361,29 +367,76 @@ const app = {
     try {
       const res = await fetch(`/api/episodes/${encodeURIComponent(name)}`);
       const data = await res.json();
+      this._viewData = data;
+      this._viewName = name;
+      this.renderEpisodeView(data, name, "script");
+    } catch (e) {
+      $main().innerHTML = `<p style="color:var(--danger)">Error loading episode: ${e.message}</p>`;
+    }
+  },
 
-      const audioHtml = data.has_audio
-        ? `<div class="audio-player">
-            <strong>Episode Audio</strong>
-            <audio controls src="${data.audio_url}"></audio>
-          </div>`
-        : '';
+  renderEpisodeView(data, name, activeTab = "script") {
+    const state = data.episode_state || "draft";
+    const stateLabel = { draft: "Draft", ready: "Ready", shared: "Shared" };
+    const stateColor = { draft: "#ee9b00", ready: "#27ae60", shared: "#0a9396" };
+    const isEditable = state !== "shared";
 
-      $main().innerHTML = `
-        <div class="step-header">
-          <h1>${data.name}</h1>
-        </div>
-        <div class="tabs">
-          <button class="tab active" id="tab-script" onclick="app.showViewTab('script', '${name.replace(/'/g, "\\'")}')">Script</button>
-          <button class="tab" id="tab-teams" onclick="app.showViewTab('teams', '${name.replace(/'/g, "\\'")}')">Teams Post</button>
-          <button class="tab" id="tab-trythis" onclick="app.showViewTab('trythis', '${name.replace(/'/g, "\\'")}')">Try This</button>
-        </div>
-        <div class="script-display" id="view-content">${data.script || '(No script found)'}</div>
-        ${audioHtml}
-        <div class="actions" style="margin-top:16px">
-          <button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button>
-        </div>
-      `;
+    const audioHtml = data.has_audio
+      ? `<div class="audio-player">
+          <strong>Episode Audio</strong>
+          <audio controls src="${data.audio_url}"></audio>
+        </div>`
+      : '';
+
+    // State actions based on current state.
+    let stateButtons = '';
+    if (state === "draft") {
+      stateButtons = `
+        <button class="btn btn-secondary" onclick="app.regenerateScript('${name.replace(/'/g, "\\'")}')">Regenerate Script</button>
+        <button class="btn btn-secondary" onclick="app.generateAudioForEpisode('${name.replace(/'/g, "\\'")}')">Generate Audio</button>
+        <button class="btn btn-primary" onclick="app.setEpisodeState('${name.replace(/'/g, "\\'")}', 'ready')">Mark as Ready</button>`;
+    } else if (state === "ready") {
+      stateButtons = `
+        <button class="btn btn-secondary" onclick="app.setEpisodeState('${name.replace(/'/g, "\\'")}', 'draft')">Back to Draft</button>
+        <button class="btn btn-secondary" onclick="app.regenerateScript('${name.replace(/'/g, "\\'")}')">Regenerate Script</button>
+        <button class="btn btn-secondary" onclick="app.generateAudioForEpisode('${name.replace(/'/g, "\\'")}')">Regenerate Audio</button>
+        <button class="btn btn-primary" onclick="app.setEpisodeState('${name.replace(/'/g, "\\'")}', 'shared')">Mark as Shared</button>`;
+    } else {
+      stateButtons = `<button class="btn btn-secondary" onclick="app.setEpisodeState('${name.replace(/'/g, "\\'")}', 'ready')">Back to Ready</button>`;
+    }
+
+    // Script tab: editable textarea if not shared, readonly otherwise.
+    const scriptContent = activeTab === "script"
+      ? (isEditable
+        ? `<textarea class="script-display" id="episode-editor" style="width:100%;min-height:400px;resize:vertical;">${data.script || ''}</textarea>
+           <div class="actions" style="margin-top:8px"><button class="btn btn-sm btn-secondary" onclick="app.saveEpisodeScript('${name.replace(/'/g, "\\'")}')">Save Edits</button></div>`
+        : `<div class="script-display">${data.script || '(No script)'}</div>`)
+      : `<div class="script-display" id="view-content">${activeTab === 'teams' ? (data.teams_post || '(empty)') : (data.try_this || '(empty)')}</div>`;
+
+    $main().innerHTML = `
+      <div class="step-header">
+        <h1>${data.name}</h1>
+        <p><span style="color:${stateColor[state]}; font-weight:600">${stateLabel[state]}</span></p>
+      </div>
+      <div class="tabs">
+        <button class="tab ${activeTab === 'script' ? 'active' : ''}" onclick="app.renderEpisodeView(app._viewData, app._viewName, 'script')">Script</button>
+        <button class="tab ${activeTab === 'teams' ? 'active' : ''}" onclick="app.renderEpisodeView(app._viewData, app._viewName, 'teams')">Teams Post</button>
+        <button class="tab ${activeTab === 'trythis' ? 'active' : ''}" onclick="app.renderEpisodeView(app._viewData, app._viewName, 'trythis')">Try This</button>
+      </div>
+      ${scriptContent}
+      ${audioHtml}
+      <h3 style="margin-top:24px; margin-bottom:8px;">Downloads</h3>
+      <ul class="download-list">
+        <li><a href="/api/files/${encodeURIComponent(name)} - Script.md" download>Script</a></li>
+        <li><a href="/api/files/${encodeURIComponent(name)} - Teams Post.md" download>Teams Post</a></li>
+        <li><a href="/api/files/${encodeURIComponent(name)} - Try This.md" download>Try This</a></li>
+        <li><a href="/api/files/${encodeURIComponent(name)} - Cover.png" download>Cover Art</a></li>
+        ${data.has_audio ? `<li><a href="${data.audio_url}" download>Audio (MP3)</a></li>` : ''}
+      </ul>
+      <div class="actions" style="margin-top:16px">
+        ${stateButtons}
+      </div>
+    `;
 
       // Stash for tab switching.
       this._viewData = data;
@@ -392,12 +445,80 @@ const app = {
     }
   },
 
-  showViewTab(tab) {
-    const d = this._viewData;
-    const content = { script: d.script, teams: d.teams_post, trythis: d.try_this };
-    document.getElementById("view-content").textContent = content[tab] || "(empty)";
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.getElementById(`tab-${tab}`).classList.add("active");
+  async setEpisodeState(name, state) {
+    try {
+      await fetch(`/api/episodes/${encodeURIComponent(name)}/state`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state }),
+      });
+      this._viewData.episode_state = state;
+      this.renderEpisodeView(this._viewData, name, "script");
+      this.loadEpisodes();
+    } catch (e) {
+      alert("Failed to update state: " + e.message);
+    }
+  },
+
+  async saveEpisodeScript(name) {
+    const editor = document.getElementById("episode-editor");
+    if (!editor) return;
+    try {
+      await fetch(`/api/files/${encodeURIComponent(name)} - Script.md`, {
+        method: "PUT",
+        headers: { "Content-Type": "text/plain" },
+        body: editor.value,
+      });
+      this._viewData.script = editor.value;
+      // Brief visual feedback.
+      const btn = editor.parentElement.querySelector(".btn");
+      if (btn) { btn.textContent = "Saved!"; setTimeout(() => btn.textContent = "Save Edits", 1500); }
+    } catch (e) {
+      alert("Failed to save: " + e.message);
+    }
+  },
+
+  async regenerateScript(name) {
+    $main().innerHTML = `
+      <div class="step-header"><h1>Regenerating Script</h1><p>${name}</p></div>
+      <div class="loading-msg"><div class="spinner"></div> Generating a fresh script with the same sources. This takes 30-60 seconds.</div>
+    `;
+    try {
+      const res = await fetch("/api/regenerate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ episode_name: name }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || "Regeneration failed");
+      // Reload the episode view with the new script.
+      this.viewEpisode(data.episode_name || name);
+    } catch (e) {
+      $main().innerHTML = `
+        <p style="color:var(--danger)">${e.message}</p>
+        <div class="actions"><button class="btn btn-primary" onclick="app.viewEpisode('${name.replace(/'/g, "\\'")}')">Back to Episode</button></div>`;
+    }
+  },
+
+  async generateAudioForEpisode(name) {
+    $main().innerHTML = `
+      <div class="step-header"><h1>Generating Audio</h1><p>${name}</p></div>
+      <div class="loading-msg"><div class="spinner"></div> Converting script to speech. This can take 1-3 minutes.</div>
+    `;
+    try {
+      const res = await fetch("/api/audio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ episode_name: name }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      this.viewEpisode(name);
+    } catch (e) {
+      $main().innerHTML = `
+        <p style="color:var(--danger)">Audio error: ${e.message}</p>
+        <div class="actions"><button class="btn btn-primary" onclick="app.viewEpisode('${name.replace(/'/g, "\\'")}')">Back to Episode</button></div>`;
+    }
   },
 };
 
