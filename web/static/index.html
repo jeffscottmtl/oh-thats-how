@@ -4,15 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Signal</title>
-  <link rel="stylesheet" href="/static/style.css?v=6">
+  <link rel="stylesheet" href="/static/style.css?v=7">
 </head>
 <body>
   <div class="app">
     <aside class="sidebar">
       <div class="logo">The Signal</div>
       <div class="logo-sub">AI Podcast for Communicators</div>
-      <button class="btn btn-primary" style="width:100%; margin-bottom: 24px;" onclick="app.newEpisode()">+ New Episode</button>
-      <h3>Past Episodes</h3>
+      <button class="btn btn-primary" style="width:100%; margin-bottom: 16px;" onclick="app.newEpisode()">+ New Episode</button>
+      <input class="sidebar-search" id="ep-search" placeholder="Search episodes..." oninput="app.filterEpisodes()">
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-filter="all" onclick="app.setFilter('all')">All</button>
+        <button class="filter-btn" data-filter="draft" onclick="app.setFilter('draft')">Draft</button>
+        <button class="filter-btn" data-filter="ready" onclick="app.setFilter('ready')">Ready</button>
+        <button class="filter-btn" data-filter="shared" onclick="app.setFilter('shared')">Shared</button>
+      </div>
       <ul class="episode-list" id="episode-list"></ul>
     </aside>
     <main class="main" id="main">
@@ -23,6 +29,6 @@
       </div>
     </main>
   </div>
-  <script src="/static/app.js?v=6"></script>
+  <script src="/static/app.js?v=7"></script>
 </body>
 </html>

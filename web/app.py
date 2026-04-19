@@ -84,12 +84,15 @@ async def list_episodes():
     for manifest_path in sorted(_OUTPUT_DIR.glob("*Manifest.json"), reverse=True):
         try:
             data = json.loads(manifest_path.read_text(encoding="utf-8"))
+            ep_name = data.get("episode_name", manifest_path.stem)
+            mp3_path = _OUTPUT_DIR / f"{ep_name}.mp3"
             episodes.append({
-                "name": data.get("episode_name", manifest_path.stem),
+                "name": ep_name,
                 "number": data.get("episode_number"),
                 "status": data.get("run_status", "unknown"),
                 "episode_state": data.get("episode_state", "draft"),
                 "created_at": data.get("created_at"),
+                "has_audio": mp3_path.exists(),
                 "files": data.get("files", {}),
             })
         except Exception:
@@ -398,6 +401,24 @@ async def generate_audio(request: Request):
         "provider": provider,
         "notes": notes,
     })
+
+
+@app.delete("/api/episodes/{name:path}")
+async def delete_episode(name: str):
+    """Delete an episode and all its files."""
+    paths = build_artifact_paths(_OUTPUT_DIR, name)
+    deleted = []
+    for key, path in paths.items():
+        if path.exists():
+            path.unlink()
+            deleted.append(key)
+    # Also delete the MP3 if it exists.
+    mp3 = _OUTPUT_DIR / f"{name}.mp3"
+    if mp3.exists():
+        mp3.unlink()
+        deleted.append("mp3")
+    logger.info("Deleted episode '%s': %s", name, deleted)
+    return JSONResponse({"deleted": deleted})
 
 
 @app.put("/api/episodes/{name:path}/state")

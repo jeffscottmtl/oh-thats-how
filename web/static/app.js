@@ -14,29 +14,109 @@ const app = {
     tryThis: null,
   },
 
+  _episodes: [],
+  _filter: "all",
+
   async init() {
     await this.loadEpisodes();
+    this.showResumeBanner();
   },
 
   async loadEpisodes() {
     try {
       const res = await fetch("/api/episodes");
-      const episodes = await res.json();
-      const list = $("#episode-list");
-      const stateLabel = { draft: "Draft", ready: "Ready", shared: "Shared" };
-      const stateColor = { draft: "#ee9b00", ready: "#27ae60", shared: "#0a9396" };
-      list.innerHTML = episodes.map(ep => {
-        const state = ep.episode_state || "draft";
-        const color = stateColor[state] || "#8b8fa3";
-        const label = stateLabel[state] || state;
-        return `
-          <li onclick="app.viewEpisode('${ep.name.replace(/'/g, "\\'")}')">
-            ${ep.name.replace("The Signal – ", "")}
-            <span class="ep-date"><span style="color:${color}; font-weight:600">${label}</span></span>
-          </li>`;
-      }).join("");
+      this._episodes = await res.json();
+      this.renderEpisodeList();
     } catch (e) {
       console.error("Failed to load episodes:", e);
+    }
+  },
+
+  setFilter(filter) {
+    this._filter = filter;
+    document.querySelectorAll(".filter-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.filter === filter);
+    });
+    this.renderEpisodeList();
+  },
+
+  filterEpisodes() {
+    this.renderEpisodeList();
+  },
+
+  renderEpisodeList() {
+    const list = $("#episode-list");
+    const search = ($("#ep-search")?.value || "").toLowerCase();
+    const filter = this._filter;
+
+    let eps = this._episodes;
+    if (filter !== "all") {
+      eps = eps.filter(ep => (ep.episode_state || "draft") === filter);
+    }
+    if (search) {
+      eps = eps.filter(ep => ep.name.toLowerCase().includes(search));
+    }
+
+    // Sort: drafts first, then ready, then shared. Within each group, newest first.
+    const order = { draft: 0, ready: 1, shared: 2 };
+    eps.sort((a, b) => {
+      const sa = order[a.episode_state || "draft"] ?? 3;
+      const sb = order[b.episode_state || "draft"] ?? 3;
+      if (sa !== sb) return sa - sb;
+      return (b.created_at || "").localeCompare(a.created_at || "");
+    });
+
+    list.innerHTML = eps.map(ep => {
+      const state = ep.episode_state || "draft";
+      const shortName = ep.name.replace("The Signal – ", "");
+      const hasAudio = ep.has_audio ? "🎧" : "";
+      const esc = ep.name.replace(/'/g, "\\'");
+      return `
+        <li onclick="app.viewEpisode('${esc}')">
+          ${shortName}
+          <button class="ep-delete" onclick="event.stopPropagation(); app.deleteEpisode('${esc}')" title="Delete">✕</button>
+          <div class="ep-meta">
+            <span class="ep-badge ${state}">${state}</span>
+            <span class="ep-icons">${hasAudio}</span>
+          </div>
+        </li>`;
+    }).join("");
+
+    if (eps.length === 0) {
+      list.innerHTML = `<li style="color:var(--text-dim); cursor:default; font-style:italic;">No episodes${filter !== 'all' ? ' in this filter' : ''}</li>`;
+    }
+  },
+
+  showResumeBanner() {
+    // Find the most recent draft episode.
+    const draft = this._episodes.find(ep => (ep.episode_state || "draft") === "draft");
+    if (!draft) return;
+    const main = $main();
+    const welcome = main.querySelector(".welcome");
+    if (!welcome) return;
+    const esc = draft.name.replace(/'/g, "\\'");
+    const banner = document.createElement("div");
+    banner.className = "continue-banner";
+    banner.onclick = () => this.viewEpisode(draft.name);
+    banner.innerHTML = `
+      <h3>Continue working on:</h3>
+      <p>${draft.name}</p>
+    `;
+    main.insertBefore(banner, welcome);
+  },
+
+  async deleteEpisode(name) {
+    if (!confirm(`Delete "${name}" and all its files?`)) return;
+    try {
+      await fetch(`/api/episodes/${encodeURIComponent(name)}`, { method: "DELETE" });
+      this._episodes = this._episodes.filter(ep => ep.name !== name);
+      this.renderEpisodeList();
+      // If we're viewing this episode, go back to welcome.
+      if (this._viewName === name) {
+        $main().innerHTML = `<div class="welcome"><h1>The Signal</h1><p>Create AI-powered podcast episodes for communicators at CN.</p><button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button></div>`;
+      }
+    } catch (e) {
+      alert("Failed to delete: " + e.message);
     }
   },
 
