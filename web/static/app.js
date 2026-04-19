@@ -113,7 +113,7 @@ const app = {
       this.renderEpisodeList();
       // If we're viewing this episode, go back to welcome.
       if (this._viewName === name) {
-        $main().innerHTML = `<div class="welcome"><h1>The Signal</h1><p>Create AI-powered podcast episodes for communicators at CN.</p><button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button></div>`;
+        $main().innerHTML = `<div class="welcome"><h1>The Signal</h1><p>Create podcast episodes for communicators at CN.</p><button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button></div>`;
       }
     } catch (e) {
       alert("Failed to delete: " + e.message);
@@ -138,7 +138,7 @@ const app = {
         <h1>Proposing Themes</h1>
         <p>Searching the web, scanning feeds, and checking the theme bank...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> Finding fresh topics for your next episode. This takes about 15 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Finding fresh topics for your next episode...</div>
     `;
 
     try {
@@ -172,7 +172,7 @@ const app = {
       ${this.renderSteps(0)}
       <div class="step-header">
         <h1>Pick a Theme</h1>
-        <p>Choose one of these 20 themes, or type your own topic below.</p>
+        <p>Choose a theme, or type your own topic below.</p>
       </div>
       <div class="card-grid">${cards}</div>
       <input class="theme-input" id="custom-theme" placeholder="Or type your own topic here..." onkeydown="if(event.key==='Enter')app.selectCustomTheme()">
@@ -206,9 +206,9 @@ const app = {
       ${this.renderSteps(1)}
       <div class="step-header">
         <h1>Researching: ${this.state.selectedTheme}</h1>
-        <p>Searching the web and feeds for the best sources...</p>
+        <p>Searching for the best sources...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> Running web searches, scanning feeds, and fetching full articles. This takes about 30 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Searching the web and fetching full articles...</div>
     `;
 
     try {
@@ -314,9 +314,9 @@ const app = {
       ${this.renderSteps(2)}
       <div class="step-header">
         <h1>Generating Script</h1>
-        <p>Writing episode script for "${this.state.selectedTheme}"...</p>
+        <p>Writing your episode on "${this.state.selectedTheme}"...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> The AI is writing your script. This usually takes 30-60 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Writing the script. This may take a minute...</div>
     `;
 
     try {
@@ -412,9 +412,9 @@ const app = {
       ${this.renderSteps(3)}
       <div class="step-header">
         <h1>Generating Audio</h1>
-        <p>Converting script to speech with Fish Audio...</p>
+        <p>Converting your script to audio...</p>
       </div>
-      <div class="loading-msg"><div class="spinner"></div> Generating audio. This can take 1-3 minutes depending on script length.</div>
+      <div class="loading-msg"><div class="spinner"></div> Generating audio. This may take a couple of minutes...</div>
     `;
 
     try {
@@ -596,7 +596,7 @@ const app = {
   async regenerateScript(name) {
     $main().innerHTML = `
       <div class="step-header"><h1>Regenerating Script</h1><p>${name}</p></div>
-      <div class="loading-msg"><div class="spinner"></div> Generating a fresh script with the same sources. This takes 30-60 seconds.</div>
+      <div class="loading-msg"><div class="spinner"></div> Writing a fresh take with the same sources...</div>
     `;
     try {
       const res = await fetch("/api/regenerate", {
@@ -618,7 +618,7 @@ const app = {
   async generateAudioForEpisode(name) {
     $main().innerHTML = `
       <div class="step-header"><h1>Generating Audio</h1><p>${name}</p></div>
-      <div class="loading-msg"><div class="spinner"></div> Converting script to speech. This can take 1-3 minutes.</div>
+      <div class="loading-msg"><div class="spinner"></div> Converting script to audio...</div>
     `;
     try {
       const res = await fetch("/api/audio", {
