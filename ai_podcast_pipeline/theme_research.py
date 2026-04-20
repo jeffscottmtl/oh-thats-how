@@ -241,8 +241,13 @@ Return JSON: {{"queries": ["query1", "query2", ...]}}"""
 _MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
 
 
-def _search_tavily(query: str, max_results: int = 8) -> list[dict]:
-    """Run a Tavily search and return results as {title, href, body} dicts."""
+def _search_tavily(query: str, max_results: int = 10) -> list[dict]:
+    """Run a Tavily search with advanced depth and return results.
+
+    Uses advanced search depth for highest relevance, excludes known
+    product/tool domains at the search level, and returns Tavily's
+    semantic relevance score alongside each result.
+    """
     import os
     try:
         from tavily import TavilyClient
@@ -251,10 +256,25 @@ def _search_tavily(query: str, max_results: int = 8) -> list[dict]:
             logger.warning("TAVILY_API_KEY not set — falling back to DuckDuckGo.")
             return _search_ddg_fallback(query, max_results)
         client = TavilyClient(api_key=api_key)
-        results = client.search(query, max_results=max_results, include_answer=False)
-        # Normalize to same format as DuckDuckGo for compatibility.
+        results = client.search(
+            query,
+            max_results=max_results,
+            search_depth="advanced",
+            include_answer=False,
+            time_range="year",
+            exclude_domains=[
+                "jasper.ai", "writesonic.com", "copy.ai", "quillbot.com",
+                "grammarly.com", "wordtune.com", "slidesai.io", "gamma.app",
+                "logicballs.com", "ahrefs.com", "semrush.com",
+            ],
+        )
         return [
-            {"title": r.get("title", ""), "href": r.get("url", ""), "body": r.get("content", "")}
+            {
+                "title": r.get("title", ""),
+                "href": r.get("url", ""),
+                "body": r.get("content", ""),
+                "tavily_score": r.get("score", 0),
+            }
             for r in results.get("results", [])
         ]
     except Exception as exc:
@@ -330,13 +350,25 @@ def _web_search_for_theme(
             _time.sleep(0.5)  # Brief pause between requests
 
     # Convert to CandidateStory and deduplicate by URL.
-    seen_urls: set[str] = set()
+    # Keep highest Tavily score when deduping (same URL from multiple queries).
+    seen_urls: dict[str, float] = {}  # url → best tavily score
     candidates: list[CandidateStory] = []
     for r in all_results:
         url = r.get("href", "").strip()
-        if not url or url in seen_urls:
+        if not url:
             continue
-        seen_urls.add(url)
+        tavily_score = r.get("tavily_score", 0)
+        if url in seen_urls:
+            # Keep the higher score if we've seen this URL before
+            if tavily_score > seen_urls[url]:
+                seen_urls[url] = tavily_score
+                # Update the existing candidate's score
+                for c in candidates:
+                    if c.url == url:
+                        c.relevance_score = max(1, round(tavily_score * 10))
+                        break
+            continue
+        seen_urls[url] = tavily_score
         parsed = urlparse(url)
         domain = parsed.netloc.lower().removeprefix("www.")
         candidates.append(CandidateStory(
@@ -345,6 +377,7 @@ def _web_search_for_theme(
             source_domain=domain,
             published_at=None,
             summary=r.get("body", "").strip(),
+            relevance_score=max(1, round(tavily_score * 10)),
         ))
 
     logger.info(
@@ -669,22 +702,24 @@ def research_theme(
         deduped.append(candidate)
     logger.info("After dedup: %d candidates for scoring.", len(deduped))
 
-    # Step 3: Generate theme-specific relevance keywords.
+    # Step 3: Generate theme-specific relevance keywords (used as quality gates).
     theme_keywords = _generate_theme_keywords(theme_name, theme_description)
     logger.info("Theme keywords: %s", theme_keywords[:10])
 
-    # Step 4: Score every candidate with deterministic keyword matching.
+    # Step 4: Gate check + sort by Tavily's semantic score.
+    # Tavily already scored results by relevance to the query — use that as primary rank.
+    # Keyword scoring acts as a quality gate only (must mention AI + comms context).
     scored = []
     for c in deduped:
-        s = _score_candidate(c, theme_keywords)
-        if s > 0:
-            scored.append((c, s))
+        gate_score = _score_candidate(c, theme_keywords)
+        if gate_score > 0:
+            # Use Tavily's semantic score (already stored on candidate) for ranking.
+            # Fall back to keyword score if no Tavily score.
+            rank = c.relevance_score if c.relevance_score > 0 else max(1, round(gate_score / 5))
+            scored.append((c, rank))
     scored.sort(key=lambda x: x[1], reverse=True)
 
-    # Normalize scores to 1-10 scale relative to the best result.
-    max_score = scored[0][1] if scored else 1
-    for c, s in scored:
-        c.relevance_score = max(1, round(s / max_score * 10))
+    # Scores are already 1-10 from Tavily (set during candidate building).
 
     # Take top results (max 20 for user to browse).
     _MAX_RESULTS = 25
