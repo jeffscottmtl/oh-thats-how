@@ -688,55 +688,41 @@ def synthesize_fish_audio_mp3(
     episode_dt: datetime | None = None,
     timeout: int = 600,
 ) -> None:
-    """Synthesize speech via Fish Audio S2 and write an MP3 with embedded metadata.
+    """Synthesize speech via Fish Audio REST API and write an MP3 with embedded metadata.
 
-    Uses either a pre-registered voice model (voice_id) or inline reference audio
-    for zero-shot voice cloning. If both are provided, voice_id takes precedence.
+    Uses the HTTP API directly — no SDK dependency required.
     """
-    try:
-        from fish_audio_sdk import Session, TTSRequest, ReferenceAudio, Prosody
-    except ImportError as exc:
-        raise FishAudioError(
-            "fish-audio-sdk is required for Fish Audio TTS. "
-            "Install with: pip install fish-audio-sdk"
-        ) from exc
+    import requests as _requests
 
-    session = Session(api_key)
-
-    # Build references list for inline cloning (if no voice_id)
-    references = []
-    if not voice_id and reference_audio_path:
-        ref_path = Path(reference_audio_path)
-        if not ref_path.exists():
-            raise FishAudioError(f"Reference audio file not found: {ref_path}")
-        ref_bytes = ref_path.read_bytes()
-        references.append(ReferenceAudio(
-            audio=ref_bytes,
-            text=reference_transcript or "",
-        ))
-
-    # Preprocess text for TTS (same as other providers)
     tts_text = _preprocess_tts_text(text)
 
-    prosody = Prosody(speed=speed) if abs(speed - 1.0) > 1e-6 else None
+    payload = {
+        "text": tts_text,
+        "format": "mp3",
+        "mp3_bitrate": 128,
+        "latency": "normal",
+        "normalize": True,
+    }
+    if voice_id:
+        payload["reference_id"] = voice_id
+    if abs(speed - 1.0) > 1e-6:
+        payload["prosody"] = {"speed": speed}
 
-    request = TTSRequest(
-        text=tts_text,
-        reference_id=voice_id or None,
-        references=references,
-        format="mp3",
-        mp3_bitrate=128,
-        latency="normal",
-        normalize=True,
-        prosody=prosody,
-    )
-
-    logger.info("Generating audio via Fish Audio S2 (voice=%s)…", voice_id or "inline-ref")
+    logger.info("Generating audio via Fish Audio API (voice=%s)…", voice_id or "default")
     try:
-        audio_chunks = session.tts(request)
-        audio_data = b"".join(audio_chunks)
+        resp = _requests.post(
+            "https://api.fish.audio/v1/tts",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=timeout,
+        )
+        resp.raise_for_status()
+        audio_data = resp.content
     except Exception as exc:
-        raise FishAudioError(f"Fish Audio TTS failed: {exc}") from exc
+        raise FishAudioError(f"Fish Audio API failed: {exc}") from exc
 
     if not audio_data or len(audio_data) < 100:
         raise FishAudioError("Fish Audio returned empty or invalid audio data")

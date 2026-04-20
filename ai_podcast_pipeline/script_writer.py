@@ -872,7 +872,7 @@ Episode structure (follow this order):
 1. THEME INTRO — state the topic in plain terms, why it caught your attention. Do NOT include a "Welcome to The Signal" greeting — that's added automatically. Jump straight into the topic.
 2. WHY IT MATTERS — connect it directly to the audience's daily work (writing, editing, presenting, emailing)
 3. 2-3 ANGLES — each illuminating a different facet of the topic, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
-4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps. This is the closing segment before the outro.
+4. PRACTICAL TAKEAWAY — synthesize what we learned from the sources into one specific, concrete technique the listener can try at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps. Connect it back to the topic and the insights from the angles above. This is the closing segment before the outro.
 
 PARAGRAPH VARIETY — this is critical for natural speech:
 - Do NOT follow the same structure in consecutive paragraphs.
@@ -898,7 +898,7 @@ Delivery cues (MANDATORY for text-to-speech):
 
 Perspective:
 - Third person when referencing articles: "the author argues", "the piece describes"
-- First person for your own reactions, the try-this segment, and food for thought
+- First person for your own reactions and the practical takeaway segment
 - NEVER start a paragraph with a publication name or source attribution
 
 Source introductions — IMPORTANT:
@@ -929,8 +929,8 @@ Fish Audio expression tags — use these for natural TTS delivery:
 Transitions and segment intros:
 - Vary how you introduce the try-this segment. Don't always use "So, what's the practical takeaway?" Rotate among natural transitions: "Here's something worth trying," "One thing I'd suggest," "If you want to put this into practice," or just flow directly into the technique.
 Return ONLY valid JSON with exactly these keys:
-- narrative: string (the full episode body — theme intro through the last angle, as one flowing text)
-- try_this: string (the concrete technique segment — this is the final segment before the outro)
+- narrative: string (the full episode body — topic intro through the last angle, as one flowing text)
+- try_this: string (the practical takeaway — synthesize lessons from the sources into one concrete technique the listener can try. This is the closing segment before the outro.)
 
 Length: aim for ~{content_words} words total across both fields combined (narrative + try_this).
 Prioritize quality and natural flow over exact count.
