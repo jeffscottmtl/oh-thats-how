@@ -295,8 +295,13 @@ body {
   margin-bottom: 10px;
 }
 
-.source-card.excluded {
-  opacity: 0.4;
+.source-card {
+  cursor: pointer;
+}
+
+.source-card.included {
+  border-color: var(--accent);
+  background: rgba(10, 126, 128, 0.03);
 }
 
 .source-card h4 {

@@ -278,9 +278,9 @@ const app = {
       const previewText = s.summary || (s.full_text ? s.full_text.substring(0, 300) : (isGartner ? 'Requires Gartner login — click to open and paste content' : 'No text available'));
 
       return `
-        <div class="source-card ${s.included ? '' : 'excluded'}">
+        <div class="source-card ${s.included ? 'included' : ''}" onclick="app.toggleSource(${i}, event)">
           <div class="source-toggle">
-            <input type="checkbox" ${s.included ? 'checked' : ''} onchange="app.toggleSource(${i})">
+            <input type="checkbox" ${s.included ? 'checked' : ''}>
             <h4>${s.title}${badge}</h4>
           </div>
           <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}${s.relevance_score ? ' &middot; relevance ' + s.relevance_score + '/10' : ''}</div>
@@ -318,7 +318,9 @@ const app = {
     `;
   },
 
-  toggleSource(index) {
+  toggleSource(index, event) {
+    // Don't toggle when clicking Show more/less button or Gartner controls
+    if (event && (event.target.tagName === 'BUTTON' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'A')) return;
     this.state.sources[index].included = !this.state.sources[index].included;
     this.renderSources();
   },
