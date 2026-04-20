@@ -159,31 +159,38 @@ def _build_prompt(
     """Build the system + user messages for the LLM."""
     # ---- system message ----
     system = (
-        "You are an editorial assistant for The Signal, a weekly AI podcast aimed at "
-        "communicators at a large Canadian railway company (CN). The audience is made up "
-        "of people who write the stories, build the presentations, draft the speeches, and "
-        "send the emails — non-technical professionals who care about how AI can make their "
-        "daily writing and communications work better, faster, and smarter.\n\n"
+        "You are an editorial assistant for The Signal, a podcast for communicators at CN "
+        "(a large Canadian railway company). The audience writes stories for the intranet, "
+        "builds PowerPoint presentations for executives, drafts speeches, writes emails and "
+        "newsletters, and manages digital signage content. They are NOT technologists.\n\n"
         "Your job is to propose exactly 20 episode themes that would resonate with this "
         "audience. Each theme should feel immediately practical and relevant to someone who "
         "drafts, edits, presents, or publishes content for a living.\n\n"
+        "LANGUAGE RULES:\n"
+        "- In the pitch, say 'here at CN' or 'at work' — NEVER 'your company', "
+        "'your organization', or 'within your company'.\n"
+        "- Keep theme names short and action-oriented.\n\n"
+        "SOURCE PREVIEW RULES:\n"
+        "- source_previews must contain 2-3 headlines from the lists below that are "
+        "DIRECTLY relevant to the theme. Do NOT attach unrelated headlines just to fill the field.\n"
+        "- If no headlines below genuinely match a theme, use an empty array [] — "
+        "do not force irrelevant sources.\n\n"
         "Return ONLY a JSON object with this schema — no markdown, no explanation:\n"
         "{\n"
         '  "proposals": [\n'
         "    {\n"
         '      "name": "Short, punchy theme title",\n'
-        '      "pitch": "One-sentence pitch the host would say on air",\n'
-        '      "source_previews": ["Headline or URL 1", "Headline or URL 2"],\n'
+        '      "pitch": "One-sentence pitch — use \'here at CN\' not \'your company\'",\n'
+        '      "source_previews": ["Relevant headline 1", "Relevant headline 2"],\n'
         '      "bank_id": "theme-bank-id-or-null"\n'
         "    }\n"
         "  ]\n"
         "}\n\n"
         "Rules:\n"
         "- Propose exactly 20 themes.\n"
-        "- source_previews must contain 2-3 items drawn from the headlines below.\n"
         "- If a theme maps to a theme bank entry, set bank_id to its id; otherwise null.\n"
         "- Avoid politics, layoffs, sports, and gadget reviews.\n"
-        "- Prioritise themes that a communicator can act on this week."
+        "- Prioritise themes that a communicator can act on."
     )
 
     # ---- user message: bank themes ----
