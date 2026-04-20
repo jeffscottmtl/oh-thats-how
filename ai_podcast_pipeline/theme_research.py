@@ -59,7 +59,14 @@ _STOPWORDS = frozenset(
     {
         "a", "an", "the", "and", "or", "of", "in", "on", "for", "to", "with",
         "at", "by", "from", "how", "your", "our", "my", "is", "are", "was",
-        "be", "as", "it", "its",
+        "be", "as", "it", "its", "not", "no", "but", "that", "this", "what",
+        "when", "who", "can", "will", "do", "don", "does", "did", "has", "have",
+        "had", "get", "got", "one", "use", "just", "like", "into", "over",
+        "out", "up", "down", "off", "need", "without", "before", "after",
+        "same", "different", "every", "each", "all", "any", "some", "more",
+        "other", "new", "way", "make", "start", "starting", "stop", "thing",
+        "work", "put", "take", "keep", "let", "hit", "send", "set",
+        "piece", "catch",
     }
 )
 
@@ -619,10 +626,14 @@ def research_theme(
     scored = []
     for c in deduped:
         s = _score_candidate(c, theme_keywords)
-        if s > 0:  # passed AI gate
-            c.relevance_score = min(s, 10) if s <= 10 else round(s / 10)
+        if s > 0:
             scored.append((c, s))
     scored.sort(key=lambda x: x[1], reverse=True)
+
+    # Normalize scores to 1-10 scale relative to the best result.
+    max_score = scored[0][1] if scored else 1
+    for c, s in scored:
+        c.relevance_score = max(1, round(s / max_score * 10))
 
     # Take top results (max 20 for user to browse).
     _MAX_RESULTS = 25
