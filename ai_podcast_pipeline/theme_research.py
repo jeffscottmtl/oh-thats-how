@@ -159,27 +159,41 @@ def _llm_generate_queries(
     project_id: str | None = None,
     organization: str | None = None,
 ) -> list[str]:
-    """Ask the LLM to generate diverse search queries for a theme.
+    """Generate search queries by asking the LLM to think like a communicator.
 
-    Returns 8-10 queries covering different angles: practical how-to,
-    research/data, adjacent concepts, industry trends, trust/ethics.
+    Instead of keyword combos, generates natural-language questions that a
+    communications professional would type into Google when looking for help
+    with this topic + AI. This produces much more contextual search results.
     Falls back to template-based queries on failure.
     """
-    desc_line = f'\nTheme description: "{theme_description}"\n' if theme_description else ""
-    prompt = f"""Generate 8-10 web search queries to find diverse, high-quality articles for a podcast episode about: "{theme_name}"
+    desc_line = f'\nTopic description: "{theme_description}"\n' if theme_description else ""
+    prompt = f"""You are a communications professional at a large company. You build presentations for executives, draft speeches for town halls, write emails and newsletters, and manage digital signage.
+
+You're preparing a podcast episode about: "{theme_name}"
 {desc_line}
-The podcast is for communications professionals at a large company — they build presentations for executives, draft speeches for leaders to deliver at town halls and events, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
+You need to find 10-12 articles about how AI can help with this specific aspect of your work.
 
-Requirements:
-- EVERY query MUST include an AI term (AI, ChatGPT, Claude, Copilot, Gemini, generative, LLM) — this is an AI podcast, generic results are useless
-- Cover DIFFERENT angles: practical how-to, real examples, adjacent concepts, trends, tips
-- At least 2 queries targeting adjacent concepts that use DIFFERENT keywords
-- 1 query with "site:reddit.com" targeting practical discussions
-- Each query should surface different sources — NO redundant keyword variations
-- Keep queries concise (5-10 words each, plus any site: prefix)
+Write the Google searches you would type — natural questions, not keyword combos.
 
-Return JSON with a single key "queries" — an array of search query strings.
-Do NOT include explanations or commentary — just the JSON."""
+Examples of GOOD queries (natural, contextual, specific):
+- "how internal comms teams use AI to adapt messages for different audiences"
+- "using ChatGPT to rewrite corporate announcements for executives vs frontline employees"
+- "communications professional shares experience using AI for tone adjustment"
+- "case study AI tailoring employee newsletter content"
+
+Examples of BAD queries (keyword soup, too generic):
+- "AI audience tone rewrite"
+- "ChatGPT communications tools"
+- "generative AI content adaptation"
+
+Rules:
+- Each query must naturally include AI/ChatGPT/Claude/Copilot or similar
+- Each query must include communications context (not generic marketing/sales)
+- Cover different angles: how-to, case studies, lessons learned, tips, trends
+- Include 1 query with "site:reddit.com"
+- No two queries should find the same articles
+
+Return JSON: {{"queries": ["query1", "query2", ...]}}"""
 
     try:
         content = chat_completion(
@@ -259,15 +273,13 @@ def _web_search_for_theme(
         project_id=project_id, organization=organization,
     )
 
-    # Add direct queries from the theme name + description.
-    desc_words = _tokenise(theme_description) if theme_description else []
+    # Add natural-language direct queries as baseline coverage.
     direct_queries = [
-        f"AI {theme_name}",
-        f"ChatGPT {theme_name}",
-        f'AI {" ".join(desc_words[:6])}' if desc_words else "",
-        f'generative AI {" ".join(desc_words[:5])} communications' if desc_words else "",
+        f"how communicators use AI for {theme_name.lower()}",
+        f"using ChatGPT for {theme_name.lower()} in corporate communications",
     ]
-    direct_queries = [q for q in direct_queries if q.strip()]
+    if theme_description:
+        direct_queries.append(f"AI {theme_description.lower()[:60]}")
 
     # Combine, deduplicate, ensure AI in each.
     _AI_QUERY_TERMS = {"ai", "chatgpt", "gpt", "claude", "copilot", "gemini",
