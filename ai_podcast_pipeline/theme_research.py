@@ -399,155 +399,117 @@ def _rank_sources(
 
 
 # ---------------------------------------------------------------------------
-# 4. LLM-based source validation
+# 4. Keyword-based relevance scoring (replaces LLM-as-judge)
 # ---------------------------------------------------------------------------
 
+# AI signals — articles must mention at least one to be included.
+_AI_SIGNALS = frozenset({
+    "ai", "artificial intelligence", "llm", "chatgpt", "generative",
+    "machine learning", "copilot", "gpt", "claude", "gemini",
+    "large language model", "automation", "chatbot", "openai", "anthropic",
+})
 
-_MAX_SUPPORTING = 8  # Cap supporting evidence articles.
 
-
-def _llm_filter_sources(
+def _generate_theme_keywords(
     theme_name: str,
-    candidates: list[CandidateStory],
+    theme_description: str,
     api_key: str,
     model: str,
-    theme_description: str = "",
     project_id: str | None = None,
     organization: str | None = None,
-    max_keep: int = 15,
-) -> tuple[list[int], list[int]]:
-    """Ask the LLM to pick the most relevant articles for a theme.
+) -> list[str]:
+    """Ask the LLM to generate relevance keywords for a theme.
 
-    Returns a tuple of (primary_indices, supporting_indices) into `candidates`.
-    Primary articles are directly about the theme. Supporting articles provide
-    research, data, or frameworks from authoritative sources that strengthen
-    the episode even if not directly about the theme name.
+    Returns a list of 15-20 keywords/phrases that indicate an article
+    is relevant to this theme. Used for deterministic scoring.
     """
-    used_articles = _load_used_articles()
+    desc = f'\nDescription: "{theme_description}"' if theme_description else ""
+    prompt = f"""Generate 15-20 keywords and short phrases that indicate an article is relevant to this podcast theme.
 
-    article_lines = []
-    for idx, c in enumerate(candidates):
-        pub = c.published_at.strftime("%Y-%m-%d") if c.published_at else "unknown"
-        summary = (c.summary or "")[:200]
-        used_in = used_articles.get(c.url, [])
-        used_tag = f" ⚠️ PREVIOUSLY USED in: {', '.join(used_in)}" if used_in else ""
-        article_lines.append(f"[{idx}] {c.title} ({c.source_domain}, {pub}){used_tag}\n    {summary}")
+Theme: "{theme_name}"{desc}
 
-    article_block = "\n".join(article_lines)
+The podcast is about AI for communications professionals. Return keywords that would appear in
+articles useful for an episode about this theme. Include:
+- Direct topic keywords (e.g., for "AI as your editing partner": proofreading, revision, grammar check, track changes)
+- Related concepts (e.g., writing quality, content review, editorial workflow)
+- Audience/context keywords (e.g., corporate writing, business communications, professional email)
 
-    prompt = f"""You are selecting articles for an episode of "The Signal," an internal AI podcast at CN.
+Do NOT include generic AI keywords (like "AI", "ChatGPT") — those are handled separately.
+Focus on TOPIC keywords that distinguish this theme from other themes.
 
-CONTEXT:
-- The Signal is a short podcast (~5-6 minutes) for communications professionals at CN.
-- The audience builds PowerPoint presentations for executives, drafts speeches, writes emails and newsletters, and manages digital signage content.
-- They are NOT technologists. They've heard of ChatGPT, they may have tried it, but they think in terms of "I have a draft due Thursday" — not models or prompts.
-- The podcast's job is to help them feel confident about AI, give them practical techniques, and keep them aware of what's changing — in that order.
-
-THIS EPISODE'S THEME: "{theme_name}"
-{f'THEME DESCRIPTION: "{theme_description}"' if theme_description else ''}
-Use the theme description to understand what this episode is specifically about — score articles higher if they match the description, not just the theme name.
-
-YOUR TASK:
-Select articles that could contribute to a compelling episode about "{theme_name}". Be GENEROUS — the user will review your selections and choose which to keep. It's better to include a borderline-relevant article than to miss a good one.
-
-Classify each selected article as PRIMARY or SUPPORTING:
-
-**PRIMARY** — articles that are clearly relevant to "{theme_name}" or closely adjacent topics.
-Think broadly: if the theme is about editing with AI, then articles about AI writing tools, AI proofreading, AI for content quality, AI revision workflows, and practical AI writing tips ALL qualify.
-
-A good primary source:
-- Covers the theme directly OR a closely related aspect of it
-- Contains practical advice, insights, examples, or research a communicator could use
-- Doesn't have to use the exact words of the theme — topical relevance is what matters
-
-**SUPPORTING** — research, data, surveys, or frameworks that provide evidence or context.
-These don't need to be about the theme specifically — a productivity study or trust survey
-that could strengthen a point in the episode counts.
-
-REJECT articles that are:
-- Not about AI — every selected article must have a clear AI angle (AI tools, AI workflows, AI impact, AI ethics, etc.). Articles about writing or editing that don't mention AI are off-topic for this podcast.
-- Product landing pages, ads, or marketing fluff with no editorial substance
-- About unrelated products, funding, or corporate news with no useful insights
-- Published before 2024 — prefer recent articles (2025-2026). Only include older articles if they are exceptionally relevant and still accurate.
-
-Select generously — aim for {max_keep} or more articles across both tiers.
-
-Note: Gartner articles ARE allowed if relevant — they'll be flagged for the user to provide full text via login.
-
-PREVIOUSLY USED ARTICLES:
-Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.
-- Strongly prefer fresh, unused articles over previously used ones.
-- Only select a previously used article if it has a genuinely different angle for THIS theme
-  that wasn't explored before.
-- If no unused articles are relevant, it's better to return fewer results than to reuse sources.
-
-Return JSON with two keys:
-- "primary": array of objects [{{"index": N, "relevance": 1-10}}, ...] for primary articles (at most {max_keep}), where relevance is how useful this article is for the episode (10 = perfect fit, 1 = barely relevant)
-- "supporting": array of objects [{{"index": N, "relevance": 1-10}}, ...] for supporting evidence (at most {_MAX_SUPPORTING})
-Sort each array by relevance descending (most relevant first).
-If none are relevant in a tier, return an empty array.
-
-Candidate articles:
-{article_block}"""
+Return JSON: {{"keywords": ["keyword1", "keyword2", ...]}}"""
 
     try:
         content = chat_completion(
-            api_key=api_key,
-            model=model,
+            api_key=api_key, model=model,
             messages=[
                 {"role": "system", "content": "Output strict JSON only."},
                 {"role": "user", "content": prompt},
             ],
-            project_id=project_id,
-            organization=organization,
-            temperature=0.1,
+            project_id=project_id, organization=organization,
+            temperature=0.3,
         )
         data = parse_json_response(content)
-
-        # Parse scored format: [{"index": N, "relevance": 1-10}, ...]
-        def _parse_scored(items: list) -> list[tuple[int, int]]:
-            """Parse items into (index, relevance) tuples, sorted by relevance desc."""
-            parsed = []
-            for item in items:
-                if isinstance(item, dict):
-                    idx = item.get("index")
-                    rel = item.get("relevance", 5)
-                elif isinstance(item, (int, float)):
-                    idx, rel = int(item), 5  # fallback for plain index
-                else:
-                    continue
-                if isinstance(idx, (int, float)) and 0 <= int(idx) < len(candidates):
-                    parsed.append((int(idx), int(rel)))
-            parsed.sort(key=lambda x: x[1], reverse=True)
-            return parsed
-
-        if "primary" in data:
-            scored_primary = _parse_scored(data.get("primary", []))
-            scored_supporting = _parse_scored(data.get("supporting", []))
-            primary = [idx for idx, _ in scored_primary]
-            supporting = [idx for idx, _ in scored_supporting[:_MAX_SUPPORTING]]
-            # Remove any supporting that's also in primary.
-            primary_set = set(primary)
-            supporting = [i for i in supporting if i not in primary_set]
-            # Store relevance scores on candidates.
-            score_map = {idx: rel for idx, rel in scored_primary + scored_supporting}
-            for idx in primary + supporting:
-                candidates[idx].relevance_score = score_map.get(idx, 5)
-            logger.info(
-                "LLM selected %d primary + %d supporting for theme '%s'.",
-                len(primary), len(supporting), theme_name,
-            )
-            return primary, supporting
-
-        # Fallback: old format (selected_indices) — treat all as primary.
-        indices = data.get("selected_indices", [])
-        valid = [int(i) for i in indices if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
-        logger.info("LLM selected %d candidates (old format) for theme '%s'.", len(valid), theme_name)
-        return valid, []
-
+        keywords = data.get("keywords", [])
+        if isinstance(keywords, list) and len(keywords) >= 5:
+            logger.info("Generated %d theme keywords for '%s'.", len(keywords), theme_name)
+            return [k.lower().strip() for k in keywords if isinstance(k, str)]
     except Exception as exc:
-        logger.warning("LLM source filtering failed: %s — falling back to all candidates.", exc)
-        return list(range(min(max_keep, len(candidates)))), []
+        logger.warning("Theme keyword generation failed: %s", exc)
+
+    # Fallback: extract words from theme name + description.
+    fallback = _tokenise(f"{theme_name} {theme_description}")
+    logger.info("Using %d fallback keywords for '%s'.", len(fallback), theme_name)
+    return fallback
+
+
+def _score_candidate(
+    candidate: CandidateStory,
+    theme_keywords: list[str],
+) -> int:
+    """Score a candidate article for relevance using keyword matching.
+
+    Returns a score 0-100. Higher = more relevant.
+    """
+    title = candidate.title.lower()
+    summary = (candidate.summary or "").lower()
+    text = f"{title} {summary}"
+
+    # Gate: must mention AI somewhere (word-boundary match to avoid false positives like "trails").
+    if not any(re.search(rf"\b{re.escape(signal)}\b", text) for signal in _AI_SIGNALS):
+        return 0
+
+    score = 0
+
+    # Theme keyword matches in title (high signal — 6 pts each, max 30).
+    title_hits = sum(1 for kw in theme_keywords if kw in title)
+    score += min(title_hits * 6, 30)
+
+    # Theme keyword matches in summary (moderate signal — 2 pts each, max 20).
+    summary_hits = sum(1 for kw in theme_keywords if kw in summary)
+    score += min(summary_hits * 2, 20)
+
+    # Penalize product pages / tool homepages.
+    product_signals = ["free online", "no sign-up", "no signup", "sign up free",
+                       "try for free", "start free", "pricing", "free trial"]
+    if any(s in text for s in product_signals):
+        score -= 15
+
+    # Bonus for editorial content signals.
+    editorial_signals = ["how to", "tips", "guide", "strategy", "best practices",
+                         "case study", "example", "workflow", "lessons", "research",
+                         "study", "survey", "report", "trend"]
+    editorial_hits = sum(1 for s in editorial_signals if s in text)
+    score += min(editorial_hits * 3, 15)
+
+    # Bonus for comms-specific content.
+    comms_signals = ["communications", "communicator", "internal comms", "corporate",
+                     "employee", "stakeholder", "newsletter", "presentation", "speech",
+                     "email", "pr ", "public relations"]
+    comms_hits = sum(1 for s in comms_signals if s in text)
+    score += min(comms_hits * 3, 15)
+
+    return max(score, 1)  # minimum 1 if it passed the AI gate
 
 
 # ---------------------------------------------------------------------------
@@ -612,50 +574,36 @@ def research_theme(
         if title_key:
             seen_titles.add(title_key)
         deduped.append(candidate)
-    logger.info("After dedup: %d candidates for LLM evaluation.", len(deduped))
+    logger.info("After dedup: %d candidates for scoring.", len(deduped))
 
-    # Step 5: LLM validation — the LLM picks the actually relevant ones.
-    # Ask for MORE than we need so the user has options to choose from.
-    _llm_max_keep = max(max_sources, 15)
-    if _api_key and deduped:
-        primary_indices, supporting_indices = _llm_filter_sources(
-            theme_name=theme_name,
-            theme_description=theme_description,
-            candidates=deduped,
-            api_key=_api_key,
-            model=_smart_model,
-            project_id=project_id,
-            organization=organization,
-            max_keep=_llm_max_keep,
+    # Step 3: Generate theme-specific relevance keywords.
+    theme_keywords = []
+    if _api_key:
+        theme_keywords = _generate_theme_keywords(
+            theme_name, theme_description,
+            api_key=_api_key, model=_smart_model,
+            project_id=project_id, organization=organization,
         )
-        # Set source roles on candidates.
-        for i in primary_indices:
-            deduped[i].source_role = "primary"
-        for i in supporting_indices:
-            deduped[i].source_role = "supporting"
-        final = [deduped[i] for i in primary_indices] + [deduped[i] for i in supporting_indices]
-        # Sort by relevance score (highest first).
-        final.sort(key=lambda c: c.relevance_score, reverse=True)
-    else:
-        final = deduped[:max_sources]
+    logger.info("Theme keywords: %s", theme_keywords[:10])
 
-    # Step 5b: Hard AI-relevance filter — drop anything that doesn't mention AI.
-    _AI_SIGNALS = {"ai", "artificial intelligence", "llm", "chatgpt", "generative",
-                   "machine learning", "copilot", "gpt", "claude", "gemini",
-                   "large language model", "automation", "chatbot"}
-    ai_filtered = []
-    for c in final:
-        text = f"{c.title} {c.summary}".lower()
-        if any(signal in text for signal in _AI_SIGNALS):
-            ai_filtered.append(c)
-        else:
-            logger.debug("AI filter dropped: %s", c.title[:60])
-    if len(ai_filtered) < len(final):
-        logger.info("AI relevance filter dropped %d/%d articles with no AI mention.",
-                     len(final) - len(ai_filtered), len(final))
-    final = ai_filtered
+    # Step 4: Score every candidate with deterministic keyword matching.
+    scored = []
+    for c in deduped:
+        s = _score_candidate(c, theme_keywords)
+        if s > 0:  # passed AI gate
+            c.relevance_score = min(s, 10) if s <= 10 else round(s / 10)
+            scored.append((c, s))
+    scored.sort(key=lambda x: x[1], reverse=True)
 
-    # Step 5c: Enforce per-domain diversity — max 3 results from any single domain.
+    # Take top results (max 20 for user to browse).
+    _MAX_RESULTS = 20
+    final = [c for c, _ in scored[:_MAX_RESULTS]]
+    logger.info(
+        "Keyword scoring: %d passed AI gate from %d, showing top %d.",
+        len(scored), len(deduped), len(final),
+    )
+
+    # Step 4b: Enforce per-domain diversity — max 3 results from any single domain.
     _MAX_PER_DOMAIN = 3
     domain_counts: dict[str, int] = {}
     diverse_final: list[CandidateStory] = []

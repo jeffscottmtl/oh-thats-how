@@ -10,7 +10,7 @@ from ai_podcast_pipeline.models import CandidateStory
 from ai_podcast_pipeline.theme_research import (
     _build_search_queries,
     _llm_generate_queries,
-    _llm_filter_sources,
+    _score_candidate,
     _rank_sources,
     _score_source,
 )
@@ -299,68 +299,47 @@ class TestLlmGenerateQueries(unittest.TestCase):
         self.assertEqual(len(queries), len(set(queries)))
 
 
-class TestLlmFilterSourcesTiered(unittest.TestCase):
-    THEME = "AI for Internal Communications"
+class TestScoreCandidate(unittest.TestCase):
+    KEYWORDS = ["editing", "proofreading", "revision", "tone", "grammar"]
 
-    def _make_candidates(self, n=5):
-        return [
-            _make_candidate(
-                title=f"Article {i}", url=f"https://example.com/{i}",
-                domain="example.com", summary=f"Summary {i}",
-            )
-            for i in range(n)
-        ]
-
-    @patch("ai_podcast_pipeline.theme_research.chat_completion")
-    def test_returns_primary_and_supporting_indices(self, mock_chat):
-        mock_chat.return_value = json.dumps({
-            "primary": [0, 1, 3],
-            "supporting": [2, 4],
-        })
-        candidates = self._make_candidates(5)
-        primary, supporting = _llm_filter_sources(
-            theme_name=self.THEME, candidates=candidates,
-            api_key="test-key", model="gpt-4.1-mini",
+    def test_relevant_article_scores_high(self):
+        c = _make_candidate(
+            title="How to use AI for editing and proofreading",
+            summary="This article covers AI tools for grammar checking and revision workflows.",
         )
-        self.assertEqual(primary, [0, 1, 3])
-        self.assertEqual(supporting, [2, 4])
+        score = _score_candidate(c, self.KEYWORDS)
+        self.assertGreater(score, 10)
 
-    @patch("ai_podcast_pipeline.theme_research.chat_completion")
-    def test_falls_back_from_old_format(self, mock_chat):
-        mock_chat.return_value = json.dumps({
-            "selected_indices": [0, 2, 4],
-        })
-        candidates = self._make_candidates(5)
-        primary, supporting = _llm_filter_sources(
-            theme_name=self.THEME, candidates=candidates,
-            api_key="test-key", model="gpt-4.1-mini",
+    def test_irrelevant_article_scores_zero(self):
+        c = _make_candidate(
+            title="Best hiking trails in Colorado",
+            summary="A guide to the best outdoor trails for summer adventures.",
         )
-        self.assertEqual(primary, [0, 2, 4])
-        self.assertEqual(supporting, [])
+        score = _score_candidate(c, self.KEYWORDS)
+        self.assertEqual(score, 0)  # no AI mention = 0
 
-    @patch("ai_podcast_pipeline.theme_research.chat_completion")
-    def test_caps_supporting_at_max(self, mock_chat):
-        mock_chat.return_value = json.dumps({
-            "primary": [0],
-            "supporting": [1, 2, 3, 4, 5, 6],
-        })
-        candidates = self._make_candidates(7)
-        primary, supporting = _llm_filter_sources(
-            theme_name=self.THEME, candidates=candidates,
-            api_key="test-key", model="gpt-4.1-mini",
+    def test_ai_but_off_topic_scores_low(self):
+        c = _make_candidate(
+            title="AI in healthcare diagnostics",
+            summary="How AI is transforming medical imaging and diagnostics.",
         )
-        self.assertLessEqual(len(supporting), 8)
+        score = _score_candidate(c, self.KEYWORDS)
+        # passes AI gate but no theme keywords — low score
+        self.assertLess(score, 10)
 
-    @patch("ai_podcast_pipeline.theme_research.chat_completion")
-    def test_fallback_on_exception(self, mock_chat):
-        mock_chat.side_effect = Exception("API error")
-        candidates = self._make_candidates(5)
-        primary, supporting = _llm_filter_sources(
-            theme_name=self.THEME, candidates=candidates,
-            api_key="test-key", model="gpt-4.1-mini",
+    def test_product_page_penalized(self):
+        c_product = _make_candidate(
+            title="Free AI Editor Online — No Sign-Up Required",
+            summary="Try our free AI editing tool online. No sign-up needed.",
         )
-        self.assertGreater(len(primary), 0)
-        self.assertEqual(supporting, [])
+        c_editorial = _make_candidate(
+            title="How AI editing tools are changing the writing process",
+            summary="A guide to using AI for editing corporate communications.",
+        )
+        self.assertGreater(
+            _score_candidate(c_editorial, self.KEYWORDS),
+            _score_candidate(c_product, self.KEYWORDS),
+        )
 
 
 if __name__ == "__main__":
