@@ -162,11 +162,10 @@ def _llm_generate_queries(
 The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
 Requirements for query diversity:
-- Cover DIFFERENT angles: practical how-to, research/data, adjacent concepts, trends, trust/ethics, measurement
-- At least 2 queries targeting research firms, surveys, or data reports (McKinsey, Gallup, Edelman, Microsoft Work Trend Index, Staffbase, Poppulo, etc.)
+- Cover DIFFERENT angles: practical how-to, real examples, adjacent concepts, trends, tips
 - At least 2 queries targeting adjacent concepts related to the theme that use DIFFERENT keywords (e.g., for "AI for Internal Communications": employee engagement, digital workplace, content personalization, newsletter analytics)
-- Include 1-2 queries with "site:gartner.com" targeting the theme
-- Include 1 query with "site:reddit.com" targeting practical discussions about the theme
+- 1 query with "site:reddit.com" targeting practical discussions about the theme
+- Do NOT name specific companies or research firms in queries — let the search engine find the best sources naturally
 - Each query should surface different sources — NO redundant keyword variations
 - Keep queries concise (5-10 words each, plus any site: prefix)
 
