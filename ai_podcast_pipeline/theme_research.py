@@ -365,7 +365,7 @@ def _web_search_for_theme(
                 # Update the existing candidate's score
                 for c in candidates:
                     if c.url == url:
-                        c.relevance_score = max(1, round(tavily_score * 10))
+                        c.relevance_score = tavily_score
                         break
             continue
         seen_urls[url] = tavily_score
@@ -377,7 +377,7 @@ def _web_search_for_theme(
             source_domain=domain,
             published_at=None,
             summary=r.get("body", "").strip(),
-            relevance_score=max(1, round(tavily_score * 10)),
+            relevance_score=tavily_score,  # raw 0-1, normalized later
         ))
 
     logger.info(
@@ -707,19 +707,20 @@ def research_theme(
     logger.info("Theme keywords: %s", theme_keywords[:10])
 
     # Step 4: Gate check + sort by Tavily's semantic score.
-    # Tavily already scored results by relevance to the query — use that as primary rank.
-    # Keyword scoring acts as a quality gate only (must mention AI + comms context).
     scored = []
     for c in deduped:
         gate_score = _score_candidate(c, theme_keywords)
         if gate_score > 0:
-            # Use Tavily's semantic score (already stored on candidate) for ranking.
-            # Fall back to keyword score if no Tavily score.
-            rank = c.relevance_score if c.relevance_score > 0 else max(1, round(gate_score / 5))
-            scored.append((c, rank))
+            scored.append((c, c.relevance_score))
     scored.sort(key=lambda x: x[1], reverse=True)
 
-    # Scores are already 1-10 from Tavily (set during candidate building).
+    # Normalize Tavily scores (0.0-1.0) to 1-10 using the actual range.
+    if scored:
+        raw_scores = [s for _, s in scored]
+        lo, hi = min(raw_scores), max(raw_scores)
+        spread = hi - lo if hi > lo else 1.0
+        for c, _ in scored:
+            c.relevance_score = max(1, min(10, round(1 + 9 * (c.relevance_score - lo) / spread)))
 
     # Take top results (max 20 for user to browse).
     _MAX_RESULTS = 25
@@ -784,20 +785,51 @@ def research_theme(
         except Exception as exc:
             logger.warning("LLM cleanup failed: %s — keeping all.", exc)
 
-    # Step 6: Fetch full text in parallel.
-    with ThreadPoolExecutor(max_workers=6) as pool:
-        future_to_candidate = {
-            pool.submit(fetch_article_text, c.url): c for c in final
-        }
-        for future in as_completed(future_to_candidate):
-            candidate = future_to_candidate[future]
-            try:
-                candidate.full_text = future.result()
-            except Exception as exc:
-                logger.debug("Full-text fetch failed for %s: %s", candidate.url, exc)
-                candidate.full_text = None
-            if on_article_done is not None:
-                on_article_done()
+    # Step 6: Fetch full text via Tavily extract (handles JS pages, returns markdown).
+    # Falls back to basic HTML fetch if Tavily extract fails.
+    import os as _os
+    tavily_key = _os.environ.get("TAVILY_API_KEY", "")
+    if tavily_key and final:
+        try:
+            from tavily import TavilyClient
+            _tavily = TavilyClient(api_key=tavily_key)
+            urls = [c.url for c in final]
+            # Tavily extract handles up to 20 URLs per call.
+            for batch_start in range(0, len(urls), 20):
+                batch_urls = urls[batch_start:batch_start + 20]
+                try:
+                    extracted = _tavily.extract(urls=batch_urls)
+                    for result in extracted.get("results", []):
+                        url = result.get("url", "")
+                        text = result.get("raw_content", "") or result.get("text", "")
+                        for c in final:
+                            if c.url == url and text:
+                                c.full_text = text[:15000]  # cap to avoid massive texts
+                                break
+                except Exception as exc:
+                    logger.warning("Tavily extract batch failed: %s", exc)
+            logger.info("Tavily extracted text for %d/%d articles.",
+                        sum(1 for c in final if c.full_text), len(final))
+        except ImportError:
+            logger.warning("tavily-python not installed — falling back to basic fetch.")
+
+    # Fallback: fetch any articles that Tavily didn't extract.
+    missing = [c for c in final if not c.full_text]
+    if missing:
+        logger.info("Fetching %d remaining articles with basic HTML parser.", len(missing))
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            future_to_candidate = {
+                pool.submit(fetch_article_text, c.url): c for c in missing
+            }
+            for future in as_completed(future_to_candidate):
+                candidate = future_to_candidate[future]
+                try:
+                    candidate.full_text = future.result()
+                except Exception as exc:
+                    logger.debug("Full-text fetch failed for %s: %s", candidate.url, exc)
+                    candidate.full_text = None
+                if on_article_done is not None:
+                    on_article_done()
 
     logger.info(
         "research_theme('%s'): returning %d sources", theme_name, len(final)
