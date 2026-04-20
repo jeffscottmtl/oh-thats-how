@@ -132,23 +132,57 @@ const app = {
 
   async newEpisode() {
     this.state = { step: 0, proposals: [], selectedTheme: null, bankId: null, sources: [], episodeName: null, script: null, teamsPost: null, tryThis: null };
-    $main().innerHTML = `
-      ${this.renderSteps(0)}
-      <div class="step-header">
-        <h1>Proposing Themes</h1>
-        <p>Searching the web, scanning feeds, and checking the theme bank...</p>
-      </div>
-      <div class="loading-msg"><div class="spinner"></div> Finding fresh topics for your next episode...</div>
-    `;
-
     try {
-      const res = await fetch("/api/propose", { method: "POST" });
-      const proposals = await res.json();
-      this.state.proposals = proposals;
-      this.renderProposals();
+      const res = await fetch("/api/theme-bank");
+      const bank = await res.json();
+
+      // Group themes by first tag
+      const groups = {};
+      for (const t of bank) {
+        const group = (t.tags && t.tags[0]) || "other";
+        if (!groups[group]) groups[group] = [];
+        groups[group].push(t);
+      }
+
+      let html = '';
+      for (const [group, themes] of Object.entries(groups)) {
+        const label = group.charAt(0).toUpperCase() + group.slice(1);
+        const cards = themes.map(t => {
+          const used = t.times_used > 0;
+          const badge = used
+            ? `<span class="badge used">${t.times_used}x · last ${t.last_used || '?'}</span>`
+            : `<span class="badge fresh">Available</span>`;
+          return `
+            <div class="card" onclick="app.selectBankTheme('${t.id}', '${t.name.replace(/'/g, "\\'")}')">
+              <h3>${t.name}</h3>
+              <p>${t.description}</p>
+              ${badge}
+            </div>`;
+        }).join("");
+        html += `<h2 style="margin-top:24px; margin-bottom:12px; font-size:16px; color:var(--text-dim);">${label}</h2><div class="card-grid">${cards}</div>`;
+      }
+
+      $main().innerHTML = `
+        ${this.renderSteps(0)}
+        <div class="step-header">
+          <h1>Pick a Theme</h1>
+          <p>Choose a theme or type your own topic.</p>
+        </div>
+        ${html}
+        <input class="theme-input" id="custom-theme" placeholder="Or type your own topic here..." onkeydown="if(event.key==='Enter')app.selectCustomTheme()">
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="app.selectCustomTheme()">Use Custom Topic</button>
+        </div>
+      `;
     } catch (e) {
-      $main().innerHTML = `<p style="color:var(--danger)">Error proposing themes: ${e.message}</p>`;
+      $main().innerHTML = `<p style="color:var(--danger)">Error loading themes: ${e.message}</p>`;
     }
+  },
+
+  selectBankTheme(bankId, name) {
+    this.state.selectedTheme = name;
+    this.state.bankId = bankId;
+    this.startResearch();
   },
 
   renderProposals() {

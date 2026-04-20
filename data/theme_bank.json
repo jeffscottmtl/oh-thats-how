@@ -1,289 +1,241 @@
 [
   {
     "id": "first-drafts",
-    "name": "Getting unstuck on first drafts",
-    "description": "Overcome blank page paralysis and generate initial draft material that you can shape and refine.",
-    "tags": [
-      "writing",
-      "productivity",
-      "getting-started"
-    ],
+    "name": "Beating the blank page",
+    "description": "Overcome blank-page paralysis — get AI to generate raw material you can shape into a polished first draft.",
+    "tags": ["writing", "getting-started"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "rewriting-for-tone",
-    "name": "Rewriting for tone and audience",
-    "description": "Adjust your message for different audiences and tones—from formal to conversational, executive to frontline.",
-    "tags": [
-      "writing",
-      "audience",
-      "refinement"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "summarizing-long-docs",
-    "name": "Summarizing long documents",
-    "description": "Distill lengthy reports, research, and documents into clear, actionable summaries for busy stakeholders.",
-    "tags": [
-      "synthesis",
-      "efficiency",
-      "communication"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "presentation-prep",
-    "name": "Building better presentations",
-    "description": "Develop compelling slide decks with clear narratives, speaker notes, and visual storytelling that engages audiences.",
-    "tags": [
-      "presentations",
-      "storytelling",
-      "design"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "email-efficiency",
-    "name": "Writing emails that get read",
-    "description": "Craft subject lines, body copy, and calls-to-action that cut through inbox noise and drive response.",
-    "tags": [
-      "email",
-      "efficiency",
-      "clarity"
-    ],
-    "last_used": "2026-04-18",
-    "times_used": 1
-  },
-  {
-    "id": "speech-drafting",
-    "name": "Drafting speeches and remarks",
-    "description": "Generate compelling remarks for town halls, events, and video messages that connect with your audience.",
-    "tags": [
-      "speeches",
-      "speaking",
-      "storytelling"
-    ],
-    "last_used": "2026-04-19",
-    "times_used": 1
-  },
-  {
-    "id": "meeting-prep",
-    "name": "Preparing for meetings with AI",
-    "description": "Build agendas, talking points, and briefing materials that set you up to lead effective meetings.",
-    "tags": [
-      "meetings",
-      "preparation",
-      "leadership"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "content-repurposing",
-    "name": "Repurposing content across channels",
-    "description": "Transform one piece of content into multiple formats—articles into social posts, speeches into emails, reports into newsletters.",
-    "tags": [
-      "content",
-      "efficiency",
-      "channels"
-    ],
+    "name": "Same message, different audience",
+    "description": "Rewrite one piece for executives, frontline, or external stakeholders — adjust tone without starting over.",
+    "tags": ["writing", "audience"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "proofreading-editing",
-    "name": "AI as an editing partner",
-    "description": "Use AI to spot grammar, clarity, tone, and structural issues before you hit send or publish.",
-    "tags": [
-      "editing",
-      "quality",
-      "refinement"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "brainstorming-ideas",
-    "name": "Brainstorming with AI",
-    "description": "Generate fresh angles, headlines, campaign ideas, and creative directions faster than traditional brainstorming.",
-    "tags": [
-      "creativity",
-      "ideation",
-      "productivity"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "data-storytelling",
-    "name": "Turning data into stories",
-    "description": "Convert metrics, numbers, and research into narratives that move audiences and drive decision-making.",
-    "tags": [
-      "storytelling",
-      "data",
-      "persuasion"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "internal-comms-strategy",
-    "name": "AI for internal communications",
-    "description": "Develop employee messaging, change communication, and engagement content that builds alignment and trust.",
-    "tags": [
-      "internal-comms",
-      "strategy",
-      "alignment"
-    ],
+    "name": "AI as your editing partner",
+    "description": "Use AI to catch grammar, clarity, tone, and structural issues before you hit send.",
+    "tags": ["writing", "quality"],
     "last_used": "2026-04-19",
     "times_used": 1
   },
   {
-    "id": "crisis-comms",
-    "name": "AI and crisis communications",
-    "description": "Develop response statements, FAQs, and rapid messaging when you need to respond quickly and thoughtfully.",
-    "tags": [
-      "crisis",
-      "rapid-response",
-      "messaging"
-    ],
+    "id": "feedback-revision",
+    "name": "Surviving the revision cycle",
+    "description": "Incorporate feedback faster, manage multiple edit rounds, and keep documents on brand through the chaos.",
+    "tags": ["writing", "collaboration"],
     "last_used": null,
     "times_used": 0
   },
   {
-    "id": "prompting-basics",
-    "name": "Writing better prompts",
-    "description": "Learn prompt techniques that help AI deliver more useful, accurate, and audience-appropriate output.",
-    "tags": [
-      "ai-skills",
-      "fundamentals",
-      "efficiency"
-    ],
+    "id": "plain-language",
+    "name": "Cutting the jargon",
+    "description": "Use AI to simplify complex language, strip corporate-speak, and make your writing clear to everyone.",
+    "tags": ["writing", "clarity"],
     "last_used": null,
     "times_used": 0
   },
   {
-    "id": "ai-anxiety",
-    "name": "Getting past AI anxiety",
-    "description": "Address fears about AI replacing writers, concerns about quality, and build confidence in using AI as a tool.",
-    "tags": [
-      "mindset",
-      "adoption",
-      "confidence"
-    ],
+    "id": "summarizing-long-docs",
+    "name": "The TL;DR machine",
+    "description": "Distill 40-page reports into crisp summaries your busy stakeholders will actually read.",
+    "tags": ["productivity", "synthesis"],
     "last_used": null,
     "times_used": 0
   },
   {
-    "id": "accessibility-plain-language",
-    "name": "Plain language and accessibility",
-    "description": "Simplify complex language, remove jargon, and create content that's readable and accessible to all audiences.",
-    "tags": [
-      "accessibility",
-      "clarity",
-      "inclusion"
-    ],
+    "id": "email-efficiency",
+    "name": "Emails that don't get deleted",
+    "description": "Craft subject lines, body copy, and calls-to-action that cut through inbox noise and get a response.",
+    "tags": ["productivity", "email"],
+    "last_used": "2026-04-18",
+    "times_used": 1
+  },
+  {
+    "id": "meeting-prep",
+    "name": "Walk into every meeting prepared",
+    "description": "Build agendas, talking points, and briefing materials so you lead meetings instead of surviving them.",
+    "tags": ["productivity", "preparation"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "content-repurposing",
+    "name": "One piece, five channels",
+    "description": "Turn a speech into a newsletter, a report into social posts, and an email into signage — without rewriting from scratch.",
+    "tags": ["productivity", "channels"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "newsletter-creation",
-    "name": "Building newsletters faster",
-    "description": "Generate newsletter content, curate stories, write headlines, and manage editorial calendars more efficiently.",
-    "tags": [
-      "newsletters",
-      "content",
-      "efficiency"
-    ],
+    "name": "Newsletters without the grind",
+    "description": "Curate stories, write headlines, and assemble newsletter editions faster with AI doing the heavy lifting.",
+    "tags": ["productivity", "newsletters"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "presentation-prep",
+    "name": "Presentations that land",
+    "description": "Build slide decks with clear narratives, sharp speaker notes, and a story arc that keeps the room engaged.",
+    "tags": ["storytelling", "presentations"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "speech-drafting",
+    "name": "Speeches that sound like a person wrote them",
+    "description": "Draft town hall remarks, event speeches, and video scripts that feel authentic — not AI-generated.",
+    "tags": ["storytelling", "speeches"],
+    "last_used": "2026-04-19",
+    "times_used": 1
+  },
+  {
+    "id": "data-storytelling",
+    "name": "Making numbers tell a story",
+    "description": "Turn metrics, charts, and data into narratives that move audiences and drive decisions.",
+    "tags": ["storytelling", "data"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "stakeholder-updates",
-    "name": "Writing stakeholder updates",
-    "description": "Create executive summaries, progress reports, and status updates that keep key stakeholders aligned and informed.",
-    "tags": [
-      "reporting",
-      "stakeholders",
-      "updates"
-    ],
+    "name": "Updates nobody dreads reading",
+    "description": "Write executive summaries and progress reports that are clear, concise, and worth your stakeholders' time.",
+    "tags": ["storytelling", "reporting"],
     "last_used": null,
     "times_used": 0
   },
   {
-    "id": "social-media-content",
-    "name": "Social media content with AI",
-    "description": "Write posts, captions, and threads optimized for LinkedIn, Twitter, Instagram, and other social platforms.",
-    "tags": [
-      "social-media",
-      "content",
-      "channels"
-    ],
+    "id": "brainstorming-ideas",
+    "name": "When you need 10 ideas by 3pm",
+    "description": "Use AI to brainstorm angles, headlines, campaign concepts, and creative directions on a deadline.",
+    "tags": ["creativity", "ideation"],
     "last_used": null,
     "times_used": 0
   },
   {
-    "id": "research-synthesis",
-    "name": "Research and synthesis",
-    "description": "Analyze research, synthesize findings into key insights, and communicate discoveries to non-specialist audiences.",
-    "tags": [
-      "research",
-      "synthesis",
-      "insights"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "feedback-revision",
-    "name": "Handling feedback and revisions",
-    "description": "Incorporate feedback efficiently, manage multiple edit rounds, and keep documents on brand while staying flexible.",
-    "tags": [
-      "revision",
-      "collaboration",
-      "refinement"
-    ],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "intranet-content",
-    "name": "Writing for the intranet",
-    "description": "Create intranet articles, how-to guides, and employee resources that are clear, scannable, and findable.",
-    "tags": [
-      "intranet",
-      "internal-comms",
-      "documentation"
-    ],
+    "id": "visual-content",
+    "name": "Visuals without a designer",
+    "description": "Create social graphics, presentation visuals, and digital signage content when the design team is booked.",
+    "tags": ["creativity", "visual"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "digital-signage",
-    "name": "Digital signage content",
-    "description": "Write compelling messages for displays, wayfinding, and screens that catch attention and communicate quickly.",
-    "tags": [
-      "signage",
-      "visual-comms",
-      "messaging"
-    ],
+    "name": "Digital signage that stops people",
+    "description": "Write messages for screens and displays that catch attention and communicate in seconds.",
+    "tags": ["creativity", "signage"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "social-media-content",
+    "name": "Social posts that aren't cringe",
+    "description": "Write LinkedIn posts, internal social content, and threads that sound human and get engagement.",
+    "tags": ["creativity", "social"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "internal-comms-strategy",
+    "name": "AI and the future of internal comms",
+    "description": "How AI is reshaping employee messaging, change communication, and engagement — and what to do about it.",
+    "tags": ["strategy", "internal-comms"],
+    "last_used": "2026-04-19",
+    "times_used": 1
+  },
+  {
+    "id": "crisis-comms",
+    "name": "When the crisis hits your inbox",
+    "description": "Draft response statements, FAQs, and rapid messaging when you need to move fast and say the right thing.",
+    "tags": ["strategy", "crisis"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "change-comms",
+    "name": "Communicating change without the panic",
+    "description": "Use AI to draft change announcements, anticipate employee questions, and build messaging that reduces anxiety.",
+    "tags": ["strategy", "change"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "measurement",
+    "name": "Proving your comms actually worked",
+    "description": "Move beyond open rates — use AI to measure what people read, how long they stayed, and what they did next.",
+    "tags": ["strategy", "measurement"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "personalization",
+    "name": "Stop sending the same email to everyone",
+    "description": "Use AI to segment audiences and tailor messages so frontline, office, and leadership each get what matters to them.",
+    "tags": ["strategy", "personalization"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "prompting-basics",
+    "name": "The art of asking AI the right question",
+    "description": "Prompt techniques that get you useful, accurate output — not generic filler you have to rewrite anyway.",
+    "tags": ["ai-skills", "fundamentals"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "ai-anxiety",
+    "name": "It's not coming for your job (probably)",
+    "description": "Address the real fears about AI replacing writers and build confidence in using it as a tool, not a threat.",
+    "tags": ["ai-skills", "mindset"],
     "last_used": null,
     "times_used": 0
   },
   {
     "id": "ai-ethics-trust",
-    "name": "Trust and transparency with AI",
-    "description": "Communicate AI's role in your organization clearly and authentically, addressing concerns and building stakeholder trust.",
-    "tags": [
-      "ai-ethics",
-      "transparency",
-      "trust"
-    ],
+    "name": "When AI gets it wrong",
+    "description": "Hallucinations, bias, and confidentiality — what can go wrong and how to keep your credibility intact.",
+    "tags": ["ai-skills", "trust"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "ai-voice",
+    "name": "Finding your voice (not AI's)",
+    "description": "Train AI on your style so output sounds like you wrote it — not like a robot summarized a press release.",
+    "tags": ["ai-skills", "voice"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "ai-workflow",
+    "name": "Building AI into your daily routine",
+    "description": "Practical workflows for making AI a natural part of how you write, edit, and publish — not an extra step.",
+    "tags": ["ai-skills", "workflow"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "research-synthesis",
+    "name": "Research without the rabbit hole",
+    "description": "Use AI to scan sources, synthesize findings, and surface key insights without losing your afternoon.",
+    "tags": ["ai-skills", "research"],
+    "last_used": null,
+    "times_used": 0
+  },
+  {
+    "id": "ai-collaboration",
+    "name": "AI and your team: who does what?",
+    "description": "Figure out which tasks to hand to AI and which need a human — and how to divide the work without confusion.",
+    "tags": ["ai-skills", "collaboration"],
     "last_used": null,
     "times_used": 0
   }
