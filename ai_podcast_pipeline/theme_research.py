@@ -699,15 +699,28 @@ def research_theme(
     )
     logger.info("Topic phrases: %s", topic_phrases[:8])
 
-    # Step 4: Gate check + sort by Tavily's semantic score.
+    # Step 4: Minimal gate (AI mention + not a product page) + Tavily ranking.
+    # Tavily's semantic search already found relevant articles. The LLM cleanup
+    # (step 5) handles topic specificity. Don't over-filter here.
     scored = []
     for c in deduped:
-        gate_score = _score_candidate(c, topic_phrases)
-        if gate_score > 0:
-            scored.append((c, c.relevance_score))
+        text = f"{c.title} {c.summary}".lower()
+        # Must mention AI
+        has_ai = any(re.search(rf"\b{re.escape(s)}\b", text) for s in _AI_SIGNALS)
+        if not has_ai:
+            continue
+        # Not a product page
+        _product_signals = [
+            "free online", "no sign-up", "sign up free", "try for free",
+            "start free", "pricing", "free trial", "free ai", "no login",
+            "get started", "try it now", "sign up", "create account",
+        ]
+        if any(s in text for s in _product_signals):
+            continue
+        scored.append((c, c.relevance_score))
     scored.sort(key=lambda x: x[1], reverse=True)
 
-    # Normalize Tavily scores (0.0-1.0) to 1-10 using the actual range.
+    # Normalize Tavily scores to 1-10 using actual range.
     if scored:
         raw_scores = [s for _, s in scored]
         lo, hi = min(raw_scores), max(raw_scores)
@@ -715,7 +728,7 @@ def research_theme(
         for c, _ in scored:
             c.relevance_score = max(1, min(10, round(1 + 9 * (c.relevance_score - lo) / spread)))
 
-    # Take top results (max 20 for user to browse).
+    # Take top results.
     _MAX_RESULTS = 25
     final = [c for c, _ in scored[:_MAX_RESULTS]]
     logger.info(
@@ -746,12 +759,14 @@ def research_theme(
             for i, c in enumerate(final)
         )
         desc_ctx = f'\nTopic description: "{theme_description}"' if theme_description else ""
+        phrases_hint = "\n".join(f"  - {p}" for p in topic_phrases[:8]) if topic_phrases else ""
         cleanup_prompt = (
             f'This episode\'s SPECIFIC topic is: "{theme_name}"{desc_ctx}\n\n'
             f"The podcast helps communicators at a large company use AI in their daily work.\n\n"
-            f"KEEP only articles that are specifically about THIS TOPIC — \"{theme_name}\".\n"
+            f"An article is on-topic if it discusses things like:\n{phrases_hint}\n\n"
+            f"KEEP articles that are specifically about THIS TOPIC.\n"
             f"An article about AI for communications in GENERAL is NOT enough.\n"
-            f"It must be about the SPECIFIC subject described above.\n\n"
+            f"It must address the specific subject above.\n\n"
             f"REMOVE:\n"
             f"- Generic \"AI for internal comms\" or \"AI tools for communicators\" articles that don't address this specific topic\n"
             f"- Product pages, tool demos, SaaS marketing\n"
