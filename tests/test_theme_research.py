@@ -10,6 +10,7 @@ from ai_podcast_pipeline.models import CandidateStory
 from ai_podcast_pipeline.theme_research import (
     _build_search_queries,
     _llm_generate_queries,
+    _llm_filter_sources,
     _rank_sources,
     _score_source,
 )
@@ -296,6 +297,70 @@ class TestLlmGenerateQueries(unittest.TestCase):
         })
         queries = _llm_generate_queries(self.THEME, api_key="test-key", model="gpt-4.1-mini")
         self.assertEqual(len(queries), len(set(queries)))
+
+
+class TestLlmFilterSourcesTiered(unittest.TestCase):
+    THEME = "AI for Internal Communications"
+
+    def _make_candidates(self, n=5):
+        return [
+            _make_candidate(
+                title=f"Article {i}", url=f"https://example.com/{i}",
+                domain="example.com", summary=f"Summary {i}",
+            )
+            for i in range(n)
+        ]
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_returns_primary_and_supporting_indices(self, mock_chat):
+        mock_chat.return_value = json.dumps({
+            "primary": [0, 1, 3],
+            "supporting": [2, 4],
+        })
+        candidates = self._make_candidates(5)
+        primary, supporting = _llm_filter_sources(
+            theme_name=self.THEME, candidates=candidates,
+            api_key="test-key", model="gpt-4.1-mini",
+        )
+        self.assertEqual(primary, [0, 1, 3])
+        self.assertEqual(supporting, [2, 4])
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_falls_back_from_old_format(self, mock_chat):
+        mock_chat.return_value = json.dumps({
+            "selected_indices": [0, 2, 4],
+        })
+        candidates = self._make_candidates(5)
+        primary, supporting = _llm_filter_sources(
+            theme_name=self.THEME, candidates=candidates,
+            api_key="test-key", model="gpt-4.1-mini",
+        )
+        self.assertEqual(primary, [0, 2, 4])
+        self.assertEqual(supporting, [])
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_caps_supporting_at_max(self, mock_chat):
+        mock_chat.return_value = json.dumps({
+            "primary": [0],
+            "supporting": [1, 2, 3, 4, 5, 6],
+        })
+        candidates = self._make_candidates(7)
+        primary, supporting = _llm_filter_sources(
+            theme_name=self.THEME, candidates=candidates,
+            api_key="test-key", model="gpt-4.1-mini",
+        )
+        self.assertLessEqual(len(supporting), 4)
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_fallback_on_exception(self, mock_chat):
+        mock_chat.side_effect = Exception("API error")
+        candidates = self._make_candidates(5)
+        primary, supporting = _llm_filter_sources(
+            theme_name=self.THEME, candidates=candidates,
+            api_key="test-key", model="gpt-4.1-mini",
+        )
+        self.assertGreater(len(primary), 0)
+        self.assertEqual(supporting, [])
 
 
 if __name__ == "__main__":

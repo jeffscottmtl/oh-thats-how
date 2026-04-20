@@ -427,6 +427,9 @@ def _rank_sources(
 # ---------------------------------------------------------------------------
 
 
+_MAX_SUPPORTING = 4  # Cap supporting evidence articles.
+
+
 def _llm_filter_sources(
     theme_name: str,
     candidates: list[CandidateStory],
@@ -435,12 +438,13 @@ def _llm_filter_sources(
     project_id: str | None = None,
     organization: str | None = None,
     max_keep: int = 15,
-) -> list[int]:
+) -> tuple[list[int], list[int]]:
     """Ask the LLM to pick the most relevant articles for a theme.
 
-    Returns a list of 0-based indices into `candidates` that the LLM
-    considers relevant. This is the key quality gate — keyword matching
-    is too loose, so we let the LLM judge semantic relevance.
+    Returns a tuple of (primary_indices, supporting_indices) into `candidates`.
+    Primary articles are directly about the theme. Supporting articles provide
+    research, data, or frameworks from authoritative sources that strengthen
+    the episode even if not directly about the theme name.
     """
     used_articles = _load_used_articles()
 
@@ -465,17 +469,27 @@ CONTEXT:
 THIS EPISODE'S THEME: "{theme_name}"
 
 YOUR TASK:
-Select articles that would help build a compelling, useful episode specifically about "{theme_name}" for this audience.
+Select articles into TWO tiers:
 
-Be STRICT about relevance. Ask yourself for each article: "Could a communicator read this and learn something specific about {theme_name}?" If the answer is no — or if the connection is vague — reject it.
+**PRIMARY** — articles that are specifically about "{theme_name}" for communications professionals.
+These form the backbone of the episode. Be STRICT: ask yourself "Could a communicator read this and learn something specific about {theme_name}?" If the answer is no, it's not primary.
 
-A good source:
+A good primary source:
 - Is specifically about "{theme_name}" — not just about AI or writing in general
 - Contains insights, research, practical advice, or a real example directly tied to this theme
 - Could be synthesized into advice like "here's how {theme_name} works better when you..."
 
+**SUPPORTING** — research, data, or frameworks from authoritative sources that provide evidence
+or context that strengthens the episode, even if the article isn't specifically about "{theme_name}".
+
+A good supporting source:
+- Contains a specific, citable data point, statistic, or research finding
+- Comes from a high-authority source (research firms, major publications, established surveys)
+- Provides evidence that makes a primary source's point stronger (e.g., a Microsoft Work Trend Index stat about employee productivity, an Edelman finding about trust in AI content)
+- Is NOT just another trade blog post restating the same ideas as the primary sources
+
 REJECT articles that are:
-- About AI or writing in general but NOT specifically about "{theme_name}"
+- About AI or writing in general but NOT relevant to "{theme_name}" even as supporting evidence
 - About unrelated products, announcements, funding, or corporate news
 - Only tangentially connected via a shared word
 - About a technology (like TTS, image generation, etc.) unless it directly helps communicators with "{theme_name}"
@@ -486,13 +500,13 @@ PREVIOUSLY USED ARTICLES:
 Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.
 - Strongly prefer fresh, unused articles over previously used ones.
 - Only select a previously used article if it has a genuinely different angle for THIS theme
-  that wasn't explored before. Different elements of a story appearing in multiple episodes
-  is acceptable, but the same article as a primary source is not.
+  that wasn't explored before.
 - If no unused articles are relevant, it's better to return fewer results than to reuse sources.
 
-Return JSON with a single key "selected_indices" — an array of the index numbers
-(the [N] values) of the articles worth using. Pick at most {max_keep}.
-If none are relevant, return an empty array — better to find nothing than to recommend junk.
+Return JSON with two keys:
+- "primary": array of index numbers for primary articles (at most {max_keep})
+- "supporting": array of index numbers for supporting evidence articles (at most {_MAX_SUPPORTING})
+If none are relevant in a tier, return an empty array.
 
 Candidate articles:
 {article_block}"""
@@ -510,13 +524,33 @@ Candidate articles:
             temperature=0.1,
         )
         data = parse_json_response(content)
+
+        # Handle new tiered format.
+        if "primary" in data:
+            raw_primary = data.get("primary", [])
+            raw_supporting = data.get("supporting", [])
+            primary = [int(i) for i in raw_primary if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
+            supporting = [int(i) for i in raw_supporting if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
+            # Cap supporting evidence.
+            supporting = supporting[:_MAX_SUPPORTING]
+            # Remove any supporting that's also in primary.
+            primary_set = set(primary)
+            supporting = [i for i in supporting if i not in primary_set]
+            logger.info(
+                "LLM selected %d primary + %d supporting for theme '%s'.",
+                len(primary), len(supporting), theme_name,
+            )
+            return primary, supporting
+
+        # Fallback: old format (selected_indices) — treat all as primary.
         indices = data.get("selected_indices", [])
         valid = [int(i) for i in indices if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
-        logger.info("LLM selected %d/%d candidates for theme '%s'.", len(valid), len(candidates), theme_name)
-        return valid
+        logger.info("LLM selected %d candidates (old format) for theme '%s'.", len(valid), theme_name)
+        return valid, []
+
     except Exception as exc:
         logger.warning("LLM source filtering failed: %s — falling back to all candidates.", exc)
-        return list(range(min(max_keep, len(candidates))))
+        return list(range(min(max_keep, len(candidates)))), []
 
 
 # ---------------------------------------------------------------------------
@@ -600,7 +634,7 @@ def research_theme(
 
     # Step 5: LLM validation — the LLM picks the actually relevant ones.
     if _api_key and pre_ranked:
-        selected_indices = _llm_filter_sources(
+        primary_indices, supporting_indices = _llm_filter_sources(
             theme_name=theme_name,
             candidates=pre_ranked,
             api_key=_api_key,
@@ -609,7 +643,12 @@ def research_theme(
             organization=organization,
             max_keep=max_sources,
         )
-        final = [pre_ranked[i] for i in selected_indices]
+        # Set source roles on candidates.
+        for i in primary_indices:
+            pre_ranked[i].source_role = "primary"
+        for i in supporting_indices:
+            pre_ranked[i].source_role = "supporting"
+        final = [pre_ranked[i] for i in primary_indices] + [pre_ranked[i] for i in supporting_indices]
     else:
         final = pre_ranked[:max_sources]
 
