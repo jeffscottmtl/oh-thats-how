@@ -283,7 +283,7 @@ const app = {
             <input type="checkbox" ${s.included ? 'checked' : ''}>
             <h4>${s.title}${badge}</h4>
           </div>
-          <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}${s.relevance_score ? ' &middot; relevance ' + s.relevance_score + '/10' : ''}</div>
+          <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}${s.relevance_score ? ` &middot; <span style="color:${s.relevance_score >= 8 ? '#16a34a' : s.relevance_score >= 5 ? '#ca8a04' : '#dc2626'}; font-weight:600">relevance ${s.relevance_score}/10</span>` : ''}</div>
           <div class="preview" id="preview-${i}">${previewText.substring(0, 300)}${previewText.length > 300 ? '...' : ''}</div>
           ${!isGartner ? `<button id="toggle-btn-${i}" class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>` : ''}
           ${gartnerPanel}

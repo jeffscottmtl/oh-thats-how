@@ -245,21 +245,34 @@ def _web_search_for_theme(
     """
     from urllib.parse import urlparse
 
-    queries = _llm_generate_queries(
+    # Generate queries from two sources for maximum coverage.
+    llm_queries = _llm_generate_queries(
         theme_name, theme_description=theme_description,
         api_key=api_key, model=model,
         project_id=project_id, organization=organization,
     )
 
-    # Ensure every query mentions AI — this is an AI podcast.
+    # Add direct queries from the theme name + description.
+    desc_words = _tokenise(theme_description) if theme_description else []
+    direct_queries = [
+        f"AI {theme_name}",
+        f"ChatGPT {theme_name}",
+        f'AI {" ".join(desc_words[:6])}' if desc_words else "",
+        f'generative AI {" ".join(desc_words[:5])} communications' if desc_words else "",
+    ]
+    direct_queries = [q for q in direct_queries if q.strip()]
+
+    # Combine, deduplicate, ensure AI in each.
     _AI_QUERY_TERMS = {"ai", "chatgpt", "gpt", "claude", "copilot", "gemini",
                        "mistral", "anthropic", "openai", "generative", "llm"}
-    fixed_queries = []
-    for q in queries:
+    seen_q: set[str] = set()
+    queries: list[str] = []
+    for q in direct_queries + llm_queries:
         if not any(term in q.lower() for term in _AI_QUERY_TERMS):
             q = f"AI {q}"
-        fixed_queries.append(q)
-    queries = fixed_queries
+        if q.lower() not in seen_q:
+            seen_q.add(q.lower())
+            queries.append(q)
 
     logger.info(
         "Running %d web searches for theme '%s'.",
@@ -270,7 +283,7 @@ def _web_search_for_theme(
     import time as _time
     all_results: list[dict] = []
     for i, q in enumerate(queries):
-        results = _search_ddg(q, 10)  # 10 results per query for more coverage
+        results = _search_ddg(q, 15)
         all_results.extend(results)
         logger.info("  Query %d/%d: %d results", i + 1, len(queries), len(results))
         if i < len(queries) - 1:
@@ -612,7 +625,7 @@ def research_theme(
     scored.sort(key=lambda x: x[1], reverse=True)
 
     # Take top results (max 20 for user to browse).
-    _MAX_RESULTS = 20
+    _MAX_RESULTS = 25
     final = [c for c, _ in scored[:_MAX_RESULTS]]
     logger.info(
         "Keyword scoring: %d passed AI gate from %d, showing top %d.",
