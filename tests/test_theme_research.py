@@ -300,32 +300,31 @@ class TestLlmGenerateQueries(unittest.TestCase):
 
 
 class TestScoreCandidate(unittest.TestCase):
-    KEYWORDS = ["editing", "proofreading", "revision", "tone", "grammar"]
+    PHRASES = ["editing and proofreading", "grammar checking", "revision workflow", "ai editing partner"]
 
     def test_relevant_article_scores_high(self):
         c = _make_candidate(
             title="How to use AI for editing and proofreading",
             summary="This article covers AI tools for grammar checking and revision workflows.",
         )
-        score = _score_candidate(c, self.KEYWORDS)
-        self.assertGreater(score, 10)
+        score = _score_candidate(c, self.PHRASES)
+        self.assertGreater(score, 0)
 
     def test_irrelevant_article_scores_zero(self):
         c = _make_candidate(
             title="Best hiking trails in Colorado",
             summary="A guide to the best outdoor trails for summer adventures.",
         )
-        score = _score_candidate(c, self.KEYWORDS)
+        score = _score_candidate(c, self.PHRASES)
         self.assertEqual(score, 0)  # no AI mention = 0
 
-    def test_ai_but_off_topic_scores_low(self):
+    def test_ai_but_off_topic_scores_zero(self):
         c = _make_candidate(
             title="AI in healthcare diagnostics",
             summary="How AI is transforming medical imaging and diagnostics.",
         )
-        score = _score_candidate(c, self.KEYWORDS)
-        # passes AI gate but no theme keywords — low score
-        self.assertLess(score, 10)
+        score = _score_candidate(c, self.PHRASES)
+        self.assertEqual(score, 0)  # no phrase matches
 
     def test_product_page_penalized(self):
         c_product = _make_candidate(
@@ -333,12 +332,12 @@ class TestScoreCandidate(unittest.TestCase):
             summary="Try our free AI editing tool online. No sign-up needed.",
         )
         c_editorial = _make_candidate(
-            title="How AI editing tools are changing the writing process",
-            summary="A guide to using AI for editing corporate communications.",
+            title="How AI is transforming editing and proofreading workflows",
+            summary="A guide to using AI for grammar checking in corporate communications.",
         )
         self.assertGreater(
-            _score_candidate(c_editorial, self.KEYWORDS),
-            _score_candidate(c_product, self.KEYWORDS),
+            _score_candidate(c_editorial, self.PHRASES),
+            _score_candidate(c_product, self.PHRASES),
         )
 
 

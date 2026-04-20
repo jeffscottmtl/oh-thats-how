@@ -506,90 +506,92 @@ _AI_SIGNALS = frozenset({
 })
 
 
-# Synonym map — common comms/writing terms and their related words.
-# When a theme mentions one of these, all synonyms get added as keywords.
-_SYNONYM_GROUPS: list[set[str]] = [
-    {"edit", "editing", "editor", "proofread", "proofreading", "revise", "revision",
-     "copyedit", "grammar", "polish", "refine", "correct", "rewrite"},
-    {"audience", "audiences", "segment", "tailor", "personalize", "customize",
-     "target", "adapt", "stakeholder", "stakeholders", "reader", "readers"},
-    {"tone", "voice", "style", "register", "formal", "informal", "conversational"},
-    {"draft", "drafting", "write", "writing", "writer", "compose", "create"},
-    {"email", "emails", "inbox", "subject", "newsletter", "newsletters"},
-    {"presentation", "presentations", "slides", "deck", "powerpoint", "keynote"},
-    {"speech", "speeches", "remarks", "talking", "speaking", "town hall"},
-    {"summarize", "summary", "summarizing", "distill", "condense", "briefing", "digest"},
-    {"brainstorm", "brainstorming", "ideation", "ideas", "angles", "concepts", "creative"},
-    {"feedback", "revisions", "review", "collaborate", "collaboration", "iterate"},
-    {"measure", "measurement", "metrics", "analytics", "engagement", "performance", "roi"},
-    {"crisis", "urgent", "rapid", "response", "incident", "statement"},
-    {"change", "transformation", "transition", "announcement", "restructure"},
-    {"trust", "credibility", "transparency", "ethics", "bias", "hallucination", "accuracy"},
-    {"prompt", "prompts", "prompting", "instruction", "technique", "workflow"},
-    {"personalize", "personalization", "segment", "segmentation", "targeted", "relevant"},
-    {"frontline", "executive", "executives", "leadership", "management", "employee", "employees"},
-    {"repurpose", "repurposing", "multichannel", "channel", "channels", "format", "formats"},
-    {"signage", "display", "screen", "screens", "visual", "visuals", "graphic", "graphics"},
-    {"research", "synthesis", "analyze", "analysis", "findings", "insights", "data"},
-]
-
-
-def _generate_theme_keywords(
+def _elaborate_topic(
     theme_name: str,
     theme_description: str,
+    api_key: str,
+    model: str,
     **kwargs,
 ) -> list[str]:
-    """Generate relevance keywords for a theme using synonym expansion.
+    """Ask the LLM to elaborate a topic into specific multi-word phrases.
 
-    Extracts words from the theme name + description, then expands each
-    word through the synonym map to produce a broad keyword set.
-    No LLM call needed — fast and deterministic.
+    Returns 8-12 phrases (3-6 words each) that would appear in an article
+    PRIMARILY about this topic. These are much more specific than single
+    keywords and filter out generic articles that merely mention the topic.
+
+    Example for "Same message, different audience":
+    - "rewrite for different audiences"
+    - "adapt message for stakeholders"
+    - "tone adjustment by audience"
+    - "executive vs frontline messaging"
+    - "audience-specific content versions"
     """
-    # Extract meaningful words from theme name + description.
-    source_words = set(_tokenise(f"{theme_name} {theme_description}"))
+    desc = f'\nDescription: "{theme_description}"' if theme_description else ""
+    prompt = f"""A podcast episode is about: "{theme_name}"{desc}
 
-    # Expand through synonym groups.
-    expanded: set[str] = set(source_words)
-    for group in _SYNONYM_GROUPS:
-        if source_words & group:  # any overlap?
-            expanded |= group
+Generate 8-12 specific multi-word PHRASES (3-6 words each) that would appear in an article that is PRIMARILY about this topic.
 
-    keywords = sorted(expanded)
-    logger.info("Generated %d keywords for '%s' (from %d source words).",
-                len(keywords), theme_name, len(source_words))
-    return keywords
+These phrases should be specific enough that:
+- An article containing 2+ of them is almost certainly about this topic
+- A generic "AI for communications" article would NOT contain them
+
+Example for "AI as your editing partner":
+GOOD phrases: "AI proofreading before publishing", "grammar and clarity check", "editing workflow with AI", "revision partner for writers"
+BAD phrases: "AI", "editing", "communications" (too generic — appear everywhere)
+
+Return JSON: {{"phrases": ["phrase1", "phrase2", ...]}}"""
+
+    try:
+        content = chat_completion(
+            api_key=api_key, model=model,
+            messages=[
+                {"role": "system", "content": "Output strict JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.3,
+            **{k: v for k, v in kwargs.items() if k in ("project_id", "organization")},
+        )
+        data = parse_json_response(content)
+        phrases = data.get("phrases", [])
+        if isinstance(phrases, list) and len(phrases) >= 3:
+            result = [p.lower().strip() for p in phrases if isinstance(p, str) and len(p.strip()) > 5]
+            logger.info("Elaborated '%s' into %d topic phrases.", theme_name, len(result))
+            return result
+    except Exception as exc:
+        logger.warning("Topic elaboration failed: %s", exc)
+
+    # Fallback: extract meaningful chunks from theme name + description.
+    fallback = [theme_name.lower()]
+    if theme_description:
+        # Split description into meaningful chunks.
+        parts = theme_description.lower().replace("—", ",").replace("–", ",").split(",")
+        fallback.extend(p.strip() for p in parts if len(p.strip()) > 10)
+    logger.info("Using %d fallback phrases for '%s'.", len(fallback), theme_name)
+    return fallback
 
 
 def _score_candidate(
     candidate: CandidateStory,
-    theme_keywords: list[str],
+    topic_phrases: list[str],
 ) -> int:
-    """Score a candidate article for relevance.
+    """Score a candidate article for relevance using topic-phrase matching.
 
-    The podcast is about AI FOR COMMUNICATORS. Every article must be about
-    BOTH — using AI AND a communications topic. Articles about only comms
-    (no AI) or only AI (no comms relevance) score zero.
+    Instead of single keywords (which match too broadly), checks for
+    multi-word phrases that indicate the article is PRIMARILY about the
+    topic, not just mentioning it in passing.
 
-    Returns 0 (reject) or 1-100 (higher = more relevant).
+    Returns 0 (reject) or 1+ (higher = more relevant).
     """
     title = candidate.title.lower()
     summary = (candidate.summary or "").lower()
     text = f"{title} {summary}"
 
     # ── GATE 1: Must mention AI ────────────────────────────────────────
-    # No AI = no use for this podcast. Hard reject.
     has_ai = any(re.search(rf"\b{re.escape(s)}\b", text) for s in _AI_SIGNALS)
     if not has_ai:
         return 0
 
-    # ── GATE 2: Must match the topic ───────────────────────────────────
-    # At least 1 theme keyword in the title, or 2+ in the summary.
-    title_hits = sum(1 for kw in theme_keywords if kw in title)
-    summary_hits = sum(1 for kw in theme_keywords if kw in summary)
-    if title_hits == 0 and summary_hits < 2:
-        return 0
-
-    # ── GATE 3: Not a product page ─────────────────────────────────────
+    # ── GATE 2: Not a product page ─────────────────────────────────────
     _product_signals = [
         "free online", "no sign-up", "no signup", "sign up free", "try for free",
         "start free", "pricing", "free trial", "free ai", "no login",
@@ -614,28 +616,15 @@ def _score_candidate(
         if promo >= 2:
             return 0
 
-    # ── GATE 4: Must be about communications/professional work ────────
-    # Rejects generic AI tutorials ("ChatGPT settings guide") that match
-    # topic keywords by accident but aren't about workplace communications.
-    _COMMS_CONTEXT = [
-        "communicat", "comms", "corporate", "internal", "employee",
-        "stakeholder", "workplace", "business writing", "professional",
-        "newsletter", "presentation", "speech", "email",
-        "pr ", "public relations", "content strategy", "messaging",
-        "team", "organization", "leadership", "executive",
-        "writer", "writing", "draft", "publish", "editing", "editor",
-        "proofread", "revision", "copywriting", "content creation",
-        "brainstorm", "headline", "storytelling", "brief",
-    ]
-    has_comms_context = any(s in text for s in _COMMS_CONTEXT)
-    if not has_comms_context:
+    # ── SCORE: Topic phrase matches ────────────────────────────────────
+    # Multi-word phrases are highly specific — each match is strong signal.
+    phrase_hits = sum(1 for p in topic_phrases if p in text)
+
+    # Need at least 1 phrase match to pass.
+    if phrase_hits == 0:
         return 0
 
-    # ── SCORE: How relevant is it? ─────────────────────────────────────
-    # Simple: count keyword matches. Title matches worth more.
-    score = title_hits * 6 + summary_hits * 2
-
-    return max(score, 1)
+    return phrase_hits
 
 
 # ---------------------------------------------------------------------------
@@ -702,14 +691,18 @@ def research_theme(
         deduped.append(candidate)
     logger.info("After dedup: %d candidates for scoring.", len(deduped))
 
-    # Step 3: Generate theme-specific relevance keywords (used as quality gates).
-    theme_keywords = _generate_theme_keywords(theme_name, theme_description)
-    logger.info("Theme keywords: %s", theme_keywords[:10])
+    # Step 3: Elaborate topic into specific phrases for filtering.
+    topic_phrases = _elaborate_topic(
+        theme_name, theme_description,
+        api_key=_api_key, model=_smart_model,
+        project_id=project_id, organization=organization,
+    )
+    logger.info("Topic phrases: %s", topic_phrases[:8])
 
     # Step 4: Gate check + sort by Tavily's semantic score.
     scored = []
     for c in deduped:
-        gate_score = _score_candidate(c, theme_keywords)
+        gate_score = _score_candidate(c, topic_phrases)
         if gate_score > 0:
             scored.append((c, c.relevance_score))
     scored.sort(key=lambda x: x[1], reverse=True)
