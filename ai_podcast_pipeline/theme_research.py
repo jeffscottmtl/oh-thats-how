@@ -459,10 +459,11 @@ A good primary source:
 These don't need to be about the theme specifically — a productivity study or trust survey
 that could strengthen a point in the episode counts.
 
-REJECT only articles that are:
-- Completely unrelated to the theme (e.g., an article about AI in healthcare for a writing theme)
+REJECT articles that are:
+- Not about AI — every selected article must have a clear AI angle (AI tools, AI workflows, AI impact, AI ethics, etc.). Articles about writing or editing that don't mention AI are off-topic for this podcast.
 - Product landing pages, ads, or marketing fluff with no editorial substance
 - About unrelated products, funding, or corporate news with no useful insights
+- Published before 2024 — prefer recent articles (2025-2026). Only include older articles if they are exceptionally relevant and still accurate.
 
 Select generously — aim for {max_keep} or more articles across both tiers.
 
