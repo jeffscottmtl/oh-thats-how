@@ -754,14 +754,17 @@ def research_theme(
         )
         desc_ctx = f'\nTopic description: "{theme_description}"' if theme_description else ""
         cleanup_prompt = (
-            f'The podcast topic is: "{theme_name}"{desc_ctx}\n\n'
-            f"This podcast helps communicators at a large company use AI in their daily work "
-            f"(presentations, speeches, emails, newsletters, digital signage).\n\n"
-            f"Review this shortlist and REMOVE any article that:\n"
-            f"- Is NOT about using AI to help with communications work\n"
-            f"- Is a product page, tool demo, or SaaS marketing\n"
-            f"- Is about a different field (marketing automation, sales, HR, engineering)\n"
-            f"- Is a generic AI tutorial not specific to professional communications\n\n"
+            f'This episode\'s SPECIFIC topic is: "{theme_name}"{desc_ctx}\n\n'
+            f"The podcast helps communicators at a large company use AI in their daily work.\n\n"
+            f"KEEP only articles that are specifically about THIS TOPIC — \"{theme_name}\".\n"
+            f"An article about AI for communications in GENERAL is NOT enough.\n"
+            f"It must be about the SPECIFIC subject described above.\n\n"
+            f"REMOVE:\n"
+            f"- Generic \"AI for internal comms\" or \"AI tools for communicators\" articles that don't address this specific topic\n"
+            f"- Product pages, tool demos, SaaS marketing\n"
+            f"- Articles about different fields (marketing automation, sales, HR)\n"
+            f"- Generic AI tutorials\n\n"
+            f"Be aggressive — it's better to keep 5 great articles than 15 mediocre ones.\n\n"
             f"Return JSON: {{\"keep\": [list of index numbers to KEEP]}}\n\n"
             f"Articles:\n{article_list}"
         )
