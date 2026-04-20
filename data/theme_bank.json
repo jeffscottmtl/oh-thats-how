@@ -3,7 +3,11 @@
     "id": "first-drafts",
     "name": "Getting unstuck on first drafts",
     "description": "Overcome blank page paralysis and generate initial draft material that you can shape and refine.",
-    "tags": ["writing", "productivity", "getting-started"],
+    "tags": [
+      "writing",
+      "productivity",
+      "getting-started"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -11,7 +15,11 @@
     "id": "rewriting-for-tone",
     "name": "Rewriting for tone and audience",
     "description": "Adjust your message for different audiences and tones—from formal to conversational, executive to frontline.",
-    "tags": ["writing", "audience", "refinement"],
+    "tags": [
+      "writing",
+      "audience",
+      "refinement"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -19,7 +27,11 @@
     "id": "summarizing-long-docs",
     "name": "Summarizing long documents",
     "description": "Distill lengthy reports, research, and documents into clear, actionable summaries for busy stakeholders.",
-    "tags": ["synthesis", "efficiency", "communication"],
+    "tags": [
+      "synthesis",
+      "efficiency",
+      "communication"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -27,7 +39,11 @@
     "id": "presentation-prep",
     "name": "Building better presentations",
     "description": "Develop compelling slide decks with clear narratives, speaker notes, and visual storytelling that engages audiences.",
-    "tags": ["presentations", "storytelling", "design"],
+    "tags": [
+      "presentations",
+      "storytelling",
+      "design"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -35,23 +51,35 @@
     "id": "email-efficiency",
     "name": "Writing emails that get read",
     "description": "Craft subject lines, body copy, and calls-to-action that cut through inbox noise and drive response.",
-    "tags": ["email", "efficiency", "clarity"],
-    "last_used": null,
-    "times_used": 0
+    "tags": [
+      "email",
+      "efficiency",
+      "clarity"
+    ],
+    "last_used": "2026-04-18",
+    "times_used": 1
   },
   {
     "id": "speech-drafting",
     "name": "Drafting speeches and remarks",
     "description": "Generate compelling remarks for town halls, events, and video messages that connect with your audience.",
-    "tags": ["speeches", "speaking", "storytelling"],
-    "last_used": null,
-    "times_used": 0
+    "tags": [
+      "speeches",
+      "speaking",
+      "storytelling"
+    ],
+    "last_used": "2026-04-19",
+    "times_used": 1
   },
   {
     "id": "meeting-prep",
     "name": "Preparing for meetings with AI",
     "description": "Build agendas, talking points, and briefing materials that set you up to lead effective meetings.",
-    "tags": ["meetings", "preparation", "leadership"],
+    "tags": [
+      "meetings",
+      "preparation",
+      "leadership"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -59,7 +87,11 @@
     "id": "content-repurposing",
     "name": "Repurposing content across channels",
     "description": "Transform one piece of content into multiple formats—articles into social posts, speeches into emails, reports into newsletters.",
-    "tags": ["content", "efficiency", "channels"],
+    "tags": [
+      "content",
+      "efficiency",
+      "channels"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -67,7 +99,11 @@
     "id": "proofreading-editing",
     "name": "AI as an editing partner",
     "description": "Use AI to spot grammar, clarity, tone, and structural issues before you hit send or publish.",
-    "tags": ["editing", "quality", "refinement"],
+    "tags": [
+      "editing",
+      "quality",
+      "refinement"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -75,7 +111,11 @@
     "id": "brainstorming-ideas",
     "name": "Brainstorming with AI",
     "description": "Generate fresh angles, headlines, campaign ideas, and creative directions faster than traditional brainstorming.",
-    "tags": ["creativity", "ideation", "productivity"],
+    "tags": [
+      "creativity",
+      "ideation",
+      "productivity"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -83,7 +123,11 @@
     "id": "data-storytelling",
     "name": "Turning data into stories",
     "description": "Convert metrics, numbers, and research into narratives that move audiences and drive decision-making.",
-    "tags": ["storytelling", "data", "persuasion"],
+    "tags": [
+      "storytelling",
+      "data",
+      "persuasion"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -91,23 +135,23 @@
     "id": "internal-comms-strategy",
     "name": "AI for internal communications",
     "description": "Develop employee messaging, change communication, and engagement content that builds alignment and trust.",
-    "tags": ["internal-comms", "strategy", "alignment"],
-    "last_used": null,
-    "times_used": 0
-  },
-  {
-    "id": "media-interview-prep",
-    "name": "Prepping for media interviews",
-    "description": "Build interview talking points, practice tough questions, and prepare messaging that stays on point.",
-    "tags": ["media", "preparation", "messaging"],
-    "last_used": null,
-    "times_used": 0
+    "tags": [
+      "internal-comms",
+      "strategy",
+      "alignment"
+    ],
+    "last_used": "2026-04-19",
+    "times_used": 1
   },
   {
     "id": "crisis-comms",
     "name": "AI and crisis communications",
     "description": "Develop response statements, FAQs, and rapid messaging when you need to respond quickly and thoughtfully.",
-    "tags": ["crisis", "rapid-response", "messaging"],
+    "tags": [
+      "crisis",
+      "rapid-response",
+      "messaging"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -115,7 +159,11 @@
     "id": "prompting-basics",
     "name": "Writing better prompts",
     "description": "Learn prompt techniques that help AI deliver more useful, accurate, and audience-appropriate output.",
-    "tags": ["ai-skills", "fundamentals", "efficiency"],
+    "tags": [
+      "ai-skills",
+      "fundamentals",
+      "efficiency"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -123,7 +171,11 @@
     "id": "ai-anxiety",
     "name": "Getting past AI anxiety",
     "description": "Address fears about AI replacing writers, concerns about quality, and build confidence in using AI as a tool.",
-    "tags": ["mindset", "adoption", "confidence"],
+    "tags": [
+      "mindset",
+      "adoption",
+      "confidence"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -131,7 +183,11 @@
     "id": "accessibility-plain-language",
     "name": "Plain language and accessibility",
     "description": "Simplify complex language, remove jargon, and create content that's readable and accessible to all audiences.",
-    "tags": ["accessibility", "clarity", "inclusion"],
+    "tags": [
+      "accessibility",
+      "clarity",
+      "inclusion"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -139,7 +195,11 @@
     "id": "newsletter-creation",
     "name": "Building newsletters faster",
     "description": "Generate newsletter content, curate stories, write headlines, and manage editorial calendars more efficiently.",
-    "tags": ["newsletters", "content", "efficiency"],
+    "tags": [
+      "newsletters",
+      "content",
+      "efficiency"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -147,7 +207,11 @@
     "id": "stakeholder-updates",
     "name": "Writing stakeholder updates",
     "description": "Create executive summaries, progress reports, and status updates that keep key stakeholders aligned and informed.",
-    "tags": ["reporting", "stakeholders", "updates"],
+    "tags": [
+      "reporting",
+      "stakeholders",
+      "updates"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -155,7 +219,11 @@
     "id": "social-media-content",
     "name": "Social media content with AI",
     "description": "Write posts, captions, and threads optimized for LinkedIn, Twitter, Instagram, and other social platforms.",
-    "tags": ["social-media", "content", "channels"],
+    "tags": [
+      "social-media",
+      "content",
+      "channels"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -163,7 +231,11 @@
     "id": "research-synthesis",
     "name": "Research and synthesis",
     "description": "Analyze research, synthesize findings into key insights, and communicate discoveries to non-specialist audiences.",
-    "tags": ["research", "synthesis", "insights"],
+    "tags": [
+      "research",
+      "synthesis",
+      "insights"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -171,7 +243,11 @@
     "id": "feedback-revision",
     "name": "Handling feedback and revisions",
     "description": "Incorporate feedback efficiently, manage multiple edit rounds, and keep documents on brand while staying flexible.",
-    "tags": ["revision", "collaboration", "refinement"],
+    "tags": [
+      "revision",
+      "collaboration",
+      "refinement"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -179,7 +255,11 @@
     "id": "intranet-content",
     "name": "Writing for the intranet",
     "description": "Create intranet articles, how-to guides, and employee resources that are clear, scannable, and findable.",
-    "tags": ["intranet", "internal-comms", "documentation"],
+    "tags": [
+      "intranet",
+      "internal-comms",
+      "documentation"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -187,7 +267,11 @@
     "id": "digital-signage",
     "name": "Digital signage content",
     "description": "Write compelling messages for displays, wayfinding, and screens that catch attention and communicate quickly.",
-    "tags": ["signage", "visual-comms", "messaging"],
+    "tags": [
+      "signage",
+      "visual-comms",
+      "messaging"
+    ],
     "last_used": null,
     "times_used": 0
   },
@@ -195,7 +279,11 @@
     "id": "ai-ethics-trust",
     "name": "Trust and transparency with AI",
     "description": "Communicate AI's role in your organization clearly and authentically, addressing concerns and building stakeholder trust.",
-    "tags": ["ai-ethics", "transparency", "trust"],
+    "tags": [
+      "ai-ethics",
+      "transparency",
+      "trust"
+    ],
     "last_used": null,
     "times_used": 0
   }
