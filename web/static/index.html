@@ -3,31 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Signal</title>
+  <title>The Signal — Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="app">
-    <aside class="sidebar">
-      <div class="logo">The Signal</div>
-      <div class="logo-sub">AI Podcast for Communicators</div>
-      <div id="app-version" style="font-size:10px; color:var(--text-dim); margin-bottom:8px;"></div>
-      <button class="btn btn-primary" style="width:100%; margin-bottom: 16px;" onclick="app.newEpisode()">+ New Episode</button>
-      <input class="sidebar-search" id="ep-search" placeholder="Search episodes..." oninput="app.filterEpisodes()">
-      <div class="filter-bar" id="filter-bar">
-        <button class="filter-btn active" data-filter="all" onclick="app.setFilter('all')">All</button>
-        <button class="filter-btn" data-filter="draft" onclick="app.setFilter('draft')">Draft</button>
-        <button class="filter-btn" data-filter="ready" onclick="app.setFilter('ready')">Ready</button>
-        <button class="filter-btn" data-filter="shared" onclick="app.setFilter('shared')">Shared</button>
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark"><span></span></div>
+        The Signal
       </div>
-      <ul class="episode-list" id="episode-list"></ul>
+      <div class="divider"></div>
+      <div class="crumbs" id="breadcrumbs">
+        <span>Studio</span>
+      </div>
+      <div class="spacer"></div>
+      <div class="right">
+        <div class="status-pill draft" id="status-pill">
+          <span class="dot"></span>
+          <span id="status-label">Draft</span>
+        </div>
+        <span id="app-version" style="font-size:10px; color:var(--ink-500);"></span>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="label">Episodes</span>
+        <button class="new-ep-btn" onclick="app.newEpisode()">+ New</button>
+      </div>
+      <div class="sidebar-search">
+        <input id="ep-search" placeholder="Search episodes..." oninput="app.filterEpisodes()">
+      </div>
+      <div class="sidebar-tabs" id="sidebar-tabs">
+        <button class="sidebar-tab active" data-filter="all" onclick="app.setFilter('all')">All</button>
+        <button class="sidebar-tab" data-filter="draft" onclick="app.setFilter('draft')">Drafts</button>
+        <button class="sidebar-tab" data-filter="ready" onclick="app.setFilter('ready')">Ready</button>
+        <button class="sidebar-tab" data-filter="shared" onclick="app.setFilter('shared')">Published</button>
+      </div>
+      <div class="episode-list" id="episode-list"></div>
     </aside>
-    <main class="main" id="main">
-      <div class="welcome">
-        <h1>The Signal</h1>
-        <p>Create podcast episodes for communicators at CN.</p>
-        <button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button>
-        <button class="btn btn-secondary" style="margin-top:8px" onclick="app.showThemeBank()">Edit Topics</button>
+
+    <!-- Main workspace -->
+    <main class="workspace">
+      <nav class="stage-rail" id="stage-rail"></nav>
+      <div class="stage-body" id="stage-body">
+        <div class="panel-pad">
+          <div class="welcome">
+            <h1>The Signal</h1>
+            <p>Create podcast episodes for communicators at CN.</p>
+            <button class="btn btn-primary btn-lg" onclick="app.newEpisode()">+ New Episode</button>
+            <div style="margin-top:12px">
+              <button class="btn btn-secondary" onclick="app.showThemeBank()">Edit Topics</button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
