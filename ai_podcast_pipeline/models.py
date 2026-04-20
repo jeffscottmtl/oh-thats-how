@@ -14,6 +14,7 @@ class CandidateStory:
     summary: str
     full_text: str | None = None  # fetched after user selection; None = not yet fetched
     source_role: str = "primary"  # "primary" or "supporting"
+    relevance_score: int = 5  # 1-10 LLM relevance rating
 
 
 @dataclass

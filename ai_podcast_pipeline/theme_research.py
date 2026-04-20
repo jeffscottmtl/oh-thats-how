@@ -477,8 +477,9 @@ Articles marked with ⚠️ PREVIOUSLY USED have been featured in past episodes.
 - If no unused articles are relevant, it's better to return fewer results than to reuse sources.
 
 Return JSON with two keys:
-- "primary": array of index numbers for primary articles (at most {max_keep})
-- "supporting": array of index numbers for supporting evidence articles (at most {_MAX_SUPPORTING})
+- "primary": array of objects [{{"index": N, "relevance": 1-10}}, ...] for primary articles (at most {max_keep}), where relevance is how useful this article is for the episode (10 = perfect fit, 1 = barely relevant)
+- "supporting": array of objects [{{"index": N, "relevance": 1-10}}, ...] for supporting evidence (at most {_MAX_SUPPORTING})
+Sort each array by relevance descending (most relevant first).
 If none are relevant in a tier, return an empty array.
 
 Candidate articles:
@@ -498,17 +499,35 @@ Candidate articles:
         )
         data = parse_json_response(content)
 
-        # Handle new tiered format.
+        # Parse scored format: [{"index": N, "relevance": 1-10}, ...]
+        def _parse_scored(items: list) -> list[tuple[int, int]]:
+            """Parse items into (index, relevance) tuples, sorted by relevance desc."""
+            parsed = []
+            for item in items:
+                if isinstance(item, dict):
+                    idx = item.get("index")
+                    rel = item.get("relevance", 5)
+                elif isinstance(item, (int, float)):
+                    idx, rel = int(item), 5  # fallback for plain index
+                else:
+                    continue
+                if isinstance(idx, (int, float)) and 0 <= int(idx) < len(candidates):
+                    parsed.append((int(idx), int(rel)))
+            parsed.sort(key=lambda x: x[1], reverse=True)
+            return parsed
+
         if "primary" in data:
-            raw_primary = data.get("primary", [])
-            raw_supporting = data.get("supporting", [])
-            primary = [int(i) for i in raw_primary if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
-            supporting = [int(i) for i in raw_supporting if isinstance(i, (int, float)) and 0 <= int(i) < len(candidates)]
-            # Cap supporting evidence.
-            supporting = supporting[:_MAX_SUPPORTING]
+            scored_primary = _parse_scored(data.get("primary", []))
+            scored_supporting = _parse_scored(data.get("supporting", []))
+            primary = [idx for idx, _ in scored_primary]
+            supporting = [idx for idx, _ in scored_supporting[:_MAX_SUPPORTING]]
             # Remove any supporting that's also in primary.
             primary_set = set(primary)
             supporting = [i for i in supporting if i not in primary_set]
+            # Store relevance scores on candidates.
+            score_map = {idx: rel for idx, rel in scored_primary + scored_supporting}
+            for idx in primary + supporting:
+                candidates[idx].relevance_score = score_map.get(idx, 5)
             logger.info(
                 "LLM selected %d primary + %d supporting for theme '%s'.",
                 len(primary), len(supporting), theme_name,
@@ -612,6 +631,8 @@ def research_theme(
         for i in supporting_indices:
             deduped[i].source_role = "supporting"
         final = [deduped[i] for i in primary_indices] + [deduped[i] for i in supporting_indices]
+        # Sort by relevance score (highest first).
+        final.sort(key=lambda c: c.relevance_score, reverse=True)
     else:
         final = deduped[:max_sources]
 

@@ -252,7 +252,7 @@ const app = {
         body: JSON.stringify({ theme_name: this.state.selectedTheme }),
       });
       const data = await res.json();
-      this.state.sources = data.sources.map(s => ({ ...s, included: true }));
+      this.state.sources = data.sources.map(s => ({ ...s, included: false }));
       this.renderSources();
     } catch (e) {
       $main().innerHTML = `<p style="color:var(--danger)">Error researching theme: ${e.message}</p>`;
@@ -282,7 +282,7 @@ const app = {
             <input type="checkbox" ${s.included ? 'checked' : ''} onchange="app.toggleSource(${i})">
             <h4>${s.title}${badge}</h4>
           </div>
-          <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}</div>
+          <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}${s.relevance_score ? ' &middot; relevance ' + s.relevance_score + '/10' : ''}</div>
           <div class="preview" id="preview-${i}">${previewText.substring(0, 300)}${previewText.length > 300 ? '...' : ''}</div>
           ${!isGartner ? `<button id="toggle-btn-${i}" class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>` : ''}
           ${gartnerPanel}
@@ -295,7 +295,7 @@ const app = {
       ${this.renderSteps(1)}
       <div class="step-header">
         <h1>Review Sources</h1>
-        <p>${included} sources selected for "${this.state.selectedTheme}". Uncheck any you want to exclude.</p>
+        <p>${this.state.sources.length} sources found for "${this.state.selectedTheme}". Select the ones you want to use (${included} selected).</p>
       </div>
       ${cards}
       <div class="source-card" style="border-style:dashed; text-align:center; padding:16px;">
