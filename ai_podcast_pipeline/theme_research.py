@@ -241,13 +241,34 @@ Return JSON: {{"queries": ["query1", "query2", ...]}}"""
 _MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
 
 
-def _search_ddg(query: str, max_results: int = 8) -> list[dict]:
-    """Run a single DuckDuckGo search and return raw results."""
+def _search_tavily(query: str, max_results: int = 8) -> list[dict]:
+    """Run a Tavily search and return results as {title, href, body} dicts."""
+    import os
+    try:
+        from tavily import TavilyClient
+        api_key = os.environ.get("TAVILY_API_KEY", "")
+        if not api_key:
+            logger.warning("TAVILY_API_KEY not set — falling back to DuckDuckGo.")
+            return _search_ddg_fallback(query, max_results)
+        client = TavilyClient(api_key=api_key)
+        results = client.search(query, max_results=max_results, include_answer=False)
+        # Normalize to same format as DuckDuckGo for compatibility.
+        return [
+            {"title": r.get("title", ""), "href": r.get("url", ""), "body": r.get("content", "")}
+            for r in results.get("results", [])
+        ]
+    except Exception as exc:
+        logger.warning("Tavily search failed for '%s': %s — trying DuckDuckGo.", query, exc)
+        return _search_ddg_fallback(query, max_results)
+
+
+def _search_ddg_fallback(query: str, max_results: int = 8) -> list[dict]:
+    """Fallback: DuckDuckGo search if Tavily is unavailable."""
     try:
         from ddgs import DDGS
         return list(DDGS().text(query, max_results=max_results, timeout=15))
     except Exception as exc:
-        logger.warning("DuckDuckGo search failed for '%s': %s", query, exc)
+        logger.warning("DuckDuckGo fallback also failed for '%s': %s", query, exc)
         return []
 
 
@@ -302,7 +323,7 @@ def _web_search_for_theme(
     import time as _time
     all_results: list[dict] = []
     for i, q in enumerate(queries):
-        results = _search_ddg(q, 15)
+        results = _search_tavily(q, 10)
         all_results.extend(results)
         logger.info("  Query %d/%d: %d results", i + 1, len(queries), len(results))
         if i < len(queries) - 1:
