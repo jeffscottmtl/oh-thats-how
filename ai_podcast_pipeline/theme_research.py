@@ -144,6 +144,73 @@ def _build_search_queries(theme_name: str) -> list[str]:
     return unique
 
 
+def _llm_generate_queries(
+    theme_name: str,
+    api_key: str,
+    model: str,
+    project_id: str | None = None,
+    organization: str | None = None,
+) -> list[str]:
+    """Ask the LLM to generate diverse search queries for a theme.
+
+    Returns 8-10 queries covering different angles: practical how-to,
+    research/data, adjacent concepts, industry trends, trust/ethics.
+    Falls back to template-based queries on failure.
+    """
+    prompt = f"""Generate 8-10 web search queries to find diverse, high-quality articles for a podcast episode about: "{theme_name}"
+
+The podcast is for communications professionals at a large company — they write stories, build presentations, draft speeches, write emails and newsletters. They want practical AI advice, not enterprise strategy.
+
+Requirements for query diversity:
+- Cover DIFFERENT angles: practical how-to, research/data, adjacent concepts, trends, trust/ethics, measurement
+- At least 2 queries targeting research firms, surveys, or data reports (McKinsey, Gallup, Edelman, Microsoft Work Trend Index, Staffbase, Poppulo, etc.)
+- At least 2 queries targeting adjacent concepts related to the theme that use DIFFERENT keywords (e.g., for "AI for Internal Communications": employee engagement, digital workplace, content personalization, newsletter analytics)
+- Include 1-2 queries with "site:gartner.com" targeting the theme
+- Each query should surface different sources — NO redundant keyword variations
+- Keep queries concise (5-10 words each, plus any site: prefix)
+
+Return JSON with a single key "queries" — an array of search query strings.
+Do NOT include explanations or commentary — just the JSON."""
+
+    try:
+        content = chat_completion(
+            api_key=api_key,
+            model=model,
+            messages=[
+                {"role": "system", "content": "Output strict JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            project_id=project_id,
+            organization=organization,
+            temperature=0.7,
+        )
+        data = parse_json_response(content)
+        queries = data.get("queries", [])
+
+        if not isinstance(queries, list) or len(queries) < 3:
+            logger.warning("LLM returned too few queries (%s) — falling back to templates.", len(queries) if isinstance(queries, list) else "invalid")
+            return _build_search_queries(theme_name)
+
+        # Filter to valid strings and deduplicate.
+        valid: list[str] = []
+        seen: set[str] = set()
+        for q in queries:
+            if isinstance(q, str) and q.strip() and q.strip() not in seen:
+                seen.add(q.strip())
+                valid.append(q.strip())
+
+        if len(valid) < 3:
+            logger.warning("LLM returned too few valid queries — falling back to templates.")
+            return _build_search_queries(theme_name)
+
+        logger.info("LLM generated %d search queries for theme '%s'.", len(valid), theme_name)
+        return valid
+
+    except Exception as exc:
+        logger.warning("LLM query generation failed: %s — falling back to templates.", exc)
+        return _build_search_queries(theme_name)
+
+
 # ---------------------------------------------------------------------------
 # 1b. Web search via OpenAI Responses API
 # ---------------------------------------------------------------------------

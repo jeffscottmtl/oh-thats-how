@@ -1,12 +1,15 @@
 """Tests for ai_podcast_pipeline.theme_research"""
 from __future__ import annotations
 
+import json
 import unittest
 from datetime import datetime, timezone, timedelta
+from unittest.mock import patch
 
 from ai_podcast_pipeline.models import CandidateStory
 from ai_podcast_pipeline.theme_research import (
     _build_search_queries,
+    _llm_generate_queries,
     _rank_sources,
     _score_source,
 )
@@ -245,6 +248,54 @@ class TestCandidateStorySourceRole(unittest.TestCase):
             published_at=None, summary="test", source_role="supporting",
         )
         self.assertEqual(c.source_role, "supporting")
+
+
+class TestLlmGenerateQueries(unittest.TestCase):
+    THEME = "AI for Internal Communications"
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_returns_queries_from_llm(self, mock_chat):
+        mock_chat.return_value = json.dumps({
+            "queries": [
+                "AI tools internal communications employee engagement 2026",
+                "personalized employee messaging AI enterprise",
+                "Microsoft Work Trend Index digital workplace productivity",
+                "Edelman trust barometer AI-generated content credibility",
+                "AI content personalization intranet newsletters",
+                "internal comms measurement analytics AI beyond open rates",
+                "McKinsey employee productivity AI knowledge workers",
+                "AI video creation internal communications digital signage",
+                "site:gartner.com AI internal communications",
+                "site:gartner.com employee communications technology",
+            ]
+        })
+        queries = _llm_generate_queries(self.THEME, api_key="test-key", model="gpt-4.1-mini")
+        self.assertGreaterEqual(len(queries), 8)
+        self.assertLessEqual(len(queries), 12)
+        for q in queries:
+            self.assertIsInstance(q, str)
+            self.assertTrue(len(q) > 0)
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_falls_back_to_templates_on_failure(self, mock_chat):
+        mock_chat.side_effect = Exception("API error")
+        queries = _llm_generate_queries(self.THEME, api_key="test-key", model="gpt-4.1-mini")
+        # Should fall back to template-based queries
+        self.assertGreaterEqual(len(queries), 4)
+        for q in queries:
+            self.assertIsInstance(q, str)
+
+    @patch("ai_podcast_pipeline.theme_research.chat_completion")
+    def test_deduplicates_queries(self, mock_chat):
+        mock_chat.return_value = json.dumps({
+            "queries": [
+                "AI internal comms",
+                "AI internal comms",
+                "employee engagement AI",
+            ]
+        })
+        queries = _llm_generate_queries(self.THEME, api_key="test-key", model="gpt-4.1-mini")
+        self.assertEqual(len(queries), len(set(queries)))
 
 
 if __name__ == "__main__":
