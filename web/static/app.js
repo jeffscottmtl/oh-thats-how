@@ -1,5 +1,8 @@
 const $ = (sel) => document.querySelector(sel);
-const $main = () => $("#main");
+const $main = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  return $("#main");
+};
 
 const app = {
   state: {
