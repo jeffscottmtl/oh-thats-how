@@ -560,14 +560,14 @@ def research_theme(
     # Resolve API credentials from args or environment.
     _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
     _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
-    _filter_model = os.environ.get("OPENAI_FILTER_MODEL", "gpt-5.4")
+    _smart_model = os.environ.get("OPENAI_SMART_MODEL", "gpt-5.4")
 
     # Step 1: Web search (primary discovery).
     web_search_results = []
     if _api_key:
         logger.info("Running web search for theme '%s'…", theme_name)
         web_search_results = _web_search_for_theme(
-            theme_name, api_key=_api_key, model=_model,
+            theme_name, api_key=_api_key, model=_smart_model,
             project_id=project_id, organization=organization,
         )
 
@@ -600,7 +600,7 @@ def research_theme(
             theme_name=theme_name,
             candidates=deduped,
             api_key=_api_key,
-            model=_filter_model,
+            model=_smart_model,
             project_id=project_id,
             organization=organization,
             max_keep=_llm_max_keep,
