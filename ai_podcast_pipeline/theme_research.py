@@ -219,51 +219,30 @@ Do NOT include explanations or commentary — just the JSON."""
 _MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
 
 
-def _web_search_for_theme(
+def _web_search_batch(
     theme_name: str,
+    queries: list[str],
     api_key: str,
-    model: str = "gpt-5.4-mini",
-    project_id: str | None = None,
-    organization: str | None = None,
+    model: str,
 ) -> list[CandidateStory]:
-    """Run web searches for a theme using OpenAI's web_search_preview tool.
+    """Run a single focused web search call for a batch of 2-3 queries.
 
-    Returns CandidateStory objects with title, URL, source_domain, and summary.
-    Full text is NOT fetched here — that happens later in the pipeline.
+    Returns CandidateStory objects found by this batch.
     """
     import requests as _requests
 
-    queries = _llm_generate_queries(
-        theme_name, api_key=api_key, model=model,
-        project_id=project_id, organization=organization,
-    )
-
-    # Ask the LLM to search and return structured results.
     search_prompt = (
-        f"Search the web for recent, high-quality articles specifically about: \"{theme_name}\"\n\n"
-        f"The audience is communications professionals at a large company who build "
-        f"presentations, draft speeches, write emails and newsletters, and manage digital signage. "
-        f"Find articles about how AI can help with \"{theme_name}\" specifically.\n\n"
-        f"Use ALL of these search queries:\n"
+        f"Search the web for articles about: \"{theme_name}\"\n\n"
+        f"Use these search queries:\n"
         + "\n".join(f"- {q}" for q in queries) + "\n\n"
         f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
         f"- \"title\": article title\n"
         f"- \"url\": full URL\n"
         f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
-        f"- \"summary\": 2-3 sentences explaining what the article covers and how it "
-        f"relates to \"{theme_name}\" for communications professionals\n\n"
-        f"Return up to 20 articles. Only include real articles with real URLs.\n"
-        f"Include up to 3 gartner.com results if relevant.\n"
-        f"SOURCE DIVERSITY: No single domain should account for more than 3 results. "
-        f"Spread across as many different publications, blogs, and sources as possible.\n"
-        f"Look beyond the first page of results. Include articles from research firms "
-        f"(McKinsey, Gallup, Edelman, Deloitte), business publications (HBR, Forbes, "
-        f"Fast Company), tech press (Wired, MIT Tech Review, The Verge), comms industry "
-        f"outlets (PR Daily, Ragan, Spin Sucks), and community discussions (Reddit threads "
-        f"with practical insights).\n"
-        f"EXCLUDE duplicate articles that appear on multiple domains.\n"
-        f"Every article must be specifically relevant to \"{theme_name}\" AND to AI or "
-        f"communications work — reject generic articles."
+        f"- \"summary\": 2-3 sentences on what the article covers\n\n"
+        f"Return up to 8 articles. Only include real articles with real URLs.\n"
+        f"Every article must be relevant to \"{theme_name}\" AND to AI or communications work.\n"
+        f"Reject generic AI news that doesn't connect to the topic."
     )
 
     try:
@@ -283,7 +262,6 @@ def _web_search_for_theme(
         resp.raise_for_status()
         data = resp.json()
 
-        # Extract the text output and parse JSON from it.
         text_content = ""
         for item in data.get("output", []):
             if item.get("type") == "message":
@@ -292,10 +270,8 @@ def _web_search_for_theme(
                         text_content += c["text"]
 
         if not text_content:
-            logger.warning("Web search returned no text content.")
             return []
 
-        # Parse the JSON from the response.
         articles_data = parse_json_response(text_content)
         raw_articles = articles_data.get("articles", [])
 
@@ -309,16 +285,69 @@ def _web_search_for_theme(
                 title=a.get("title", "").strip(),
                 url=url,
                 source_domain=domain,
-                published_at=None,  # Web search doesn't reliably give dates.
+                published_at=None,
                 summary=a.get("summary", "").strip(),
             ))
-
-        logger.info("Web search found %d candidates for theme '%s'.", len(candidates), theme_name)
         return candidates
 
     except Exception as exc:
-        logger.warning("Web search failed: %s — continuing with RSS only.", exc)
+        logger.warning("Web search batch failed: %s", exc)
         return []
+
+
+def _web_search_for_theme(
+    theme_name: str,
+    api_key: str,
+    model: str = "gpt-5.4-mini",
+    project_id: str | None = None,
+    organization: str | None = None,
+) -> list[CandidateStory]:
+    """Run parallel web searches for a theme using OpenAI's web_search_preview tool.
+
+    Splits queries into batches of 2-3 and runs them in parallel so each batch
+    gets its own independent web search. This yields 3-4x more candidates than
+    a single call with all queries crammed together.
+    """
+    queries = _llm_generate_queries(
+        theme_name, api_key=api_key, model=model,
+        project_id=project_id, organization=organization,
+    )
+
+    # Split queries into batches of 2-3 for parallel searching.
+    batch_size = 3
+    batches = [queries[i:i + batch_size] for i in range(0, len(queries), batch_size)]
+    logger.info(
+        "Running %d parallel web searches for theme '%s' (%d queries total).",
+        len(batches), theme_name, len(queries),
+    )
+
+    # Run batches in parallel.
+    all_candidates: list[CandidateStory] = []
+    with ThreadPoolExecutor(max_workers=min(len(batches), 4)) as pool:
+        futures = {
+            pool.submit(_web_search_batch, theme_name, batch, api_key, model): batch
+            for batch in batches
+        }
+        for future in as_completed(futures):
+            try:
+                batch_results = future.result()
+                all_candidates.extend(batch_results)
+            except Exception as exc:
+                logger.warning("Web search batch failed: %s", exc)
+
+    # Deduplicate by URL across batches.
+    seen_urls: set[str] = set()
+    deduped: list[CandidateStory] = []
+    for c in all_candidates:
+        if c.url not in seen_urls:
+            seen_urls.add(c.url)
+            deduped.append(c)
+
+    logger.info(
+        "Web search found %d candidates (%d unique) for theme '%s'.",
+        len(all_candidates), len(deduped), theme_name,
+    )
+    return deduped
 
 
 # ---------------------------------------------------------------------------
