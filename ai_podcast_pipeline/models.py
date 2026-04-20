@@ -13,6 +13,7 @@ class CandidateStory:
     published_at: datetime | None
     summary: str
     full_text: str | None = None  # fetched after user selection; None = not yet fetched
+    source_role: str = "primary"  # "primary" or "supporting"
 
 
 @dataclass

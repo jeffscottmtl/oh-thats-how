@@ -231,5 +231,21 @@ class TestRankSources(unittest.TestCase):
             self.assertIsInstance(item, CandidateStory)
 
 
+class TestCandidateStorySourceRole(unittest.TestCase):
+    def test_default_source_role_is_primary(self):
+        c = CandidateStory(
+            title="Test", url="https://example.com", source_domain="example.com",
+            published_at=None, summary="test",
+        )
+        self.assertEqual(c.source_role, "primary")
+
+    def test_source_role_can_be_set_to_supporting(self):
+        c = CandidateStory(
+            title="Test", url="https://example.com", source_domain="example.com",
+            published_at=None, summary="test", source_role="supporting",
+        )
+        self.assertEqual(c.source_role, "supporting")
+
+
 if __name__ == "__main__":
     unittest.main()
