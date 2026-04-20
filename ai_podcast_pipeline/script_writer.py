@@ -810,6 +810,7 @@ def _theme_articles_blob(selected: list[ScoredStory]) -> str:
         rows.append(
             f"{idx}. title={c.title}\n"
             f"   source={_pub_name(c.source_domain)}\n"
+            f"   role={c.source_role}\n"
             f"   published_at={published}\n"
             f"   full_article_text={c.full_text or c.summary}"
         )
@@ -857,8 +858,13 @@ def generate_theme_script(
 This episode's theme: "{theme_name}"
 
 Write ONE cohesive podcast script about this theme. Do NOT summarize articles one by one.
-Weave insights from the supporting articles into a single flowing narrative. Sources are
-evidence supporting your points — not standalone segments.
+Weave insights from the articles into a single flowing narrative.
+
+SOURCE ROLES:
+- Articles marked role=primary drive the episode's substance and narrative.
+- Articles marked role=supporting are evidence sources — use them for specific data points,
+  statistics, and framing that strengthen your arguments. Don't build narrative arcs around
+  supporting sources; cite their findings to add weight and credibility to your primary points.
 {prev_eps_block}
 
 Episode structure (follow this order):

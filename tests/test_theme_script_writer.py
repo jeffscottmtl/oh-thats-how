@@ -51,5 +51,38 @@ class TestBuildThemeScriptMarkdown(unittest.TestCase):
         self.assertNotIn("And finally,", md)
 
 
+class TestThemeArticlesBlobSourceRole(unittest.TestCase):
+    def test_includes_source_role(self):
+        from ai_podcast_pipeline.script_writer import _theme_articles_blob
+        c = CandidateStory(
+            title="Test Article", url="https://example.com/art",
+            source_domain="example.com",
+            published_at=datetime.now(timezone.utc),
+            summary="A test article", full_text="Full text here.",
+            source_role="supporting",
+        )
+        scored = ScoredStory(
+            candidate=c, credibility=90, comms_relevance=50,
+            freshness=80, ai_materiality=60, preferred_topic=0, total=55.0,
+        )
+        blob = _theme_articles_blob([scored])
+        self.assertIn("role=supporting", blob)
+
+    def test_primary_role_shown(self):
+        from ai_podcast_pipeline.script_writer import _theme_articles_blob
+        c = CandidateStory(
+            title="Test Article", url="https://example.com/art",
+            source_domain="example.com",
+            published_at=datetime.now(timezone.utc),
+            summary="A test article", full_text="Full text here.",
+        )
+        scored = ScoredStory(
+            candidate=c, credibility=90, comms_relevance=50,
+            freshness=80, ai_materiality=60, preferred_topic=0, total=55.0,
+        )
+        blob = _theme_articles_blob([scored])
+        self.assertIn("role=primary", blob)
+
+
 if __name__ == "__main__":
     unittest.main()
