@@ -53,8 +53,22 @@ const app = {
   },
 
   onStageClick(index) {
-    // Stage rail clicks are informational for now — stages advance through the pipeline flow.
-    // Could add navigation logic here later.
+    // Only allow navigating back to completed stages.
+    if (index >= this._currentStage) return;
+
+    // Navigate to the stage if we have the data for it.
+    if (index === 0 && this.state.selectedTheme) {
+      this.renderStageRail(0, this._currentStage);
+      this.newEpisode();
+    } else if (index === 1 && this.state.sources.length > 0) {
+      this.renderStageRail(1, this._currentStage);
+      this.updateBreadcrumbs(this.state.episodeName, 'Articles');
+      this.renderSources();
+    } else if (index === 2 && this.state.script) {
+      this.renderStageRail(2, this._currentStage);
+      this.updateBreadcrumbs(this.state.episodeName, 'Script');
+      this.renderScript();
+    }
   },
 
   clearStageRail() {
