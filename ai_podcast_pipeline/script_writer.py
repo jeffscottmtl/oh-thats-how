@@ -894,6 +894,7 @@ Voice and tone:
 - No jargon. If you must use a technical term, explain it immediately in plain English.
 - No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
+- NEVER include a "food for thought" or "here's some food for thought" segment. The practical takeaway in try_this IS the closing content. No separate sign-off segment.
 
 Delivery cues (MANDATORY for text-to-speech):
 - Em dashes (—) for mid-sentence pivots and asides: 1-2 per section max. Use periods and short sentences for breathing room.

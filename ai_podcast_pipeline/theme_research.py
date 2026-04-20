@@ -522,41 +522,39 @@ def _score_candidate(
     if has_ai:
         score += 10
 
-    # Kill product pages / tool homepages aggressively.
-    _product_killers = [
+    # Kill product pages / tool homepages — pattern-based, not domain lists.
+    # 1. Text signals: marketing language in title or summary
+    _product_text_signals = [
         "free online", "no sign-up", "no signup", "sign up free", "try for free",
         "start free", "pricing", "free trial", "free ai", "no login",
-        "unlimited words", "paraphrasing tool", "paraphraser", "rewriter tool",
-        "rewording tool", "humanizer", "text generator", "content generator",
-        "photo editor", "image editor", "video editor", "image editing",
-        "video editing", "photo editing",
-        # SaaS product pages
+        "unlimited words", "get started", "try it now", "start now",
+        "sign up", "create account", "free plan",
+    ]
+    if any(s in text for s in _product_text_signals):
+        return 0
+
+    # 2. Title signals: the title IS the product (tool/maker/generator/checker)
+    _product_title_signals = [
+        "paraphrasing tool", "paraphraser", "rewriter tool", "rewording tool",
+        "humanizer", "text generator", "content generator",
+        "photo editor", "image editor", "video editor",
         "presentation maker", "presentation builder", "slide maker", "slide generator",
-        "pitch deck", "pitch decks", "ai-powered presentation", "ai presentation maker",
-        "ai slides", "build ai-driven", "generate full slides",
-        "grammar checker", "writing assistant", "ai writer",
-        "email writer", "email generator",
+        "grammar checker", "email writer", "email generator",
         "brainstorm generator", "idea generator",
-        "ai-powered tool", "powered by ai",
-        # Listicle tool roundups
         "best ai tools", "top ai tools", "best ai apps",
     ]
-    if any(s in text for s in _product_killers):
-        return 0  # hard reject, not just penalty
-
-    # Kill known product/vendor blog domains.
-    _PRODUCT_DOMAINS = {
-        "rewritepal.com", "jasper.ai", "writesonic.com", "copy.ai",
-        "rytr.me", "anyword.com", "contentbot.ai", "peppertype.ai",
-        "wordtune.com", "quillbot.com", "hyperwriteai.com", "writerly.ai",
-        "jenova.ai", "slidexy.ai", "slidesmith.ai", "gamma.app",
-        "presentations.ai", "voxdeck.ai", "lovart.ai", "slidesai.io",
-        "dreamleap.com", "theee.ai", "editgpt.app", "clevertype.co",
-        "robotwritersai.com", "spreadbot.ai", "turboagents.ai",
-        "reelmind.ai", "pressmaster.ai", "nutshell.com",
-    }
-    if candidate.source_domain.lower() in _PRODUCT_DOMAINS:
+    if any(s in title for s in _product_title_signals):
         return 0
+
+    # 3. Domain heuristic: .ai TLDs that aren't major platforms are usually product sites
+    domain = candidate.source_domain.lower()
+    _LEGIT_AI_DOMAINS = {"openai.com", "anthropic.com", "ai.meta.com", "deepmind.google"}
+    if domain.endswith(".ai") and domain not in _LEGIT_AI_DOMAINS:
+        # .ai domain — check if it looks editorial or promotional
+        promo_signals = sum(1 for s in ["tool", "generate", "create", "build", "maker",
+                                         "transform", "convert", "automate"] if s in text)
+        if promo_signals >= 2:
+            return 0  # likely a product site
 
     # Bonus for editorial content signals.
     editorial_signals = ["how to", "tips", "guide", "strategy", "best practices",
