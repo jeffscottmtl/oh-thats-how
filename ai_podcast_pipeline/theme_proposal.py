@@ -225,11 +225,9 @@ def _web_search_headlines(api_key: str) -> list[str]:
 
 def _build_prompt(
     eligible: list[ThemeBankEntry],
-    rss_stories: list[CandidateStory],
     web_headlines: list[str] | None,
 ) -> str:
     """Build the system + user messages for the LLM."""
-    # ---- system message ----
     system = (
         "You are an editorial assistant for The Signal, a podcast for communicators at CN "
         "(a large Canadian railway company). The audience builds PowerPoint presentations "
@@ -274,16 +272,6 @@ def _build_prompt(
     else:
         bank_section = "## Eligible theme bank entries\n(none — all themes are on cooldown)\n\n"
 
-    # ---- user message: RSS headlines ----
-    rss_slice = rss_stories[:_MAX_RSS_HEADLINES]
-    if rss_slice:
-        rss_lines = "\n".join(
-            f"  - {s.title} ({s.source_domain})" for s in rss_slice
-        )
-        rss_section = f"## RSS headlines (last scan)\n{rss_lines}\n\n"
-    else:
-        rss_section = "## RSS headlines (last scan)\n(none available)\n\n"
-
     # ---- user message: web headlines ----
     if web_headlines:
         web_slice = web_headlines[:_MAX_WEB_HEADLINES]
@@ -294,7 +282,6 @@ def _build_prompt(
 
     user = (
         f"{bank_section}"
-        f"{rss_section}"
         f"{web_section}"
         "Based on the above, propose exactly 20 episode themes for The Signal. "
         "Return the JSON object described in the system prompt."
@@ -312,17 +299,16 @@ def propose_themes(
     api_key: str,
     model: str,
     theme_bank_path: Path | str = THEME_BANK_PATH,
-    rss_headlines: list[CandidateStory] | None = None,
     web_headlines: list[str] | None = None,
     project_id: str | None = None,
     organization: str | None = None,
-    on_feed_done: Callable[[], None] | None = None,
+    **kwargs,
 ) -> tuple[list[ThemeProposal], list[ThemeBankEntry]]:
-    """Propose 5 episode themes for The Signal.
+    """Propose 20 episode themes for The Signal.
 
     1. Loads the theme bank from theme_bank_path.
     2. Filters to eligible themes (outside cooldown window).
-    3. Fetches RSS headlines if rss_headlines is not provided.
+    3. Runs web search for AI+comms headlines if not supplied.
     4. Builds a prompt and calls the LLM at temperature 0.4.
     5. Parses the response into ThemeProposal objects.
 
@@ -333,26 +319,18 @@ def propose_themes(
     bank_entries = load_theme_bank(bank_path)
     eligible = get_eligible_themes(bank_entries)
 
-    # Fetch RSS headlines if not supplied by the caller.
-    if rss_headlines is None:
-        logger.info("Scanning RSS feeds for theme proposal headlines…")
-        rss_stories = _scan_rss_headlines(on_feed_done=on_feed_done)
-    else:
-        rss_stories = list(rss_headlines)
-
     # Run web search for fresh AI+comms headlines if not supplied.
     if web_headlines is None:
         logger.info("Running web search for AI+comms headlines…")
         web_headlines = _web_search_headlines(api_key)
 
-    system_msg, user_msg = _build_prompt(eligible, rss_stories, web_headlines)
+    system_msg, user_msg = _build_prompt(eligible, web_headlines)
 
     logger.info(
         "Calling LLM (%s) to propose themes — %d bank entries eligible, "
-        "%d RSS stories, %d web headlines.",
+        "%d web headlines.",
         model,
         len(eligible),
-        len(rss_stories[:_MAX_RSS_HEADLINES]),
         len((web_headlines or [])[:_MAX_WEB_HEADLINES]),
     )
 
