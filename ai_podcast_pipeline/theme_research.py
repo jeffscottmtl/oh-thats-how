@@ -164,7 +164,7 @@ def _llm_generate_queries(
 The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
 Requirements:
-- EVERY query MUST include the word "AI" or "ChatGPT" — this is an AI podcast, generic results are useless
+- EVERY query MUST include an AI term (AI, ChatGPT, Claude, Copilot, Gemini, generative, LLM) — this is an AI podcast, generic results are useless
 - Cover DIFFERENT angles: practical how-to, real examples, adjacent concepts, trends, tips
 - At least 2 queries targeting adjacent concepts that use DIFFERENT keywords
 - 1 query with "site:reddit.com" targeting practical discussions
@@ -251,10 +251,12 @@ def _web_search_for_theme(
         project_id=project_id, organization=organization,
     )
 
-    # Ensure every query includes "AI" — this is an AI podcast.
+    # Ensure every query mentions AI — this is an AI podcast.
+    _AI_QUERY_TERMS = {"ai", "chatgpt", "gpt", "claude", "copilot", "gemini",
+                       "mistral", "anthropic", "openai", "generative", "llm"}
     fixed_queries = []
     for q in queries:
-        if "ai" not in q.lower() and "chatgpt" not in q.lower() and "gpt" not in q.lower():
+        if not any(term in q.lower() for term in _AI_QUERY_TERMS):
             q = f"AI {q}"
         fixed_queries.append(q)
     queries = fixed_queries
