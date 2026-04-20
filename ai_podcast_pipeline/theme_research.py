@@ -498,80 +498,59 @@ def _score_candidate(
     candidate: CandidateStory,
     theme_keywords: list[str],
 ) -> int:
-    """Score a candidate article for relevance using keyword matching.
+    """Score a candidate article for relevance.
 
-    Returns a score 0-100. Higher = more relevant.
+    The podcast is about AI FOR COMMUNICATORS. Every article must be about
+    BOTH — using AI AND a communications topic. Articles about only comms
+    (no AI) or only AI (no comms relevance) score zero.
+
+    Returns 0 (reject) or 1-100 (higher = more relevant).
     """
     title = candidate.title.lower()
     summary = (candidate.summary or "").lower()
     text = f"{title} {summary}"
 
-    has_ai = any(re.search(rf"\b{re.escape(signal)}\b", text) for signal in _AI_SIGNALS)
+    # ── GATE 1: Must mention AI ────────────────────────────────────────
+    # No AI = no use for this podcast. Hard reject.
+    has_ai = any(re.search(rf"\b{re.escape(s)}\b", text) for s in _AI_SIGNALS)
+    if not has_ai:
+        return 0
 
-    score = 0
-
-    # Theme keyword matches in title (high signal — 6 pts each, max 30).
+    # ── GATE 2: Must match the topic ───────────────────────────────────
+    # At least 1 theme keyword in the title, or 2+ in the summary.
     title_hits = sum(1 for kw in theme_keywords if kw in title)
-    score += min(title_hits * 6, 30)
-
-    # Theme keyword matches in summary (moderate signal — 2 pts each, max 20).
     summary_hits = sum(1 for kw in theme_keywords if kw in summary)
-    score += min(summary_hits * 2, 20)
+    if title_hits == 0 and summary_hits < 2:
+        return 0
 
-    # AI bonus — articles that mention AI score higher.
-    if has_ai:
-        score += 10
-
-    # Kill product pages / tool homepages — pattern-based, not domain lists.
-    # 1. Text signals: marketing language in title or summary
-    _product_text_signals = [
+    # ── GATE 3: Not a product page ─────────────────────────────────────
+    _product_signals = [
         "free online", "no sign-up", "no signup", "sign up free", "try for free",
         "start free", "pricing", "free trial", "free ai", "no login",
         "unlimited words", "get started", "try it now", "start now",
         "sign up", "create account", "free plan",
-    ]
-    if any(s in text for s in _product_text_signals):
-        return 0
-
-    # 2. Title signals: the title IS the product (tool/maker/generator/checker)
-    _product_title_signals = [
         "paraphrasing tool", "paraphraser", "rewriter tool", "rewording tool",
-        "humanizer", "text generator", "content generator",
-        "photo editor", "image editor", "video editor",
-        "presentation maker", "presentation builder", "slide maker", "slide generator",
-        "grammar checker", "email writer", "email generator",
-        "brainstorm generator", "idea generator",
-        "best ai tools", "top ai tools", "best ai apps",
+        "humanizer",
+        "photo editor", "photo editing", "image editor", "image editing",
+        "video editor", "video editing", "code editing", "code editor",
+        "presentation maker", "slide maker", "slide generator",
+        "grammar checker", "email generator", "brainstorm generator",
     ]
-    if any(s in title for s in _product_title_signals):
+    if any(s in text for s in _product_signals):
         return 0
 
-    # 3. Domain heuristic: .ai TLDs that aren't major platforms are usually product sites
+    # .ai domains with promotional language are product sites
     domain = candidate.source_domain.lower()
     _LEGIT_AI_DOMAINS = {"openai.com", "anthropic.com", "ai.meta.com", "deepmind.google"}
     if domain.endswith(".ai") and domain not in _LEGIT_AI_DOMAINS:
-        # .ai domain — check if it looks editorial or promotional
-        promo_signals = sum(1 for s in ["tool", "generate", "create", "build", "maker",
-                                         "transform", "convert", "automate"] if s in text)
-        if promo_signals >= 2:
-            return 0  # likely a product site
+        promo = sum(1 for s in ["tool", "generate", "create", "build", "maker",
+                                "transform", "convert"] if s in text)
+        if promo >= 2:
+            return 0
 
-    # Bonus for editorial content signals.
-    editorial_signals = ["how to", "tips", "guide", "strategy", "best practices",
-                         "case study", "example", "workflow", "lessons", "research",
-                         "study", "survey", "report", "trend"]
-    editorial_hits = sum(1 for s in editorial_signals if s in text)
-    score += min(editorial_hits * 3, 15)
-
-    # Bonus for comms-specific content.
-    comms_signals = ["communications", "communicator", "internal comms", "corporate",
-                     "employee", "stakeholder", "newsletter", "presentation", "speech"]
-    comms_hits = sum(1 for s in comms_signals if s in text)
-    score += min(comms_hits * 4, 16)
-
-    # Minimum: need at least some theme relevance to be worth showing.
-    if title_hits == 0 and summary_hits < 2:
-        return 0
+    # ── SCORE: How relevant is it? ─────────────────────────────────────
+    # Simple: count keyword matches. Title matches worth more.
+    score = title_hits * 6 + summary_hits * 2
 
     return max(score, 1)
 
