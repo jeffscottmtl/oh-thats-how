@@ -263,9 +263,16 @@ def _search_tavily(query: str, max_results: int = 10) -> list[dict]:
             include_answer=False,
             time_range="year",
             exclude_domains=[
+                # AI writing tools
                 "jasper.ai", "writesonic.com", "copy.ai", "quillbot.com",
-                "grammarly.com", "wordtune.com", "slidesai.io", "gamma.app",
-                "logicballs.com", "ahrefs.com", "semrush.com",
+                "grammarly.com", "wordtune.com", "hyperwriteai.com",
+                # IC platform vendors (their blogs promote their product)
+                "staffbase.com", "simpplr.com", "poppulo.com", "contactmonkey.com",
+                "haiilo.com", "useworkshop.com", "cerkl.com", "workai.com",
+                "theemployeeapp.com", "sparrowconnected.com", "sociabble.com",
+                # Other tools
+                "slidesai.io", "gamma.app", "logicballs.com", "ahrefs.com",
+                "semrush.com", "clickup.com", "miro.com",
             ],
         )
         return [
@@ -658,7 +665,7 @@ def research_theme(
     # Resolve API credentials from args or environment.
     _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
     _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
-    _smart_model = os.environ.get("OPENAI_SMART_MODEL", "gpt-5.4")
+    _smart_model = os.environ.get("OPENAI_SMART_MODEL", "gpt-4.1")
 
     # Step 1: Web search (primary discovery).
     web_search_results = []
@@ -711,12 +718,17 @@ def research_theme(
             f'topic — not AI for communications in general.\n\n'
             f'For each article, ask: "Is this PRIMARILY about {theme_name}? Would it '
             f'teach a communicator something specific and practical about this topic?"\n\n'
-            f'REJECT:\n'
-            f'- Generic "AI for internal comms" articles that mention the topic in passing\n'
-            f'- Product pages, tool homepages, SaaS marketing\n'
-            f'- Articles about marketing automation, sales, HR, or other fields\n'
-            f'- Generic AI tutorials or prompt guides not specific to this topic\n\n'
-            f'KEEP 8-15 articles. Score each 1-10 for how useful it would be for the episode.\n\n'
+            f'REJECT (be ruthless):\n'
+            f'- Generic "AI for internal comms" or "AI tools for communicators" roundups\n'
+            f'- PRODUCT PAGES: if the domain sells the tool being described, it is a product '
+            f'page. Staffbase, Simpplr, Poppulo, ContactMonkey, Haiilo, Workshop, Cerkl, '
+            f'ClickUp, Workai — these are all vendor blogs promoting their own product. '
+            f'REJECT them even if the content seems useful. We only want independent sources.\n'
+            f'- Articles about marketing, sales, HR, or other fields\n'
+            f'- Generic AI tutorials not specific to this topic\n'
+            f'- Listicles ("Top 10 AI tools for X")\n\n'
+            f'KEEP 8-15 articles from INDEPENDENT sources (news outlets, industry publications, '
+            f'practitioner blogs, universities, Reddit discussions). Score each 1-10.\n\n'
             f'Return JSON: {{"selected": [{{"index": N, "score": 1-10}}, ...]}}\n'
             f'Sort by score descending.\n\n'
             f'Articles:\n{article_list}'
