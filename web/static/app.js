@@ -153,7 +153,7 @@ const app = {
             ? `<span class="badge used">${t.times_used}x · last ${t.last_used || '?'}</span>`
             : `<span class="badge fresh">Available</span>`;
           return `
-            <div class="card" onclick="app.selectBankTheme('${t.id}', '${t.name.replace(/'/g, "\\'")}')">
+            <div class="card" onclick="app.selectBankTheme('${t.id}', '${t.name.replace(/'/g, "\\'")}', '${(t.description || '').replace(/'/g, "\\'")}')">
               <h3>${t.name}</h3>
               <p>${t.description}</p>
               ${badge}
@@ -179,8 +179,9 @@ const app = {
     }
   },
 
-  selectBankTheme(bankId, name) {
+  selectBankTheme(bankId, name, description) {
     this.state.selectedTheme = name;
+    this.state.themeDescription = description || '';
     this.state.bankId = bankId;
     this.startResearch();
   },
@@ -249,7 +250,7 @@ const app = {
       const res = await fetch("/api/research", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ theme_name: this.state.selectedTheme }),
+        body: JSON.stringify({ theme_name: this.state.selectedTheme, theme_description: this.state.themeDescription || '' }),
       });
       const data = await res.json();
       this.state.sources = data.sources.map(s => ({ ...s, included: false }));

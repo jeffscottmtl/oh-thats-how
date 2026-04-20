@@ -268,6 +268,7 @@ async def research(request: Request):
     """Research a chosen theme, return ranked sources."""
     body = await request.json()
     theme_name = body.get("theme_name", "")
+    theme_description = body.get("theme_description", "")
     if not theme_name:
         return JSONResponse({"error": "theme_name required"}, status_code=400)
 
@@ -275,6 +276,7 @@ async def research(request: Request):
     results = await _run_sync(
         research_theme,
         theme_name=theme_name,
+        theme_description=theme_description,
         api_key=settings.openai_api_key,
         model=settings.openai_model,
         project_id=settings.openai_project_id,

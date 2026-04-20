@@ -146,8 +146,9 @@ def _build_search_queries(theme_name: str) -> list[str]:
 
 def _llm_generate_queries(
     theme_name: str,
-    api_key: str,
-    model: str,
+    theme_description: str = "",
+    api_key: str = "",
+    model: str = "",
     project_id: str | None = None,
     organization: str | None = None,
 ) -> list[str]:
@@ -157,8 +158,9 @@ def _llm_generate_queries(
     research/data, adjacent concepts, industry trends, trust/ethics.
     Falls back to template-based queries on failure.
     """
+    desc_line = f'\nTheme description: "{theme_description}"\n' if theme_description else ""
     prompt = f"""Generate 8-10 web search queries to find diverse, high-quality articles for a podcast episode about: "{theme_name}"
-
+{desc_line}
 The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
 Requirements for query diversity:
@@ -230,7 +232,8 @@ def _search_ddg(query: str, max_results: int = 8) -> list[dict]:
 
 def _web_search_for_theme(
     theme_name: str,
-    api_key: str,
+    theme_description: str = "",
+    api_key: str = "",
     model: str = "gpt-5.4-mini",
     project_id: str | None = None,
     organization: str | None = None,
@@ -238,14 +241,13 @@ def _web_search_for_theme(
     """Search for articles using DuckDuckGo, one search per LLM-generated query.
 
     Uses a real search engine for discovery (comprehensive, fast), then the
-    LLM filter downstream handles quality evaluation. This replaces the
-    OpenAI web_search_preview approach which was a black box returning too
-    few results.
+    LLM filter downstream handles quality evaluation.
     """
     from urllib.parse import urlparse
 
     queries = _llm_generate_queries(
-        theme_name, api_key=api_key, model=model,
+        theme_name, theme_description=theme_description,
+        api_key=api_key, model=model,
         project_id=project_id, organization=organization,
     )
 
@@ -409,6 +411,7 @@ def _llm_filter_sources(
     candidates: list[CandidateStory],
     api_key: str,
     model: str,
+    theme_description: str = "",
     project_id: str | None = None,
     organization: str | None = None,
     max_keep: int = 15,
@@ -441,6 +444,8 @@ CONTEXT:
 - The podcast's job is to help them feel confident about AI, give them practical techniques, and keep them aware of what's changing — in that order.
 
 THIS EPISODE'S THEME: "{theme_name}"
+{f'THEME DESCRIPTION: "{theme_description}"' if theme_description else ''}
+Use the theme description to understand what this episode is specifically about — score articles higher if they match the description, not just the theme name.
 
 YOUR TASK:
 Select articles that could contribute to a compelling episode about "{theme_name}". Be GENEROUS — the user will review your selections and choose which to keep. It's better to include a borderline-relevant article than to miss a good one.
@@ -546,18 +551,13 @@ Candidate articles:
 
 
 # ---------------------------------------------------------------------------
-# 5. (RSS gathering removed — search-then-filter replaces it)
-# ---------------------------------------------------------------------------
-    return all_candidates
-
-
-# ---------------------------------------------------------------------------
 # 6. Main entry point
 # ---------------------------------------------------------------------------
 
 
 def research_theme(
     theme_name: str,
+    theme_description: str = "",
     web_results: list[CandidateStory] | None = None,
     on_feed_done: Callable[[], None] | None = None,
     on_article_done: Callable[[], None] | None = None,
@@ -566,6 +566,7 @@ def research_theme(
     model: str | None = None,
     project_id: str | None = None,
     organization: str | None = None,
+    **kwargs,
 ) -> list[CandidateStory]:
     """Research a theme and return the top sources with full text fetched.
 
@@ -587,7 +588,8 @@ def research_theme(
     if _api_key:
         logger.info("Running web search for theme '%s'…", theme_name)
         web_search_results = _web_search_for_theme(
-            theme_name, api_key=_api_key, model=_smart_model,
+            theme_name, theme_description=theme_description,
+            api_key=_api_key, model=_smart_model,
             project_id=project_id, organization=organization,
         )
 
@@ -618,6 +620,7 @@ def research_theme(
     if _api_key and deduped:
         primary_indices, supporting_indices = _llm_filter_sources(
             theme_name=theme_name,
+            theme_description=theme_description,
             candidates=deduped,
             api_key=_api_key,
             model=_smart_model,
