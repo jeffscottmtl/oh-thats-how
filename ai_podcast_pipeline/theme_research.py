@@ -222,6 +222,8 @@ def _web_search_for_theme(
     theme_name: str,
     api_key: str,
     model: str = "gpt-4.1-mini",
+    project_id: str | None = None,
+    organization: str | None = None,
 ) -> list[CandidateStory]:
     """Run web searches for a theme using OpenAI's web_search_preview tool.
 
@@ -230,10 +232,10 @@ def _web_search_for_theme(
     """
     import requests as _requests
 
-    queries = _build_search_queries(theme_name)
-    # Add Gartner-specific queries targeting the theme.
-    queries.append(f"site:gartner.com {theme_name}")
-    queries.append(f"site:gartner.com AI {theme_name}")
+    queries = _llm_generate_queries(
+        theme_name, api_key=api_key, model=model,
+        project_id=project_id, organization=organization,
+    )
 
     # Ask the LLM to search and return structured results.
     search_prompt = (
@@ -565,7 +567,10 @@ def research_theme(
     web_search_results = []
     if _api_key:
         logger.info("Running web search for theme '%s'…", theme_name)
-        web_search_results = _web_search_for_theme(theme_name, api_key=_api_key)
+        web_search_results = _web_search_for_theme(
+            theme_name, api_key=_api_key, model=_model,
+            project_id=project_id, organization=organization,
+        )
 
     # Step 1b: Gather RSS pool (catches recent posts from known feeds).
     rss_candidates = _gather_rss_candidates(on_feed_done=on_feed_done)
