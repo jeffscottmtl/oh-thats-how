@@ -219,79 +219,13 @@ Do NOT include explanations or commentary — just the JSON."""
 _MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
 
 
-def _web_search_batch(
-    theme_name: str,
-    queries: list[str],
-    api_key: str,
-    model: str,
-) -> list[CandidateStory]:
-    """Run a single focused web search call for a batch of 2-3 queries.
-
-    Returns CandidateStory objects found by this batch.
-    """
-    import requests as _requests
-
-    search_prompt = (
-        f"Search the web for articles about: \"{theme_name}\"\n\n"
-        f"Use these search queries:\n"
-        + "\n".join(f"- {q}" for q in queries) + "\n\n"
-        f"Return a JSON object with key \"articles\" — an array of objects, each with:\n"
-        f"- \"title\": article title\n"
-        f"- \"url\": full URL\n"
-        f"- \"source_domain\": domain name (e.g. \"wired.com\")\n"
-        f"- \"summary\": 2-3 sentences on what the article covers\n\n"
-        f"Return up to 8 articles. Only include real articles with real URLs.\n"
-        f"Every article must be relevant to \"{theme_name}\" AND to AI or communications work.\n"
-        f"Reject generic AI news that doesn't connect to the topic."
-    )
-
+def _search_ddg(query: str, max_results: int = 8) -> list[dict]:
+    """Run a single DuckDuckGo search and return raw results."""
     try:
-        resp = _requests.post(
-            "https://api.openai.com/v1/responses",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": model,
-                "tools": [{"type": "web_search_preview"}],
-                "input": search_prompt,
-            },
-            timeout=60,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-
-        text_content = ""
-        for item in data.get("output", []):
-            if item.get("type") == "message":
-                for c in item.get("content", []):
-                    if c.get("type") == "output_text":
-                        text_content += c["text"]
-
-        if not text_content:
-            return []
-
-        articles_data = parse_json_response(text_content)
-        raw_articles = articles_data.get("articles", [])
-
-        candidates = []
-        for a in raw_articles:
-            url = a.get("url", "").strip()
-            domain = a.get("source_domain", "").strip()
-            if not url or not domain:
-                continue
-            candidates.append(CandidateStory(
-                title=a.get("title", "").strip(),
-                url=url,
-                source_domain=domain,
-                published_at=None,
-                summary=a.get("summary", "").strip(),
-            ))
-        return candidates
-
+        from ddgs import DDGS
+        return list(DDGS().text(query, max_results=max_results))
     except Exception as exc:
-        logger.warning("Web search batch failed: %s", exc)
+        logger.warning("DuckDuckGo search failed for '%s': %s", query, exc)
         return []
 
 
@@ -302,52 +236,58 @@ def _web_search_for_theme(
     project_id: str | None = None,
     organization: str | None = None,
 ) -> list[CandidateStory]:
-    """Run parallel web searches for a theme using OpenAI's web_search_preview tool.
+    """Search for articles using DuckDuckGo, one search per LLM-generated query.
 
-    Splits queries into batches of 2-3 and runs them in parallel so each batch
-    gets its own independent web search. This yields 3-4x more candidates than
-    a single call with all queries crammed together.
+    Uses a real search engine for discovery (comprehensive, fast), then the
+    LLM filter downstream handles quality evaluation. This replaces the
+    OpenAI web_search_preview approach which was a black box returning too
+    few results.
     """
+    from urllib.parse import urlparse
+
     queries = _llm_generate_queries(
         theme_name, api_key=api_key, model=model,
         project_id=project_id, organization=organization,
     )
 
-    # Split queries into batches of 2-3 for parallel searching.
-    batch_size = 3
-    batches = [queries[i:i + batch_size] for i in range(0, len(queries), batch_size)]
     logger.info(
-        "Running %d parallel web searches for theme '%s' (%d queries total).",
-        len(batches), theme_name, len(queries),
+        "Running %d web searches for theme '%s'.",
+        len(queries), theme_name,
     )
 
-    # Run batches in parallel.
-    all_candidates: list[CandidateStory] = []
-    with ThreadPoolExecutor(max_workers=min(len(batches), 4)) as pool:
-        futures = {
-            pool.submit(_web_search_batch, theme_name, batch, api_key, model): batch
-            for batch in batches
-        }
+    # Run each query in parallel.
+    all_results: list[dict] = []
+    with ThreadPoolExecutor(max_workers=min(len(queries), 6)) as pool:
+        futures = {pool.submit(_search_ddg, q, 8): q for q in queries}
         for future in as_completed(futures):
             try:
-                batch_results = future.result()
-                all_candidates.extend(batch_results)
+                all_results.extend(future.result())
             except Exception as exc:
-                logger.warning("Web search batch failed: %s", exc)
+                logger.warning("Search failed: %s", exc)
 
-    # Deduplicate by URL across batches.
+    # Convert to CandidateStory and deduplicate by URL.
     seen_urls: set[str] = set()
-    deduped: list[CandidateStory] = []
-    for c in all_candidates:
-        if c.url not in seen_urls:
-            seen_urls.add(c.url)
-            deduped.append(c)
+    candidates: list[CandidateStory] = []
+    for r in all_results:
+        url = r.get("href", "").strip()
+        if not url or url in seen_urls:
+            continue
+        seen_urls.add(url)
+        parsed = urlparse(url)
+        domain = parsed.netloc.lower().removeprefix("www.")
+        candidates.append(CandidateStory(
+            title=r.get("title", "").strip(),
+            url=url,
+            source_domain=domain,
+            published_at=None,
+            summary=r.get("body", "").strip(),
+        ))
 
     logger.info(
-        "Web search found %d candidates (%d unique) for theme '%s'.",
-        len(all_candidates), len(deduped), theme_name,
+        "Web search found %d results (%d unique) for theme '%s'.",
+        len(all_results), len(candidates), theme_name,
     )
-    return deduped
+    return candidates
 
 
 # ---------------------------------------------------------------------------
