@@ -423,22 +423,23 @@ def _generate_theme_keywords(
     Returns a list of 15-20 keywords/phrases that indicate an article
     is relevant to this theme. Used for deterministic scoring.
     """
+    # Always start with words from the theme name + description (reliable baseline).
+    baseline = _tokenise(f"{theme_name} {theme_description}")
+
     desc = f'\nDescription: "{theme_description}"' if theme_description else ""
-    prompt = f"""Generate 15-20 keywords and short phrases that indicate an article is relevant to this podcast theme.
+    prompt = f"""Generate 20-30 SINGLE WORDS that indicate an article is relevant to this podcast theme.
 
 Theme: "{theme_name}"{desc}
 
-The podcast is about AI for communications professionals. Return keywords that would appear in
-articles useful for an episode about this theme. Include:
-- Direct topic keywords (e.g., for "AI as your editing partner": proofreading, revision, grammar check, track changes)
-- Related concepts (e.g., writing quality, content review, editorial workflow)
-- Audience/context keywords (e.g., corporate writing, business communications, professional email)
+Rules:
+- Each keyword must be ONE WORD only (e.g., "audience" not "audience segmentation")
+- Include synonyms and related concepts
+- Example for "AI as your editing partner": proofreading, revision, grammar, editing, copyediting, rewrite, polish, clarity, style, review, draft, proofread, refine, correct, revise
+- Do NOT include generic AI words (AI, ChatGPT, GPT) — those are handled separately
 
-Do NOT include generic AI keywords (like "AI", "ChatGPT") — those are handled separately.
-Focus on TOPIC keywords that distinguish this theme from other themes.
+Return JSON: {{"keywords": ["word1", "word2", ...]}}"""
 
-Return JSON: {{"keywords": ["keyword1", "keyword2", ...]}}"""
-
+    llm_keywords: list[str] = []
     try:
         content = chat_completion(
             api_key=api_key, model=model,
@@ -450,17 +451,23 @@ Return JSON: {{"keywords": ["keyword1", "keyword2", ...]}}"""
             temperature=0.3,
         )
         data = parse_json_response(content)
-        keywords = data.get("keywords", [])
-        if isinstance(keywords, list) and len(keywords) >= 5:
-            logger.info("Generated %d theme keywords for '%s'.", len(keywords), theme_name)
-            return [k.lower().strip() for k in keywords if isinstance(k, str)]
+        raw = data.get("keywords", [])
+        if isinstance(raw, list):
+            # Split any multi-word entries into individual words.
+            for k in raw:
+                if isinstance(k, str):
+                    for word in k.lower().strip().split():
+                        if word not in _STOPWORDS and len(word) > 2:
+                            llm_keywords.append(word)
+            logger.info("LLM generated %d keywords for '%s'.", len(llm_keywords), theme_name)
     except Exception as exc:
         logger.warning("Theme keyword generation failed: %s", exc)
 
-    # Fallback: extract words from theme name + description.
-    fallback = _tokenise(f"{theme_name} {theme_description}")
-    logger.info("Using %d fallback keywords for '%s'.", len(fallback), theme_name)
-    return fallback
+    # Combine baseline + LLM keywords, deduplicate.
+    combined = list(dict.fromkeys(baseline + llm_keywords))
+    logger.info("Using %d keywords (%d baseline + %d LLM) for '%s'.",
+                len(combined), len(baseline), len(llm_keywords), theme_name)
+    return combined
 
 
 def _score_candidate(
