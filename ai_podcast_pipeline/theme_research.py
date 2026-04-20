@@ -410,64 +410,58 @@ _AI_SIGNALS = frozenset({
 })
 
 
+# Synonym map — common comms/writing terms and their related words.
+# When a theme mentions one of these, all synonyms get added as keywords.
+_SYNONYM_GROUPS: list[set[str]] = [
+    {"edit", "editing", "editor", "proofread", "proofreading", "revise", "revision",
+     "copyedit", "grammar", "polish", "refine", "correct", "rewrite"},
+    {"audience", "audiences", "segment", "tailor", "personalize", "customize",
+     "target", "adapt", "stakeholder", "stakeholders", "reader", "readers"},
+    {"tone", "voice", "style", "register", "formal", "informal", "conversational"},
+    {"draft", "drafting", "write", "writing", "writer", "compose", "create"},
+    {"email", "emails", "inbox", "subject", "newsletter", "newsletters"},
+    {"presentation", "presentations", "slides", "deck", "powerpoint", "keynote"},
+    {"speech", "speeches", "remarks", "talking", "speaking", "town hall"},
+    {"summarize", "summary", "summarizing", "distill", "condense", "briefing", "digest"},
+    {"brainstorm", "brainstorming", "ideation", "ideas", "angles", "concepts", "creative"},
+    {"feedback", "revisions", "review", "collaborate", "collaboration", "iterate"},
+    {"measure", "measurement", "metrics", "analytics", "engagement", "performance", "roi"},
+    {"crisis", "urgent", "rapid", "response", "incident", "statement"},
+    {"change", "transformation", "transition", "announcement", "restructure"},
+    {"trust", "credibility", "transparency", "ethics", "bias", "hallucination", "accuracy"},
+    {"prompt", "prompts", "prompting", "instruction", "technique", "workflow"},
+    {"personalize", "personalization", "segment", "segmentation", "targeted", "relevant"},
+    {"frontline", "executive", "executives", "leadership", "management", "employee", "employees"},
+    {"repurpose", "repurposing", "multichannel", "channel", "channels", "format", "formats"},
+    {"signage", "display", "screen", "screens", "visual", "visuals", "graphic", "graphics"},
+    {"research", "synthesis", "analyze", "analysis", "findings", "insights", "data"},
+]
+
+
 def _generate_theme_keywords(
     theme_name: str,
     theme_description: str,
-    api_key: str,
-    model: str,
-    project_id: str | None = None,
-    organization: str | None = None,
+    **kwargs,
 ) -> list[str]:
-    """Ask the LLM to generate relevance keywords for a theme.
+    """Generate relevance keywords for a theme using synonym expansion.
 
-    Returns a list of 15-20 keywords/phrases that indicate an article
-    is relevant to this theme. Used for deterministic scoring.
+    Extracts words from the theme name + description, then expands each
+    word through the synonym map to produce a broad keyword set.
+    No LLM call needed — fast and deterministic.
     """
-    # Always start with words from the theme name + description (reliable baseline).
-    baseline = _tokenise(f"{theme_name} {theme_description}")
+    # Extract meaningful words from theme name + description.
+    source_words = set(_tokenise(f"{theme_name} {theme_description}"))
 
-    desc = f'\nDescription: "{theme_description}"' if theme_description else ""
-    prompt = f"""Generate 20-30 SINGLE WORDS that indicate an article is relevant to this podcast theme.
+    # Expand through synonym groups.
+    expanded: set[str] = set(source_words)
+    for group in _SYNONYM_GROUPS:
+        if source_words & group:  # any overlap?
+            expanded |= group
 
-Theme: "{theme_name}"{desc}
-
-Rules:
-- Each keyword must be ONE WORD only (e.g., "audience" not "audience segmentation")
-- Include synonyms and related concepts
-- Example for "AI as your editing partner": proofreading, revision, grammar, editing, copyediting, rewrite, polish, clarity, style, review, draft, proofread, refine, correct, revise
-- Do NOT include generic AI words (AI, ChatGPT, GPT) — those are handled separately
-
-Return JSON: {{"keywords": ["word1", "word2", ...]}}"""
-
-    llm_keywords: list[str] = []
-    try:
-        content = chat_completion(
-            api_key=api_key, model=model,
-            messages=[
-                {"role": "system", "content": "Output strict JSON only."},
-                {"role": "user", "content": prompt},
-            ],
-            project_id=project_id, organization=organization,
-            temperature=0.3,
-        )
-        data = parse_json_response(content)
-        raw = data.get("keywords", [])
-        if isinstance(raw, list):
-            # Split any multi-word entries into individual words.
-            for k in raw:
-                if isinstance(k, str):
-                    for word in k.lower().strip().split():
-                        if word not in _STOPWORDS and len(word) > 2:
-                            llm_keywords.append(word)
-            logger.info("LLM generated %d keywords for '%s'.", len(llm_keywords), theme_name)
-    except Exception as exc:
-        logger.warning("Theme keyword generation failed: %s", exc)
-
-    # Combine baseline + LLM keywords, deduplicate.
-    combined = list(dict.fromkeys(baseline + llm_keywords))
-    logger.info("Using %d keywords (%d baseline + %d LLM) for '%s'.",
-                len(combined), len(baseline), len(llm_keywords), theme_name)
-    return combined
+    keywords = sorted(expanded)
+    logger.info("Generated %d keywords for '%s' (from %d source words).",
+                len(keywords), theme_name, len(source_words))
+    return keywords
 
 
 def _score_candidate(
@@ -584,13 +578,7 @@ def research_theme(
     logger.info("After dedup: %d candidates for scoring.", len(deduped))
 
     # Step 3: Generate theme-specific relevance keywords.
-    theme_keywords = []
-    if _api_key:
-        theme_keywords = _generate_theme_keywords(
-            theme_name, theme_description,
-            api_key=_api_key, model=_smart_model,
-            project_id=project_id, organization=organization,
-        )
+    theme_keywords = _generate_theme_keywords(theme_name, theme_description)
     logger.info("Theme keywords: %s", theme_keywords[:10])
 
     # Step 4: Score every candidate with deterministic keyword matching.
