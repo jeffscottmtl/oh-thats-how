@@ -527,16 +527,8 @@ Candidate articles:
 
 
 # ---------------------------------------------------------------------------
-# 5. RSS gathering (broad, then LLM filters)
+# 5. (RSS gathering removed — search-then-filter replaces it)
 # ---------------------------------------------------------------------------
-
-
-def _gather_rss_candidates(
-    on_feed_done: Callable[[], None] | None = None,
-) -> list[CandidateStory]:
-    """Fetch all RSS candidates. No keyword filtering — the LLM decides relevance."""
-    all_candidates = fetch_candidates(on_feed_done=on_feed_done)
-    logger.info("Gathered %d RSS candidates for LLM filtering.", len(all_candidates))
     return all_candidates
 
 
@@ -558,10 +550,10 @@ def research_theme(
 ) -> list[CandidateStory]:
     """Research a theme and return the top sources with full text fetched.
 
-    Two-pass approach:
-    1. Gather a broad pool of RSS candidates + web results.
-    2. Use keyword scoring to pre-filter to top ~30 candidates.
-    3. LLM validates which are actually relevant (if api_key provided).
+    Search-then-filter approach:
+    1. LLM generates diverse search queries for the theme.
+    2. DuckDuckGo searches each query, yielding 60-80 candidates.
+    3. LLM evaluates candidates and picks the best 10-15.
     4. Fetch full article text for the winners.
     """
     import os
@@ -570,7 +562,7 @@ def research_theme(
     _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
     _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
 
-    # Step 1a: Web search (primary discovery — finds blogs, news, Gartner).
+    # Step 1: Web search (primary discovery).
     web_search_results = []
     if _api_key:
         logger.info("Running web search for theme '%s'…", theme_name)
@@ -579,17 +571,8 @@ def research_theme(
             project_id=project_id, organization=organization,
         )
 
-    # Step 1b: Gather RSS pool (catches recent posts from known feeds).
-    rss_candidates = _gather_rss_candidates(on_feed_done=on_feed_done)
-
-    # Step 2: Pre-rank RSS candidates (keyword scoring to cut 1200 → ~30).
-    # Web search results SKIP pre-ranking — they were already found by
-    # relevant queries and should go straight to LLM evaluation.
-    rss_ranked = _rank_sources(rss_candidates, theme_name, max_results=30)
-    logger.info("RSS pre-ranking: %d survived from %d.", len(rss_ranked), len(rss_candidates))
-
-    # Step 3: Merge web search + ranked RSS + any externally provided.
-    all_candidates: list[CandidateStory] = list(web_search_results) + list(rss_ranked)
+    # Step 2: Merge web search + any externally provided.
+    all_candidates: list[CandidateStory] = list(web_search_results)
     if web_results:
         all_candidates.extend(web_results)
 
