@@ -548,6 +548,21 @@ def _score_candidate(
         if promo >= 2:
             return 0
 
+    # ── GATE 4: Must be about communications/professional work ────────
+    # Rejects generic AI tutorials ("ChatGPT settings guide") that match
+    # topic keywords by accident but aren't about workplace communications.
+    _COMMS_CONTEXT = [
+        "communicat", "comms", "corporate", "internal", "employee",
+        "stakeholder", "workplace", "business writing", "professional",
+        "newsletter", "presentation", "speech", "email",
+        "pr ", "public relations", "content strategy", "messaging",
+        "team", "organization", "leadership", "executive",
+        "writer", "writing", "draft", "publish",
+    ]
+    has_comms_context = any(s in text for s in _COMMS_CONTEXT)
+    if not has_comms_context:
+        return 0
+
     # ── SCORE: How relevant is it? ─────────────────────────────────────
     # Simple: count keyword matches. Title matches worth more.
     score = title_hits * 6 + summary_hits * 2
@@ -657,6 +672,47 @@ def research_theme(
     if len(diverse_final) < len(final):
         logger.info("Source diversity cap removed %d/%d sources.", len(final) - len(diverse_final), len(final))
     final = diverse_final
+
+    # Step 5: LLM cleanup — remove obviously wrong articles from the shortlist.
+    # The keyword scoring is good but can't catch everything. A quick LLM pass
+    # on 15-25 pre-filtered articles is fast and catches the last few misfits.
+    if _api_key and final:
+        article_list = "\n".join(
+            f"[{i}] {c.title} ({c.source_domain})\n    {(c.summary or '')[:150]}"
+            for i, c in enumerate(final)
+        )
+        desc_ctx = f'\nTopic description: "{theme_description}"' if theme_description else ""
+        cleanup_prompt = (
+            f'The podcast topic is: "{theme_name}"{desc_ctx}\n\n'
+            f"This podcast helps communicators at a large company use AI in their daily work "
+            f"(presentations, speeches, emails, newsletters, digital signage).\n\n"
+            f"Review this shortlist and REMOVE any article that:\n"
+            f"- Is NOT about using AI to help with communications work\n"
+            f"- Is a product page, tool demo, or SaaS marketing\n"
+            f"- Is about a different field (marketing automation, sales, HR, engineering)\n"
+            f"- Is a generic AI tutorial not specific to professional communications\n\n"
+            f"Return JSON: {{\"keep\": [list of index numbers to KEEP]}}\n\n"
+            f"Articles:\n{article_list}"
+        )
+        try:
+            content = chat_completion(
+                api_key=_api_key, model=_smart_model,
+                messages=[
+                    {"role": "system", "content": "Output strict JSON only."},
+                    {"role": "user", "content": cleanup_prompt},
+                ],
+                project_id=project_id, organization=organization,
+                temperature=0.1,
+            )
+            data = parse_json_response(content)
+            keep_indices = data.get("keep", [])
+            if isinstance(keep_indices, list) and len(keep_indices) >= 3:
+                kept = [final[int(i)] for i in keep_indices if isinstance(i, (int, float)) and 0 <= int(i) < len(final)]
+                if len(kept) >= 3:
+                    logger.info("LLM cleanup: kept %d/%d articles.", len(kept), len(final))
+                    final = kept
+        except Exception as exc:
+            logger.warning("LLM cleanup failed: %s — keeping all.", exc)
 
     # Step 6: Fetch full text in parallel.
     with ThreadPoolExecutor(max_workers=6) as pool:
