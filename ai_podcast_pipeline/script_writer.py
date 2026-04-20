@@ -30,8 +30,8 @@ def _has_short_sentence(text: str, max_words: int = 5) -> bool:
     return any(0 < len(s.strip().split()) <= max_words for s in sentences)
 
 
-def _count_italic_emphasis(text: str) -> int:
-    return len(re.findall(r'\*[^*]+\*', text))
+def _count_fish_tags(text: str) -> int:
+    return len(re.findall(r'\[(pause|long pause|emphasis|soft)\]', text))
 
 
 def _validate_delivery_cues(narratives: list[str]) -> list[str]:
@@ -48,8 +48,8 @@ def _validate_delivery_cues(narratives: list[str]) -> list[str]:
         if not short:
             issues.append(f"Story {i}: no short sentence (≤5 words)")
     all_text = " ".join(narratives)
-    if _count_italic_emphasis(all_text) < 1:
-        issues.append("No *italicized emphasis* found in any narrative (need ≥1)")
+    if _count_fish_tags(all_text) < 1:
+        issues.append("No Fish Audio [emphasis] tags found in any narrative (need ≥1)")
     return issues
 
 
@@ -335,11 +335,17 @@ Internal audience — this is non-negotiable:
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
 - When describing what communicators at CN do, stick to: building presentations for executives, drafting speeches for leaders to deliver at town halls and events, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
 
-Fish Audio expression tags — use these for natural TTS delivery:
-- [pause] for a brief beat, [long pause] for a longer break
+Fish Audio expression tags — use these THROUGHOUT the script for natural TTS delivery:
+- [pause] for a brief beat between thoughts
+- [long pause] for weight before or after an important point
 - [emphasis] before a word or phrase you want stressed
 - [soft] for a gentler, more reflective tone
-- Use sparingly but deliberately — 3-5 tags per episode makes speech feel human, not robotic.
+- Use generously — aim for 10-15 tags per episode spread throughout the script.
+  Every paragraph should have at least 1-2 tags. These are what make the audio sound
+  human instead of robotic. Without them the TTS reads everything in the same flat tone.
+- Do NOT use *italics*, **bold**, or any other markdown formatting in the script.
+  The ONLY formatting allowed is [tag] style Fish Audio tags. No brackets for anything
+  else — [pause], [emphasis], [soft], [long pause] only.
 
 Perspective rules — this is critical:
 - When covering a story, you are the narrator summarizing an article for your listeners. Always write in third person about the article, its author, and its subject matter. Use attribution: "the author argues", "she describes", "they found", "the piece explains", "according to the report". Never slip into the article author's voice.
@@ -442,8 +448,8 @@ Self-validation (check BEFORE returning JSON):
   * Each story narrative must contain at least 2 em dashes (—). Count them.
   * Each story narrative must contain at least 1 rhetorical question (sentence ending with ?).
   * Each story narrative must contain at least 1 sentence of 5 words or fewer.
-  * The full output must contain at least 2 Fish Audio expression tags ([emphasis], [pause], [soft], [long pause]).
-  * Do NOT use *italicized emphasis* — use Fish Audio tags instead.
+  * The full output must contain at least 10 Fish Audio expression tags ([emphasis], [pause], [soft], [long pause]).
+  * Do NOT use *italics*, **bold**, or any markdown formatting — only [tag] style tags.
   * If any narrative fails these checks, rewrite it to include the missing elements before returning.
 - If any check fails, fix it before returning.
 
@@ -518,7 +524,7 @@ Each story includes a suggested_opening_approach — use it as a starting point 
                 "- Each story narrative MUST have at least 2 em dashes (—) for mid-sentence pauses\n"
                 "- Each story narrative MUST have at least 1 rhetorical question ending with ?\n"
                 "- Each story narrative MUST have at least 1 sentence of 5 words or fewer\n"
-                "- At least 1 narrative must use *italicized emphasis* on a key word\n\n"
+                "- Each narrative must include at least 2 Fish Audio [emphasis] tags\n\n"
                 "Current narratives:\n"
                 + "\n\n".join(f"Story {i+1}:\n{n}" for i, n in enumerate(narratives))
                 + "\n\nReturn JSON with key story_narratives (array of strings, same order)."
@@ -757,7 +763,7 @@ Self-validation before returning:
   * Each story section must contain at least 2 em dashes (—).
   * Each story section must contain at least 1 rhetorical question (?).
   * Each story section must contain at least 1 sentence of 5 words or fewer.
-  * The full script must contain at least 1 instance of *italicized emphasis*.
+  * The full script must contain at least 10 Fish Audio expression tags ([emphasis], [pause], [soft], [long pause]).
 - If any check fails, fix it before returning.
 
 Return JSON with a single key `script_markdown`.
@@ -890,11 +896,20 @@ Voice and tone:
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
 
 Delivery cues (MANDATORY for text-to-speech):
-- Em dashes (—) for mid-sentence pivots and asides: 1-2 per section max. For breathing room, use periods and short sentences — not more em dashes.
+- Em dashes (—) for mid-sentence pivots and asides: 1-2 per section max. Use periods and short sentences for breathing room.
 - Use commas and periods for natural pauses — don't rely only on em dashes.
 - Rhetorical questions for vocal inflection: at least 2-3 across the full script
 - Short impact sentences (5 words or fewer) after longer buildups
-- Use Fish Audio expression tags for vocal variety: [emphasis] before key words, [pause] for beats, [long pause] for weight, [soft] for reflective moments. Aim for 4-6 tags across the full script. Do NOT use *italicized emphasis* — use Fish Audio tags instead.
+
+Fish Audio expression tags — use these THROUGHOUT the script:
+- [pause] for a brief beat between thoughts
+- [long pause] for weight before or after an important point
+- [emphasis] before a word or phrase you want stressed
+- [soft] for a gentler, more reflective tone
+- Use generously — aim for 10-15 tags across the full script. Every paragraph
+  should have at least 1-2 tags. These make the audio sound human, not robotic.
+- Do NOT use *italics*, **bold**, or any other markdown formatting.
+  The ONLY formatting allowed is [tag] style Fish Audio tags.
 
 Perspective:
 - Third person when referencing articles: "the author argues", "the piece describes"
@@ -919,12 +934,6 @@ AI integration — this is critical:
 - This is a podcast about AI and communications. The AI angle should be woven throughout the episode, not isolated in one paragraph near the end.
 - When discussing a challenge (attention, access, trust, etc.), show how AI relates to it right there — don't save all AI mentions for a separate "and here's where AI fits in" section.
 - The listener should come away understanding the theme AND how AI changes their approach to it. These two threads should be braided together, not stacked.
-
-Fish Audio expression tags — use these for natural TTS delivery:
-- [pause] for a brief beat, [long pause] for a longer break
-- [emphasis] before a word or phrase you want stressed
-- [soft] for a gentler, more reflective tone
-- Use sparingly but deliberately — 3-5 tags per episode makes speech feel human, not robotic.
 
 Transitions and segment intros:
 - Vary how you introduce the try-this segment. Don't always use "So, what's the practical takeaway?" Rotate among natural transitions: "Here's something worth trying," "One thing I'd suggest," "If you want to put this into practice," or just flow directly into the technique.
@@ -991,8 +1000,8 @@ def _validate_delivery_cues_text(text: str) -> list[str]:
         issues.append(f"Only {dashes} em dashes in narrative (need ≥4)")
     if questions < 2:
         issues.append(f"Only {questions} rhetorical questions (need ≥2)")
-    if _count_italic_emphasis(text) < 2:
-        issues.append("Fewer than 2 italicized emphasis instances")
+    if _count_fish_tags(text) < 10:
+        issues.append(f"Only {_count_fish_tags(text)} Fish Audio tags (need ≥10)")
     return issues
 
 
