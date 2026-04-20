@@ -349,7 +349,7 @@ class TestLlmFilterSourcesTiered(unittest.TestCase):
             theme_name=self.THEME, candidates=candidates,
             api_key="test-key", model="gpt-4.1-mini",
         )
-        self.assertLessEqual(len(supporting), 4)
+        self.assertLessEqual(len(supporting), 8)
 
     @patch("ai_podcast_pipeline.theme_research.chat_completion")
     def test_fallback_on_exception(self, mock_chat):

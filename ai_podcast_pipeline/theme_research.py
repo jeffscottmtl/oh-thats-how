@@ -223,7 +223,7 @@ def _search_ddg(query: str, max_results: int = 8) -> list[dict]:
     """Run a single DuckDuckGo search and return raw results."""
     try:
         from ddgs import DDGS
-        return list(DDGS().text(query, max_results=max_results))
+        return list(DDGS().text(query, max_results=max_results, timeout=15))
     except Exception as exc:
         logger.warning("DuckDuckGo search failed for '%s': %s", query, exc)
         return []
@@ -255,15 +255,15 @@ def _web_search_for_theme(
         len(queries), theme_name,
     )
 
-    # Run each query in parallel.
+    # Run queries sequentially — DuckDuckGo rate-limits concurrent requests.
+    import time as _time
     all_results: list[dict] = []
-    with ThreadPoolExecutor(max_workers=min(len(queries), 6)) as pool:
-        futures = {pool.submit(_search_ddg, q, 8): q for q in queries}
-        for future in as_completed(futures):
-            try:
-                all_results.extend(future.result())
-            except Exception as exc:
-                logger.warning("Search failed: %s", exc)
+    for i, q in enumerate(queries):
+        results = _search_ddg(q, 8)
+        all_results.extend(results)
+        logger.info("  Query %d/%d: %d results", i + 1, len(queries), len(results))
+        if i < len(queries) - 1:
+            _time.sleep(0.5)  # Brief pause between requests
 
     # Convert to CandidateStory and deduplicate by URL.
     seen_urls: set[str] = set()
@@ -402,7 +402,7 @@ def _rank_sources(
 # ---------------------------------------------------------------------------
 
 
-_MAX_SUPPORTING = 4  # Cap supporting evidence articles.
+_MAX_SUPPORTING = 8  # Cap supporting evidence articles.
 
 
 def _llm_filter_sources(
@@ -444,30 +444,28 @@ CONTEXT:
 THIS EPISODE'S THEME: "{theme_name}"
 
 YOUR TASK:
-Select articles into TWO tiers:
+Select articles that could contribute to a compelling episode about "{theme_name}". Be GENEROUS — the user will review your selections and choose which to keep. It's better to include a borderline-relevant article than to miss a good one.
 
-**PRIMARY** — articles that are specifically about "{theme_name}" for communications professionals.
-These form the backbone of the episode. Be STRICT: ask yourself "Could a communicator read this and learn something specific about {theme_name}?" If the answer is no, it's not primary.
+Classify each selected article as PRIMARY or SUPPORTING:
+
+**PRIMARY** — articles that are clearly relevant to "{theme_name}" or closely adjacent topics.
+Think broadly: if the theme is about editing with AI, then articles about AI writing tools, AI proofreading, AI for content quality, AI revision workflows, and practical AI writing tips ALL qualify.
 
 A good primary source:
-- Is specifically about "{theme_name}" — not just about AI or writing in general
-- Contains insights, research, practical advice, or a real example directly tied to this theme
-- Could be synthesized into advice like "here's how {theme_name} works better when you..."
+- Covers the theme directly OR a closely related aspect of it
+- Contains practical advice, insights, examples, or research a communicator could use
+- Doesn't have to use the exact words of the theme — topical relevance is what matters
 
-**SUPPORTING** — research, data, or frameworks from authoritative sources that provide evidence
-or context that strengthens the episode, even if the article isn't specifically about "{theme_name}".
+**SUPPORTING** — research, data, surveys, or frameworks that provide evidence or context.
+These don't need to be about the theme specifically — a productivity study or trust survey
+that could strengthen a point in the episode counts.
 
-A good supporting source:
-- Contains a specific, citable data point, statistic, or research finding
-- Comes from a high-authority source (research firms, major publications, established surveys)
-- Provides evidence that makes a primary source's point stronger (e.g., a Microsoft Work Trend Index stat about employee productivity, an Edelman finding about trust in AI content)
-- Is NOT just another trade blog post restating the same ideas as the primary sources
+REJECT only articles that are:
+- Completely unrelated to the theme (e.g., an article about AI in healthcare for a writing theme)
+- Product landing pages, ads, or marketing fluff with no editorial substance
+- About unrelated products, funding, or corporate news with no useful insights
 
-REJECT articles that are:
-- About AI or writing in general but NOT relevant to "{theme_name}" even as supporting evidence
-- About unrelated products, announcements, funding, or corporate news
-- Only tangentially connected via a shared word
-- About a technology (like TTS, image generation, etc.) unless it directly helps communicators with "{theme_name}"
+Select generously — aim for {max_keep} or more articles across both tiers.
 
 Note: Gartner articles ARE allowed if relevant — they'll be flagged for the user to provide full text via login.
 
@@ -606,8 +604,11 @@ def research_theme(
 
     # Step 4: Pre-filter with keyword scoring to top ~50 (keeps LLM prompt manageable).
     pre_ranked = _rank_sources(deduped, theme_name, max_results=50)
+    logger.info("Pre-ranking: %d candidates survived from %d total.", len(pre_ranked), len(deduped))
 
     # Step 5: LLM validation — the LLM picks the actually relevant ones.
+    # Ask for MORE than we need so the user has options to choose from.
+    _llm_max_keep = max(max_sources, 12)
     if _api_key and pre_ranked:
         primary_indices, supporting_indices = _llm_filter_sources(
             theme_name=theme_name,
@@ -616,7 +617,7 @@ def research_theme(
             model=_model,
             project_id=project_id,
             organization=organization,
-            max_keep=max_sources,
+            max_keep=_llm_max_keep,
         )
         # Set source roles on candidates.
         for i in primary_indices:
