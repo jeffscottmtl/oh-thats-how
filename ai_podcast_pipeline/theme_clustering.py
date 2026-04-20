@@ -11,8 +11,8 @@ from .script_writer import _pub_name
 logger = logging.getLogger(__name__)
 
 AUDIENCE_CONTEXT = (
-    "The audience is communications professionals who write stories, build presentations, "
-    "draft speeches, create emails, and manage content like intranets and digital signage. "
+    "The audience is communications professionals who build presentations, "
+    "draft speeches, create emails and newsletters, and manage digital signage. "
     "They want to know how AI can help their daily work — not enterprise deployment strategy."
 )
 

@@ -232,15 +232,15 @@ def _build_prompt(
     # ---- system message ----
     system = (
         "You are an editorial assistant for The Signal, a podcast for communicators at CN "
-        "(a large Canadian railway company). The audience writes stories for the intranet, "
-        "builds PowerPoint presentations for executives, drafts speeches, writes emails and "
-        "newsletters, and manages digital signage content. They are NOT technologists.\n\n"
+        "(a large Canadian railway company). The audience builds PowerPoint presentations "
+        "for executives, drafts speeches, writes emails and newsletters, and manages digital "
+        "signage content. They are NOT technologists.\n\n"
         "Your job is to propose exactly 20 episode themes that would resonate with this "
         "audience. Each theme should feel immediately practical and relevant to someone who "
         "drafts, edits, presents, or publishes content for a living.\n\n"
         "LANGUAGE RULES:\n"
-        "- In the pitch, say 'here at CN' or 'at work' — NEVER 'your company', "
-        "'your organization', or 'within your company'.\n"
+        "- In the pitch, say 'at CN' or 'at work' — NEVER 'your company', "
+        "'your organization', 'within your company', or 'here at CN'.\n"
         "- Keep theme names short and action-oriented.\n\n"
         "SOURCE PREVIEW RULES:\n"
         "- source_previews must contain 2-3 headlines from the lists below that are "
@@ -252,7 +252,7 @@ def _build_prompt(
         '  "proposals": [\n'
         "    {\n"
         '      "name": "Short, punchy theme title",\n'
-        '      "pitch": "One-sentence pitch — use \'here at CN\' not \'your company\'",\n'
+        '      "pitch": "One-sentence pitch — use \'at CN\' not \'your company\'",\n'
         '      "source_previews": ["Relevant headline 1", "Relevant headline 2"],\n'
         '      "bank_id": "theme-bank-id-or-null"\n'
         "    }\n"

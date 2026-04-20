@@ -320,9 +320,18 @@ const app = {
   _formatPreviewText(text) {
     if (!text) return '<p>No text available</p>';
     const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return escaped.split(/\n\s*\n/).map(para =>
-      `<p>${para.replace(/\n/g, '<br>')}</p>`
-    ).join('');
+    // Split on double-newlines first; if none, split long text into ~sentence-based paragraphs
+    const paragraphs = escaped.split(/\n\s*\n/).filter(p => p.trim());
+    if (paragraphs.length > 1) {
+      return paragraphs.map(para => `<p>${para.replace(/\n/g, '<br>')}</p>`).join('');
+    }
+    // No paragraph breaks — break every ~3-4 sentences for readability
+    const sentences = escaped.split(/(?<=[.!?])\s+/);
+    const chunks = [];
+    for (let i = 0; i < sentences.length; i += 4) {
+      chunks.push(`<p>${sentences.slice(i, i + 4).join(' ')}</p>`);
+    }
+    return chunks.join('');
   },
 
   togglePreview(index) {

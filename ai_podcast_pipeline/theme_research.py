@@ -159,13 +159,14 @@ def _llm_generate_queries(
     """
     prompt = f"""Generate 8-10 web search queries to find diverse, high-quality articles for a podcast episode about: "{theme_name}"
 
-The podcast is for communications professionals at a large company — they write stories, build presentations, draft speeches, write emails and newsletters. They want practical AI advice, not enterprise strategy.
+The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
 Requirements for query diversity:
 - Cover DIFFERENT angles: practical how-to, research/data, adjacent concepts, trends, trust/ethics, measurement
 - At least 2 queries targeting research firms, surveys, or data reports (McKinsey, Gallup, Edelman, Microsoft Work Trend Index, Staffbase, Poppulo, etc.)
 - At least 2 queries targeting adjacent concepts related to the theme that use DIFFERENT keywords (e.g., for "AI for Internal Communications": employee engagement, digital workplace, content personalization, newsletter analytics)
 - Include 1-2 queries with "site:gartner.com" targeting the theme
+- Include 1 query with "site:reddit.com" targeting practical discussions about the theme
 - Each query should surface different sources — NO redundant keyword variations
 - Keep queries concise (5-10 words each, plus any site: prefix)
 
@@ -240,8 +241,8 @@ def _web_search_for_theme(
     # Ask the LLM to search and return structured results.
     search_prompt = (
         f"Search the web for recent, high-quality articles specifically about: \"{theme_name}\"\n\n"
-        f"The audience is communications professionals at a large company who write internal "
-        f"stories, build presentations, draft speeches, write emails, and manage content. "
+        f"The audience is communications professionals at a large company who build "
+        f"presentations, draft speeches, write emails and newsletters, and manage digital signage. "
         f"Find articles about how AI can help with \"{theme_name}\" specifically.\n\n"
         f"Use ALL of these search queries:\n"
         + "\n".join(f"- {q}" for q in queries) + "\n\n"
@@ -257,8 +258,9 @@ def _web_search_for_theme(
         f"Spread across as many different publications, blogs, and sources as possible.\n"
         f"Look beyond the first page of results. Include articles from research firms "
         f"(McKinsey, Gallup, Edelman, Deloitte), business publications (HBR, Forbes, "
-        f"Fast Company), tech press (Wired, MIT Tech Review, The Verge), and comms industry "
-        f"outlets (PR Daily, Ragan, Spin Sucks).\n"
+        f"Fast Company), tech press (Wired, MIT Tech Review, The Verge), comms industry "
+        f"outlets (PR Daily, Ragan, Spin Sucks), and community discussions (Reddit threads "
+        f"with practical insights).\n"
         f"EXCLUDE duplicate articles that appear on multiple domains.\n"
         f"Every article must be specifically relevant to \"{theme_name}\" AND to AI or "
         f"communications work — reject generic articles."
@@ -466,7 +468,7 @@ def _llm_filter_sources(
 
 CONTEXT:
 - The Signal is a short podcast (~5-6 minutes) for communications professionals at CN.
-- The audience writes stories for the intranet, builds PowerPoint presentations for executives, drafts speeches, writes emails and newsletters, and manages digital signage content.
+- The audience builds PowerPoint presentations for executives, drafts speeches, writes emails and newsletters, and manages digital signage content.
 - They are NOT technologists. They've heard of ChatGPT, they may have tried it, but they think in terms of "I have a draft due Thursday" — not models or prompts.
 - The podcast's job is to help them feel confident about AI, give them practical techniques, and keep them aware of what's changing — in that order.
 

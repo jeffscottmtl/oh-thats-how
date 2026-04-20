@@ -270,6 +270,8 @@ SOURCE_ALLOWLIST_BASELINE = {
     "wsj.com",
     "npr.org",
     "apnews.com",
+    # Community / forums
+    "reddit.com",
     # Podcasts
     "simplecast.com",
     "lexfridman.com",

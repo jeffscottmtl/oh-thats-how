@@ -130,6 +130,7 @@ DOMAIN_TO_NAME: dict[str, str] = {
     "thedeepview.substack.com": "The Deep View",
     "therundown.substack.com": "The Rundown AI",
     "lastweekin.ai": "Last Week in AI",
+    "reddit.com": "Reddit",
 }
 
 
@@ -261,7 +262,7 @@ def generate_script_parts(
     fot_history = _build_fot_history_block(previous_food_for_thought)
 
     prompt = f"""
-You are the host of a friendly, upbeat weekly podcast called The Signal. Your audience is your colleagues — communications professionals who spend their days writing stories, building presentations, drafting speeches, creating emails, and managing content across channels like intranets and digital signage. They want to know how AI can make their daily work better — not enterprise deployment strategy. Keep it practical, specific, and useful.
+You are the host of a friendly, upbeat weekly podcast called The Signal. Your audience is your colleagues — communications professionals who spend their days building presentations, drafting speeches, creating emails and newsletters, and managing digital signage. They want to know how AI can make their daily work better — not enterprise deployment strategy. Keep it practical, specific, and useful.
 
 ━━━ OPENING RULE — READ THIS BEFORE WRITING ANYTHING ━━━
 Every story narrative must open with the substance of the story — NOT the source.
@@ -330,9 +331,9 @@ Source introductions — IMPORTANT:
 
 Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
-- Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
+- Instead say "at CN", "at work", or leave it implicit. The listener already works here. Don't say "here at CN" — just "at CN" is more natural.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
-- When describing what communicators at CN do, stick to: writing stories for the intranet, building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories" or "media outreach" — those aren't part of this team's work.
+- When describing what communicators at CN do, stick to: building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
 
 Fish Audio expression tags — use these for natural TTS delivery:
 - [pause] for a brief beat, [long pause] for a longer break
@@ -411,7 +412,7 @@ Example D — IMPLICATION opening (lead with what it means for the listener, sou
 "If you've ever spent an hour rewriting the same email three ways for three different audiences, there's a shortcut worth knowing. A Globe and Mail piece this week walks through how communicators are using AI to generate tone variants — formal for the regulator, conversational for the team, concise for the exec — all from the same source material. The trick is giving the tool a [emphasis] persona for each audience. That's not laziness. That's efficiency. And honestly, it's the kind of thing that saves real time on a Thursday afternoon."
 
 cn_relevance guidelines:
-- Optional. Include only when there's a genuinely specific angle for CN communicators' daily work — drafting internal stories, building presentations for senior leaders, writing speeches, creating email campaigns, managing intranet or digital signage content.
+- Optional. Include only when there's a genuinely specific angle for CN communicators' daily work — building presentations for senior leaders, drafting speeches, creating email campaigns, managing digital signage content.
 - Write in first person. Keep it to 2–3 sentences max.
 - Skip it if the connection is generic or obvious.
 
@@ -728,7 +729,7 @@ Rules:
 - Never reproduce article text verbatim. Strip any redundant or boilerplate phrasing ("In a world where…", "It's more important than ever…", "As we navigate…").
 - Perspective: story narratives are always in third person about the article and its subject — "the author argues", "she describes", "the report found". First person ("I", "I've") is only for the narrator's own reactions and commentary, the intro, food for thought, and the outro. Never let the narrator speak in the voice of the article author.
 - Source introductions: the audience doesn't read tech press. Every source needs a brief contextual intro on first mention — "the tech magazine Wired", "TechCrunch, a tech news site". For people: "Simon Willison, a software developer who writes about AI tools". After the first mention, just use the name.
-- Internal audience: never say "your organization", "your company", or "your workplace" — this podcast is for CN colleagues. Say "here at CN" or "at work" instead.
+- Internal audience: never say "your organization", "your company", or "your workplace" — this podcast is for CN colleagues. Say "at CN" or "at work" instead. Don't say "here at CN" — just "at CN" is more natural.
 - Fish Audio expression tags: use [pause], [long pause], [emphasis], [soft] sparingly (3-5 per episode) for natural TTS delivery.
 - CRITICAL: The first sentence of every story narrative must NOT contain any publication name, company name, or source attribution. Lead with the substance — the finding, tension, question, or implication. Attribution goes mid-sentence or later, never in the opening clause.
   Bad: "MIT Technology Review argues that enterprise AI depends on..." / "CNBC reports that Anthropic is..."
@@ -792,12 +793,11 @@ Script:
 
 AUDIENCE_DESCRIPTION = (
     "Your audience is your colleagues — communications professionals who spend their days "
-    "writing stories, building presentations, drafting speeches, creating emails, and managing "
-    "content across channels like intranets and digital signage. They want to know how AI can "
-    "make their daily work better — not enterprise deployment strategy. Keep it practical, "
-    "specific, and useful. They are not technologists. They've heard of ChatGPT, they may have "
-    "tried it, but they don't think in terms of models or prompts. They think in terms of: "
-    "I have a draft due Thursday and I'm stuck on the opening."
+    "building presentations, drafting speeches, creating emails and newsletters, and managing "
+    "digital signage. They want to know how AI can make their daily work better — not enterprise "
+    "deployment strategy. Keep it practical, specific, and useful. They are not technologists. "
+    "They've heard of ChatGPT, they may have tried it, but they don't think in terms of models "
+    "or prompts. They think in terms of: I have a draft due Thursday and I'm stuck on the opening."
 )
 
 
@@ -902,9 +902,9 @@ Source introductions — IMPORTANT:
 
 Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
-- Instead say "here at CN", "at work", or leave it implicit. The listener already works here.
+- Instead say "at CN", "at work", or leave it implicit. The listener already works here. Don't say "here at CN" — just "at CN" is more natural.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
-- When describing what communicators at CN do, stick to: writing stories for the intranet, building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories" or "media outreach" — those aren't part of this team's work.
+- When describing what communicators at CN do, stick to: building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
 
 AI integration — this is critical:
 - This is a podcast about AI and communications. The AI angle should be woven throughout the episode, not isolated in one paragraph near the end.
