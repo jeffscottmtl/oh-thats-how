@@ -582,12 +582,18 @@ def research_theme(
     # Step 1b: Gather RSS pool (catches recent posts from known feeds).
     rss_candidates = _gather_rss_candidates(on_feed_done=on_feed_done)
 
-    # Step 2: Merge all sources — web search + RSS + any externally provided.
-    all_candidates: list[CandidateStory] = list(web_search_results) + list(rss_candidates)
+    # Step 2: Pre-rank RSS candidates (keyword scoring to cut 1200 → ~30).
+    # Web search results SKIP pre-ranking — they were already found by
+    # relevant queries and should go straight to LLM evaluation.
+    rss_ranked = _rank_sources(rss_candidates, theme_name, max_results=30)
+    logger.info("RSS pre-ranking: %d survived from %d.", len(rss_ranked), len(rss_candidates))
+
+    # Step 3: Merge web search + ranked RSS + any externally provided.
+    all_candidates: list[CandidateStory] = list(web_search_results) + list(rss_ranked)
     if web_results:
         all_candidates.extend(web_results)
 
-    # Step 3: Deduplicate by URL AND by title (catches same article across subdomains).
+    # Step 4: Deduplicate by URL AND by title.
     seen_urls: set[str] = set()
     seen_titles: set[str] = set()
     deduped: list[CandidateStory] = []
@@ -601,18 +607,15 @@ def research_theme(
         if title_key:
             seen_titles.add(title_key)
         deduped.append(candidate)
-
-    # Step 4: Pre-filter with keyword scoring to top ~50 (keeps LLM prompt manageable).
-    pre_ranked = _rank_sources(deduped, theme_name, max_results=50)
-    logger.info("Pre-ranking: %d candidates survived from %d total.", len(pre_ranked), len(deduped))
+    logger.info("After dedup: %d candidates for LLM evaluation.", len(deduped))
 
     # Step 5: LLM validation — the LLM picks the actually relevant ones.
     # Ask for MORE than we need so the user has options to choose from.
-    _llm_max_keep = max(max_sources, 12)
-    if _api_key and pre_ranked:
+    _llm_max_keep = max(max_sources, 15)
+    if _api_key and deduped:
         primary_indices, supporting_indices = _llm_filter_sources(
             theme_name=theme_name,
-            candidates=pre_ranked,
+            candidates=deduped,
             api_key=_api_key,
             model=_model,
             project_id=project_id,
@@ -621,12 +624,12 @@ def research_theme(
         )
         # Set source roles on candidates.
         for i in primary_indices:
-            pre_ranked[i].source_role = "primary"
+            deduped[i].source_role = "primary"
         for i in supporting_indices:
-            pre_ranked[i].source_role = "supporting"
-        final = [pre_ranked[i] for i in primary_indices] + [pre_ranked[i] for i in supporting_indices]
+            deduped[i].source_role = "supporting"
+        final = [deduped[i] for i in primary_indices] + [deduped[i] for i in supporting_indices]
     else:
-        final = pre_ranked[:max_sources]
+        final = deduped[:max_sources]
 
     # Step 5b: Enforce per-domain diversity — max 3 results from any single domain.
     _MAX_PER_DOMAIN = 3
