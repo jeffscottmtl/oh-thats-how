@@ -163,11 +163,11 @@ def _llm_generate_queries(
 {desc_line}
 The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
-Requirements for query diversity:
+Requirements:
+- EVERY query MUST include the word "AI" or "ChatGPT" — this is an AI podcast, generic results are useless
 - Cover DIFFERENT angles: practical how-to, real examples, adjacent concepts, trends, tips
-- At least 2 queries targeting adjacent concepts related to the theme that use DIFFERENT keywords (e.g., for "AI for Internal Communications": employee engagement, digital workplace, content personalization, newsletter analytics)
-- 1 query with "site:reddit.com" targeting practical discussions about the theme
-- Do NOT name specific companies or research firms in queries — let the search engine find the best sources naturally
+- At least 2 queries targeting adjacent concepts that use DIFFERENT keywords
+- 1 query with "site:reddit.com" targeting practical discussions
 - Each query should surface different sources — NO redundant keyword variations
 - Keep queries concise (5-10 words each, plus any site: prefix)
 
@@ -251,6 +251,14 @@ def _web_search_for_theme(
         project_id=project_id, organization=organization,
     )
 
+    # Ensure every query includes "AI" — this is an AI podcast.
+    fixed_queries = []
+    for q in queries:
+        if "ai" not in q.lower() and "chatgpt" not in q.lower() and "gpt" not in q.lower():
+            q = f"AI {q}"
+        fixed_queries.append(q)
+    queries = fixed_queries
+
     logger.info(
         "Running %d web searches for theme '%s'.",
         len(queries), theme_name,
@@ -260,7 +268,7 @@ def _web_search_for_theme(
     import time as _time
     all_results: list[dict] = []
     for i, q in enumerate(queries):
-        results = _search_ddg(q, 8)
+        results = _search_ddg(q, 10)  # 10 results per query for more coverage
         all_results.extend(results)
         logger.info("  Query %d/%d: %d results", i + 1, len(queries), len(results))
         if i < len(queries) - 1:
