@@ -168,7 +168,7 @@ def _llm_generate_queries(
     desc_line = f'\nTheme description: "{theme_description}"\n' if theme_description else ""
     prompt = f"""Generate 8-10 web search queries to find diverse, high-quality articles for a podcast episode about: "{theme_name}"
 {desc_line}
-The podcast is for communications professionals at a large company — they build presentations, draft speeches, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
+The podcast is for communications professionals at a large company — they build presentations for executives, draft speeches for leaders to deliver at town halls and events, write emails and newsletters, and manage digital signage. They want practical AI advice, not enterprise strategy.
 
 Requirements:
 - EVERY query MUST include an AI term (AI, ChatGPT, Claude, Copilot, Gemini, generative, LLM) — this is an AI podcast, generic results are useless
@@ -543,6 +543,20 @@ def _score_candidate(
     ]
     if any(s in text for s in _product_killers):
         return 0  # hard reject, not just penalty
+
+    # Kill known product/vendor blog domains.
+    _PRODUCT_DOMAINS = {
+        "rewritepal.com", "jasper.ai", "writesonic.com", "copy.ai",
+        "rytr.me", "anyword.com", "contentbot.ai", "peppertype.ai",
+        "wordtune.com", "quillbot.com", "hyperwriteai.com", "writerly.ai",
+        "jenova.ai", "slidexy.ai", "slidesmith.ai", "gamma.app",
+        "presentations.ai", "voxdeck.ai", "lovart.ai", "slidesai.io",
+        "dreamleap.com", "theee.ai", "editgpt.app", "clevertype.co",
+        "robotwritersai.com", "spreadbot.ai", "turboagents.ai",
+        "reelmind.ai", "pressmaster.ai", "nutshell.com",
+    }
+    if candidate.source_domain.lower() in _PRODUCT_DOMAINS:
+        return 0
 
     # Bonus for editorial content signals.
     editorial_signals = ["how to", "tips", "guide", "strategy", "best practices",

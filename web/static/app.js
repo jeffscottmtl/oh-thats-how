@@ -165,8 +165,8 @@ const app = {
       $main().innerHTML = `
         ${this.renderSteps(0)}
         <div class="step-header">
-          <h1>Pick a Theme</h1>
-          <p>Choose a theme or type your own topic.</p>
+          <h1>Pick a Topic</h1>
+          <p>Choose a topic or type your own.</p>
         </div>
         ${html}
         <input class="theme-input" id="custom-theme" placeholder="Or type your own topic here..." onkeydown="if(event.key==='Enter')app.selectCustomTheme()">
@@ -206,8 +206,8 @@ const app = {
     $main().innerHTML = `
       ${this.renderSteps(0)}
       <div class="step-header">
-        <h1>Pick a Theme</h1>
-        <p>Choose a theme, or type your own topic below.</p>
+        <h1>Pick a Topic</h1>
+        <p>Choose a topic, or type your own below.</p>
       </div>
       <div class="card-grid">${cards}</div>
       <input class="theme-input" id="custom-theme" placeholder="Or type your own topic here..." onkeydown="if(event.key==='Enter')app.selectCustomTheme()">
@@ -542,7 +542,7 @@ const app = {
       <div class="summary-grid">
         <div class="summary-item"><div class="label">Words</div><div class="value">${this.state.wordCount || '—'}</div></div>
         <div class="summary-item"><div class="label">Sources</div><div class="value">${this.state.sources.filter(s => s.included).length}</div></div>
-        <div class="summary-item"><div class="label">Theme</div><div class="value" style="font-size:14px">${this.state.selectedTheme}</div></div>
+        <div class="summary-item"><div class="label">Topic</div><div class="value" style="font-size:14px">${this.state.selectedTheme}</div></div>
         <div class="summary-item"><div class="label">Audio</div><div class="value">${this.state.audioUrl ? 'Yes' : 'Skipped'}</div></div>
       </div>
       ${audioHtml}
@@ -701,7 +701,7 @@ const app = {
   // ── Theme Bank ──────────────────────────────────────────────────────
 
   async showThemeBank() {
-    $main().innerHTML = `<div class="loading-msg"><div class="spinner"></div> Loading theme bank...</div>`;
+    $main().innerHTML = `<div class="loading-msg"><div class="spinner"></div> Loading topics...</div>`;
     try {
       const res = await fetch("/api/theme-bank");
       const themes = await res.json();
@@ -737,16 +737,16 @@ const app = {
 
     $main().innerHTML = `
       <div class="step-header">
-        <h1>Theme Bank</h1>
-        <p>${themes.length} themes. Click Edit to modify, or add a new one below.</p>
+        <h1>Edit Topics</h1>
+        <p>${themes.length} topics. Click Edit to modify, or add a new one below.</p>
       </div>
       ${rows}
       <div class="source-card" style="border-style:dashed;">
-        <h4 style="margin-bottom:8px;">Add New Theme</h4>
-        <input id="new-theme-name" class="theme-input" placeholder="Theme name" style="margin-top:0; margin-bottom:8px;">
-        <input id="new-theme-desc" class="theme-input" placeholder="Description — one sentence about what this theme covers" style="margin-top:0; margin-bottom:8px;">
+        <h4 style="margin-bottom:8px;">Add New Topic</h4>
+        <input id="new-theme-name" class="theme-input" placeholder="Topic name" style="margin-top:0; margin-bottom:8px;">
+        <input id="new-theme-desc" class="theme-input" placeholder="Description — one sentence about what this topic covers" style="margin-top:0; margin-bottom:8px;">
         <input id="new-theme-tags" class="theme-input" placeholder="Tags (comma-separated)" style="margin-top:0; margin-bottom:8px;">
-        <button class="btn btn-sm btn-primary" onclick="app.addTheme()">Add Theme</button>
+        <button class="btn btn-sm btn-primary" onclick="app.addTheme()">Add Topic</button>
       </div>
     `;
   },
@@ -754,7 +754,7 @@ const app = {
   async editTheme(themeId) {
     const theme = (this._themeBank || []).find(t => t.id === themeId);
     if (!theme) return;
-    const name = prompt("Theme name:", theme.name);
+    const name = prompt("Topic name:", theme.name);
     if (name === null) return;
     const desc = prompt("Description:", theme.description);
     if (desc === null) return;
@@ -774,7 +774,7 @@ const app = {
   },
 
   async deleteTheme(themeId) {
-    if (!confirm("Delete this theme from the bank?")) return;
+    if (!confirm("Delete this topic?")) return;
     try {
       await fetch(`/api/theme-bank/${encodeURIComponent(themeId)}`, { method: "DELETE" });
       this.showThemeBank();
@@ -787,7 +787,7 @@ const app = {
     const name = (document.getElementById("new-theme-name")?.value || "").trim();
     const desc = (document.getElementById("new-theme-desc")?.value || "").trim();
     const tagsStr = (document.getElementById("new-theme-tags")?.value || "").trim();
-    if (!name) { alert("Theme name is required."); return; }
+    if (!name) { alert("Topic name is required."); return; }
     const tags = tagsStr ? tagsStr.split(",").map(t => t.trim()).filter(Boolean) : [];
     try {
       const res = await fetch("/api/theme-bank", {

@@ -262,7 +262,7 @@ def generate_script_parts(
     fot_history = _build_fot_history_block(previous_food_for_thought)
 
     prompt = f"""
-You are the host of a friendly, upbeat weekly podcast called The Signal. Your audience is your colleagues — communications professionals who spend their days building presentations, drafting speeches, creating emails and newsletters, and managing digital signage. They want to know how AI can make their daily work better — not enterprise deployment strategy. Keep it practical, specific, and useful.
+You are the host of a friendly, upbeat weekly podcast called The Signal. Your audience is your colleagues — communications professionals who spend their days building presentations for executives, drafting speeches for leaders to deliver at town halls and events, writing emails and newsletters, and managing digital signage. They want to know how AI can make their daily work better — not enterprise deployment strategy. Keep it practical, specific, and useful.
 
 ━━━ OPENING RULE — READ THIS BEFORE WRITING ANYTHING ━━━
 Every story narrative must open with the substance of the story — NOT the source.
@@ -333,7 +333,7 @@ Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
 - Instead say "at CN", "at work", or leave it implicit. The listener already works here. Don't say "here at CN" — just "at CN" is more natural.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
-- When describing what communicators at CN do, stick to: building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
+- When describing what communicators at CN do, stick to: building presentations for executives, drafting speeches for leaders to deliver at town halls and events, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
 
 Fish Audio expression tags — use these for natural TTS delivery:
 - [pause] for a brief beat, [long pause] for a longer break
@@ -412,7 +412,7 @@ Example D — IMPLICATION opening (lead with what it means for the listener, sou
 "If you've ever spent an hour rewriting the same email three ways for three different audiences, there's a shortcut worth knowing. A Globe and Mail piece this week walks through how communicators are using AI to generate tone variants — formal for the regulator, conversational for the team, concise for the exec — all from the same source material. The trick is giving the tool a [emphasis] persona for each audience. That's not laziness. That's efficiency. And honestly, it's the kind of thing that saves real time on a Thursday afternoon."
 
 cn_relevance guidelines:
-- Optional. Include only when there's a genuinely specific angle for CN communicators' daily work — building presentations for senior leaders, drafting speeches, creating email campaigns, managing digital signage content.
+- Optional. Include only when there's a genuinely specific angle for CN communicators' daily work — building presentations for executives, drafting speeches for leaders to deliver, writing email campaigns and newsletters, managing digital signage content.
 - Write in first person. Keep it to 2–3 sentences max.
 - Skip it if the connection is generic or obvious.
 
@@ -793,11 +793,12 @@ Script:
 
 AUDIENCE_DESCRIPTION = (
     "Your audience is your colleagues — communications professionals who spend their days "
-    "building presentations, drafting speeches, creating emails and newsletters, and managing "
-    "digital signage. They want to know how AI can make their daily work better — not enterprise "
-    "deployment strategy. Keep it practical, specific, and useful. They are not technologists. "
-    "They've heard of ChatGPT, they may have tried it, but they don't think in terms of models "
-    "or prompts. They think in terms of: I have a draft due Thursday and I'm stuck on the opening."
+    "building presentations for executives, drafting speeches for leaders to deliver at town halls "
+    "and events, writing emails and newsletters, and managing digital signage. They want to know "
+    "how AI can make their daily work better — not enterprise deployment strategy. Keep it "
+    "practical, specific, and useful. They are not technologists. They've heard of ChatGPT, they "
+    "may have tried it, but they don't think in terms of models or prompts. They think in terms "
+    "of: I have a draft due Thursday and I'm stuck on the opening."
 )
 
 
@@ -855,9 +856,9 @@ def generate_theme_script(
 
 {AUDIENCE_DESCRIPTION}
 
-This episode's theme: "{theme_name}"
+This episode's topic: "{theme_name}"
 
-Write ONE cohesive podcast script about this theme. Do NOT summarize articles one by one.
+Write ONE cohesive podcast script about this topic. Do NOT summarize articles one by one.
 Weave insights from the articles into a single flowing narrative.
 
 SOURCE ROLES:
@@ -868,10 +869,17 @@ SOURCE ROLES:
 {prev_eps_block}
 
 Episode structure (follow this order):
-1. THEME INTRO — state the theme in plain terms, why it caught your attention
+1. THEME INTRO — state the topic in plain terms, why it caught your attention. Do NOT include a "Welcome to The Signal" greeting — that's added automatically. Jump straight into the topic.
 2. WHY IT MATTERS — connect it directly to the audience's daily work (writing, editing, presenting, emailing)
-3. 2-3 ANGLES — each illuminating a different facet of the theme, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
+3. 2-3 ANGLES — each illuminating a different facet of the topic, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
 4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps. This is the closing segment before the outro.
+
+PARAGRAPH VARIETY — this is critical for natural speech:
+- Do NOT follow the same structure in consecutive paragraphs.
+- Bad pattern: "Source X says... [details]. Source Y adds... [details]. Source Z points out... [details]."
+- Each angle should open differently: one might start with a question, another with a surprising fact, another with a practical scenario.
+- Weave source attributions naturally — mid-sentence, parenthetical, or at the end. Never open consecutive paragraphs with a source name.
+- Vary sentence length and rhythm between sections. If one angle is explanation-heavy, make the next one punchy and practical.
 
 Voice and tone:
 - Conversational, warm, plain language. You're a colleague sharing something useful, not a news anchor.
@@ -882,7 +890,8 @@ Voice and tone:
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
 
 Delivery cues (MANDATORY for text-to-speech):
-- Em dashes (—) for mid-sentence pivots and pauses: 2-3 across the full script (no more — overuse feels breathless)
+- Em dashes (—) for mid-sentence pivots and asides: 1-2 per section max. For breathing room, use periods and short sentences — not more em dashes.
+- Use commas and periods for natural pauses — don't rely only on em dashes.
 - Rhetorical questions for vocal inflection: at least 2-3 across the full script
 - Short impact sentences (5 words or fewer) after longer buildups
 - Use Fish Audio expression tags for vocal variety: [emphasis] before key words, [pause] for beats, [long pause] for weight, [soft] for reflective moments. Aim for 4-6 tags across the full script. Do NOT use *italicized emphasis* — use Fish Audio tags instead.
@@ -904,7 +913,7 @@ Internal audience — this is non-negotiable:
 - This podcast is for colleagues at CN. Never say "your organization", "your company", or "your workplace."
 - Instead say "at CN", "at work", or leave it implicit. The listener already works here. Don't say "here at CN" — just "at CN" is more natural.
 - The narrator is a communicator too — use "we" and "us" naturally. Say "nobody wants to write the message people delete" not "nobody wants to be the message people delete." The narrator writes emails, they aren't emails.
-- When describing what communicators at CN do, stick to: building presentations, drafting speeches, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
+- When describing what communicators at CN do, stick to: building presentations for executives, drafting speeches for leaders to deliver at town halls and events, writing emails and newsletters, managing digital signage. Do NOT invent tasks like "pitching stories", "media outreach", or "writing for the intranet" — those aren't part of this team's current work.
 
 AI integration — this is critical:
 - This is a podcast about AI and communications. The AI angle should be woven throughout the episode, not isolated in one paragraph near the end.

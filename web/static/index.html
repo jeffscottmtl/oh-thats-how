@@ -13,7 +13,6 @@
       <div class="logo-sub">AI Podcast for Communicators</div>
       <div id="app-version" style="font-size:10px; color:var(--text-dim); margin-bottom:8px;"></div>
       <button class="btn btn-primary" style="width:100%; margin-bottom: 16px;" onclick="app.newEpisode()">+ New Episode</button>
-      <button class="btn btn-secondary" style="width:100%; margin-bottom: 16px; font-size:12px;" onclick="app.showThemeBank()">Theme Bank</button>
       <input class="sidebar-search" id="ep-search" placeholder="Search episodes..." oninput="app.filterEpisodes()">
       <div class="filter-bar" id="filter-bar">
         <button class="filter-btn active" data-filter="all" onclick="app.setFilter('all')">All</button>
@@ -28,6 +27,7 @@
         <h1>The Signal</h1>
         <p>Create podcast episodes for communicators at CN.</p>
         <button class="btn btn-primary" onclick="app.newEpisode()">+ New Episode</button>
+        <button class="btn btn-secondary" style="margin-top:8px" onclick="app.showThemeBank()">Edit Topics</button>
       </div>
     </main>
   </div>

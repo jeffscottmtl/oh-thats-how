@@ -231,8 +231,9 @@ def _build_prompt(
     system = (
         "You are an editorial assistant for The Signal, a podcast for communicators at CN "
         "(a large Canadian railway company). The audience builds PowerPoint presentations "
-        "for executives, drafts speeches, writes emails and newsletters, and manages digital "
-        "signage content. They are NOT technologists.\n\n"
+        "for executives, drafts speeches for leaders to deliver at town halls and events, "
+        "writes emails and newsletters, and manages digital signage content. "
+        "They are NOT technologists.\n\n"
         "Your job is to propose exactly 20 episode themes that would resonate with this "
         "audience. Each theme should feel immediately practical and relevant to someone who "
         "drafts, edits, presents, or publishes content for a living.\n\n"
