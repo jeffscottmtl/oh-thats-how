@@ -691,52 +691,73 @@ def research_theme(
         deduped.append(candidate)
     logger.info("After dedup: %d candidates for scoring.", len(deduped))
 
-    # Step 3: Elaborate topic into specific phrases for filtering.
-    topic_phrases = _elaborate_topic(
-        theme_name, theme_description,
-        api_key=_api_key, model=_smart_model,
-        project_id=project_id, organization=organization,
-    )
-    logger.info("Topic phrases: %s", topic_phrases[:8])
+    # Step 3: LLM selects relevant articles from search results.
+    # No keyword gates, no phrase matching — the LLM reads each title+summary
+    # and decides if it's relevant to THIS SPECIFIC topic. That's what LLMs
+    # are good at: understanding intent, not pattern matching.
+    if _api_key and deduped:
+        article_list = "\n".join(
+            f"[{i}] {c.title} ({c.source_domain})\n    {(c.summary or '')[:200]}"
+            for i, c in enumerate(deduped)
+        )
+        desc_ctx = f'\nTopic description: "{theme_description}"' if theme_description else ""
+        select_prompt = (
+            f'You are selecting articles for a podcast episode.\n\n'
+            f'TOPIC: "{theme_name}"{desc_ctx}\n\n'
+            f'AUDIENCE: Communications professionals at a large company who build '
+            f'presentations for executives, draft speeches for town halls, write emails '
+            f'and newsletters, and manage digital signage.\n\n'
+            f'GOAL: Find articles that help these communicators use AI for THIS SPECIFIC '
+            f'topic — not AI for communications in general.\n\n'
+            f'For each article, ask: "Is this PRIMARILY about {theme_name}? Would it '
+            f'teach a communicator something specific and practical about this topic?"\n\n'
+            f'REJECT:\n'
+            f'- Generic "AI for internal comms" articles that mention the topic in passing\n'
+            f'- Product pages, tool homepages, SaaS marketing\n'
+            f'- Articles about marketing automation, sales, HR, or other fields\n'
+            f'- Generic AI tutorials or prompt guides not specific to this topic\n\n'
+            f'KEEP 8-15 articles. Score each 1-10 for how useful it would be for the episode.\n\n'
+            f'Return JSON: {{"selected": [{{"index": N, "score": 1-10}}, ...]}}\n'
+            f'Sort by score descending.\n\n'
+            f'Articles:\n{article_list}'
+        )
+        try:
+            content = chat_completion(
+                api_key=_api_key, model=_smart_model,
+                messages=[
+                    {"role": "system", "content": "Output strict JSON only."},
+                    {"role": "user", "content": select_prompt},
+                ],
+                project_id=project_id, organization=organization,
+                temperature=0.1,
+            )
+            data = parse_json_response(content)
+            selected = data.get("selected", [])
+            if isinstance(selected, list) and len(selected) >= 3:
+                final = []
+                for item in selected:
+                    if isinstance(item, dict):
+                        idx = item.get("index")
+                        score = item.get("score", 5)
+                    elif isinstance(item, (int, float)):
+                        idx, score = int(item), 5
+                    else:
+                        continue
+                    if isinstance(idx, (int, float)) and 0 <= int(idx) < len(deduped):
+                        c = deduped[int(idx)]
+                        c.relevance_score = int(score)
+                        final.append(c)
+                logger.info("LLM selected %d articles for '%s'.", len(final), theme_name)
+            else:
+                logger.warning("LLM selection returned too few — using all with Tavily ranking.")
+                final = sorted(deduped, key=lambda c: c.relevance_score, reverse=True)[:25]
+        except Exception as exc:
+            logger.warning("LLM selection failed: %s — using Tavily ranking.", exc)
+            final = sorted(deduped, key=lambda c: c.relevance_score, reverse=True)[:25]
+    else:
+        final = sorted(deduped, key=lambda c: c.relevance_score, reverse=True)[:25]
 
-    # Step 4: Minimal gate (AI mention + not a product page) + Tavily ranking.
-    # Tavily's semantic search already found relevant articles. The LLM cleanup
-    # (step 5) handles topic specificity. Don't over-filter here.
-    scored = []
-    for c in deduped:
-        text = f"{c.title} {c.summary}".lower()
-        # Must mention AI
-        has_ai = any(re.search(rf"\b{re.escape(s)}\b", text) for s in _AI_SIGNALS)
-        if not has_ai:
-            continue
-        # Not a product page
-        _product_signals = [
-            "free online", "no sign-up", "sign up free", "try for free",
-            "start free", "pricing", "free trial", "free ai", "no login",
-            "get started", "try it now", "sign up", "create account",
-        ]
-        if any(s in text for s in _product_signals):
-            continue
-        scored.append((c, c.relevance_score))
-    scored.sort(key=lambda x: x[1], reverse=True)
-
-    # Normalize Tavily scores to 1-10 using actual range.
-    if scored:
-        raw_scores = [s for _, s in scored]
-        lo, hi = min(raw_scores), max(raw_scores)
-        spread = hi - lo if hi > lo else 1.0
-        for c, _ in scored:
-            c.relevance_score = max(1, min(10, round(1 + 9 * (c.relevance_score - lo) / spread)))
-
-    # Take top results.
-    _MAX_RESULTS = 25
-    final = [c for c, _ in scored[:_MAX_RESULTS]]
-    logger.info(
-        "Keyword scoring: %d passed AI gate from %d, showing top %d.",
-        len(scored), len(deduped), len(final),
-    )
-
-    # Step 4b: Enforce per-domain diversity — max 3 results from any single domain.
+    # Enforce per-domain diversity — max 3 results from any single domain.
     _MAX_PER_DOMAIN = 3
     domain_counts: dict[str, int] = {}
     diverse_final: list[CandidateStory] = []
@@ -747,54 +768,8 @@ def research_theme(
             diverse_final.append(c)
             domain_counts[domain] = count + 1
     if len(diverse_final) < len(final):
-        logger.info("Source diversity cap removed %d/%d sources.", len(final) - len(diverse_final), len(final))
+        logger.info("Domain cap removed %d/%d.", len(final) - len(diverse_final), len(final))
     final = diverse_final
-
-    # Step 5: LLM cleanup — remove obviously wrong articles from the shortlist.
-    # The keyword scoring is good but can't catch everything. A quick LLM pass
-    # on 15-25 pre-filtered articles is fast and catches the last few misfits.
-    if _api_key and final:
-        article_list = "\n".join(
-            f"[{i}] {c.title} ({c.source_domain})\n    {(c.summary or '')[:150]}"
-            for i, c in enumerate(final)
-        )
-        desc_ctx = f'\nTopic description: "{theme_description}"' if theme_description else ""
-        phrases_hint = "\n".join(f"  - {p}" for p in topic_phrases[:8]) if topic_phrases else ""
-        cleanup_prompt = (
-            f'This episode\'s SPECIFIC topic is: "{theme_name}"{desc_ctx}\n\n'
-            f"The podcast helps communicators at a large company use AI in their daily work.\n\n"
-            f"An article is on-topic if it discusses things like:\n{phrases_hint}\n\n"
-            f"KEEP articles that are specifically about THIS TOPIC.\n"
-            f"An article about AI for communications in GENERAL is NOT enough.\n"
-            f"It must address the specific subject above.\n\n"
-            f"REMOVE:\n"
-            f"- Generic \"AI for internal comms\" or \"AI tools for communicators\" articles that don't address this specific topic\n"
-            f"- Product pages, tool demos, SaaS marketing\n"
-            f"- Articles about different fields (marketing automation, sales, HR)\n"
-            f"- Generic AI tutorials\n\n"
-            f"Be aggressive — it's better to keep 5 great articles than 15 mediocre ones.\n\n"
-            f"Return JSON: {{\"keep\": [list of index numbers to KEEP]}}\n\n"
-            f"Articles:\n{article_list}"
-        )
-        try:
-            content = chat_completion(
-                api_key=_api_key, model=_smart_model,
-                messages=[
-                    {"role": "system", "content": "Output strict JSON only."},
-                    {"role": "user", "content": cleanup_prompt},
-                ],
-                project_id=project_id, organization=organization,
-                temperature=0.1,
-            )
-            data = parse_json_response(content)
-            keep_indices = data.get("keep", [])
-            if isinstance(keep_indices, list) and len(keep_indices) >= 3:
-                kept = [final[int(i)] for i in keep_indices if isinstance(i, (int, float)) and 0 <= int(i) < len(final)]
-                if len(kept) >= 3:
-                    logger.info("LLM cleanup: kept %d/%d articles.", len(kept), len(final))
-                    final = kept
-        except Exception as exc:
-            logger.warning("LLM cleanup failed: %s — keeping all.", exc)
 
     # Step 6: Fetch full text via Tavily extract (handles JS pages, returns markdown).
     # Falls back to basic HTML fetch if Tavily extract fails.
