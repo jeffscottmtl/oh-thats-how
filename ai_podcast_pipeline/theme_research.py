@@ -557,7 +557,9 @@ def _score_candidate(
         "newsletter", "presentation", "speech", "email",
         "pr ", "public relations", "content strategy", "messaging",
         "team", "organization", "leadership", "executive",
-        "writer", "writing", "draft", "publish",
+        "writer", "writing", "draft", "publish", "editing", "editor",
+        "proofread", "revision", "copywriting", "content creation",
+        "brainstorm", "headline", "storytelling", "brief",
     ]
     has_comms_context = any(s in text for s in _COMMS_CONTEXT)
     if not has_comms_context:
@@ -601,7 +603,7 @@ def research_theme(
     # Resolve API credentials from args or environment.
     _api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
     _model = model or os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
-    _smart_model = os.environ.get("OPENAI_SMART_MODEL", "gpt-4.1")
+    _smart_model = os.environ.get("OPENAI_SMART_MODEL", "gpt-5.4")
 
     # Step 1: Web search (primary discovery).
     web_search_results = []
