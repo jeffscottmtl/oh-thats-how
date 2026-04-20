@@ -486,9 +486,7 @@ def _score_candidate(
     summary = (candidate.summary or "").lower()
     text = f"{title} {summary}"
 
-    # Gate: must mention AI somewhere (word-boundary match to avoid false positives like "trails").
-    if not any(re.search(rf"\b{re.escape(signal)}\b", text) for signal in _AI_SIGNALS):
-        return 0
+    has_ai = any(re.search(rf"\b{re.escape(signal)}\b", text) for signal in _AI_SIGNALS)
 
     score = 0
 
@@ -500,11 +498,21 @@ def _score_candidate(
     summary_hits = sum(1 for kw in theme_keywords if kw in summary)
     score += min(summary_hits * 2, 20)
 
-    # Penalize product pages / tool homepages.
-    product_signals = ["free online", "no sign-up", "no signup", "sign up free",
-                       "try for free", "start free", "pricing", "free trial"]
-    if any(s in text for s in product_signals):
-        score -= 15
+    # AI bonus — articles that mention AI score higher.
+    if has_ai:
+        score += 10
+
+    # Kill product pages / tool homepages aggressively.
+    _product_killers = [
+        "free online", "no sign-up", "no signup", "sign up free", "try for free",
+        "start free", "pricing", "free trial", "free ai", "no login",
+        "unlimited words", "paraphrasing tool", "paraphraser", "rewriter tool",
+        "rewording tool", "humanizer", "text generator", "content generator",
+        "photo editor", "image editor", "video editor", "image editing",
+        "video editing", "photo editing",
+    ]
+    if any(s in text for s in _product_killers):
+        return 0  # hard reject, not just penalty
 
     # Bonus for editorial content signals.
     editorial_signals = ["how to", "tips", "guide", "strategy", "best practices",
@@ -515,12 +523,15 @@ def _score_candidate(
 
     # Bonus for comms-specific content.
     comms_signals = ["communications", "communicator", "internal comms", "corporate",
-                     "employee", "stakeholder", "newsletter", "presentation", "speech",
-                     "email", "pr ", "public relations"]
+                     "employee", "stakeholder", "newsletter", "presentation", "speech"]
     comms_hits = sum(1 for s in comms_signals if s in text)
-    score += min(comms_hits * 3, 15)
+    score += min(comms_hits * 4, 16)
 
-    return max(score, 1)  # minimum 1 if it passed the AI gate
+    # Minimum: need at least some theme relevance to be worth showing.
+    if title_hits == 0 and summary_hits < 2:
+        return 0
+
+    return max(score, 1)
 
 
 # ---------------------------------------------------------------------------
