@@ -250,7 +250,7 @@ const app = {
           </div>
           <div class="meta">${s.source_domain} &middot; ${s.word_count || 0} words${s.published_at ? ' &middot; ' + s.published_at.split('T')[0] : ''}</div>
           <div class="preview" id="preview-${i}">${previewText.substring(0, 300)}${previewText.length > 300 ? '...' : ''}</div>
-          ${!isGartner ? `<button class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>` : ''}
+          ${!isGartner ? `<button id="toggle-btn-${i}" class="btn btn-sm btn-secondary" style="margin-top:8px" onclick="app.togglePreview(${i})">Show more</button>` : ''}
           ${gartnerPanel}
         </div>`;
     }).join("");
@@ -317,15 +317,26 @@ const app = {
     this.renderSources();
   },
 
+  _formatPreviewText(text) {
+    if (!text) return '<p>No text available</p>';
+    const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return escaped.split(/\n\s*\n/).map(para =>
+      `<p>${para.replace(/\n/g, '<br>')}</p>`
+    ).join('');
+  },
+
   togglePreview(index) {
     const el = document.getElementById(`preview-${index}`);
+    const btn = document.getElementById(`toggle-btn-${index}`);
     if (el) {
       el.classList.toggle("expanded");
       const s = this.state.sources[index];
       if (el.classList.contains("expanded")) {
-        el.textContent = s.full_text || s.summary || "No text available";
+        el.innerHTML = this._formatPreviewText(s.full_text || s.summary);
+        if (btn) btn.textContent = "Show less";
       } else {
         el.textContent = (s.full_text || s.summary || "No text available").substring(0, 300) + "...";
+        if (btn) btn.textContent = "Show more";
       }
     }
   },

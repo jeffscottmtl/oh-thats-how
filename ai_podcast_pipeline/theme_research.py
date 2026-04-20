@@ -254,7 +254,11 @@ def _web_search_for_theme(
         f"Return up to 20 articles. Only include real articles with real URLs.\n"
         f"Include up to 3 gartner.com results if relevant.\n"
         f"SOURCE DIVERSITY: No single domain should account for more than 3 results. "
-        f"Spread across different publications, blogs, and sources.\n"
+        f"Spread across as many different publications, blogs, and sources as possible.\n"
+        f"Look beyond the first page of results. Include articles from research firms "
+        f"(McKinsey, Gallup, Edelman, Deloitte), business publications (HBR, Forbes, "
+        f"Fast Company), tech press (Wired, MIT Tech Review, The Verge), and comms industry "
+        f"outlets (PR Daily, Ragan, Spin Sucks).\n"
         f"EXCLUDE duplicate articles that appear on multiple domains.\n"
         f"Every article must be specifically relevant to \"{theme_name}\" AND to AI or "
         f"communications work — reject generic articles."
@@ -400,7 +404,7 @@ def _score_source(
 # ---------------------------------------------------------------------------
 
 
-_MIN_SOURCE_SCORE = 25  # Sources below this threshold are too weak to use.
+_MIN_SOURCE_SCORE = 15  # Sources below this threshold are too weak to use.
 
 
 def _rank_sources(
@@ -652,8 +656,8 @@ def research_theme(
     else:
         final = pre_ranked[:max_sources]
 
-    # Step 5b: Enforce per-domain diversity — max 2 results from any single domain.
-    _MAX_PER_DOMAIN = 2
+    # Step 5b: Enforce per-domain diversity — max 3 results from any single domain.
+    _MAX_PER_DOMAIN = 3
     domain_counts: dict[str, int] = {}
     diverse_final: list[CandidateStory] = []
     for c in final:

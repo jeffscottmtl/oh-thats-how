@@ -287,6 +287,7 @@ async def research(request: Request):
             "full_text": None if is_gartner else c.full_text,  # Gartner needs manual paste
             "word_count": len(c.full_text.split()) if c.full_text and not is_gartner else 0,
             "requires_auth": is_gartner,
+            "source_role": getattr(c, 'source_role', 'primary'),
         })
 
     return JSONResponse({"theme_name": theme_name, "sources": sources})
