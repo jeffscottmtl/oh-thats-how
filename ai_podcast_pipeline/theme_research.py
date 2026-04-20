@@ -530,6 +530,16 @@ def _score_candidate(
         "rewording tool", "humanizer", "text generator", "content generator",
         "photo editor", "image editor", "video editor", "image editing",
         "video editing", "photo editing",
+        # SaaS product pages
+        "presentation maker", "presentation builder", "slide maker", "slide generator",
+        "pitch deck", "pitch decks", "ai-powered presentation", "ai presentation maker",
+        "ai slides", "build ai-driven", "generate full slides",
+        "grammar checker", "writing assistant", "ai writer",
+        "email writer", "email generator",
+        "brainstorm generator", "idea generator",
+        "ai-powered tool", "powered by ai",
+        # Listicle tool roundups
+        "best ai tools", "top ai tools", "best ai apps",
     ]
     if any(s in text for s in _product_killers):
         return 0  # hard reject, not just penalty
