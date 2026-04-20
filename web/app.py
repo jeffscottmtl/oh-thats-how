@@ -48,12 +48,13 @@ app = FastAPI(title="The Signal")
 
 _STATIC_DIR = Path(__file__).parent / "static"
 _OUTPUT_DIR = _PROJECT_ROOT / "output"
-_APP_BUILD = str(int(__import__("time").time()))  # changes every server restart
+_APP_START = __import__("datetime").datetime.now()
+_APP_BUILD = _APP_START.strftime("%b %d %H:%M")  # e.g. "Apr 19 21:30"
 
 
 @app.get("/api/version")
 async def version():
-    return JSONResponse({"version": f"build {_APP_BUILD[-4:]}", "build": _APP_BUILD})
+    return JSONResponse({"version": _APP_BUILD, "build": str(int(_APP_START.timestamp()))})
 
 app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
 
