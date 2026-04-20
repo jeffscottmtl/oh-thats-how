@@ -187,7 +187,7 @@ def _web_search_headlines(api_key: str) -> list[str]:
                 "Content-Type": "application/json",
             },
             json={
-                "model": "gpt-4.1-mini",
+                "model": "gpt-5.4-mini",
                 "tools": [{"type": "web_search_preview"}],
                 "input": search_prompt,
             },

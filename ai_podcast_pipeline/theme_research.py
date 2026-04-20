@@ -222,7 +222,7 @@ _MAX_GARTNER_SOURCES = 1  # Cap Gartner so it doesn't dominate episodes.
 def _web_search_for_theme(
     theme_name: str,
     api_key: str,
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-5.4-mini",
     project_id: str | None = None,
     organization: str | None = None,
 ) -> list[CandidateStory]:
