@@ -639,7 +639,23 @@ def research_theme(
     else:
         final = deduped[:max_sources]
 
-    # Step 5b: Enforce per-domain diversity — max 3 results from any single domain.
+    # Step 5b: Hard AI-relevance filter — drop anything that doesn't mention AI.
+    _AI_SIGNALS = {"ai", "artificial intelligence", "llm", "chatgpt", "generative",
+                   "machine learning", "copilot", "gpt", "claude", "gemini",
+                   "large language model", "automation", "chatbot"}
+    ai_filtered = []
+    for c in final:
+        text = f"{c.title} {c.summary}".lower()
+        if any(signal in text for signal in _AI_SIGNALS):
+            ai_filtered.append(c)
+        else:
+            logger.debug("AI filter dropped: %s", c.title[:60])
+    if len(ai_filtered) < len(final):
+        logger.info("AI relevance filter dropped %d/%d articles with no AI mention.",
+                     len(final) - len(ai_filtered), len(final))
+    final = ai_filtered
+
+    # Step 5c: Enforce per-domain diversity — max 3 results from any single domain.
     _MAX_PER_DOMAIN = 3
     domain_counts: dict[str, int] = {}
     diverse_final: list[CandidateStory] = []
