@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 # Caps applied when building the LLM prompt.
 _MAX_RSS_HEADLINES = 40
-_MAX_WEB_HEADLINES = 20
+_MAX_WEB_HEADLINES = 30
 # How many RSS candidates to pull for headline extraction.
 _RSS_SCAN_LIMIT = 60
 
@@ -147,6 +147,78 @@ def _scan_rss_headlines(
 
 
 # ---------------------------------------------------------------------------
+# Web search for AI+comms headlines
+# ---------------------------------------------------------------------------
+
+
+def _web_search_headlines(api_key: str) -> list[str]:
+    """Search the web for fresh AI + communications headlines.
+
+    Uses the OpenAI Responses API with web_search_preview to find recent
+    articles about AI tools for communications professionals.
+    Returns a list of headline strings.
+    """
+    import requests as _requests
+
+    search_prompt = (
+        "Search the web for recent articles about AI tools and techniques for "
+        "communications professionals — people who write, edit, present, and draft "
+        "content at work. Find articles about:\n"
+        "- AI for speechwriting and executive communications\n"
+        "- AI for internal communications and employee messaging\n"
+        "- AI for presentation building and slide design\n"
+        "- AI for email writing and newsletters\n"
+        "- AI for content creation and editing in the workplace\n"
+        "- AI for brainstorming, summarizing, and research\n"
+        "- ChatGPT, Claude, Copilot tips for corporate communicators\n"
+        "- Gartner reports on AI and communications\n\n"
+        "Return a JSON object with key \"headlines\" — an array of strings, each being "
+        "an article title followed by the source in parentheses.\n"
+        "Example: \"How AI is Changing Corporate Speechwriting (Harvard Business Review)\"\n\n"
+        "Return 20-30 headlines. Only include real, recent articles. "
+        "Spread across diverse sources — no more than 3 from any single domain."
+    )
+
+    try:
+        resp = _requests.post(
+            "https://api.openai.com/v1/responses",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "gpt-4.1-mini",
+                "tools": [{"type": "web_search_preview"}],
+                "input": search_prompt,
+            },
+            timeout=60,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        text_content = ""
+        for item in data.get("output", []):
+            if item.get("type") == "message":
+                for c in item.get("content", []):
+                    if c.get("type") == "output_text":
+                        text_content += c["text"]
+
+        if not text_content:
+            logger.warning("Web search for headlines returned no content.")
+            return []
+
+        from .llm import parse_json_response
+        parsed = parse_json_response(text_content)
+        headlines = parsed.get("headlines", [])
+        logger.info("Web search found %d AI+comms headlines.", len(headlines))
+        return [str(h) for h in headlines if isinstance(h, str)]
+
+    except Exception as exc:
+        logger.warning("Web search for headlines failed: %s", exc)
+        return []
+
+
+# ---------------------------------------------------------------------------
 # Prompt construction
 # ---------------------------------------------------------------------------
 
@@ -267,6 +339,11 @@ def propose_themes(
         rss_stories = _scan_rss_headlines(on_feed_done=on_feed_done)
     else:
         rss_stories = list(rss_headlines)
+
+    # Run web search for fresh AI+comms headlines if not supplied.
+    if web_headlines is None:
+        logger.info("Running web search for AI+comms headlines…")
+        web_headlines = _web_search_headlines(api_key)
 
     system_msg, user_msg = _build_prompt(eligible, rss_stories, web_headlines)
 
