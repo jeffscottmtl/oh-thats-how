@@ -281,6 +281,7 @@ def _search_tavily(query: str, max_results: int = 10) -> list[dict]:
                 "href": r.get("url", ""),
                 "body": r.get("content", ""),
                 "tavily_score": r.get("score", 0),
+                "published_date": r.get("published_date", ""),
             }
             for r in results.get("results", [])
         ]
@@ -378,11 +379,20 @@ def _web_search_for_theme(
         seen_urls[url] = tavily_score
         parsed = urlparse(url)
         domain = parsed.netloc.lower().removeprefix("www.")
+        # Parse published date from Tavily if available.
+        pub_date = None
+        pub_str = r.get("published_date", "")
+        if pub_str:
+            try:
+                from ai_podcast_pipeline.utils import parse_datetime
+                pub_date = parse_datetime(pub_str)
+            except Exception:
+                pass
         candidates.append(CandidateStory(
             title=r.get("title", "").strip(),
             url=url,
             source_domain=domain,
-            published_at=None,
+            published_at=pub_date,
             summary=r.get("body", "").strip(),
             relevance_score=tavily_score,  # raw 0-1, normalized later
         ))
