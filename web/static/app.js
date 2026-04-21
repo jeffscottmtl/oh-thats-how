@@ -229,7 +229,6 @@ const app = {
       if (e.key === "Escape") { cleanup(); document.removeEventListener("keydown", handler); }
     });
     document.getElementById("del-confirm").focus();
-    }
   },
 
   showWelcome() {
