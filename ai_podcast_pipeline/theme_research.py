@@ -262,28 +262,7 @@ def _search_tavily(query: str, max_results: int = 10) -> list[dict]:
             search_depth="advanced",
             include_answer=False,
             time_range="year",
-            exclude_domains=[
-                # AI writing/productivity tools
-                "jasper.ai", "writesonic.com", "copy.ai", "quillbot.com",
-                "grammarly.com", "wordtune.com", "hyperwriteai.com",
-                "writerly.ai", "rytr.me", "anyword.com", "peppertype.ai",
-                "contentbot.ai", "typeface.ai", "writer.com",
-                # IC/comms platform vendors
-                "staffbase.com", "simpplr.com", "poppulo.com", "contactmonkey.com",
-                "haiilo.com", "useworkshop.com", "cerkl.com", "workai.com",
-                "theemployeeapp.com", "sparrowconnected.com", "sociabble.com",
-                "bananatag.com", "snapcomms.com", "speakap.com", "flip.com",
-                "getflip.com", "lumapps.com", "unily.com", "jostle.me",
-                "interact-intranet.com", "happeo.com",
-                # Marketing/SEO/sales tools
-                "slidesai.io", "gamma.app", "logicballs.com", "ahrefs.com",
-                "semrush.com", "clickup.com", "miro.com", "hubspot.com",
-                "mailchimp.com", "hootsuite.com", "sproutsocial.com",
-                "buffer.com", "canva.com", "visme.co", "lumen5.com",
-                # Email/messaging tools
-                "superhuman.com", "missiveapp.com", "front.com",
-                "intercom.com", "drift.com", "brevo.com",
-            ],
+            # No domain blocklist — the LLM identifies product pages by pattern.
         )
         return [
             {
@@ -740,15 +719,18 @@ def research_theme(
             f'teach a communicator something specific and practical about this topic?"\n\n'
             f'REJECT (be ruthless):\n'
             f'- Generic "AI for internal comms" or "AI tools for communicators" roundups\n'
-            f'- PRODUCT PAGES: if the domain sells the tool being described, it is a product '
-            f'page. Staffbase, Simpplr, Poppulo, ContactMonkey, Haiilo, Workshop, Cerkl, '
-            f'ClickUp, Workai — these are all vendor blogs promoting their own product. '
-            f'REJECT them even if the content seems useful. We only want independent sources.\n'
+            f'- PRODUCT/VENDOR BLOGS: Check the domain. If the company behind the website '
+            f'sells a product or service (SaaS platform, AI tool, comms software, marketing '
+            f'tool, email platform), it is a vendor blog — even if the article reads like '
+            f'editorial content. Vendor blogs exist to promote their product. Signs: the '
+            f'domain name IS the product name, the article mentions "our platform" or "with '
+            f'[product name]", or the site has pricing/signup pages. REJECT all vendor blogs.\n'
             f'- Articles about marketing, sales, HR, or other fields\n'
             f'- Generic AI tutorials not specific to this topic\n'
-            f'- Listicles ("Top 10 AI tools for X")\n\n'
-            f'KEEP 8-15 articles from INDEPENDENT sources (news outlets, industry publications, '
-            f'practitioner blogs, universities, Reddit discussions). Score each 1-10.\n\n'
+            f'- Listicles ("Top 10 AI tools for X", "Best AI tools for Y")\n\n'
+            f'KEEP 8-15 articles from INDEPENDENT sources only: news outlets (Forbes, BBC, '
+            f'CNBC), industry publications (Ragan, PR Daily, PRWeek), practitioner blogs, '
+            f'universities, research firms, Reddit discussions. Score each 1-10.\n\n'
             f'Return JSON: {{"selected": [{{"index": N, "score": 1-10}}, ...]}}\n'
             f'Sort by score descending.\n\n'
             f'Articles:\n{article_list}'
