@@ -266,7 +266,7 @@ input, textarea, select {
   display: grid;
   grid-template-columns: 40px 1fr auto;
   gap: 10px;
-  padding: 8px;
+  padding: 8px 28px 8px 8px;
   border-radius: var(--r-md);
   cursor: pointer;
   align-items: center;
@@ -336,18 +336,22 @@ input, textarea, select {
 .ep-delete {
   display: none;
   position: absolute;
-  right: 8px;
-  top: 8px;
-  background: none;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--paper-2);
   border: none;
-  color: var(--danger);
+  color: var(--ink-400);
   cursor: pointer;
-  font-size: 14px;
-  padding: 2px 4px;
-  border-radius: 3px;
+  font-size: 11px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  line-height: 20px;
+  text-align: center;
+  padding: 0;
 }
 .ep-row:hover .ep-delete { display: block; }
-.ep-delete:hover { background: rgba(220, 38, 38, 0.1); }
+.ep-delete:hover { background: var(--cn-red-100); color: var(--danger); }
 
 /* ── Main workspace ─────────────────────────────────── */
 

@@ -192,18 +192,43 @@ const app = {
     welcome.parentElement.insertBefore(banner, welcome.parentElement.firstChild);
   },
 
-  async deleteEpisode(name) {
-    if (!confirm(`Delete "${name}" and all its files?`)) return;
-    try {
-      await fetch(`/api/episodes/${encodeURIComponent(name)}`, { method: "DELETE" });
-      this._episodes = this._episodes.filter(ep => ep.name !== name);
-      this.renderEpisodeList();
-      // If we're viewing this episode, go back to welcome.
-      if (this._viewName === name) {
-        this.showWelcome();
+  deleteEpisode(name) {
+    // Show inline confirmation that accepts Enter or Space.
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:100;display:flex;align-items:center;justify-content:center;";
+    const dialog = document.createElement("div");
+    dialog.style.cssText = "background:white;padding:24px;border-radius:12px;box-shadow:var(--shadow-lg);max-width:360px;text-align:center;";
+    dialog.innerHTML = `
+      <p style="margin-bottom:16px;font-size:14px;">Delete <strong>${name.replace("The Signal – ", "")}</strong> and all its files?</p>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button id="del-cancel" class="btn btn-secondary">Cancel</button>
+        <button id="del-confirm" class="btn btn-primary" style="background:var(--danger);">Delete</button>
+      </div>
+    `;
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+
+    const cleanup = () => overlay.remove();
+    const doDelete = async () => {
+      cleanup();
+      try {
+        await fetch(`/api/episodes/${encodeURIComponent(name)}`, { method: "DELETE" });
+        this._episodes = this._episodes.filter(ep => ep.name !== name);
+        this.renderEpisodeList();
+        if (this._viewName === name) this.showWelcome();
+      } catch (e) {
+        alert("Failed to delete: " + e.message);
       }
-    } catch (e) {
-      alert("Failed to delete: " + e.message);
+    };
+
+    document.getElementById("del-confirm").onclick = doDelete;
+    document.getElementById("del-cancel").onclick = cleanup;
+    overlay.onclick = (e) => { if (e.target === overlay) cleanup(); };
+    document.addEventListener("keydown", function handler(e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doDelete(); document.removeEventListener("keydown", handler); }
+      if (e.key === "Escape") { cleanup(); document.removeEventListener("keydown", handler); }
+    });
+    document.getElementById("del-confirm").focus();
     }
   },
 
