@@ -697,6 +697,7 @@ def synthesize_fish_audio_mp3(
     # Fish Audio natively supports [pause], [emphasis], [soft], [long pause] etc.
     # Don't use the Qwen preprocessor which would mangle them.
     # Just clean up markdown formatting and leave Fish tags intact.
+    import os as _os
     import re as _re
     tts_text = text
     # Strip markdown italic markers but keep the text
@@ -725,7 +726,7 @@ def synthesize_fish_audio_mp3(
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
-                "model": "s1",
+                "model": _os.environ.get("FISH_AUDIO_MODEL", "s1"),
             },
             json=payload,
             timeout=timeout,

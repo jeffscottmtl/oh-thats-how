@@ -580,7 +580,15 @@ const app = {
         </div>
         <textarea class="script-display" id="script-editor" style="width:100%;min-height:400px;resize:vertical;${activeTab === 'script' ? '' : 'display:none;'}">${this.state.script || ''}</textarea>
         <div class="script-display" id="script-readonly" style="${activeTab !== 'script' ? '' : 'display:none;'}">${content[activeTab] || '(empty)'}</div>
-        <div class="actions">
+        <div class="actions" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <label style="font-size:13px; color:var(--ink-600); display:flex; align-items:center; gap:6px;">
+            Voice model:
+            <select id="fish-model" style="font-size:13px; padding:4px 8px; border:1px solid var(--border); border-radius:var(--r-sm);">
+              <option value="s1">S1 (fast)</option>
+              <option value="s2-pro">S2 Pro (expressive)</option>
+            </select>
+          </label>
+          <div style="flex:1;"></div>
           <button class="btn btn-secondary" onclick="app.finish()">Skip Audio & Finish</button>
           <button class="btn btn-primary" onclick="app.saveAndGenerateAudio()">Generate Audio</button>
         </div>
@@ -604,6 +612,7 @@ const app = {
         console.warn("Could not save script edits:", e);
       }
     }
+    this.state.fishModel = document.getElementById("fish-model")?.value || "s1";
     this.generateAudio();
   },
 
@@ -627,7 +636,7 @@ const app = {
       const res = await fetch("/api/audio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ episode_name: this.state.episodeName }),
+        body: JSON.stringify({ episode_name: this.state.episodeName, fish_model: this.state.fishModel || "s1" }),
       });
       const data = await res.json();
 

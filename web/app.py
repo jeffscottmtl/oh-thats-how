@@ -477,6 +477,11 @@ async def generate_audio(request: Request):
     episode_dt = datetime.now(ZoneInfo(TIMEZONE))
     episode_number = resolve_episode_number(_OUTPUT_DIR)
 
+    # Allow model override from the UI.
+    fish_model = body.get("fish_model", "s1")
+    import os
+    os.environ["FISH_AUDIO_MODEL"] = fish_model
+
     audio_generated, provider, notes, audio_error = await _run_sync(
         _stage_audio,
         script_markdown=script_markdown,
