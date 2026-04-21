@@ -982,53 +982,93 @@ def _generate_companion_materials(
     """Generate companion files for Microsoft Teams distribution.
 
     Creates two files:
-    1. Teams Post — short description with bullet points for the Teams announcement.
-    2. Try This — extracted steps/prompts from the try_this segment.
+    1. Teams Post — curiosity-driven description + practical Try This section
+       with copy-paste prompts and fill-in-the-blank templates.
+    2. Try This — standalone version of the Try This section.
     """
-    # --- Teams Post ---
-    # Build a concise announcement with theme and key takeaways.
-    theme_line = f"**{parts.theme_name}**" if parts.theme_name else ""
-    teams_lines = [
-        f"🎙️ **New Episode: {episode_name}**",
-        "",
-    ]
-    if theme_line:
-        teams_lines.append(f"This week's theme: {theme_line}")
-        teams_lines.append("")
+    import os
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    model = os.environ.get("OPENAI_SMART_MODEL", "gpt-4.1")
+    theme = parts.theme_name or "this episode"
 
-    # Extract a one-liner from the narrative (first sentence).
-    if parts.narrative:
-        first_sentence = parts.narrative.split(".")[0].strip() + "."
-        # Strip any Fish Audio tags for the Teams post.
-        first_sentence = _strip_fish_tags(first_sentence)
-        teams_lines.append(first_sentence)
-        teams_lines.append("")
+    # Use the LLM to generate a compelling Teams post from the script.
+    teams_content = ""
+    try_this_content = ""
+    if api_key and parts.narrative:
+        from .llm import chat_completion, parse_json_response
+        clean_narrative = _strip_fish_tags(parts.narrative)
+        clean_try_this = _strip_fish_tags(parts.try_this) if parts.try_this else ""
 
-    teams_lines.append("**In this episode:**")
-    # Pull key points from the narrative — use paragraph starts as bullets.
-    paragraphs = [p.strip() for p in parts.narrative.split("\n\n") if p.strip()]
-    for para in paragraphs[:4]:
-        # Take first sentence of each paragraph as a bullet.
-        bullet = para.split(".")[0].strip()
-        bullet = _strip_fish_tags(bullet)
-        if bullet and len(bullet) > 15:
-            teams_lines.append(f"- {bullet}")
+        prompt = f"""You are writing a Microsoft Teams post to announce a new podcast episode and a companion "Try This" guide.
 
-    teams_lines.extend(["", "🎧 Listen to the episode and share your thoughts below!"])
-    paths["teams_post"].write_text("\n".join(teams_lines) + "\n", encoding="utf-8")
+EPISODE: {episode_name}
+TOPIC: {theme}
+SCRIPT:
+{clean_narrative[:3000]}
 
-    # --- Try This ---
+PRACTICAL TAKEAWAY FROM THE EPISODE:
+{clean_try_this[:1000]}
+
+Write TWO things:
+
+1. **TEAMS POST** — A short, curiosity-driven post that makes people want to listen.
+   - Open with a question or surprising insight that hooks the reader
+   - 2-3 sentences max — don't summarize the episode, tease it
+   - End with a nudge to listen
+   - No bullet points, no "In this episode:" lists — that kills curiosity
+   - Tone: warm, direct, collegial — like a message from a teammate
+
+2. **TRY THIS GUIDE** — An expanded, standalone version of the practical takeaway.
+   - Brief description of what they'll do and why (2-3 sentences)
+   - Numbered steps, clear and specific
+   - Include at least one COPY-PASTE PROMPT they can use directly with ChatGPT, Claude, or Copilot.
+     Format the prompt in a code block so they can copy it easily. Use [brackets] for
+     parts they should fill in with their own content.
+   - If a fill-in-the-blank template makes sense, include one
+   - End with a "Claude Design instructions" section: a prompt the reader can paste into
+     claude.ai/design to generate a visual companion for this topic — an infographic,
+     quick-reference card, workflow diagram, or cheat sheet they can save or print.
+     Write this as a ready-to-paste prompt in a code block.
+
+Return JSON:
+{{
+  "teams_post": "the teams post text",
+  "try_this": "the try this guide in markdown"
+}}"""
+
+        try:
+            content = chat_completion(
+                api_key=api_key, model=model,
+                messages=[
+                    {"role": "system", "content": "Output strict JSON only."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            data = parse_json_response(content)
+            teams_content = data.get("teams_post", "")
+            try_this_content = data.get("try_this", "")
+        except Exception as exc:
+            logger.warning("Companion materials LLM generation failed: %s", exc)
+
+    # Fallback if LLM failed.
+    if not teams_content:
+        teams_content = (
+            f"New episode of The Signal: **{theme}**\n\n"
+            f"Give it a listen and let us know what you think in the comments."
+        )
+    if not try_this_content and parts.try_this:
+        try_this_content = _strip_fish_tags(parts.try_this)
+
+    # --- Write Teams Post ---
+    paths["teams_post"].write_text(teams_content.strip() + "\n", encoding="utf-8")
+
+    # --- Write Try This ---
     try_this_lines = [
-        f"# Try This — {episode_name}",
+        f"# Try This — {theme}",
+        "",
+        try_this_content or "*(No try-this section for this episode.)*",
         "",
     ]
-    if parts.try_this:
-        clean_try_this = _strip_fish_tags(parts.try_this)
-        try_this_lines.append(clean_try_this)
-    else:
-        try_this_lines.append("*(No try-this segment in this episode.)*")
-
-    try_this_lines.append("")
     paths["try_this"].write_text("\n".join(try_this_lines) + "\n", encoding="utf-8")
 
 
