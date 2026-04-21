@@ -894,6 +894,7 @@ Voice and tone:
 - No jargon. If you must use a technical term, explain it immediately in plain English.
 - No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
+- NEVER use religious phrasing or metaphors — no "one-message-many-doors", "gospel", "sermon", "preach", "amen", "blessing", "baptism", "congregation", "disciples", "scripture" or similar. This is a corporate podcast.
 - NEVER include a "food for thought" or "here's some food for thought" segment. The practical takeaway in try_this IS the closing content. No separate sign-off segment.
 
 Delivery cues (MANDATORY for text-to-speech):
