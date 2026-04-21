@@ -1,5 +1,6 @@
 const $ = (sel) => document.querySelector(sel);
-const $stage = () => {
+const $stage = () => $("#stage-body");
+const $stageTop = () => {
   const el = $("#stage-body");
   if (el) el.scrollTo({ top: 0, behavior: 'smooth' });
   return el;
@@ -63,10 +64,12 @@ const app = {
     } else if (index === 1 && this.state.sources.length > 0) {
       this.renderStageRail(1, this._currentStage);
       this.updateBreadcrumbs(this.state.episodeName, 'Articles');
+      $stageTop();
       this.renderSources();
     } else if (index === 2 && this.state.script) {
       this.renderStageRail(2, this._currentStage);
       this.updateBreadcrumbs(this.state.episodeName, 'Script');
+      $stageTop();
       this.renderScript();
     }
   },
@@ -390,6 +393,7 @@ const app = {
       });
       const data = await res.json();
       this.state.sources = data.sources.map(s => ({ ...s, included: false }));
+      $stageTop();  // scroll to top on navigation
       this.renderSources();
     } catch (e) {
       $stage().innerHTML = `<div class="panel-pad"><p style="color:var(--danger)">Error researching theme: ${e.message}</p></div>`;

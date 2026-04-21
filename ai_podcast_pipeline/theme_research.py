@@ -263,16 +263,26 @@ def _search_tavily(query: str, max_results: int = 10) -> list[dict]:
             include_answer=False,
             time_range="year",
             exclude_domains=[
-                # AI writing tools
+                # AI writing/productivity tools
                 "jasper.ai", "writesonic.com", "copy.ai", "quillbot.com",
                 "grammarly.com", "wordtune.com", "hyperwriteai.com",
-                # IC platform vendors (their blogs promote their product)
+                "writerly.ai", "rytr.me", "anyword.com", "peppertype.ai",
+                "contentbot.ai", "typeface.ai", "writer.com",
+                # IC/comms platform vendors
                 "staffbase.com", "simpplr.com", "poppulo.com", "contactmonkey.com",
                 "haiilo.com", "useworkshop.com", "cerkl.com", "workai.com",
                 "theemployeeapp.com", "sparrowconnected.com", "sociabble.com",
-                # Other tools
+                "bananatag.com", "snapcomms.com", "speakap.com", "flip.com",
+                "getflip.com", "lumapps.com", "unily.com", "jostle.me",
+                "interact-intranet.com", "happeo.com",
+                # Marketing/SEO/sales tools
                 "slidesai.io", "gamma.app", "logicballs.com", "ahrefs.com",
-                "semrush.com", "clickup.com", "miro.com",
+                "semrush.com", "clickup.com", "miro.com", "hubspot.com",
+                "mailchimp.com", "hootsuite.com", "sproutsocial.com",
+                "buffer.com", "canva.com", "visme.co", "lumen5.com",
+                # Email/messaging tools
+                "superhuman.com", "missiveapp.com", "front.com",
+                "intercom.com", "drift.com", "brevo.com",
             ],
         )
         return [
