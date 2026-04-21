@@ -396,6 +396,7 @@ def _do_generate(theme_name: str, sources: list[dict], bank_id: str | None) -> d
             episode_dt=episode_dt,
             episode_number=episode_number,
             cover_path=paths["cover_png"],
+            theme_name=theme_name,
         )
     except Exception as exc:
         logger.warning("Cover render failed: %s", exc)

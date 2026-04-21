@@ -72,56 +72,107 @@ def render_cover(
     episode_dt: datetime,
     output_path: Path,
     episode_number: int,
+    theme_name: str = "",
 ) -> None:
-    """Render a 3000×3000 PNG cover for the episode.
+    """Render a 3000×3000 PNG cover with the Signal Wave design.
 
-    The cover uses CN brand colours and displays the show title,
-    episode number badge, and episode date.
+    Light warm background, serif title, theme-driven generative wave
+    pattern in CN Red + dark ink, episode info, and theme title.
     """
+    import math
     from PIL import Image, ImageDraw
 
     dt = episode_dt.astimezone(ZoneInfo(TIMEZONE))
     logger.debug("Rendering cover for episode %d ('%s')…", episode_number, episode_name)
 
-    width = 3000
-    height = 3000
-    im = Image.new("RGB", (width, height), color=CN_PETROLEUM_BLACK)
+    W = 3000
+    H = 3000
+    PAPER = (253, 252, 249)      # warm off-white
+    INK = (11, 13, 16)           # near-black
+    INK_MID = (90, 102, 116)     # grey for meta text
+    RED = CN_RED
+
+    im = Image.new("RGB", (W, H), color=PAPER)
     draw = ImageDraw.Draw(im)
 
-    # Subtle vertical gradient background.
-    for y in range(height):
-        t = y / (height - 1)
-        color = _blend(CN_PETROLEUM_BLACK, CN_BLACK_DEEP, t)
-        draw.line([(0, y), (width, y)], fill=color)
+    # Fonts.
+    title_font = _load_font(420, "extrabold")
+    meta_font = _load_font(66, "semibold")
+    theme_font = _load_font(160, "bold")
+    footer_font = _load_font(54, "regular")
 
-    # Decorative accent polygons.
-    draw.polygon([(0, 0), (1200, 0), (650, 1700), (0, 1400)], fill=_blend(CN_RED, CN_PETROLEUM_BLACK, 0.35))
-    draw.polygon([(1400, 3000), (3000, 1950), (3000, 3000)], fill=_blend(CN_RED, CN_BLACK_DEEP, 0.65))
-    draw.rectangle([(180, 2120), (2820, 2280)], fill=CN_RED)
+    # ── Title: "The Signal" ──
+    draw.text((180, 240), "The Signal", fill=INK, font=title_font)
 
-    title_font = _load_font(360, "extrabold")
-    strap_font = _load_font(86, "semibold")
-    date_font = _load_font(110, "regular")
-    episode_font = _load_font(84, "bold")
+    # Red accent bar under title.
+    draw.rectangle([(180, 560), (510, 569)], fill=RED)
 
-    draw.text((200, 340), "The Signal", fill=CN_WHITE, font=title_font)
-    draw.text((205, 790), "Weekly AI and Communications Brief", fill=CN_LIGHT, font=strap_font)
-
-    # Episode number badge (top-right corner).
-    episode_label = f"Episode {episode_number}"
-    bbox = draw.textbbox((0, 0), episode_label, font=episode_font)
-    text_w = bbox[2] - bbox[0]
-    text_h = bbox[3] - bbox[1]
-    box_x0 = width - text_w - 340
-    box_y0 = 250
-    box_x1 = width - 200
-    box_y1 = box_y0 + text_h + 70
-    draw.rounded_rectangle([(box_x0, box_y0), (box_x1, box_y1)], radius=24, fill=CN_RED)
-    draw.text((box_x0 + 70, box_y0 + 35), episode_label, fill=CN_WHITE, font=episode_font)
-
-    # Date line below the red bar.
+    # ── Episode + date meta line ──
     date_line = format_episode_date(dt)
-    draw.text((200, 2460), date_line, fill=CN_WHITE, font=date_font)
+    meta_text = f"EPISODE {episode_number}  ·  {date_line.upper()}"
+    draw.text((180, 620), meta_text, fill=INK_MID, font=meta_font)
+
+    # ── Theme title ──
+    if theme_name:
+        # Word-wrap the theme title.
+        words = theme_name.split()
+        lines = []
+        current = ""
+        for word in words:
+            test = f"{current} {word}".strip()
+            bbox = draw.textbbox((0, 0), test, font=theme_font)
+            if bbox[2] - bbox[0] > 2640:
+                lines.append(current)
+                current = word
+            else:
+                current = test
+        if current:
+            lines.append(current)
+        y = 820
+        for line in lines[:3]:  # max 3 lines
+            draw.text((180, y), line, fill=INK, font=theme_font)
+            y += 180
+
+    # ── Signal wave pattern (theme-driven) ──
+    # Deterministic seed from theme name.
+    seed_val = sum(ord(c) for c in (theme_name or "signal"))
+    import random
+    rng = random.Random(seed_val)
+
+    rows = 7
+    cols = 48
+    wave_y_start = 1860
+    row_spacing = 126
+
+    for r in range(rows):
+        amp = 36 + rng.random() * 72
+        freq = 0.8 + rng.random() * 1.8
+        phase = rng.random() * math.pi * 2
+        row_seed = rng.random()
+        y_base = wave_y_start + r * row_spacing - rng.random() * 30
+
+        points = []
+        for c in range(cols + 1):
+            x = 180 + (c / cols) * 2640
+            fall = math.sin((c / cols) * math.pi * freq + phase + row_seed) * amp
+            pulse = math.exp(-((c / cols - 0.6) ** 2) * 6) * 90 * (r / rows)
+            y = y_base + fall + pulse
+            points.append((int(x), int(y)))
+
+        # Draw as connected line segments.
+        color = RED if r < 3 else INK
+        width = 9 if r < 3 else 5
+        opacity_factor = 0.95 if r < 3 else 0.35
+
+        if r >= 3:
+            # For dark lines, blend with background for transparency effect.
+            color = _blend(INK, PAPER, 1.0 - opacity_factor)
+
+        for i in range(len(points) - 1):
+            draw.line([points[i], points[i + 1]], fill=color, width=width)
+
+    # ── Footer ──
+    draw.text((2640, 2850), "AI + COMMS · CN", fill=INK_MID, font=footer_font, anchor="ra")
 
     im.save(output_path, format="PNG", optimize=False)
     logger.debug("Cover saved to %s.", output_path.name)

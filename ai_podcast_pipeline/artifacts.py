@@ -31,6 +31,12 @@ def resolve_episode_number(output_dir: Path) -> int:
         if isinstance(value, int) and value > max_number:
             max_number = value
 
+    import os
+    reset_at = os.environ.get("EPISODE_NUMBER_RESET")
+    if reset_at is not None:
+        # Reset numbering: subtract this value so episodes start from 1.
+        # Set EPISODE_NUMBER_RESET to the current max episode number.
+        return max(1, (max_number + 1 if max_number > 0 else len(manifests) + 1) - int(reset_at))
     if max_number > 0:
         return max_number + 1
     return len(manifests) + 1
@@ -54,4 +60,6 @@ def build_artifact_paths(output_dir: Path, episode_name: str) -> dict[str, Path]
         "cover_png": output_dir / f"{episode_name} - Cover.png",
         "mp3": output_dir / f"{episode_name}.mp3",
         "manifest_json": output_dir / f"{episode_name} - Manifest.json",
+        "teams_post": output_dir / f"{episode_name} - Teams Post.md",
+        "try_this": output_dir / f"{episode_name} - Try This.md",
     }

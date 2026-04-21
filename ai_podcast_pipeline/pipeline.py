@@ -783,6 +783,7 @@ def _stage_render_cover(
     episode_dt: datetime,
     episode_number: int,
     cover_path: Path,
+    theme_name: str = "",
 ) -> str:
     """Render the cover PNG and a probe copy to verify determinism.
 
@@ -793,6 +794,7 @@ def _stage_render_cover(
         episode_dt=episode_dt,
         output_path=cover_path,
         episode_number=episode_number,
+        theme_name=theme_name,
     )
 
     with NamedTemporaryFile("wb", suffix=".png", delete=False) as tmp:
