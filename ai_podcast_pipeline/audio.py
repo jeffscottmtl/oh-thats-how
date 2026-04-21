@@ -710,19 +710,22 @@ def synthesize_fish_audio_mp3(
         "mp3_bitrate": 128,
         "latency": "normal",
         "normalize": True,
+        "prosody": {
+            "speed": speed,
+            "normalize_loudness": True,
+        },
     }
     if voice_id:
         payload["reference_id"] = voice_id
-    if abs(speed - 1.0) > 1e-6:
-        payload["prosody"] = {"speed": speed}
 
-    logger.info("Generating audio via Fish Audio API (voice=%s)…", voice_id or "default")
+    logger.info("Generating audio via Fish Audio API (voice=%s, speed=%.2f)…", voice_id or "default", speed)
     try:
         resp = _requests.post(
             "https://api.fish.audio/v1/tts",
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
+                "model": "s2-pro",
             },
             json=payload,
             timeout=timeout,
