@@ -725,7 +725,7 @@ def synthesize_fish_audio_mp3(
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
-                "model": "s2-pro",
+                "model": "s1",
             },
             json=payload,
             timeout=timeout,
