@@ -508,8 +508,26 @@ async def generate_audio(request: Request):
 
 @app.delete("/api/episodes/{name:path}")
 async def delete_episode(name: str):
-    """Delete an episode and all its files."""
+    """Delete an episode and all its files, decrement theme bank usage."""
+    # Check if this episode had a theme — decrement usage count.
     paths = build_artifact_paths(_OUTPUT_DIR, name)
+    script_json_path = paths.get("script_json")
+    if script_json_path and script_json_path.exists():
+        try:
+            ep_data = json.loads(script_json_path.read_text(encoding="utf-8"))
+            theme = ep_data.get("theme", "")
+            if theme:
+                bank = load_theme_bank(Path(THEME_BANK_PATH))
+                for entry in bank:
+                    if entry.name == theme and entry.times_used > 0:
+                        entry.times_used -= 1
+                        if entry.times_used == 0:
+                            entry.last_used = None
+                        save_theme_bank(bank, Path(THEME_BANK_PATH))
+                        break
+        except Exception:
+            pass  # Don't block deletion if theme bank update fails.
+
     deleted = []
     for key, path in paths.items():
         if path.exists():
