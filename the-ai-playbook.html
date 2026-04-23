@@ -291,8 +291,206 @@ a { color: inherit; }
 </div>
 
 <main>
-  <div class="tab-content active" id="tab-start"></div>
-  <div class="tab-content" id="tab-guides"></div>
+  <div class="tab-content active" id="tab-start">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="container">
+        <div class="eyebrow" style="margin-bottom:26px;">A handbook for Communications, PAGA &amp; Strategy &middot; v2.0 &middot; April 2026</div>
+        <h1>Better drafts, <em>faster</em>,<br>without losing your voice.</h1>
+        <p class="lede">A self-service library of short, practical guides for getting real work out of AI, written for CN colleagues in Communications, Public Affairs &amp; Government Affairs, Media Relations, and Strategy. Built on the Four Questions framework. No hype. No jargon. Just patterns that work.</p>
+        <div class="meta">
+          <span><b>4</b> Questions</span>
+          <span><b>13</b> Task guides</span>
+          <span><b>8</b> Literacy notes</span>
+          <span><b>15</b> Custom GPTs</span>
+          <span><b>~5 min</b> per guide</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- FOUR QUESTIONS -->
+    <section class="section" style="padding-top: 44px;">
+      <div class="section-head">
+        <div class="num"><em>I</em></div>
+        <div>
+          <div class="eyebrow">Start here</div>
+          <h2>The Four Questions.</h2>
+          <p>Every prompt in this library follows the same framework. Answer these four questions before you hit Enter, and 80% of bad AI output disappears.</p>
+        </div>
+      </div>
+      <div class="fourq">
+        <div class="fq">
+          <div class="qn">1</div>
+          <h4>What job am I asking AI to do?</h4>
+          <p>Pick the job: draft, edit, summarize, translate, brainstorm. Set the focus. Set the red lines, what NOT to mention.</p>
+          <div class="ex">e.g. "Draft an internal message. Do not speculate on cause or restoration date."</div>
+        </div>
+        <div class="fq">
+          <div class="qn">2</div>
+          <h4>Who is it for, and what should it achieve?</h4>
+          <p>Name the audience. Set the tone. State the desired outcome, what you want the reader to do, feel, or decide.</p>
+          <div class="ex">e.g. "For unionized employees. Direct, respectful tone. Build understanding, not speculation."</div>
+        </div>
+        <div class="fq">
+          <div class="qn">3</div>
+          <h4>What format should it use?</h4>
+          <p>Specify the deliverable. Set the length. Set the structure, headers, bullets, word counts, order of information.</p>
+          <div class="ex">e.g. "Email. 150&ndash;180 words. Subject line, opening, three bullets, closing."</div>
+        </div>
+        <div class="fq">
+          <div class="qn">4</div>
+          <h4>What info &amp; rules does AI need?</h4>
+          <p>Give it the facts, background, and reference examples. State house rules: Canadian spelling, no acronyms, no em dashes, placeholders for missing facts.</p>
+          <div class="ex">e.g. "Change takes effect April 15, Montreal yard only. Use Canadian spelling."</div>
+        </div>
+      </div>
+      <div style="padding: 22px 36px 0;">
+        <p style="margin:0; font-size:14px; color:var(--ink-2);">Head to the Learn tab for the full explainer and worked example.</p>
+      </div>
+    </section>
+
+    <!-- SIX AUDIENCES -->
+    <section class="section" style="padding-top: 20px;">
+      <div class="section-head">
+        <div class="num"><em>II</em></div>
+        <div>
+          <div class="eyebrow">Know who you're writing for</div>
+          <h2>Six CN audiences, six tones.</h2>
+          <p>The same message hits differently depending on who's reading it. Name the audience in your prompt, every time.</p>
+        </div>
+      </div>
+      <div class="audiences">
+        <div class="aud"><div class="n">AUDIENCE 01</div><h5>Executives</h5><p>Concise, decision-oriented. Numbers up front. No preamble.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 02</div><h5>Management employees</h5><p>Context + direction. What changed, what to do.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 03</div><h5>Front-line supervisors (FLS)</h5><p>Practical, operational. Talking points they can use.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 04</div><h5>Unionized employees</h5><p>Direct, respectful, clear. No corporate softening.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 05</div><h5>Media &amp; public</h5><p>News-first. Facts, quotes, context. Every word defensible.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 06</div><h5>Investors</h5><p>Precise. Cite sources. Nothing market-sensitive pre-disclosure.</p></div>
+      </div>
+    </section>
+
+    <!-- QUICKBAR CTA -->
+    <div class="quickbar">
+      <div>Ready? Pick a task from Guides, or explore your custom GPTs in Your Tools.</div>
+    </div>
+
+  </div>
+  <div class="tab-content" id="tab-guides">
+    <section class="section" style="padding-top: 44px;">
+      <div class="section-head">
+        <div class="num"><em>III</em></div>
+        <div>
+          <div class="eyebrow">The guides</div>
+          <h2>Pick a task. Get a pattern.</h2>
+          <p>Each guide shows when to use AI, when not to, a prompt pattern, before/after examples, and a pre-send checklist. All built on the Four Questions.</p>
+        </div>
+      </div>
+
+      <div class="filters no-print">
+        <button class="chip active" data-filter="all">All 13</button>
+        <button class="chip" data-filter="writing">Writing</button>
+        <button class="chip" data-filter="editing">Editing</button>
+        <button class="chip" data-filter="stakeholder">Stakeholder &amp; PAGA</button>
+        <button class="chip" data-filter="media">Media</button>
+        <button class="chip" data-filter="internal">Internal comms</button>
+        <button class="chip" data-filter="research">Research &amp; prep</button>
+      </div>
+
+      <div id="guide-grid">
+        <div class="guides">
+          <div class="guide feature" data-cat="writing editing" onclick="showGuide('email')">
+            <div class="num">GUIDE / 01</div><div class="cat">Writing &middot; Most used</div>
+            <h3>Draft an email in 90 seconds.</h3>
+            <p>The workhorse. A prompt pattern using the Four Questions &mdash; plus the five edits you should always make before hitting send.</p>
+            <div class="foot"><span>4 min read &middot; 6 templates</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="editing" onclick="showGuide('proofread')">
+            <div class="num">GUIDE / 02</div><div class="cat">Editing</div>
+            <h3>Proofread without losing your voice.</h3>
+            <p>How to ask AI to catch errors without rewriting your style into corporate mush.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="writing stakeholder" onclick="showGuide('speechwriting')">
+            <div class="num">GUIDE / 03</div><div class="cat">Writing</div>
+            <h3>Speechwriting &amp; talking points.</h3>
+            <p>From bullets to a speakable draft. Openers, structures, Q&amp;A anticipation.</p>
+            <div class="foot"><span>6 min &middot; 4 templates</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="writing stakeholder" onclick="showGuide('letters')">
+            <div class="num">GUIDE / 04</div><div class="cat">Stakeholder &amp; PAGA</div>
+            <h3>Letter writing &mdash; formal &amp; firm.</h3>
+            <p>Official letters, MP responses, stakeholder correspondence. Five tone rungs, warm to terse.</p>
+            <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="writing internal" onclick="showGuide('presentations')">
+            <div class="num">GUIDE / 05</div><div class="cat">Internal comms</div>
+            <h3>Presentations &amp; slide content.</h3>
+            <p>Turn a 30-page report into a 10-slide story. Outline first, then fill.</p>
+            <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide wide" data-cat="media" onclick="showGuide('media-qa')">
+            <div class="num">GUIDE / 06</div><div class="cat">Media</div>
+            <h3>Q&amp;A prep &amp; media statements.</h3>
+            <p>Surface the hostile questions before the journalist does. Draft a 40-word statement you can actually defend.</p>
+            <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide half" data-cat="media stakeholder" onclick="showGuide('crisis')">
+            <div class="num">GUIDE / 07</div><div class="cat">Crisis comms</div>
+            <h3>Holding statements when the clock is ticking.</h3>
+            <p>What AI is good for in a crisis &mdash; and where to stop and call Legal.</p>
+            <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="research" onclick="showGuide('summarize')">
+            <div class="num">GUIDE / 08</div><div class="cat">Research &amp; prep</div>
+            <h3>Summarize a long document.</h3>
+            <p>Three summary types &mdash; exec, skim, deep &mdash; and when to ask for each.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="research stakeholder" onclick="showGuide('stakeholder-map')">
+            <div class="num">GUIDE / 09</div><div class="cat">Stakeholder &amp; PAGA</div>
+            <h3>Stakeholder &amp; audience analysis.</h3>
+            <p>Who cares, what they want, what'll annoy them. Pre-meeting prep.</p>
+            <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="editing" onclick="showGuide('tone-shift')">
+            <div class="num">GUIDE / 10</div><div class="cat">Editing</div>
+            <h3>Translate tone: exec &harr; FLS &harr; union.</h3>
+            <p>Rewrite the same message for CN's six audiences without losing its meaning.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="internal" onclick="showGuide('internal-memo')">
+            <div class="num">GUIDE / 11</div><div class="cat">Internal comms</div>
+            <h3>Memos &amp; all-employee notes.</h3>
+            <p>Announcing a change without sounding like an HR bulletin.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="research" onclick="showGuide('meeting-brief')">
+            <div class="num">GUIDE / 12</div><div class="cat">Research &amp; prep</div>
+            <h3>Briefing notes for meetings.</h3>
+            <p>A one-pager for the principal: context, positions, traps, asks.</p>
+            <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="writing media" onclick="showGuide('social')">
+            <div class="num">GUIDE / 13</div><div class="cat">Media</div>
+            <h3>Social posts (LinkedIn, X, internal).</h3>
+            <p>Platform-native tone, with a "does this sound human?" test.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="guide-detail" style="display:none;">
+        <div style="padding: 16px 36px;">
+          <button class="btn ghost" onclick="hideGuide()" style="margin-bottom:20px;">&larr; Back to all guides</button>
+        </div>
+        <div id="guide-detail-content">
+          <!-- Individual guide pages will be added here in Task 4 -->
+        </div>
+      </div>
+
+    </section>
+  </div>
   <div class="tab-content" id="tab-learn"></div>
   <div class="tab-content" id="tab-tools"></div>
   <div class="tab-content" id="tab-poster"></div>
@@ -313,6 +511,37 @@ document.querySelectorAll('.tab').forEach(btn => {
     window.scrollTo(0, 0);
   });
 });
+
+// Guide filters
+document.querySelectorAll('#tab-guides .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#tab-guides .chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    const f = c.dataset.filter;
+    document.querySelectorAll('#guide-grid .guide').forEach(g => {
+      const cats = (g.dataset.cat || '').split(' ');
+      g.style.display = (f === 'all' || cats.includes(f)) ? '' : 'none';
+    });
+  });
+});
+
+// Show/hide guide detail
+function showGuide(id) {
+  document.getElementById('guide-grid').style.display = 'none';
+  document.querySelector('#tab-guides .filters').style.display = 'none';
+  document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = 'none';
+  document.getElementById('guide-detail').style.display = 'block';
+  document.querySelectorAll('.guide-page').forEach(p => p.style.display = 'none');
+  const page = document.getElementById('guide-' + id);
+  if (page) page.style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function hideGuide() {
+  document.getElementById('guide-grid').style.display = '';
+  document.querySelector('#tab-guides .filters').style.display = '';
+  document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = '';
+  document.getElementById('guide-detail').style.display = 'none';
+}
 </script>
 </body>
 </html>
