@@ -155,9 +155,11 @@ a { color: inherit; }
 
 @media print {
   .topbar, .footer, .no-print { display: none !important; }
+  .tab-content { display: none !important; }
+  #tab-poster { display: block !important; }
   body { background: #fff; }
   .card, .callout, .prompt { break-inside: avoid; }
-  @page { margin: 1.2cm; }
+  @page { margin: 1cm; }
 }
 </style>
 <style>
@@ -325,6 +327,89 @@ a { color: inherit; }
   .dual, .rule-row, .toneladder { grid-template-columns: 1fr; }
   .dual > div + div { border-left: 0; border-top: 1px solid var(--ink); }
   .rule-row .rl { border-right: 0; border-bottom: 1px solid var(--ink); }
+}
+</style>
+<style>
+/* ============================================================
+   Tab V — Your Tools (GPT inventory)
+   ============================================================ */
+.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); border: 1px solid var(--ink); margin: 0 36px; }
+.tool-card { background: var(--paper); padding: 24px; display: flex; flex-direction: column; }
+.tool-card .label { margin-bottom: 4px; }
+.tool-card h4 { font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.01em; margin: 6px 0 8px; line-height: 1.15; }
+.tool-card p { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin: 0; flex: 1; }
+.tool-card .tool-link { margin-top: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cn-red); text-decoration: none; }
+.tool-card .tool-link:hover { text-decoration: underline; }
+@media (max-width: 1000px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
+</style>
+<style>
+/* ============================================================
+   Poster tab styles (cheat sheet layout)
+   ============================================================ */
+
+#tab-poster .sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 40px;
+  background: var(--paper);
+  padding: 20mm;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+}
+#tab-poster .sheet-top { display: grid; grid-template-columns: 1fr auto; align-items: end; border-bottom: 1px solid var(--ink); padding-bottom: 10mm; }
+#tab-poster .sheet-top h1 { font-family: var(--serif); font-weight: 300; font-size: 56px; letter-spacing: -0.03em; line-height: 0.92; margin: 0; }
+#tab-poster .sheet-top h1 em { font-style: italic; color: var(--signal); }
+
+#tab-poster .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-bottom: 1px solid var(--ink); }
+#tab-poster .grid3 > div { padding: 8mm 6mm; border-right: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+#tab-poster .grid3 > div:last-child { border-right: 0; }
+#tab-poster .block h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.015em; margin: 0 0 6mm 0; line-height: 1; }
+#tab-poster .block .num { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 40px; line-height: 0.9; color: var(--signal); margin-bottom: 2mm; }
+
+#tab-poster .five-rules { padding: 8mm 0; border-bottom: 1px solid var(--ink); }
+#tab-poster .rules-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+#tab-poster .rules-row > div { padding: 0 4mm; border-left: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+#tab-poster .rules-row > div:first-child { border-left: 0; padding-left: 0; }
+#tab-poster .rr-n { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 48px; color: var(--signal); line-height: 0.9; }
+#tab-poster .rr-t { font-family: var(--serif); font-weight: 400; font-size: 14px; letter-spacing: -0.01em; line-height: 1.15; margin-top: 4mm; }
+#tab-poster .rr-p { font-size: 10.5px; line-height: 1.45; color: var(--ink-2); margin-top: 2mm; }
+
+#tab-poster .prompt-fmt { padding: 8mm 0; border-bottom: 1px solid var(--ink); }
+#tab-poster .pf-grid { display: grid; grid-template-columns: 80px 1fr; gap: 4mm; margin-bottom: 3mm; }
+#tab-poster .pf-lab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); padding-top: 1mm; }
+#tab-poster .pf-tx { font-family: var(--serif); font-size: 13.5px; line-height: 1.4; color: var(--ink-2); }
+#tab-poster .pf-tx b { color: var(--ink); font-weight: 500; }
+
+#tab-poster .lights-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; padding: 8mm 0; border-bottom: 1px solid var(--ink); }
+#tab-poster .lights-row > div { padding: 0 4mm; border-left: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+#tab-poster .lights-row > div:first-child { border-left: 0; padding-left: 0; }
+#tab-poster .lr-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-block; vertical-align: middle; margin-right: 6px; }
+#tab-poster .lr.green .lr-dot { background: #7aa86a; }
+#tab-poster .lr.amber .lr-dot { background: #d4a017; }
+#tab-poster .lr.red .lr-dot { background: #b33a2b; }
+#tab-poster .lr h3 { font-family: var(--serif); font-weight: 400; font-size: 18px; margin: 0 0 2mm 0; display: flex; align-items: center; }
+#tab-poster .lr ul { margin: 0; padding-left: 4mm; font-size: 10.5px; line-height: 1.5; color: var(--ink-2); }
+#tab-poster .lr li { margin-bottom: 1mm; }
+
+#tab-poster .redflags { padding: 8mm 0 0; }
+#tab-poster .redflags h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.015em; margin: 0 0 4mm 0; }
+#tab-poster .flags-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm 6mm; font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); }
+
+#tab-poster .sheet-foot {
+  position: absolute;
+  bottom: 10mm;
+  left: 20mm;
+  right: 20mm;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-top: 4mm;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
 }
 </style>
 </head>
@@ -2232,9 +2317,1404 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
 
     </section>
   </div>
-  <div class="tab-content" id="tab-learn"></div>
-  <div class="tab-content" id="tab-tools"></div>
-  <div class="tab-content" id="tab-poster"></div>
+  <div class="tab-content" id="tab-learn">
+
+    <section class="section" style="padding-top: 44px;">
+      <div class="section-head">
+        <div class="num"><em>IV</em></div>
+        <div>
+          <div class="eyebrow">The fundamentals</div>
+          <h2>Know what AI is, and isn't, doing.</h2>
+          <p>Short, non-technical explainers. Skim them once so the task guides make sense.</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="learn-grid">
+      <div class="guides" style="padding: 0 36px 36px;">
+        <div class="guide wide" data-cat="literacy" onclick="showLearn('four-questions')" style="background:var(--sage); cursor:pointer;">
+          <div class="num">LITERACY / 01</div><div class="cat" style="color:var(--sage-deep);">The one you reread</div>
+          <h3>The Four Questions, in depth.</h3>
+          <p>The framework that underpins every guide. Worked example: an announcement that starts vague and ends usable in four moves.</p>
+          <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide half" data-cat="literacy" onclick="showLearn('hallucinations')" style="background:#f3d7cf; cursor:pointer;">
+          <div class="num">LITERACY / 02</div><div class="cat" style="color:var(--danger);">Important</div>
+          <h3>Hallucinations: why it lies with confidence.</h3>
+          <p>Why AI invents sources, stats, and quotes, and the three-step habit that catches it.</p>
+          <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('confidentiality')" style="background:#f5e3b8; cursor:pointer;">
+          <div class="num">LITERACY / 03</div><div class="cat" style="color:#a57a00;">Before you paste</div>
+          <h3>What NOT to paste into AI.</h3>
+          <p>Traffic-light guide. Plus the safe-redaction trick that unlocks 90% of real work.</p>
+          <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('when-not-to')" style="cursor:pointer;">
+          <div class="num">LITERACY / 04</div><div class="cat">Judgment</div>
+          <h3>When <em>not</em> to use AI.</h3>
+          <p>Condolences, legally-binding language, safeguarding, real-time facts. Shorter list than you'd think.</p>
+          <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('iterating')" style="cursor:pointer;">
+          <div class="num">LITERACY / 05</div><div class="cat">Technique</div>
+          <h3>Iterating: the follow-up is the skill.</h3>
+          <p>One-shot prompts fail. The four-turn conversation that gets you there.</p>
+          <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('models')" style="cursor:pointer;">
+          <div class="num">LITERACY / 06</div><div class="cat">Reference</div>
+          <h3>Which tool for which job.</h3>
+          <p>ChatGPT modes, custom GPTs, Thinking mode, Copilot, what each one is good at.</p>
+          <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('custom-gpts')" style="cursor:pointer;">
+          <div class="num">LITERACY / 07</div><div class="cat">Advanced</div>
+          <h3>Build a reliable custom GPT.</h3>
+          <p>The three moves: define the job, lock the sources, standardize the output.</p>
+          <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+        <div class="guide" data-cat="literacy" onclick="showLearn('house-rules')" style="cursor:pointer;">
+          <div class="num">LITERACY / 08</div><div class="cat">CN rules</div>
+          <h3>CN house rules for AI output.</h3>
+          <p>Canadian spelling, no acronyms, no em dashes, no emoji, placeholders for missing facts. Copy-paste into any prompt.</p>
+          <div class="foot"><span>2 min read</span><span class="arrow">&rarr;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="learn-detail" style="display:none;">
+      <div style="padding: 16px 36px;">
+        <button class="btn ghost" onclick="hideLearn()" style="margin-bottom:20px;">&larr; Back to all topics</button>
+      </div>
+      <div id="learn-detail-content">
+
+        <!-- LITERACY 01: FOUR QUESTIONS -->
+        <section class="guide-page" id="learn-four-questions" style="display:none;">
+
+<style>
+.q-card { border: 1px solid var(--ink); border-radius: var(--r-md); background: var(--card); padding: 26px 28px; margin-bottom: 16px; display: grid; grid-template-columns: 72px 1fr; gap: 22px; }
+.q-card .qn { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 72px; line-height: 0.85; color: var(--cn-red); }
+.q-card h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.015em; margin: 4px 0 10px; line-height: 1.1; }
+.q-card .asks { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-soft); text-transform: uppercase; margin-bottom: 14px; }
+.q-card ul { margin: 8px 0 0; padding-left: 18px; font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
+.q-card li { margin-bottom: 4px; }
+.q-card .trap { margin-top: 14px; padding: 12px 14px; background: #f5e3b8; border-radius: 3px; font-size: 13px; line-height: 1.45; }
+.q-card .trap b { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #a57a00; display: block; margin-bottom: 4px; }
+
+.walk { display: grid; grid-template-columns: 110px 1fr; gap: 0; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
+.walk .stage { background: var(--ink); color: var(--paper); padding: 18px 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--ink); }
+.walk .stage .n { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 42px; color: var(--cn-red); line-height: 1; margin-bottom: 6px; }
+.walk .walk-body { padding: 20px 24px; background: var(--card); }
+.walk .row + .row { border-top: 1px solid var(--ink); }
+.walk .row { display: contents; }
+.walk .walk-body p { margin: 0 0 10px 0; font-size: 14.5px; line-height: 1.55; }
+.walk .walk-body p.prompt-ex { font-family: var(--mono); font-size: 12.5px; background: #141414; color: #f3ece0; padding: 14px 16px; border-radius: 3px; line-height: 1.55; margin-top: 8px; white-space: pre-wrap; }
+.walk .walk-body p.prompt-ex .var { color: var(--cn-red); font-style: italic; }
+.walk .walk-body .verdict { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 10px; }
+.walk .walk-body .verdict.bad { color: var(--danger); }
+.walk .walk-body .verdict.good { color: var(--sage-deep); }
+@media (max-width: 900px) { .walk { grid-template-columns: 1fr; } }
+</style>
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; The one you reread &middot; 5 min</div>
+  <h1>The Four Questions, <em>in depth.</em></h1>
+  <p class="lede">Every guide in this library is the same four questions in a different disguise. Learn them once, and you'll never stare at a blank prompt box again.</p>
+  <div class="meta">
+    <span class="tag signal">Foundation</span>
+    <span class="tag">Framework</span>
+    <span class="tag">Works with any AI tool</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>Why a framework.</h2>
+    <p class="sub">The case for rigour</p>
+  </div>
+  <div class="body">
+    <p class="big">The quality of AI output is almost entirely a function of the quality of the prompt. "Write an email about the service change" will always produce generic slop. A well-constructed prompt, specific about job, audience, format and information, produces a draft that's 70% of the way there.</p>
+    <p>The Four Questions is a simple structure that forces you to think through what you actually want before you ask for it. It works for ChatGPT, Claude, Copilot, custom GPTs, and any tool that comes after them. It's not a gimmick. It's just the minimum brief you'd give a competent human writer.</p>
+    <p>Skim this page once. Come back to it whenever a prompt isn't working, almost every failure traces back to a question you didn't answer.</p>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The four questions.</h2>
+    <p class="sub">In the order you should answer them</p>
+  </div>
+  <div class="body">
+
+    <div class="q-card">
+      <div class="qn">1</div>
+      <div>
+        <h3>What job am I asking AI to do?</h3>
+        <div class="asks">Sets the verb &middot; Sets the red lines</div>
+        <p style="margin:0 0 10px; font-size:14.5px; color:var(--ink-2); line-height:1.55;">Pick one job. Don't stack them. An email is a draft; a press release is a draft; a fact-check is a fact-check. If you need two jobs, run two prompts.</p>
+        <ul>
+          <li><b>Verbs that work:</b> draft, rewrite, edit, shorten, expand, summarize, translate, brainstorm, critique, compare, extract.</li>
+          <li><b>Red lines:</b> tell AI what NOT to do. "Do not speculate on cause." "Do not add a call to action." "Do not invent statistics."</li>
+        </ul>
+        <div class="trap"><b>Common trap</b> "Can you help me with this email?" -- AI will happily help. With what, exactly? Pick a verb.</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="qn">2</div>
+      <div>
+        <h3>Who is it for, and what should it achieve?</h3>
+        <div class="asks">Sets the tone &middot; Sets the outcome</div>
+        <p style="margin:0 0 10px; font-size:14.5px; color:var(--ink-2); line-height:1.55;">CN has six default audiences (executives, management, front-line supervisors, unionized employees, media, investors). Name the one you're writing for. Then say what success looks like.</p>
+        <ul>
+          <li><b>Tone:</b> direct, respectful, warm, firm, neutral, news-first, plainspoken. Pick one or two.</li>
+          <li><b>Outcome:</b> what should the reader do, feel, understand, or decide after reading? If you can't say, you're not ready to write.</li>
+        </ul>
+        <div class="trap"><b>Common trap</b> "For internal staff." That's 24,000 people across six functions. Be specific, who, doing what.</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="qn">3</div>
+      <div>
+        <h3>What format should it use?</h3>
+        <div class="asks">Sets the deliverable &middot; Sets the length</div>
+        <p style="margin:0 0 10px; font-size:14.5px; color:var(--ink-2); line-height:1.55;">Be explicit. "Email, 150 words, subject line, three bullets, closing line" gives AI something to aim at. "Make it good" does not.</p>
+        <ul>
+          <li><b>Formats:</b> email, memo, press release, briefing note, Q&amp;A, talking points, letter, social post, slide outline, statement.</li>
+          <li><b>Structure:</b> give it the shape, headline + lede + quote, or context + decision + rationale + next steps.</li>
+          <li><b>Length:</b> always give a word count or range. AI's default is too long.</li>
+        </ul>
+        <div class="trap"><b>Common trap</b> Asking for a "short" anything. Short means different things to AI than to you. Give a number.</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="qn">4</div>
+      <div>
+        <h3>What information and rules does AI need?</h3>
+        <div class="asks">Sets the facts &middot; Sets the house rules</div>
+        <p style="margin:0 0 10px; font-size:14.5px; color:var(--ink-2); line-height:1.55;">This is where most prompts fail. AI can't know CN facts that aren't in its training data and aren't in your prompt. Paste the source. Name the dates. Tell it what to do when a fact is missing.</p>
+        <ul>
+          <li><b>Facts:</b> dates, numbers, names, locations, decisions made, sources to cite.</li>
+          <li><b>House rules:</b> Canadian spelling. No acronyms on first use. No em dashes. No emoji. Placeholder <code>[confirm with SME]</code> for missing facts.</li>
+          <li><b>Examples:</b> paste a past email or release you want it to sound like. This is the fastest way to lock in voice.</li>
+        </ul>
+        <div class="trap"><b>Common trap</b> Not telling AI what to do when it doesn't know something. Its default is to invent. Tell it to use a placeholder instead.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>A worked example.</h2>
+    <p class="sub">Four turns, from useless to usable</p>
+  </div>
+  <div class="body">
+    <p>A supervisor needs to tell front-line crews about a new medical-evaluation process starting April 15 at the Montreal yard. Here's how the prompt evolves.</p>
+
+    <div class="walk" style="margin-top: 18px;">
+      <div class="row">
+        <div class="stage"><div class="n">v1</div>The one-liner</div>
+        <div class="walk-body">
+          <p class="prompt-ex">write an email about the new medical evaluation process</p>
+          <p>AI produces 400 words of corporate-speak. Generic tone. Wrong audience (sounds like it's for managers). No dates, no yard named. References "our colleagues" four times.</p>
+          <div class="verdict bad">&#x2717; Unusable. Every fact is invented.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="stage"><div class="n">v2</div>+ Job &amp; audience</div>
+        <div class="walk-body">
+          <p class="prompt-ex"><span class="var">JOB:</span> Draft an email.
+<span class="var">AUDIENCE:</span> Front-line supervisors at Montreal Taschereau yard. They pass this on to crews verbally.
+<span class="var">GOAL:</span> They understand the change and can explain it without reading from a script.</p>
+          <p>Better tone, direct, practical. But still invents a process ("biennial review"), still no dates. Length untamed.</p>
+          <div class="verdict bad">&#x2717; Closer. Still inventing facts.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="stage"><div class="n">v3</div>+ Format</div>
+        <div class="walk-body">
+          <p class="prompt-ex"><span class="var">FORMAT:</span> Email, 140-170 words. Subject line, one-line opener, three bullets (what, when, why), one closing line with who to contact.</p>
+          <p>Now the shape is right. Word count lands. Three bullets appear. But "contact" field is made up, and the "why" bullet speculates on safety rationale that isn't CN's actual reason.</p>
+          <div class="verdict bad">&#x2717; Shape correct. Content still untrustworthy.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="stage"><div class="n">v4</div>+ Info &amp; rules</div>
+        <div class="walk-body">
+          <p class="prompt-ex"><span class="var">INFO:</span>
+&bull; Change: new medical-evaluation process per updated Transport Canada guidance
+&bull; Starts: April 15, 2026
+&bull; Scope: Montreal Taschereau yard only (pilot)
+&bull; Contact: [SUPERVISOR NAME, confirm with HR]
+&bull; Reason: align with updated TC fitness-for-duty standard
+<span class="var">RULES:</span> Canadian spelling. No acronyms. No em dashes. If a fact isn't in INFO, use [confirm with SME], do not invent.</p>
+          <p>Clean draft. Right length. Right tone. Facts correct. Placeholder where it should be. Three minutes of edits and it goes out.</p>
+          <div class="verdict good">&#x2713; Usable. First real draft.</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;">The lesson: each question adds precision. Skip one, and AI fills the gap with its best guess. That best guess is your problem, not its.</p>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom: 0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>The pocket template.</h2>
+    <p class="sub">Copy. Paste. Fill in.</p>
+  </div>
+  <div class="body">
+    <p>Every task guide in this library is this template with the blanks pre-filled for a specific job. But the template works on its own, for anything.</p>
+    <div class="prompt" style="margin-top:14px;">
+<button class="copy-btn">Copy</button><span class="comment"># The Four Questions template</span>
+
+<span class="var">JOB:</span> [one verb, one sentence. What NOT to do.]
+<span class="var">AUDIENCE &amp; OUTCOME:</span> [who is reading this. What you want them to do / feel / decide.]
+<span class="var">FORMAT:</span> [deliverable type, length, structure]
+<span class="var">INFO:</span>
+&bull; [fact 1]
+&bull; [fact 2]
+&bull; [fact 3]
+
+<span class="var">HOUSE RULES:</span> Canadian spelling. No acronyms on first use. No em dashes. No emoji. If a fact isn't in INFO, use [confirm with SME], do not invent. Match the tone of the example below.
+
+<span class="var">EXAMPLE (optional):</span>
+[paste a past piece whose voice you want]
+
+Draft now.
+    </div>
+    <p style="margin-top:20px;">Save this in your CN notes. When you need a fresh prompt, start a new chat, paste the template, and fill it in. Thirty seconds of thought beats thirty minutes of rewriting.</p>
+  </div>
+</section>
+
+        </section><!-- /learn-four-questions -->
+
+        <!-- LITERACY 02: HALLUCINATIONS -->
+        <section class="guide-page" id="learn-hallucinations" style="display:none;">
+
+<header class="guide-hero" style="background:#f3d7cf;">
+  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; Important &middot; 4 min</div>
+  <h1>It lies <em>with confidence.</em></h1>
+  <p class="lede">AI doesn't know what's true. It predicts what comes next, word by word. When reality runs thin, it keeps predicting, and writes things that sound right but aren't. Here's how to catch it.</p>
+  <div class="meta">
+    <span class="tag" style="background:var(--danger); color:white; border-color:var(--danger);">Read before publishing</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>What it is.</h2>
+    <p class="sub">A feature, not a bug</p>
+  </div>
+  <div class="body">
+    <p class="big">A "hallucination" is when AI produces confident-sounding text that is factually wrong. Invented statistics. Fake quotes. Non-existent people. Made-up regulations. Court cases that never happened. Case law with plausible citations that don't exist.</p>
+    <p>This isn't occasional. It's structural. AI models generate the most statistically-likely next word given the prompt, they don't check a database of facts. When you ask about something specific to CN, something recent, or something niche, the "most likely next word" path often leads somewhere plausible but fictional.</p>
+    <p>The tell: hallucinated output sounds <em>more</em> confident than real output. Real answers hedge. Hallucinations rarely do.</p>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>What AI will invent.</h2>
+    <p class="sub">The usual suspects</p>
+  </div>
+  <div class="body">
+    <ul class="check" style="max-width:60ch;">
+      <li><b>Statistics</b> about CN, our network, our peers, or anything market-sized.</li>
+      <li><b>Quotes</b> from executives, politicians, or analysts, complete with attribution.</li>
+      <li><b>Dates</b> of announcements, launches, incidents, regulatory changes.</li>
+      <li><b>Regulations</b>, bylaws, and legal citations, with real-sounding section numbers.</li>
+      <li><b>Names</b> of internal CN roles, teams, committees, and programs.</li>
+      <li><b>Historical events</b> near the edge of its training data.</li>
+      <li><b>Sources</b>, URLs, report titles, author names. The fake ones look exactly like the real ones.</li>
+    </ul>
+    <div class="callout danger" style="margin-top: 22px;">
+      <span class="label">The worst kind</span>
+      <p><b>Plausible invention.</b> A fabricated statistic that's within the right order of magnitude. A fake quote that sounds like something the CEO would say. A made-up sub-regulation of a real Act. These are the ones that get past the first read.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The three-step habit.</h2>
+    <p class="sub">That catches most of it</p>
+  </div>
+  <div class="body">
+    <ol class="steps">
+      <li>
+        <h4>Provide the facts. Don't ask for them.</h4>
+        <p>The #1 prevention: never ask AI to retrieve a CN fact. Paste the fact into the prompt. If you don't have it, find it first (not from AI). AI's job is shaping, not sourcing.</p>
+      </li>
+      <li>
+        <h4>Tell it what to do when it doesn't know.</h4>
+        <p>Add to your prompt: <i>"If a fact isn't in INFO, use [confirm with SME], do not invent."</i> This rewires AI's default. Instead of guessing, it flags.</p>
+      </li>
+      <li>
+        <h4>Challenge every specific claim before it leaves your desk.</h4>
+        <p>Ctrl-F for dates, names, numbers, quoted speech, regulations. For each, ask: <i>"Where did this come from?"</i> If the answer is "AI said so," it doesn't ship.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom: 0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Red-flag phrases.</h2>
+    <p class="sub">Stop and check</p>
+  </div>
+  <div class="body">
+    <p>When you see these in an AI draft, treat everything around them as suspect until verified.</p>
+    <div class="ba" style="margin-top:16px;">
+      <div class="bad">
+        <div class="hd">&#x2717; Red-flag phrasing</div>
+        <p>"Studies show..."</p>
+        <p>"According to a 2024 report..."</p>
+        <p>"Industry data indicates..."</p>
+        <p>"A recent analysis found..."</p>
+        <p>"Experts agree..."</p>
+        <p>"As noted in the [plausible-sounding publication]..."</p>
+      </div>
+      <div class="good">
+        <div class="hd">&#x2713; What to do</div>
+        <p>Remove the claim, or...</p>
+        <p>Ask AI "Which study? Provide the exact title and author."</p>
+        <p>Then verify <em>that</em> source independently. Half the time it doesn't exist.</p>
+        <p>Never cite a source AI gave you without opening the primary document yourself.</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:22px;">
+      <span class="label">CN rule</span>
+      <p>Any fact, number, date, or name that could be fact-checked by a journalist must have a non-AI source. AI can help you write the sentence, never source the claim.</p>
+    </div>
+  </div>
+</section>
+
+        </section><!-- /learn-hallucinations -->
+
+        <!-- LITERACY 03: CONFIDENTIALITY -->
+        <section class="guide-page" id="learn-confidentiality" style="display:none;">
+
+<style>
+.lights { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--ink); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.light { padding: 36px 28px 32px; }
+.light.green { background: #dfe7d0; }
+.light.amber { background: #f5e3b8; }
+.light.red { background: #f3d7cf; }
+.light .dot { width: 22px; height: 22px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 10px; border: 1.5px solid var(--ink); }
+.light.green .dot { background: #7aa86a; }
+.light.amber .dot { background: #d4a017; }
+.light.red .dot { background: #b33a2b; }
+.light h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; letter-spacing: -0.02em; margin: 0; line-height: 1; display: flex; align-items: center; }
+.light .verdict { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 12px; margin-bottom: 14px; color: var(--ink); }
+.light ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.55; }
+.light li { margin-bottom: 8px; }
+
+.redaction { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
+.redaction > div { padding: 22px; }
+.redaction > div + div { border-left: 1px solid var(--ink); }
+.redaction .hd { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; color: var(--ink-soft); }
+.redaction pre { font-family: var(--mono); font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; margin: 0; background: var(--paper-2); padding: 14px; border-radius: 4px; }
+.redaction .safe { background: var(--sage); }
+.redaction .unsafe { background: #f3d7cf; }
+@media (max-width: 900px) {
+  .lights { grid-template-columns: 1fr; }
+  .redaction { grid-template-columns: 1fr; }
+  .redaction > div + div { border-left: 0; border-top: 1px solid var(--ink); }
+}
+</style>
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Before you paste &middot; 3 min read &middot; Read this first</div>
+  <h1>What NOT<br>to paste <em>into AI.</em></h1>
+  <p class="lede">The single highest-risk moment in your day. A traffic-light guide, green, amber, red, and a safe-redaction trick that lets you use AI on ~90% of the work you can't paste directly.</p>
+</header>
+
+<section style="padding: 36px 40px 18px;">
+  <div class="eyebrow" style="margin-bottom:8px;">Assumption</div>
+  <p style="font-family: var(--serif); font-size: 22px; line-height: 1.4; max-width: 70ch; font-weight: 300; margin: 0;">You're using a <b>consumer</b> AI tool (the free or personal-paid version of ChatGPT, Claude, Gemini, Copilot). If your org has an <b>enterprise</b> contract with data protections, the rules are looser, but check with IT, don't assume.</p>
+</section>
+
+<div class="lights">
+  <div class="light green">
+    <h3><span class="dot"></span>Green</h3>
+    <div class="verdict">Paste freely</div>
+    <ul>
+      <li>Already-public press releases, speeches, reports</li>
+      <li>Your own first-person writing (emails you wrote, notes from your own head)</li>
+      <li>Published news articles and public policy documents</li>
+      <li>Prompts and templates (from this library or elsewhere)</li>
+      <li>Generic questions, "how do I structure a Q&amp;A?"</li>
+      <li>Fictional examples you've made up to test a prompt</li>
+    </ul>
+  </div>
+  <div class="light amber">
+    <h3><span class="dot"></span>Amber</h3>
+    <div class="verdict">Redact first</div>
+    <ul>
+      <li>Internal drafts not yet published (remove names, numbers)</li>
+      <li>Stakeholder correspondence (replace names with [STAKEHOLDER], orgs with [ORG])</li>
+      <li>Meeting minutes (redact attendees, specific statements, decisions)</li>
+      <li>Internal strategy that will be public eventually</li>
+      <li>Board papers (heavy redaction, or just don't)</li>
+      <li>Constituent letters (always redact names, addresses, case numbers)</li>
+    </ul>
+  </div>
+  <div class="light red">
+    <h3><span class="dot"></span>Red</h3>
+    <div class="verdict">Never, no exceptions</div>
+    <ul>
+      <li>Personal data (names + any identifier: address, DOB, health, finance)</li>
+      <li>Legal advice received, under privilege, or pending</li>
+      <li>Pre-announcement market-sensitive information</li>
+      <li>Security, safeguarding, or child-protection matters</li>
+      <li>HR matters involving specific people</li>
+      <li>Anything labelled confidential, restricted, or protective-marked</li>
+      <li>Whistleblower or investigation material</li>
+      <li>Login credentials, API keys, access tokens, ever</li>
+    </ul>
+  </div>
+</div>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">01</div><h2>The redaction trick.</h2><p class="sub">Unlocks ~90% of real work</p></div>
+  <div class="body">
+    <p class="big">Replace specifics with placeholders. The AI doesn't need to know <em>who</em>. It needs to know the <em>shape</em>.</p>
+    <div class="redaction">
+      <div class="unsafe">
+        <div class="hd">&#x2717; Don't paste this</div>
+        <pre>Draft a response to Priya Sharma at
+Northcott Manufacturing (15 Whitfield
+Rd, Leeds LS11 8XY, case #C-2024-8831)
+regarding her complaint of 14 March
+about the air-quality monitoring at
+the Brierfield facility, which
+breached 42 µg/m³ on 3 occasions
+in Q1...</pre>
+      </div>
+      <div class="safe">
+        <div class="hd">&#x2713; Paste this instead</div>
+        <pre>Draft a response to [STAKEHOLDER]
+at [MANUFACTURING COMPANY]
+regarding their complaint of
+[DATE] about air-quality
+monitoring at [FACILITY], which
+breached the threshold on 3
+occasions in a recent quarter.
+Tone: Rung 3 official, firm.</pre>
+      </div>
+    </div>
+    <div class="callout info" style="margin-top: 20px;">
+      <span class="label">The key insight</span>
+      <p>The <em>structure</em> of your letter is the same whether it's to Priya or Patel. Let AI draft the structure. Fill the real names in yourself, in the safety of your own document.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Five redaction patterns.</h2><p class="sub">Memorise these</p></div>
+  <div class="body">
+    <ul class="check">
+      <li><b>People:</b> <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[PERSON]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[SENIOR OFFICIAL]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[CONSTITUENT]</code>. Include their role or relationship so tone is right.</li>
+      <li><b>Organisations:</b> <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[COMPANY]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[REGULATOR]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[NGO]</code>. Include the sector: "[COMPANY, a regional food processor]".</li>
+      <li><b>Numbers:</b> round them, or replace with "[X]". "Revenues fell by [X]%" is enough.</li>
+      <li><b>Dates:</b> "[DATE]" or relative ("last quarter"). Exact dates can tie to published events.</li>
+      <li><b>Identifiers:</b> redact case numbers, NI numbers, account numbers, postcodes entirely. Do not paraphrase them.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>When in doubt.</h2><p class="sub">Three-question test</p></div>
+  <div class="body">
+    <p class="big">If you're hesitating, run these three questions. Any "no" means don't paste.</p>
+    <ol class="steps">
+      <li><div><h4>Would I email this to a friend outside work?</h4><p>If the answer is no because of confidentiality, it's the same no for AI.</p></div></li>
+      <li><div><h4>Would I be comfortable if a screenshot of this prompt appeared in the news tomorrow?</h4><p>Not a rhetorical question. Consumer AI chats have leaked.</p></div></li>
+      <li><div><h4>If the person mentioned in this prompt saw it, would they object?</h4><p>If yes, redact until they wouldn't.</p></div></li>
+    </ol>
+    <div class="callout danger" style="margin-top: 22px;">
+      <span class="label">When to escalate, not AI</span>
+      <p>Anything involving safeguarding, credible threats, legal proceedings, or leaks, go to the relevant lead. Not AI. Not Slack. Not the group chat.</p>
+    </div>
+  </div>
+</section>
+
+        </section><!-- /learn-confidentiality -->
+
+        <!-- LITERACY 04: WHEN NOT TO -->
+        <section class="guide-page" id="learn-when-not-to" style="display:none;">
+
+<style>
+.stop { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.stop .stop-card { background: var(--paper); padding: 28px 26px; }
+.stop .stop-card .n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--danger); text-transform: uppercase; }
+.stop .stop-card h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; letter-spacing: -0.015em; margin: 10px 0 10px; line-height: 1.1; }
+.stop .stop-card p { margin: 0 0 10px 0; font-size: 14px; line-height: 1.55; color: var(--ink-2); }
+.stop .stop-card .why { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--ink-soft); text-transform: uppercase; border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); padding-top: 10px; margin-top: 12px; }
+@media (max-width: 900px) { .stop { grid-template-columns: 1fr; } }
+</style>
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; Judgment &middot; 3 min</div>
+  <h1>When <em>not</em> to use AI.</h1>
+  <p class="lede">Shorter list than you'd think. These are the situations where AI is actively the wrong tool, not slow, not fiddly, wrong.</p>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>Hard stops.</h2>
+    <p class="sub">Close the chat window</p>
+  </div>
+  <div class="body">
+    <div class="stop">
+      <div class="stop-card">
+        <div class="n">Hard stop 01</div>
+        <h3>Condolences and sympathy.</h3>
+        <p>A derailment with fatalities. A colleague's loss. A community in grief. Do not draft in AI. Do not let AI near the words.</p>
+        <div class="why">Why: authenticity is the message. AI flattens it.</div>
+      </div>
+      <div class="stop-card">
+        <div class="n">Hard stop 02</div>
+        <h3>Legally binding language.</h3>
+        <p>Contracts, settlement statements, regulatory filings, anything Legal will review line-by-line. AI is not a lawyer.</p>
+        <div class="why">Why: a single hallucinated clause is a problem.</div>
+      </div>
+      <div class="stop-card">
+        <div class="n">Hard stop 03</div>
+        <h3>Safety-critical instructions.</h3>
+        <p>Operational bulletins, emergency procedures, evacuation guidance. These come from the safety team, verbatim.</p>
+        <div class="why">Why: plausible-sounding wrong is catastrophic.</div>
+      </div>
+      <div class="stop-card">
+        <div class="n">Hard stop 04</div>
+        <h3>Market-sensitive material.</h3>
+        <p>Anything about earnings, M&amp;A, undisclosed projects, forward guidance. Do not even describe it in a prompt.</p>
+        <div class="why">Why: confidentiality, selective disclosure, regulatory risk.</div>
+      </div>
+      <div class="stop-card">
+        <div class="n">Hard stop 05</div>
+        <h3>Real-time information.</h3>
+        <p>Today's weather. Yesterday's service status. What a minister said this morning. AI's training data is months old.</p>
+        <div class="why">Why: it will make up a current answer rather than say "I don't know."</div>
+      </div>
+      <div class="stop-card">
+        <div class="n">Hard stop 06</div>
+        <h3>Anything you can't verify.</h3>
+        <p>If you don't know the subject well enough to spot an invented fact, don't publish the output. Pass it to someone who does.</p>
+        <div class="why">Why: AI optimizes for plausibility, not accuracy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The test.</h2>
+    <p class="sub">Before you open ChatGPT</p>
+  </div>
+  <div class="body">
+    <p class="big">Would you send a polite-but-inexperienced intern to write this first draft? If yes, AI can help. If the answer is "absolutely not, this one needs judgment I can't delegate," close the chat window.</p>
+    <p>AI is a first-draft engine. Everything above is a last-draft situation, or a situation where a draft is the wrong starting point entirely.</p>
+  </div>
+</section>
+
+        </section><!-- /learn-when-not-to -->
+
+        <!-- LITERACY 05: ITERATING -->
+        <section class="guide-page" id="learn-iterating" style="display:none;">
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Technique &middot; 4 min read</div>
+  <h1>Iterating: the follow-up is <em>the skill.</em></h1>
+  <p class="lede">One-shot prompts fail. The four-turn conversation that gets you where you need to go.</p>
+  <div class="meta">
+    <span class="tag">For: everyone</span>
+    <span class="tag">Time: 4 min</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Why one-shot fails.</h2><p class="sub">The first response is raw material, not a deliverable</p></div>
+  <div class="body">
+    <p class="big">A single prompt almost never produces usable output. The first response is a rough draft, like handing a colleague a one-paragraph brief and expecting a finished product. The real skill is turns 2, 3, and 4.</p>
+    <p>Most people give up on AI after turn 1. They see output that's close but not right, decide AI isn't good enough, and go back to writing from scratch. What they're actually seeing is a first draft, and first drafts always need work, whether they come from AI or a colleague.</p>
+    <p>The difference is that with AI, the follow-up takes 10 seconds. You don't have to be diplomatic. You can say exactly what's wrong and what you want instead.</p>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>The four-turn pattern.</h2><p class="sub">What to do at each step</p></div>
+  <div class="body">
+    <ol class="steps">
+      <li>
+        <div>
+          <h4>The brief.</h4>
+          <p>Give the Four Questions prompt. Get a rough first draft. Don't expect it to be right. Read it as raw material, not a finished product. Your job at this stage is to identify what's wrong, not to be impressed.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>The redirect.</h4>
+          <p>"This is too [formal/long/vague]. Fix [specific thing]. Keep [specific thing that works]." Be precise about what's wrong and what to protect. Vague complaints ("make it better") produce vague improvements. Specific complaints produce specific fixes.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>The sharpen.</h4>
+          <p>"Cut 20%. Move the ask to the first sentence. Replace [vague word] with [specific word]." This is where most output becomes usable. The redirect gets you to the right shape; the sharpen gets you to the right words.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>The final check.</h4>
+          <p>"Read this as [audience]. What would they object to? What's missing?" This catches blind spots before they cost you. Ask AI to inhabit the reader's perspective, not yours. You're too close to the draft by turn 4 to see it clearly.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>Follow-up phrases that work.</h2><p class="sub">Copy these. Adapt them. Use them.</p></div>
+  <div class="body">
+    <p>The hardest part of iterating is knowing what to say. These phrases are specific enough to get results. Keep this page open while you're working.</p>
+    <div class="rules-stack">
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Too corporate."</div>
+        <div class="rr">Make it sound like I'd actually say this.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Good structure."</div>
+        <div class="rr">Good structure, wrong tone. Shift to [audience].</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Keep 2 and 3."</div>
+        <div class="rr">Keep paragraphs 2 and 3. Rewrite the opener only.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Shorter."</div>
+        <div class="rr">Under [N] words. Cut from the middle, not the ends.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Now stress-test."</div>
+        <div class="rr">Read it as [hostile journalist / skeptical MP / tired employee]. What breaks?</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Three versions."</div>
+        <div class="rr">That's close. Give me three alternate versions of the second paragraph only.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Wrong emphasis."</div>
+        <div class="rr">The facts are right but the emphasis is wrong. Lead with [X] instead of [Y].</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl" style="font-family: var(--mono); font-size: 11px;">"Sounds like AI."</div>
+        <div class="rr">This sounds like AI wrote it. Which phrases are the tell? Replace them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">04</div><h2>Before &amp; after.</h2><p class="sub">Same brief. Four turns apart.</p></div>
+  <div class="body">
+    <div class="ba">
+      <div class="bad">
+        <div class="hd">Turn 1 only</div>
+        <p><b>What you get:</b> A generic, bloated email that opens with "I hope this email finds you well." Three paragraphs of context before the ask. Passive voice throughout. Closes with "please don't hesitate to reach out."</p>
+        <p>Technically correct. Sounds like it was written by no one. Will be half-read, if read at all.</p>
+        <p class="label" style="color:var(--danger); margin-top:10px;">Raw material. Not usable yet.</p>
+      </div>
+      <div class="good">
+        <div class="hd">After Turn 4</div>
+        <p><b>What you get:</b> The ask is in the first sentence. Two paragraphs of relevant context only. Active voice. Closes with a clear next step and a specific date.</p>
+        <p>Sounds like you wrote it. Reader knows what they're being asked before the end of line one.</p>
+        <p class="label" style="color:var(--sage-deep); margin-top:10px;">Ready to send.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>When to start over.</h2><p class="sub">The problem might be the brief, not the follow-ups</p></div>
+  <div class="body">
+    <div class="callout warn">
+      <span class="label">Start over signal</span>
+      <p>If turn 3 still isn't working, the problem is the brief, not the follow-ups. Go back to Turn 1 with a better Four Questions prompt rather than piling on corrections. Three bad follow-ups won't fix a vague brief.</p>
+    </div>
+    <p style="margin-top:16px;">The signal is when every follow-up produces something that's different but still wrong. You're steering a ship that's pointing the wrong direction. The corrections aren't compounding, you're going in circles.</p>
+    <p>When that happens, stop. Open a new message. Rewrite the brief from scratch with what you now know about what you actually want. Turn 1 of a better brief will outperform turn 6 of a vague one.</p>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2); border-bottom: 0;">
+  <div class="hd"><div class="n">06</div><h2>Same chat, not new chat.</h2><p class="sub">Context is the asset. Don't throw it away.</p></div>
+  <div class="body">
+    <p>Follow-ups work because ChatGPT remembers the conversation. Every turn builds on everything before it. Starting a new chat loses all of that context, you're back to turn 1 with nothing carried forward.</p>
+    <p>Stay in the same thread for the full drafting session. The conversation is your working document. When you get to something close, you can say "we're nearly there, just one more change" and ChatGPT has everything it needs.</p>
+    <div class="callout info" style="margin-top:16px;">
+      <span class="label">When to open a new chat</span>
+      <p>If you've gone in circles and can't recover the thread, open a new chat, but paste in your best draft so far, not the original prompt. You're not starting over; you're starting from your best work.</p>
+    </div>
+  </div>
+</section>
+
+        </section><!-- /learn-iterating -->
+
+        <!-- LITERACY 06: MODELS -->
+        <section class="guide-page" id="learn-models" style="display:none;">
+
+<style>
+.ui-mock {
+  border: 1px solid var(--ink); border-radius: var(--r-lg); overflow: hidden;
+  background: #212121; color: #e8e8e8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px; margin: 16px 0;
+}
+.ui-mock .ui-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; border-bottom: 1px solid #3a3a3a; background: #2a2a2a;
+}
+.ui-mock .ui-bar .model-sel {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #3a3a3a; padding: 6px 12px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: default;
+}
+.ui-mock .ui-bar .model-sel .chev { font-size: 10px; opacity: 0.5; }
+.ui-mock .ui-body { padding: 20px 18px; min-height: 80px; }
+.ui-dropdown {
+  background: #2f2f2f; border: 1px solid #4a4a4a; border-radius: 12px;
+  padding: 8px 0; margin: 8px 0 0 0; display: inline-block; min-width: 220px;
+}
+.ui-dropdown .ui-opt {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; font-size: 13px; cursor: default;
+}
+.ui-dropdown .ui-opt.active { background: #3a3a3a; }
+.ui-dropdown .ui-opt .check-m { color: #10a37f; font-weight: bold; }
+.ui-dropdown .ui-opt .desc { font-size: 11px; color: #888; margin-left: 8px; }
+.ui-dropdown .ui-sep { height: 1px; background: #3a3a3a; margin: 4px 0; }
+.ui-think-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #3a3a3a; padding: 6px 14px; border-radius: 20px;
+  font-size: 12px; color: #e8e8e8; margin: 4px 0;
+}
+.ui-think-toggle .sw {
+  width: 34px; height: 18px; background: #555; border-radius: 10px;
+  position: relative; display: inline-block;
+}
+.ui-think-toggle .sw .dot {
+  width: 14px; height: 14px; background: #ccc; border-radius: 50%;
+  position: absolute; top: 2px; left: 2px;
+}
+.ui-think-toggle.on .sw { background: #10a37f; }
+.ui-think-toggle.on .sw .dot { left: 18px; background: white; }
+.ui-step-anim { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 14px 0; align-items: start; }
+.ui-step-anim .step-n {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cn-red); color: white;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+}
+.ui-step-anim .step-body { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.ui-step-anim .step-body b { color: var(--ink); }
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink); border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; margin-top: 16px; }
+.feat-card { background: var(--card); padding: 22px 20px; }
+.feat-card h4 { font-family: var(--serif); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; margin: 0 0 8px; line-height: 1.1; }
+.feat-card p { font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+.feat-card .fc-use { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage-deep); margin-top: 10px; }
+@media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr; } }
+</style>
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Reference &middot; 6 min read</div>
+  <h1>Which tool for <em>which job.</em></h1>
+  <p class="lede">ChatGPT has more modes, models, and features than you probably know about. Most of them are useful. Here's a practical map of what each one does and when to reach for it.</p>
+  <div class="meta">
+    <span class="tag">Tool: ChatGPT</span>
+    <span class="tag">Updated: April 2026</span>
+    <span class="tag">For: everyone</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Choosing a model.</h2><p class="sub">The dropdown at the top</p></div>
+  <div class="body">
+    <p class="big">Not all models are equal. The model selector at the top of every ChatGPT conversation lets you pick the right engine for the job.</p>
+    <p>Click the model name at the top-centre of the chat window to open the selector. Here's what you'll see:</p>
+    <div class="ui-mock">
+      <div class="ui-bar">
+        <div class="model-sel">ChatGPT <span class="chev">&#9662;</span></div>
+        <div style="font-size:12px; color:#888;">Temporary chat</div>
+      </div>
+      <div class="ui-body" style="padding: 12px 18px;">
+        <div class="ui-dropdown">
+          <div class="ui-opt active"><div><b>GPT-4o</b> <span class="desc">Great for most tasks</span></div><span class="check-m">&#10003;</span></div>
+          <div class="ui-opt"><div><b>GPT-4o mini</b> <span class="desc">Faster, lighter tasks</span></div></div>
+          <div class="ui-sep"></div>
+          <div class="ui-opt"><div><b>o3</b> <span class="desc">Reasoning &middot; Best for complex analysis</span></div></div>
+          <div class="ui-opt"><div><b>o4-mini</b> <span class="desc">Reasoning &middot; Fast + smart</span></div></div>
+          <div class="ui-sep"></div>
+          <div class="ui-opt"><div><b>GPT-4.5</b> <span class="desc">Research preview</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="rules-stack" style="margin-top:20px;">
+      <div class="rule-row"><div class="rl"><span class="lvl">GPT-4o</span><b>Your default.</b></div><div class="rr">Fast, capable, good at writing, editing, and general tasks. Use this for 90% of your work: emails, memos, summaries, brainstorming. Handles file uploads, images, and web search.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">o3 / o4-mini</span><b>Reasoning.</b></div><div class="rr">These models "think before answering." They take longer but produce better results for complex analysis, multi-step problems, and anything requiring careful logic. Use for: stakeholder analysis, comparing policy options, critiquing a draft for logical gaps.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">4o mini</span><b>Quick tasks.</b></div><div class="rr">Fastest response. Good for simple reformatting, quick translations, or when you need a fast first draft you plan to heavily edit anyway.</div></div>
+    </div>
+    <div class="callout info" style="margin-top: 20px;">
+      <span class="label">Rule of thumb</span>
+      <p>If the task requires <b>speed and fluency</b> (drafting, editing, tone-shifting), use <b>GPT-4o</b>. If it requires <b>careful analysis</b> (finding gaps in an argument, comparing options, red-teaming a position), switch to <b>o3</b> or <b>o4-mini</b>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Thinking mode.</h2><p class="sub">When you need it to reason</p></div>
+  <div class="body">
+    <p class="big">Thinking mode makes ChatGPT pause and reason through the problem before answering. The output takes longer but is more thorough, more accurate, and better at complex tasks.</p>
+    <h4 class="display" style="font-size:22px; margin: 14px 0 10px;">How to turn it on</h4>
+    <div class="ui-step-anim"><div class="step-n">1</div><div class="step-body"><b>Click the lightbulb icon</b> in the message input area (bottom of the chat). It appears to the left of the send button. In some versions, you may also see a "Think" toggle below the model selector.</div></div>
+    <div class="ui-step-anim"><div class="step-n">2</div><div class="step-body"><b>Choose your level.</b> Standard thinking adds a brief reasoning step. <b>Extended thinking</b> gives the model much more time to work through complex problems. For most comms work, standard is enough. Use extended for multi-stakeholder analysis or document comparison.</div></div>
+    <div class="ui-step-anim"><div class="step-n">3</div><div class="step-body"><b>Send your prompt.</b> You'll see a "Thinking..." indicator while the model reasons. When it finishes, you can expand the thinking block to see its reasoning process.</div></div>
+    <div style="margin: 18px 0; display:flex; gap: 18px; align-items:center;">
+      <div class="ui-think-toggle"><span>&#128161;</span> Thinking <span class="sw"><span class="dot"></span></span></div>
+      <span style="font-size:13px; color:var(--ink-soft);">Off</span>
+      <span style="margin: 0 8px; color: var(--ink-soft);">&rarr;</span>
+      <div class="ui-think-toggle on"><span>&#128161;</span> Thinking <span class="sw"><span class="dot"></span></span></div>
+      <span style="font-size:13px; color:var(--sage-deep);">On</span>
+    </div>
+    <div class="callout" style="margin-top:16px;">
+      <span class="label">When to use thinking</span>
+      <p><b>Yes:</b> Stakeholder analysis, comparing two draft strategies, finding logical gaps in a briefing note, red-teaming a public statement, anything where "think harder" would be your instruction to a human colleague.</p>
+      <p style="margin-top:8px;"><b>Skip it:</b> Simple emails, reformatting, translation, anything where speed matters more than depth.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>Canvas.</h2><p class="sub">Side-by-side editing</p></div>
+  <div class="body">
+    <p class="big">Canvas opens a full document editor next to the chat. You can edit the text directly while continuing to ask ChatGPT to revise specific sections.</p>
+    <p>Canvas appears automatically when ChatGPT produces a long piece of writing, or you can trigger it by saying "open this in Canvas" or "use Canvas for this."</p>
+    <div class="feat-grid">
+      <div class="feat-card"><h4>Direct editing</h4><p>Click anywhere in the Canvas text to edit it yourself. Your changes stick. Then ask ChatGPT to revise a different section without losing your edits.</p><div class="fc-use">Best for: speeches, memos, long-form</div></div>
+      <div class="feat-card"><h4>Highlight and instruct</h4><p>Select a specific passage and tell ChatGPT what to do with it: "Make this paragraph more direct" or "Cut this to 40 words." Only the selection changes.</p><div class="fc-use">Best for: targeted tone shifts</div></div>
+      <div class="feat-card"><h4>Version control</h4><p>Canvas keeps a version history. You can undo changes or restore an earlier version if a revision goes too far.</p><div class="fc-use">Best for: iterating safely</div></div>
+      <div class="feat-card"><h4>Built-in tools</h4><p>Toolbar options include: adjust reading level, shorten/lengthen, add polish, suggest edits (tracked-changes style), and translate.</p><div class="fc-use">Best for: quick polish passes</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">04</div><h2>File uploads.</h2><p class="sub">Give it the source material</p></div>
+  <div class="body">
+    <p class="big">Click the paperclip icon (or the "+" button) in the message bar to upload files directly into the conversation. ChatGPT reads them and can summarize, analyse, compare, or extract information.</p>
+    <div class="rules-stack">
+      <div class="rule-row"><div class="rl"><span class="lvl">PDF</span><b>Reports, filings</b></div><div class="rr">Annual reports, regulatory filings, policy documents. ChatGPT reads the full text including tables. Upload rather than pasting to preserve structure.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">DOCX</span><b>Drafts, briefs</b></div><div class="rr">Word documents with formatting intact. Good for "proofread this" or "summarize the key recommendations."</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">PPTX</span><b>Presentations</b></div><div class="rr">Slide decks. ChatGPT reads slide text and can suggest restructuring, write speaker notes, or extract the core narrative.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">XLSX</span><b>Data, tables</b></div><div class="rr">Spreadsheets. ChatGPT can analyse data, create charts, find patterns, and summarize findings. Good for pulling highlights from operational reports.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">Images</span><b>Screenshots, charts</b></div><div class="rr">Photos, screenshots, charts, diagrams. ChatGPT can describe, transcribe, or analyse visual content. Useful for "what does this chart show?"</div></div>
+    </div>
+    <div class="callout danger" style="margin-top:18px;">
+      <span class="label">Before you upload</span>
+      <p>Check the confidentiality traffic-light guide first. Never upload board papers, unredacted employee data, pre-disclosure financial information, or anything marked Confidential or Restricted. When in doubt, redact names and numbers before uploading.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Custom GPTs.</h2><p class="sub">One job, locked and loaded</p></div>
+  <div class="body">
+    <p class="big">A custom GPT is a version of ChatGPT configured for one specific job, with its own instructions and reference documents baked in. You don't need to re-explain the context every time.</p>
+    <ol class="steps">
+      <li><div><h4>Open the GPT library.</h4><p>Click "Explore GPTs" in the left sidebar of ChatGPT, or go directly to <b>chatgpt.com/gpts</b>. You'll see featured GPTs and a search bar.</p></div></li>
+      <li><div><h4>Search or browse.</h4><p>Search for the CN Prompt Builder GPT or any other team-shared GPTs. GPTs shared by colleagues appear in the "Shared with you" section or via direct link.</p></div></li>
+      <li><div><h4>Start a conversation.</h4><p>Click the GPT to open it. It behaves like a normal ChatGPT chat, but with pre-loaded instructions and documents. Just type your prompt as usual.</p></div></li>
+    </ol>
+    <div class="callout" style="margin-top:18px;">
+      <span class="label">CN's custom GPTs</span>
+      <p>The <b>CN Prompt Builder GPT</b> walks you through the Four Questions and generates a ready-to-use prompt. Start there if you're new to prompting.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2); border-bottom: 0;">
+  <div class="hd"><div class="n">06</div><h2>The cheat sheet.</h2><p class="sub">Task &rarr; tool</p></div>
+  <div class="body">
+    <p class="big">Don't overthink it. Here's the shortcut.</p>
+    <div class="rules-stack">
+      <div class="rule-row"><div class="rl"><b>Draft an email</b></div><div class="rr">GPT-4o, standard mode.</div></div>
+      <div class="rule-row"><div class="rl"><b>Proofread a draft</b></div><div class="rr">GPT-4o + Canvas. Open in Canvas, highlight and instruct.</div></div>
+      <div class="rule-row"><div class="rl"><b>Summarize a long report</b></div><div class="rr">GPT-4o, upload the PDF.</div></div>
+      <div class="rule-row"><div class="rl"><b>Stakeholder analysis</b></div><div class="rr">o3 or o4-mini with Thinking on. Needs careful reasoning.</div></div>
+      <div class="rule-row"><div class="rl"><b>Q&amp;A prep for media</b></div><div class="rr">GPT-4o, then switch to o3 to red-team your answers.</div></div>
+      <div class="rule-row"><div class="rl"><b>Speech first draft</b></div><div class="rr">GPT-4o for outline + drafting, Canvas for editing.</div></div>
+      <div class="rule-row"><div class="rl"><b>Compare two documents</b></div><div class="rr">Upload both files. Use Thinking mode for thorough comparison.</div></div>
+      <div class="rule-row"><div class="rl"><b>Recurring task (same format every time)</b></div><div class="rr">Build a custom GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Check recent news/facts</b></div><div class="rr">GPT-4o with web search. Always verify the sources it cites.</div></div>
+      <div class="rule-row"><div class="rl"><b>Crisis holding statement</b></div><div class="rr">GPT-4o, standard mode, fast.</div></div>
+    </div>
+  </div>
+</section>
+
+        </section><!-- /learn-models -->
+
+        <!-- LITERACY 07: CUSTOM GPTS -->
+        <section class="guide-page" id="learn-custom-gpts" style="display:none;">
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; Advanced &middot; 5 min</div>
+  <h1>Build a reliable <em>custom GPT.</em></h1>
+  <p class="lede">A custom GPT is a ChatGPT configured for one job, locked to a specific set of documents, that produces the same shape of output every time. Three moves get you there.</p>
+  <div class="meta">
+    <span class="tag">For recurring tasks</span>
+    <span class="tag">Team-shareable</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>What "good" looks like.</h2><p class="sub">Two words</p></div>
+  <div class="body">
+    <p class="big"><b>Reliability:</b> same question in, same structure out.<br><b>Accuracy:</b> uses approved documents first, cites them, and says "Not found in the sources" when the documents don't support an answer.</p>
+    <p>A custom GPT that fails either of these is worse than no custom GPT. It produces a confident-looking document with invented facts, at scale. Build for these two properties or don't build.</p>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Three moves.</h2><p class="sub">In order</p></div>
+  <div class="body">
+    <ol class="steps">
+      <li>
+        <h4>Define the job in one sentence.</h4>
+        <p>No custom GPT should try to do more than one thing. Write the single sentence that describes its job, including the audience.</p>
+        <div class="prompt" style="margin-top:10px;">
+<button class="copy-btn">Copy</button><span class="comment"># Example job sentence</span>
+"This GPT gives executives a sourced overview of CN's business, strategy, and performance, using only approved corporate documents."
+        </div>
+        <p style="margin-top:12px;">If the sentence has an "and" that could be split, split it into two custom GPTs.</p>
+      </li>
+      <li>
+        <h4>Lock the sources and require citations.</h4>
+        <p>Upload the approved documents. In the GPT's instructions, say this verbatim:</p>
+        <div class="prompt" style="margin-top:10px;">
+<button class="copy-btn">Copy</button>"Use these as the primary sources. Any fact, number, date, KPI, or claim must be cited to one of these documents. If it cannot be cited, do not include it. Say 'Not found in the sources' instead of inventing an answer."
+
+Sources:
+&bull; 2024 CN annual report (financial reporting)
+&bull; 2025 investor fact book (network, KPIs)
+&bull; CN investor presentation (current investor narrative)
+&bull; Delivering responsibly 2024 (sustainability)
+&bull; Management information circular 2025 (governance)
+
+Default assumption: unless the user specifies a period, use the most recent information reflected in the uploaded documents.
+        </div>
+        <p style="margin-top:12px;">The citation requirement is the safety net. Without it, the GPT pattern-matches from its general training data, and you lose accuracy.</p>
+      </li>
+      <li>
+        <h4>Standardize the output.</h4>
+        <p>Give it the exact template. Every output should look the same.</p>
+        <div class="prompt" style="margin-top:10px;">
+<button class="copy-btn">Copy</button>Always use this template in this order:
+
+1. Key takeaways (3 bullets)
+2. Business overview (what CN does, network footprint, revenue mix)
+3. Performance snapshot (top KPIs, year, currency)
+4. Strategy and priorities (as described in investor materials)
+5. Delivering responsibly (only what is supported by the sustainability report)
+6. Sources used (bullet list, cite specific documents)
+        </div>
+        <p style="margin-top:12px;">Reliability comes from format consistency. Executives skim in the same pattern every time, give them that.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd"><div class="n">03</div><h2>Test before you share.</h2><p class="sub">Five questions that break bad GPTs</p></div>
+  <div class="body">
+    <ul class="check">
+      <li>Ask it a question <b>not</b> in the documents. It should say "Not found in the sources." If it answers anyway, tighten the instructions.</li>
+      <li>Ask the same question twice in different chats. If the structure differs, tighten the template.</li>
+      <li>Ask a question that requires a number. Confirm the number is real, and the citation points to the right document.</li>
+      <li>Ask a leading question ("Why is CN the best operator in North America?"). It should pull sourced claims or decline. If it editorializes, tighten.</li>
+      <li>Ask about last week. It should say it only has the documents you loaded. If it pulls recent-sounding facts, tighten.</li>
+    </ul>
+    <div class="callout" style="margin-top:22px;">
+      <span class="label">Governance</span>
+      <p>Before sharing a custom GPT with a team, make sure the uploaded documents are approved for the use. If one source is confidential, the whole GPT is confidential, treat it accordingly.</p>
+    </div>
+  </div>
+</section>
+
+        </section><!-- /learn-custom-gpts -->
+
+        <!-- LITERACY 08: HOUSE RULES -->
+        <section class="guide-page" id="learn-house-rules" style="display:none;">
+
+<style>
+.rules-list { border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; margin-top: 14px; background: var(--card); }
+.rules-list .rule { display: grid; grid-template-columns: 60px 1fr 1fr; }
+.rules-list .rule + .rule { border-top: 1px solid var(--ink); }
+.rules-list .rule .rn { background: var(--ink); color: var(--paper); padding: 18px 14px; font-family: var(--serif); font-style: italic; font-size: 28px; border-right: 1px solid var(--ink); }
+.rules-list .rule .what { padding: 18px 22px; border-right: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); }
+.rules-list .rule .why { padding: 18px 22px; font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+.rules-list .rule h4 { font-family: var(--serif); font-weight: 400; font-size: 21px; letter-spacing: -0.01em; margin: 0 0 8px 0; line-height: 1.15; }
+.rules-list .rule p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.rules-list .rule code { font-family: var(--mono); font-size: 12px; background: var(--paper-2); padding: 1px 6px; border-radius: 2px; }
+@media (max-width: 900px) { .rules-list .rule { grid-template-columns: 1fr; } }
+</style>
+
+<header class="guide-hero">
+  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; CN rules &middot; 2 min</div>
+  <h1>CN house rules for <em>AI output.</em></h1>
+  <p class="lede">Paste this block into any prompt. It's the Communications style guide translated into instructions AI can follow.</p>
+  <div class="meta">
+    <span class="tag signal">Copy-paste</span>
+    <span class="tag">Works in any tool</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>The block.</h2><p class="sub">Copy into every prompt</p></div>
+  <div class="body">
+    <p>Drop this into the <b>HOUSE RULES</b> section of your prompt (see the Four Questions template). It takes ten seconds and changes the output more than anything else you'll do.</p>
+    <div class="prompt" style="margin-top:14px;">
+<button class="copy-btn">Copy</button><span class="comment"># CN HOUSE RULES, paste into every prompt</span>
+
+&bull; Use <b>Canadian English</b> spelling (colour, centre, organize).
+&bull; Spell out acronyms on first use: "front-line supervisors (FLS)".
+&bull; Do not use em dashes. Use commas, semicolons, or two sentences.
+&bull; Do not use emoji.
+&bull; Do not start a sentence with "I". Write in CN's voice, not a chatty voice.
+&bull; No exclamation marks in formal content.
+&bull; No hype words: "revolutionary", "game-changing", "unprecedented", "excited to".
+&bull; Titles and role names: capitalize when attached to a name ("President Tracy Robinson"), lowercase when generic ("the president said").
+&bull; Dates: "April 15, 2026", not "15/04/26" or "April 15th".
+&bull; Numbers: spell out one to nine, digits for 10+. Always use digits for stats, dollar figures, and dates.
+&bull; If a fact isn't in INFO, use <b>[confirm with SME]</b>, do not invent. Never fabricate quotes, statistics, dates, or names.
+&bull; Every claim a journalist or auditor could challenge must be traceable to INFO.
+&bull; Do not speculate on cause, restoration time, legal outcomes, or market-sensitive matters.
+&bull; Do not use second-person "you" in public-facing news releases; use third-person.
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Rule by rule.</h2><p class="sub">Why each one matters</p></div>
+  <div class="body">
+    <div class="rules-list">
+      <div class="rule"><div class="rn">1</div><div class="what"><h4>Canadian spelling</h4><p>colour, centre, organize, specialize, programme only for broadcasting.</p></div><div class="why"><p>Most AI defaults to US English. CN is a Canadian company and writes like one. One word of American spelling in a minister's letter is the thing they'll notice.</p></div></div>
+      <div class="rule"><div class="rn">2</div><div class="what"><h4>No em dashes</h4><p>Use commas, semicolons, or start a new sentence.</p></div><div class="why"><p>The em dash is AI's favourite piece of punctuation. Readers have learned to spot it. Removing it is the single biggest tell-reduction you can do.</p></div></div>
+      <div class="rule"><div class="rn">3</div><div class="what"><h4>Spell out acronyms</h4><p>"Front-line supervisors (FLS)" on first use, then FLS thereafter.</p></div><div class="why"><p>Not every reader lives inside our org chart. Investors, journalists, MPs, suppliers don't know what PAGA or IOI or OTR means.</p></div></div>
+      <div class="rule"><div class="rn">4</div><div class="what"><h4>No emoji</h4><p>Ever, in anything the company puts its name on.</p></div><div class="why"><p>Emoji are ambiguous, cross-cultural hazards, and they age badly. If the draft has a train emoji in it, it's not a CN document yet.</p></div></div>
+      <div class="rule"><div class="rn">5</div><div class="what"><h4>No hype words</h4><p>Strike "revolutionary", "game-changing", "unprecedented", "excited to announce".</p></div><div class="why"><p>AI reaches for these. Readers skip them. Any sentence that still lands after you remove the adjective is a better sentence.</p></div></div>
+      <div class="rule"><div class="rn">6</div><div class="what"><h4>Placeholders, not inventions</h4><p><code>[confirm with SME]</code> beats a plausible-sounding lie every time.</p></div><div class="why"><p>This is the single most important rule. AI will invent dates, quotes, stats, and signatories unless you tell it not to. Tell it not to.</p></div></div>
+      <div class="rule"><div class="rn">7</div><div class="what"><h4>No speculation</h4><p>Nothing about cause, restoration date, legal outcomes, or share-price impact.</p></div><div class="why"><p>Speculation in a CN statement becomes tomorrow's headline. "Investigation is underway. More information will follow." is always the right answer until it isn't.</p></div></div>
+      <div class="rule"><div class="rn">8</div><div class="what"><h4>Dates and numbers</h4><p>"April 15, 2026." One to nine spelled, 10+ in digits. Always digits for money, stats, dates.</p></div><div class="why"><p>Consistent notation makes dates scannable. A release that mixes "April 15" and "15/04" looks like three people wrote it.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd"><div class="n">03</div><h2>The pre-send scan.</h2><p class="sub">Five things to search for</p></div>
+  <div class="body">
+    <p>Before a draft leaves your desk, Ctrl-F for these. It takes thirty seconds and catches 90% of AI tells.</p>
+    <ul class="check" style="margin-top:16px;">
+      <li>Search <b>--</b> (em dash). Replace with commas or semicolons.</li>
+      <li>Search <b>" - "</b> (double-hyphen with spaces). Same treatment.</li>
+      <li>Search <b>"excited"</b>, <b>"thrilled"</b>, <b>"delighted"</b>. If it's still there, it shouldn't be.</li>
+      <li>Search <b>"color"</b>, <b>"center"</b>, <b>"organize"</b>. Swap for Canadian spellings.</li>
+      <li>Search <b>"[confirm"</b>. Every placeholder filled or the document doesn't send.</li>
+    </ul>
+  </div>
+</section>
+
+        </section><!-- /learn-house-rules -->
+
+      </div><!-- /learn-detail-content -->
+    </div><!-- /learn-detail -->
+
+  </div><!-- /tab-learn -->
+  <div class="tab-content" id="tab-tools">
+
+    <section class="section" style="padding-top: 44px;">
+      <div class="section-head">
+        <div class="num"><em>V</em></div>
+        <div>
+          <div class="eyebrow">Your custom GPTs</div>
+          <h2>Pick a tool. Start working.</h2>
+          <p>These custom GPTs live in your CN ChatGPT account at chat.com. Each one is built for a specific job. Open the one that matches your task.</p>
+        </div>
+      </div>
+    </section>
+
+    <div style="padding: 0 36px 24px;">
+      <div class="callout info">
+        <span class="label">How to access</span>
+        <p>Go to <a href="https://chat.com" target="_blank" style="color:var(--cn-red); text-decoration:underline;">chat.com</a> and sign in with your CN account. Your custom GPTs appear in the sidebar under &ldquo;GPTs.&rdquo; Click one to start a conversation.</p>
+      </div>
+    </div>
+
+    <!-- Drafting & Writing -->
+    <div style="padding: 18px 36px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);">Drafting &amp; Writing</div>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>Prompt builder</h4>
+        <p>Walks you through the Four Questions step by step to build a ready-to-use prompt for any task.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>Speaking notes generator</h4>
+        <p>Prepares draft speeches for CN speakers at events. Asks about audience, topics, tone, and logistics one step at a time.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>Stakeholder letters</h4>
+        <p>Drafts polished letters for senior CN leaders to send to politicians, public servants, and stakeholders. Eight letter types.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>Briefing note generator</h4>
+        <p>Drafts executive-ready briefing notes: meeting prep, issue overviews, event briefings, trip notes, decision notes, and more.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>CN Magazine Editorial Partner</h4>
+        <p>Creates structured, frontline-focused CN Magazine content: features, profiles, safety stories, exec letters, Q&amp;A.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Drafting &amp; Writing</span>
+        <h4>CN customer comms</h4>
+        <p>Drafts customer-facing communications: operational updates, safety advisories, tariff changes, service planning, and more.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+    </div>
+
+    <!-- CEO & Executive Comms -->
+    <div style="padding: 18px 36px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);">CEO &amp; Executive Comms</div>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <span class="label">CEO &amp; Executive Comms</span>
+        <h4>Tracy Robinson comms</h4>
+        <p>Speeches, investor updates, conference remarks, and LinkedIn posts for the CEO. Distinct external voice guidance.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">CEO &amp; Executive Comms</span>
+        <h4>Exec LinkedIn shares</h4>
+        <p>Generates LinkedIn share updates for CN&rsquo;s executive team when they share corporate posts.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Review & Research -->
+    <div style="padding: 18px 36px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);">Review &amp; Research</div>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <span class="label">Review &amp; Research</span>
+        <h4>Review, revise, and adapt</h4>
+        <p>Reviews and revises content for employees, customers, or investors. Acts as a writing coach with detailed feedback.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Review &amp; Research</span>
+        <h4>Summarize CN news clippings</h4>
+        <p>Summarizes news clippings for executive review with consistent formatting and full coverage tracking.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Review &amp; Research</span>
+        <h4>CN Strategy Insights</h4>
+        <p>Analytical strategy manager for researching trends, aggregating data, and framing strategic scenarios.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Specialized Tools -->
+    <div style="padding: 18px 36px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft);">Specialized Tools</div>
+    <div class="tool-grid" style="margin-bottom: 56px;">
+      <div class="tool-card">
+        <span class="label">Specialized Tools</span>
+        <h4>PAGA GPT</h4>
+        <p>Drafts incident statements during railway incidents. Three types: initial, updated, and close-out.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Specialized Tools</span>
+        <h4>RSW GPT</h4>
+        <p>Creates Rail Safety Week content for the public, communities, officials, employees, and customers.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Specialized Tools</span>
+        <h4>CN Alt Text Generator</h4>
+        <p>Generates bilingual alt text (EN-CA, FR-CA, and combined) for CN social media images.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+      <div class="tool-card">
+        <span class="label">Specialized Tools</span>
+        <h4>CN translator and glossary</h4>
+        <p>Translates between EN-CA and FR-CA using CN&rsquo;s official glossary. Also searches the glossary by keyword.</p>
+        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="tab-content" id="tab-poster">
+
+    <div style="padding: 24px 36px;" class="no-print">
+      <button class="btn" onclick="window.print()">Print this page &rarr;</button>
+      <span style="margin-left:12px; font-size:13px; color:var(--ink-soft);">Prints as a clean one-page cheat sheet</span>
+    </div>
+
+    <div class="sheet">
+
+      <div class="sheet-top">
+        <div>
+          <div class="eyebrow" style="margin-bottom: 6mm;">The AI Playbook &middot; Pin this up</div>
+          <h1>Using AI well,<br>on <em>one page.</em></h1>
+        </div>
+        <div class="tag">v1.0 &middot; April 2026</div>
+      </div>
+
+      <div class="five-rules">
+        <div class="eyebrow" style="margin-bottom: 5mm;">Five rules, no exceptions</div>
+        <div class="rules-row">
+          <div>
+            <div class="rr-n">1</div>
+            <div class="rr-t">You're the editor, not the author.</div>
+            <div class="rr-p">Never send AI's first draft. Cut, verify, humanise.</div>
+          </div>
+          <div>
+            <div class="rr-n">2</div>
+            <div class="rr-t">Role, reader, goal every time.</div>
+            <div class="rr-p">"Write an email" is too vague. Give it a specific role, a specific reader, a specific outcome.</div>
+          </div>
+          <div>
+            <div class="rr-n">3</div>
+            <div class="rr-t">Feed it your materials.</div>
+            <div class="rr-p">Past emails, style guide, source doc. AI can only work with what it sees.</div>
+          </div>
+          <div>
+            <div class="rr-n">4</div>
+            <div class="rr-t">Never paste what you wouldn't email out.</div>
+            <div class="rr-p">Confidential info stays out unless you're on an approved enterprise tool.</div>
+          </div>
+          <div>
+            <div class="rr-n">5</div>
+            <div class="rr-t">Fact-check every name, number, claim.</div>
+            <div class="rr-p">AI invents plausible sources. If it would land you in a correction, verify.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-fmt">
+        <div class="eyebrow" style="margin-bottom: 5mm;">The prompt pattern, every task</div>
+        <div class="pf-grid">
+          <div class="pf-lab">Role</div>
+          <div class="pf-tx"><b>I am a&hellip;</b> Tell it who you are and who you speak for.</div>
+        </div>
+        <div class="pf-grid">
+          <div class="pf-lab">Reader</div>
+          <div class="pf-tx"><b>Writing to&hellip;</b> Name them. Include relationship and what they already know.</div>
+        </div>
+        <div class="pf-grid">
+          <div class="pf-lab">Goal</div>
+          <div class="pf-tx"><b>The ONE thing this needs to do.</b> One outcome. Not three.</div>
+        </div>
+        <div class="pf-grid">
+          <div class="pf-lab">Inputs</div>
+          <div class="pf-tx"><b>Here's what I have.</b> Bullets, source doc, voice samples, past examples.</div>
+        </div>
+        <div class="pf-grid">
+          <div class="pf-lab">Format</div>
+          <div class="pf-tx"><b>What I want back.</b> Length, structure, tone, what NOT to include.</div>
+        </div>
+      </div>
+
+      <div class="lights-row">
+        <div class="lr green">
+          <h3><span class="lr-dot"></span>Green, paste freely</h3>
+          <ul>
+            <li>Public press releases, speeches, reports</li>
+            <li>Your own first-person writing</li>
+            <li>Generic how-to questions</li>
+            <li>Prompts and templates</li>
+          </ul>
+        </div>
+        <div class="lr amber">
+          <h3><span class="lr-dot"></span>Amber, redact first</h3>
+          <ul>
+            <li>Internal drafts (remove names, numbers)</li>
+            <li>Stakeholder letters (names, addresses)</li>
+            <li>Meeting minutes and positions</li>
+            <li>Constituent correspondence</li>
+          </ul>
+        </div>
+        <div class="lr red">
+          <h3><span class="lr-dot"></span>Red, never</h3>
+          <ul>
+            <li>Personal data + identifiers</li>
+            <li>Legal advice, privileged material</li>
+            <li>Pre-announcement market-sensitive info</li>
+            <li>HR, safeguarding, investigations</li>
+            <li>Credentials, API keys, ever</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="redflags">
+        <h2>Red-flag phrases, <em style="font-style: italic; color: var(--signal);">Ctrl-F before you send</em></h2>
+        <div class="flags-grid">
+          <div>&bull; "I hope this finds you well"</div>
+          <div>&bull; "I wanted to reach out"</div>
+          <div>&bull; "Please don't hesitate"</div>
+          <div>&bull; "In today's fast-paced world"</div>
+          <div>&bull; "Leverage / synergies"</div>
+          <div>&bull; "Delve into / dive deep"</div>
+          <div>&bull; "It's worth noting that"</div>
+          <div>&bull; "In conclusion,"</div>
+          <div>&bull; "I would like to take this opportunity"</div>
+          <div>&bull; "Moving forward,"</div>
+          <div>&bull; "Crucial / vital / pivotal / robust"</div>
+          <div>&bull; Any unprompted punctuation flourishes</div>
+        </div>
+      </div>
+
+      <div class="sheet-foot">
+        <div>The AI Playbook &middot; for Comms &amp; Stakeholder Relations</div>
+        <div>Full library online</div>
+      </div>
+
+    </div>
+
+  </div>
 </main>
 
 <footer class="footer">
@@ -2282,6 +3762,22 @@ function hideGuide() {
   document.querySelector('#tab-guides .filters').style.display = '';
   document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = '';
   document.getElementById('guide-detail').style.display = 'none';
+}
+
+// Show/hide learn detail
+function showLearn(id) {
+  document.getElementById('learn-grid').style.display = 'none';
+  document.querySelector('#tab-learn .section-head').style.display = 'none';
+  document.getElementById('learn-detail').style.display = 'block';
+  document.querySelectorAll('#learn-detail-content .guide-page').forEach(p => p.style.display = 'none');
+  var page = document.getElementById('learn-' + id);
+  if (page) page.style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function hideLearn() {
+  document.getElementById('learn-grid').style.display = '';
+  document.querySelector('#tab-learn .section-head').style.display = '';
+  document.getElementById('learn-detail').style.display = 'none';
 }
 
 // Copy-prompt buttons
