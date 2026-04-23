@@ -273,6 +273,60 @@ a { color: inherit; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 </style>
+<style>
+/* ============================================================
+   Guide page styles (guide.css + inline guide styles)
+   ============================================================ */
+
+.guide-hero { padding: 56px 40px 40px; border-bottom: 1px solid var(--ink); }
+.guide-hero .crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 20px; }
+.guide-hero .crumb a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+.guide-hero .crumb a:hover { border-bottom-color: var(--signal); }
+.guide-hero h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(48px, 7vw, 88px); letter-spacing: -0.03em; line-height: 0.95; margin: 0 0 22px 0; max-width: 18ch; }
+.guide-hero h1 em { font-style: italic; color: var(--signal); }
+.guide-hero .lede { font-family: var(--serif); font-size: 20px; line-height: 1.4; color: var(--ink-2); max-width: 58ch; margin: 0; font-weight: 300; }
+.guide-hero .meta { display:flex; gap: 24px; margin-top: 26px; flex-wrap: wrap; }
+
+.two-col { display: grid; grid-template-columns: 220px 1fr; gap: 48px; padding: 48px 40px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+.two-col .hd { position: sticky; top: 88px; align-self: start; }
+.two-col .hd .n { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 52px; line-height: 0.9; color: var(--signal); }
+.two-col .hd h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.015em; margin: 14px 0 0 0; line-height: 1.05; }
+.two-col .hd p.sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 10px 0 0 0; }
+.two-col .body p { font-size: 16px; line-height: 1.65; margin: 0 0 14px 0; max-width: 64ch; }
+.two-col .body p.big { font-family: var(--serif); font-size: 22px; line-height: 1.4; color: var(--ink); font-weight: 300; margin-bottom: 18px; }
+
+.dual { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
+.dual > div { padding: 20px 22px; }
+.dual > div + div { border-left: 1px solid var(--ink); }
+.dual .hd { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
+.dual .use { background: var(--sage); } .dual .use .hd { color: var(--sage-deep); }
+.dual .skip { background: #f3d7cf; } .dual .skip .hd { color: var(--danger); }
+.dual ul { margin: 0; padding-left: 18px; }
+.dual li { font-size: 14px; line-height: 1.5; margin-bottom: 6px; }
+
+.rules-stack { display: grid; gap: 0; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; margin-top: 14px; }
+.rule-row { display: grid; grid-template-columns: 240px 1fr; background: var(--card); }
+.rule-row + .rule-row { border-top: 1px solid var(--ink); }
+.rule-row .rl { padding: 16px 18px; border-right: 1px solid var(--ink); display: flex; align-items: center; gap: 12px; }
+.rule-row .rr { padding: 16px 18px; font-size: 14px; color: var(--ink-2); }
+.lvl { font-family: var(--mono); font-size: 10px; padding: 3px 8px; background: var(--signal); color: var(--paper); letter-spacing: 0.1em; border-radius: 2px; }
+
+.toneladder { display:grid; grid-template-columns: 120px 1fr; gap:0; border:1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
+.toneladder > div { padding: 14px 16px; border-top: 1px solid var(--ink); }
+.toneladder > div:nth-child(-n+2) { border-top: 0; }
+.toneladder .lbl { background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; border-right: 1px solid var(--ink); display:flex; align-items:center; }
+.toneladder .ex { font-family: var(--serif); font-size: 16px; line-height: 1.4; color: var(--ink); font-style: italic; }
+
+.guide-page { display: none; }
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; gap: 18px; }
+  .two-col .hd { position: static; }
+  .dual, .rule-row, .toneladder { grid-template-columns: 1fr; }
+  .dual > div + div { border-left: 0; border-top: 1px solid var(--ink); }
+  .rule-row .rl { border-right: 0; border-bottom: 1px solid var(--ink); }
+}
+</style>
 </head>
 <body>
 
@@ -485,7 +539,1694 @@ a { color: inherit; }
           <button class="btn ghost" onclick="hideGuide()" style="margin-bottom:20px;">&larr; Back to all guides</button>
         </div>
         <div id="guide-detail-content">
-          <!-- Individual guide pages will be added here in Task 4 -->
+
+<!-- ============================================================
+     GUIDE 01: Email
+     ============================================================ -->
+<section class="guide-page" id="guide-email">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 01</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Writing &middot; Most used &middot; 4 min read</div>
+  <h1>Draft an email <em>in 90 seconds.</em></h1>
+  <p class="lede">The workhorse guide. A prompt pattern that produces a clear, appropriately-toned email on the first try, and the five edits you should always make before hitting send.</p>
+  <div class="meta">
+    <span class="tag">Audience: anyone</span>
+    <span class="tag">Tool: any chat AI</span>
+    <span class="tag">Time: 2 min prompt &middot; 1 min edit</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>Use AI for this. Don't for that.</h2>
+    <p class="sub">The first decision</p>
+  </div>
+  <div class="body">
+    <p class="big">AI is a first-draft engine, not a judgment engine. Use it for volume, structure, and tone. Don't outsource the decisions.</p>
+    <div class="dual" style="margin-top: 20px;">
+      <div class="use">
+        <div class="hd">✓ Great for</div>
+        <ul>
+          <li>Status updates, FYIs, chasers</li>
+          <li>Meeting requests and intros</li>
+          <li>Translating bullet points into prose</li>
+          <li>Softening or firming a tone</li>
+          <li>Writing in a language you're rusty in</li>
+          <li>"Say this nicely" rewrites</li>
+        </ul>
+      </div>
+      <div class="skip">
+        <div class="hd">✗ Stop and write it yourself</div>
+        <ul>
+          <li>Condolences or sympathy</li>
+          <li>Performance or HR conversations</li>
+          <li>Legally binding commitments</li>
+          <li>Anything involving a specific person's confidential situation</li>
+          <li>Apologies on behalf of the org, get them reviewed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">Copy, adapt, paste</p>
+  </div>
+  <div class="body">
+    <p>Fill in the <span style="color:var(--signal); font-style:italic;">italic bits</span>. Keep the structure. This pattern works in Claude, ChatGPT, Copilot, or Gemini.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="email-p1">Copy</button><span id="email-p1">You are helping me draft an email.
+
+<span class="comment">// Context</span>
+I am <span class="var">[your role]</span> at <span class="var">[org]</span>.
+I am writing to <span class="var">[recipient, name, role, how well you know them]</span>.
+Our relationship: <span class="var">[first contact / ongoing / tense / warm]</span>.
+
+<span class="comment">// Goal</span>
+The single thing this email needs to achieve: <span class="var">[the ONE outcome]</span>.
+
+<span class="comment">// Inputs</span>
+Here is what I want to say, in rough bullets:
+- <span class="var">[point 1]</span>
+- <span class="var">[point 2]</span>
+- <span class="var">[ask]</span>
+
+<span class="comment">// Constraints</span>
+- Tone: <span class="var">[warm / professional / diplomatic-firm / apologetic]</span>
+- Length: under <span class="var">[120]</span> words
+- Do NOT use: "I hope this finds you well", "circle back", "touch base", exclamation marks
+- Match this voice sample from my past writing: <span class="var">[paste 2-3 of your previous emails]</span>
+
+<span class="comment">// Output</span>
+Give me:
+1. A subject line (under 8 words, specific)
+2. The email body
+3. One alternate version with a firmer tone
+
+Then stop. Do not add commentary.</span>
+    </div>
+    <div class="callout info" style="margin-top: 20px;">
+      <span class="label">Why the voice sample matters</span>
+      <p>Without it, every email comes out sounding like a LinkedIn post. Two or three of <em>your</em> past emails teach the model your rhythm, your sign-offs, your hedges. This single addition is the difference between usable and uncanny.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>Before &amp; after.</h2>
+    <p class="sub">Vague prompt vs. the pattern</p>
+  </div>
+  <div class="body">
+    <div class="ba">
+      <div class="bad">
+        <div class="hd">✗ Vague prompt</div>
+        <p style="font-family:var(--mono); font-size:12px; background:#111; color:#f3ece0; padding:14px; border-radius:4px;">"Write an email to our MP about the bridge project."</p>
+        <div class="hd" style="margin-top:14px;">Output (generic)</div>
+        <p>Dear Honourable Member,<br><br>I hope this email finds you well. I am writing to you today regarding the ongoing bridge project in our community. As you may be aware, this project represents a significant investment...</p>
+      </div>
+      <div class="good">
+        <div class="hd">✓ Pattern prompt</div>
+        <p style="font-family:var(--mono); font-size:12px; background:#111; color:#f3ece0; padding:14px; border-radius:4px;">Role, goal, bullets, tone "diplomatic-firm", 120 words, voice sample attached.</p>
+        <div class="hd" style="margin-top:14px;">Output (usable first draft)</div>
+        <p>Subject: Bridge project, timing question before Thursday<br><br>Priya,<br><br>A quick note ahead of Thursday's constituency meeting. We've had three delivery dates slip since January, and residents on the east side are asking pointed questions I can't keep fielding without an update from your office.<br><br>Could you confirm by Wednesday whether the June window still holds? If it doesn't, I'd rather know now so we can manage expectations together.<br><br>Happy to jump on a call.<br><br>-- Sam</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Four variants to save.</h2>
+    <p class="sub">For the situations you hit weekly</p>
+  </div>
+  <div class="body">
+
+    <h4 class="display" style="font-size:24px; margin: 0 0 6px;">a. The "I disagree, politely"</h4>
+    <p>When you need to push back without burning the relationship.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="email-p2">Copy</button><span id="email-p2">Rewrite this email so it:
+- Clearly registers that I disagree with <span class="var">[specific point]</span>
+- Keeps the door open for next steps
+- Avoids passive-aggressive phrasing ("as previously discussed", "per my last email")
+- Ends with a concrete proposal, not a complaint
+
+Original: <span class="var">[paste]</span></span>
+    </div>
+
+    <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">b. The chaser</h4>
+    <p>Second or third follow-up. The trick: acknowledge the silence rather than ignoring it.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="email-p3">Copy</button><span id="email-p3">Draft a follow-up email. This is my <span class="var">[second / third]</span> chase.
+
+Rules:
+- Under 60 words
+- Acknowledge the silence briefly, without guilt-tripping
+- Restate the ask in one sentence
+- Offer an out ("if this has been deprioritised, just tell me")
+- No "gentle reminder", no "per my last email"
+
+Thread so far: <span class="var">[paste]</span></span>
+    </div>
+
+    <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">c. The stakeholder update</h4>
+    <p>Monthly/quarterly note to a list. The risk: sounding like a newsletter no one asked for.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="email-p4">Copy</button><span id="email-p4">Write a stakeholder update email based on these bullets: <span class="var">[paste]</span>
+
+Format:
+- Subject: what changed, not "Monthly update"
+- Opening line: the one thing they need to know
+- 3 bullet points, max 15 words each
+- One clear ask or next step
+- Sign-off: my name, nothing else
+
+Tone: peer-to-peer, not broadcast.
+Length: under 150 words. Cut ruthlessly.</span>
+    </div>
+
+    <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">d. The "thanks, but no"</h4>
+    <p>Declining an invitation, request, or proposal without closing the door.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="email-p5">Copy</button><span id="email-p5">Draft a polite decline. Context: <span class="var">[who is asking, what they want, why I am saying no, our relationship]</span>.
+
+Structure:
+1. Thank them specifically (name the thing)
+2. Say no clearly, no euphemisms ("unfortunately not" is fine; "at this time we are unable to accommodate" is not)
+3. Give one honest reason if I have one; otherwise don't invent one
+4. Offer something small if possible: a referral, a future window, an introduction
+5. Close warmly
+
+Under 100 words.</span>
+    </div>
+
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd">
+    <div class="n">05</div>
+    <h2>The five-edit rule.</h2>
+    <p class="sub">Before you hit send</p>
+  </div>
+  <div class="body">
+    <p class="big">Never send AI's first draft. Make these five edits, every time.</p>
+    <ol class="steps" style="margin-top:10px;">
+      <li>
+        <div>
+          <h4>Cut the opening pleasantry.</h4>
+          <p>"I hope this email finds you well" is AI's calling card. Delete it. Start with the actual point, or a one-line human opener ("Quick one before Thursday,").</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Verify every name, number, and date.</h4>
+          <p>AI makes up plausible specifics. If it says "the 2023 report found 62%," you haven't read that report, find it or remove the stat.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Read it aloud. Cut anything you wouldn't say.</h4>
+          <p>"Leverage", "synergies", "circle back", "at this juncture", if you wouldn't say it to their face, cut it.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Check the ask is in the first 3 sentences.</h4>
+          <p>AI buries the ask in the third paragraph. Move it up. Busy people skim.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Add one specific, human touch.</h4>
+          <p>A reference to their last message. A remark about context only you two share. One sentence of you. This is the thing that keeps AI emails from feeling like AI emails.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">06</div>
+    <h2>Red-flag phrases.</h2>
+    <p class="sub">Ctrl-F these before sending</p>
+  </div>
+  <div class="body">
+    <p>If any of these survive in your draft, you sent AI's voice, not yours.</p>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-top: 14px; font-family: var(--mono); font-size: 13px;">
+      <div>&bull; "I hope this finds you well"</div>
+      <div>&bull; "I wanted to reach out"</div>
+      <div>&bull; "Please don't hesitate to"</div>
+      <div>&bull; "In today's fast-paced world"</div>
+      <div>&bull; "Leverage / synergies / align"</div>
+      <div>&bull; "Delve into / dive deep"</div>
+      <div>&bull; "It's worth noting that"</div>
+      <div>&bull; "In conclusion,"</div>
+      <div>&bull; "I would like to take this opportunity"</div>
+      <div>&bull; "Moving forward,"</div>
+      <div>&bull; "Crucial / vital / pivotal / robust"</div>
+      <div>&bull; Any phrase that sounds corporate and hollow</div>
+    </div>
+    <div class="callout warn" style="margin-top: 22px;">
+      <span class="label">Habit</span>
+      <p>Keep a "red-flag list" in a note. Every time you catch a new AI-ism in your own drafts, add it. Within a month you'll spot them in two seconds.</p>
+    </div>
+  </div>
+</section>
+
+</section><!-- /guide-email -->
+
+<!-- ============================================================
+     GUIDE 02: Proofread
+     ============================================================ -->
+<section class="guide-page" id="guide-proofread">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 02</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Editing &amp; review &middot; 3 min read</div>
+  <h1>Proofread without losing <em>your voice.</em></h1>
+  <p class="lede">The trap: you ask AI to "polish" your draft and it hands back something that reads like a trade-journal editorial. Here's how to ask for corrections, not a rewrite.</p>
+  <div class="meta">
+    <span class="tag">Tool: any chat AI</span>
+    <span class="tag">Time: 2 min</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Three levels of review.</h2><p class="sub">Ask for the right one</p></div>
+  <div class="body">
+    <p class="big">AI will default to the heaviest edit possible. Your job is to ask for the lightest one that solves your problem.</p>
+    <div class="rules-stack">
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">L1</span><b>Copy-edit only.</b></div>
+        <div class="rr">Typos, grammar, punctuation. Zero word changes otherwise. Use when you trust your own writing.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">L2</span><b>Line-edit.</b></div>
+        <div class="rr">L1 plus clunky phrasing, repetition, vague words. Preserves voice. Use on first drafts.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">L3</span><b>Structural.</b></div>
+        <div class="rr">Reorder paragraphs, cut sections, rewrite the opening. Use only when you know the draft is broken.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>The prompt.</h2><p class="sub">For L1 + L2, the ones you'll use 90% of the time</p></div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="proof-p1">Copy</button><span id="proof-p1">Proofread the text below. Do a Level 2 edit:
+
+CHANGE:
+- Typos, grammar, punctuation
+- Awkward or repetitive phrasing
+- Vague words where a specific one exists
+- Sentences that run longer than 30 words
+
+DO NOT CHANGE:
+- My vocabulary or sentence rhythm
+- Contractions (keep "don't", "we'll")
+- British / Canadian / Australian / American spelling, match what's already there
+- Anything that works, just to show you did something
+
+Return the edit as a tracked-changes list:
+  → [original phrase] becomes [new phrase] -- because [reason]
+
+Do not return a rewritten document. I want to approve each change myself.
+
+Text: <span class="var">[paste]</span></span>
+    </div>
+    <div class="callout info" style="margin-top:20px;">
+      <span class="label">The key move</span>
+      <p>Asking for a <b>tracked-changes list</b> instead of a rewritten draft changes everything. You see each suggestion, accept what works, reject the rest. You stay the author.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>Before &amp; after.</h2><p class="sub">Voice intact</p></div>
+  <div class="body">
+    <div class="ba">
+      <div class="bad">
+        <div class="hd">✗ "Polish this" (L3 by default)</div>
+        <p style="font-style:italic; color:var(--ink-soft);">Original: "The meeting went sideways fast. We had three asks, got none of them, and left with a new problem."</p>
+        <p>After: "The meeting did not proceed as anticipated. Despite presenting three distinct requests, we were unable to secure agreement on any of them, and we departed with an additional challenge to address."</p>
+        <p class="label" style="color:var(--danger); margin-top:10px;">Your voice: gone</p>
+      </div>
+      <div class="good">
+        <div class="hd">✓ "L2 tracked changes"</div>
+        <p style="font-style:italic; color:var(--ink-soft);">Original: "The meeting went sideways fast. We had three asks, got none of them, and left with a new problem."</p>
+        <p>Suggested: → "sideways fast" works, keep<br>→ "got none of them" → "got none agreed" (clearer)<br>→ "a new problem" → "a fourth issue to handle" (specific)</p>
+        <p class="label" style="color:var(--sage-deep); margin-top:10px;">Your voice: intact</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">04</div><h2>Two special cases.</h2><p class="sub">When L2 isn't enough</p></div>
+  <div class="body">
+    <h4 class="display" style="font-size:22px; margin:0 0 6px;">a. "Read this as my sharpest critic would."</h4>
+    <p>Before sending something high-stakes, a board paper, a public statement, a letter to a regulator.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="proof-p2">Copy</button><span id="proof-p2">Read the text below as the most skeptical version of my audience: <span class="var">[e.g., a hostile journalist / an opposition MP / a regulator looking for gaps]</span>.
+
+Give me:
+1. Three sentences they would quote out of context to make us look bad. Quote them back to me.
+2. Two claims they would demand evidence for.
+3. One thing that's technically defensible but reads badly.
+4. The single weakest paragraph.
+
+Do not rewrite anything. Just identify the risks.
+
+Text: <span class="var">[paste]</span></span>
+    </div>
+
+    <h4 class="display" style="font-size:22px; margin:26px 0 6px;">b. "Is this actually clear?"</h4>
+    <p>For anything jargon-heavy, policy, technical briefs, legal-adjacent writing.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="proof-p3">Copy</button><span id="proof-p3">Read the text below and tell me:
+
+1. What is this document actually asking the reader to do or believe? State it in one sentence, using the simplest possible words.
+2. Which paragraphs, if removed, would NOT hurt that goal?
+3. Which three sentences are the hardest to understand? Quote them back.
+4. Is there a moment where the reader would reasonably get lost? Where?
+
+Do not rewrite. Just diagnose.
+
+Text: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Things AI should not touch.</h2><p class="sub">Protect these in your prompt</p></div>
+  <div class="body">
+    <ul class="check">
+      <li><b>Quoted speech.</b> If you're quoting someone, AI will "tidy" the quote. Add: "Do not modify anything between quotation marks."</li>
+      <li><b>Names and titles.</b> Add: "Do not change any proper nouns, titles, or honorifics."</li>
+      <li><b>Legal phrasing.</b> "Without prejudice", "on a confidential basis", specific regulatory language, flag them in the prompt as do-not-touch.</li>
+      <li><b>Deliberate repetition.</b> If you repeated a word for rhetorical effect, AI will "fix" it. Tell it the repetition is intentional.</li>
+      <li><b>Technical terms your audience expects.</b> "Stakeholder capitalism", "material change", "in-camera", add a glossary of terms to preserve.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-proofread -->
+
+<!-- ============================================================
+     GUIDE 03: Speechwriting
+     ============================================================ -->
+<section class="guide-page" id="guide-speechwriting">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 03</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Writing &middot; 6 min read &middot; 4 templates</div>
+  <h1>From bullets<br>to a speech you can <em>actually say.</em></h1>
+  <p class="lede">Written words and spoken words have different physics. AI knows written. Your job is to pull it toward spoken, short sentences, hard stops, and sentences your principal wouldn't stumble over.</p>
+  <div class="meta">
+    <span class="tag">Audience: writers, speechwriters, EAs</span>
+    <span class="tag">Time: 10&ndash;30 min</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Start with structure.</h2><p class="sub">Pick a shape before you write a word</p></div>
+  <div class="body">
+    <p class="big">Most bad speeches fail at the outline, not the sentences. Ask AI for three outline options, pick one, <em>then</em> draft.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="speech-p1">Copy</button><span id="speech-p1">I need a speech outline. Give me THREE different structural options before I pick one.
+
+CONTEXT
+- Speaker: <span class="var">[name, role, speaking style if known]</span>
+- Audience: <span class="var">[who, how many, what they care about, what they're sceptical of]</span>
+- Occasion: <span class="var">[event, time of day, tone expected]</span>
+- Length: <span class="var">[minutes] -- roughly [words] at speaking pace</span>
+- The ONE thing the audience should remember tomorrow: <span class="var">[message]</span>
+
+For each of the 3 options, give me:
+- The structural logic in one sentence (e.g. "problem → pivot → promise")
+- An opener (first 2 sentences, ready to speak)
+- 4-6 section headers with one line each
+- A closer (last 2 sentences)
+
+Do NOT draft the whole speech yet. Just the three outlines.</span>
+    </div>
+    <div class="callout info" style="margin-top:18px;">
+      <span class="label">Why three</span>
+      <p>One outline is a suggestion; three is a choice. Seeing three side-by-side tells you what each structure costs, and usually makes the right one obvious.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Draft for the ear.</h2><p class="sub">Different rules from writing for the eye</p></div>
+  <div class="body">
+    <p>Once you've picked an outline, draft one section at a time. Long prompts get flabby outputs; short ones stay tight.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="speech-p2">Copy</button><span id="speech-p2">Draft the <span class="var">[section name]</span> section of a speech for <span class="var">[speaker]</span>.
+
+SPOKEN-WORD RULES (hard):
+- Average sentence: under 14 words. Cap at 22.
+- No semicolons. No dashes used as pauses. Use a full stop.
+- No words the speaker would pause before: "notwithstanding", "concomitant", "paradigm"
+- Read aloud test: if it needs a breath mid-sentence, cut it
+- Contractions: yes ("we're", "won't")
+- No lists of more than three. Three beats. Always three.
+- Repetition is fine. Repetition lands. Repetition is how speeches work.
+
+CONTENT TO WORK FROM
+<span class="var">[paste bullets, quotes, stats]</span>
+
+Draft ~<span class="var">[N]</span> words. Format with line breaks between paragraphs.
+At the end, flag any stat or quote I need to verify.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>The opener &amp; the closer.</h2><p class="sub">Spend disproportionate time here</p></div>
+  <div class="body">
+    <p>The first 30 seconds and the last 30 seconds are 80% of what the room remembers. Worth 10 prompts, not one.</p>
+
+    <h4 class="display" style="font-size:22px; margin: 14px 0 6px;">Opener generator</h4>
+    <div class="prompt">
+<button class="copy-btn" data-copy="speech-p3">Copy</button><span id="speech-p3">Give me FIVE different openers for a speech by <span class="var">[speaker]</span> to <span class="var">[audience]</span> about <span class="var">[topic]</span>.
+
+Try five different shapes:
+1. A specific moment (a scene, a date, a person)
+2. A direct acknowledgment of the room (why we're here, who's missing)
+3. A surprising number or fact
+4. A question the audience is already asking themselves
+5. A short, honest admission
+
+Each opener: 2-3 sentences, under 40 words. No "Good morning and thank you for having me."</span>
+    </div>
+
+    <h4 class="display" style="font-size:22px; margin: 22px 0 6px;">Closer generator</h4>
+    <div class="prompt">
+<button class="copy-btn" data-copy="speech-p4">Copy</button><span id="speech-p4">Give me THREE closers for the speech below. The audience should leave with one clear feeling and one clear action.
+
+One feeling: <span class="var">[e.g., urgency / pride / clarity]</span>
+One action: <span class="var">[e.g., write to their MP / read the report / show up Thursday]</span>
+
+Rules:
+- Under 60 words each
+- Last sentence must be speakable in one breath
+- No "in conclusion", "thank you for your time", "I'll now take questions"
+- Return to an image or phrase from the opener if one fits, but only if it fits
+
+Speech draft: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">04</div><h2>Anticipate the Q&amp;A.</h2><p class="sub">Before the speech, not after</p></div>
+  <div class="body">
+    <p>If the speech will be followed by questions, and most are, rehearse them before you write the closer.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="speech-p5">Copy</button><span id="speech-p5">Act as three different people in the audience for this speech. For each, give me:
+- The single hardest question they would ask
+- Why it's hard (what assumption or weakness it probes)
+- A 40-word answer the speaker could actually give
+
+Three people:
+1. A friendly journalist looking for a headline
+2. A sceptic in the room who disagrees with the premise
+3. A bureaucrat who wants to know about cost and timing
+
+Speech: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Pre-delivery checklist.</h2><p class="sub">Final pass</p></div>
+  <div class="body">
+    <ul class="check">
+      <li><b>Read it aloud.</b> Not in your head. Out loud. Time it.</li>
+      <li><b>Mark the breath points.</b> Slashes where the speaker pauses. If a sentence has no breath, rewrite it.</li>
+      <li><b>Cut 10% of words.</b> On stage, every extra word is a drag. This is the single highest-leverage edit.</li>
+      <li><b>Verify every number, name, date, quote.</b> A speech gets clipped on social media. One wrong stat lives forever.</li>
+      <li><b>Replace any word the speaker hasn't said in a real conversation this month.</b> If it's not in their vocabulary, it won't sound like them.</li>
+      <li><b>Sound check for acronyms.</b> Spell them out the first time. Don't make the audience decode.</li>
+      <li><b>Print it in the speaker's preferred format.</b> Double-spaced, 14pt, bold the emphasis words. Paper, not phone.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-speechwriting -->
+
+<!-- ============================================================
+     GUIDE 04: Letters
+     ============================================================ -->
+<section class="guide-page" id="guide-letters">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 04</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Stakeholder relations &middot; 5 min read</div>
+  <h1>Letters: <em>formal,</em> firm, &amp; human.</h1>
+  <p class="lede">Letters are the slowest, most considered form of business correspondence. Tone is everything. Here's how to move a letter up and down the tone ladder without losing the point.</p>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>The tone ladder.</h2><p class="sub">Same message, five registers</p></div>
+  <div class="body">
+    <p class="big">Before you prompt, decide which rung. Most "letter" prompts default to rung 3, which is neither warm enough for a constituent nor firm enough for a regulator.</p>
+    <div class="toneladder">
+      <div class="lbl">Rung 1</div>
+      <div class="ex">"Warmly personal." Thank-you letters, condolences (only if hand-edited), invitations to people you know.</div>
+      <div class="lbl">Rung 2</div>
+      <div class="ex">"Considerate official." Constituent replies, responses to public inquiries, appreciative stakeholder notes.</div>
+      <div class="lbl">Rung 3</div>
+      <div class="ex">"Neutral official." Standard correspondence, confirmations, procedural notices.</div>
+      <div class="lbl">Rung 4</div>
+      <div class="ex">"Diplomatic-firm." Disagreements, escalations, "your proposal is insufficient" letters.</div>
+      <div class="lbl">Rung 5</div>
+      <div class="ex">"Formal-terse." Regulator-bound, legally-adjacent, pre-litigation. Run past counsel.</div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>The prompt.</h2><p class="sub">Name the rung explicitly</p></div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="letters-p1">Copy</button><span id="letters-p1">Draft a formal letter.
+
+TONE RUNG: <span class="var">[1-5, see the ladder]</span>
+-- If Rung 1/2: warm opening, acknowledge the person specifically
+-- If Rung 3: neutral, procedural, no sentiment
+-- If Rung 4: firm but not rude; register disagreement clearly; keep the door open
+-- If Rung 5: minimal; facts and positions only; no concessions beyond what I specify
+
+FROM: <span class="var">[your name, title, org]</span>
+TO: <span class="var">[recipient name, title, org, full postal address]</span>
+DATE: <span class="var">[today]</span>
+RE: <span class="var">[subject line, specific]</span>
+
+KEY POINTS to include (in this order if possible):
+1. <span class="var">[point]</span>
+2. <span class="var">[point]</span>
+3. <span class="var">[explicit ask OR position]</span>
+
+CONSTRAINTS
+- Length: under <span class="var">[one page / 400 words]</span>
+- No clichés ("I hope this letter finds you well")
+- British / Canadian / US spelling: <span class="var">[pick]</span>
+- If Rung 4/5: every claim must be directly supported by what I've given you. Do not infer or soften.
+
+Return the full letter including salutation, body, sign-off, and a placeholder line for signature.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>Constituent &amp; public replies.</h2><p class="sub">Scale without feeling form-lettered</p></div>
+  <div class="body">
+    <p>The trick: AI writes the body; you hand-write two sentences acknowledging <em>their specific</em> case.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="letters-p2">Copy</button><span id="letters-p2">Draft a reply to a constituent/member of the public.
+
+WHAT THEY WROTE (verbatim): <span class="var">[paste]</span>
+
+OUR POSITION: <span class="var">[paste the policy/position note]</span>
+
+RULES:
+- Rung 2 tone: considerate official
+- Start by naming the specific concern THEY raised (not a generic "thank you for writing about [topic]")
+- Address their ask directly, yes, no, partially, not yet, or "here's who can help"
+- If we can't do what they want, say why in one honest sentence. Not three paragraphs of process.
+- Close with one tangible next step (a link, a name, a date)
+- No "please don't hesitate to contact us", say how they can follow up specifically
+
+Leave a <span class="var">[INSERT PERSONAL NOTE HERE]</span> placeholder before the sign-off for me to add 2 sentences by hand.</span>
+    </div>
+    <div class="callout warn" style="margin-top:20px;">
+      <span class="label">Never do this</span>
+      <p>Don't paste constituent data (names, addresses, case numbers, sensitive details) into a consumer AI tool. Redact to "[CONSTITUENT NAME]" and "[ADDRESS]", or use an approved enterprise tool.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">04</div><h2>The "diplomatic-firm" letter.</h2><p class="sub">Rung 4, the hardest rung</p></div>
+  <div class="body">
+    <p>The letter that records a disagreement, formally, without closing the relationship. AI tends to over-soften. You want clarity without contempt.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="letters-p3">Copy</button><span id="letters-p3">Draft a Rung-4 diplomatic-firm letter.
+
+SITUATION: <span class="var">[background]</span>
+WHAT THEY DID / PROPOSED: <span class="var">[specifics]</span>
+WHY IT'S UNACCEPTABLE (internal note, do NOT include verbatim): <span class="var">[candid]</span>
+WHAT WE WANT INSTEAD: <span class="var">[specific ask]</span>
+DEADLINE / NEXT STEP: <span class="var">[date and consequence]</span>
+
+TONE RULES
+- Register the disagreement in the first paragraph, unambiguously. Do NOT bury it.
+- One paragraph of reasoning, fact-based, not emotional
+- The ask must be specific and time-bound
+- No veiled threats; state consequences plainly and only if I have authority to deliver them
+- Close courteously. "We look forward to your response by [date]." No warmth past that.
+
+Produce two versions:
+A) The one I asked for
+B) One clicks firmer (Rung 4.5), in case legal wants it pointier</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Pre-mail checklist.</h2><p class="sub">A letter goes on the record</p></div>
+  <div class="body">
+    <ul class="check">
+      <li><b>Address correct?</b> Name, title, honorific, organisation. AI gets these wrong constantly.</li>
+      <li><b>Dates and deadlines.</b> Every date verified; every deadline achievable.</li>
+      <li><b>Position matches our actual position.</b> Not AI's softened version of it.</li>
+      <li><b>Letters FOI/disclosure-safe.</b> Would you be comfortable if this letter were made public tomorrow?</li>
+      <li><b>Signed off by the right person.</b> AI doesn't know your delegation limits. You do.</li>
+      <li><b>Copied to the right people.</b> CC line matches the politics.</li>
+      <li><b>Legal review if Rung 5.</b> Non-negotiable.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-letters -->
+
+<!-- ============================================================
+     GUIDE 05: Presentations
+     ============================================================ -->
+<section class="guide-page" id="guide-presentations">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 05</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Internal comms &middot; 5 min read</div>
+  <h1>30-page report to a <em>10-slide story.</em></h1>
+  <p class="lede">AI is brilliant for the outline. Mediocre for the slides themselves. The trick is to stop at the right moment and take over.</p>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Outline first. Always.</h2><p class="sub">Never ask for slides straight away</p></div>
+  <div class="body">
+    <p class="big">If you ask AI "make me a 10-slide deck", you get ten generic slides. If you ask for an outline, you get a spine you can defend.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="pres-p1">Copy</button><span id="pres-p1">I have source material for a presentation. BEFORE drafting slides, build me an outline.
+
+AUDIENCE: <span class="var">[who, what they already know, what they want from this meeting]</span>
+LENGTH: <span class="var">[N] slides, [M] minutes</span>
+ONE-SENTENCE GOAL: at the end of this meeting, the audience will <span class="var">[do / decide / understand]</span>.
+
+SOURCE: <span class="var">[paste the report / briefing / bullets]</span>
+
+Give me:
+1. A one-sentence thesis for the whole deck
+2. A slide-by-slide outline, for each slide:
+   · a short title (under 8 words, stating the POINT, not the topic)
+   · the single sentence that slide must prove
+   · 1-3 supporting facts from the source
+3. A list of anything in the source that I am NOT using, and why
+4. The single slide the audience will remember, which one? why?
+
+Do not draft the slides themselves yet.</span>
+    </div>
+    <div class="callout info" style="margin-top:18px;">
+      <span class="label">The "point, not topic" rule</span>
+      <p>"Q3 Results" is a topic. "Revenue grew 14% despite policy headwinds" is a point. Audiences remember points. They forget topics. Force this in every slide title.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Draft one slide at a time.</h2><p class="sub">Resist batch mode</p></div>
+  <div class="body">
+    <p>Once you've approved the outline, ask for one slide's content at a time. Slower, but the output is usable.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="pres-p2">Copy</button><span id="pres-p2">Draft the content for slide <span class="var">[N]</span>.
+
+TITLE (from the outline): <span class="var">[paste]</span>
+THIS SLIDE MUST PROVE: <span class="var">[the sentence]</span>
+
+Give me:
+- A tightened version of the title (under 8 words, active verb if possible)
+- ONE big-number or big-quote I can place visually prominent, if the source supports one
+- 3 bullet points, max 12 words each, but only if bullets genuinely help. If a single sentence is stronger, return one sentence.
+- Speaker notes: ~50 words of what the presenter would say while this slide is up. Conversational, not scripted.
+- A note on what NOT to put on this slide (things the presenter should say out loud instead)
+
+Source for this slide: <span class="var">[paste the relevant section]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>The density audit.</h2><p class="sub">AI overfills slides. Trim.</p></div>
+  <div class="body">
+    <p>Run this at the end, once the full deck exists.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="pres-p3">Copy</button><span id="pres-p3">Audit this slide deck for density. Go slide by slide. For each:
+
+1. Count words on the slide (headline + bullets + labels, not speaker notes)
+2. Flag any slide over 40 words as overloaded
+3. Identify the weakest word on each slide, the one that adds the least
+4. Identify any slide whose title is a topic instead of a point, rewrite as a point
+5. Spot duplicate concepts across slides, two slides making the same argument
+
+Return a table with columns: slide #, word count, verdict (lean / okay / overloaded), one specific cut to make.
+
+Deck: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">04</div><h2>Visual suggestions.</h2><p class="sub">What to put next to the words</p></div>
+  <div class="body">
+    <p>AI can't design your slide. It can tell you what kind of image or chart each slide wants.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="pres-p4">Copy</button><span id="pres-p4">For each slide in this deck, suggest the visual. Pick from:
+- Big number (one huge figure, one label)
+- Chart (say what kind, what it shows, what shape it should have if the data supports the argument)
+- Photograph (say who/what is in it; a specific scene, not "people collaborating")
+- Pull quote (say who said it and why it belongs on this slide)
+- Diagram (describe the shape in 1 sentence)
+- Nothing, words only
+
+Rule: if a slide doesn't have a clear visual idea, that's a sign the slide doesn't have a clear point. Flag those.
+
+Deck: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Pre-show checklist.</h2><p class="sub">Before you share screen</p></div>
+  <div class="body">
+    <ul class="check">
+      <li><b>Every slide title is a point, not a topic.</b></li>
+      <li><b>Every number on a slide has a source.</b> You know where each came from.</li>
+      <li><b>No slide over 40 words.</b> If it is, split or cut.</li>
+      <li><b>You can present without the slides.</b> If the slides disappeared, you could still make the argument. If you can't, you don't understand it yet.</li>
+      <li><b>Speaker notes read like speech.</b> If they read like a memo, rewrite.</li>
+      <li><b>A backup slide exists for the hostile question.</b> You know which question and where the slide is.</li>
+      <li><b>Final slide is an ask.</b> Not "thank you". What you want the audience to do.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-presentations -->
+
+<!-- ============================================================
+     GUIDE 06: Media Q&A
+     ============================================================ -->
+<section class="guide-page" id="guide-media-qa">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Guide 06</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Media &middot; 4 min read</div>
+  <h1>Q&amp;A prep &amp; <em>media statements.</em></h1>
+  <p class="lede">Surface the hostile questions before the journalist does. Draft a 40-word statement you can actually defend.</p>
+  <div class="meta">
+    <span class="tag">For: Media Relations</span>
+    <span class="tag">Tool: ChatGPT</span>
+    <span class="tag">Time: 15 min</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Use AI for this. Don't for that.</h2><p class="sub">Know the line before you start</p></div>
+  <div class="body">
+    <div class="dual">
+      <div class="use">
+        <div class="hd">Great for</div>
+        <ul>
+          <li>Generating 20+ hostile questions in 60 seconds</li>
+          <li>Role-playing a journalist in back-and-forth</li>
+          <li>Drafting tight 40-word holding statements</li>
+          <li>Identifying weak spots in talking points</li>
+          <li>Stress-testing answers before they're on record</li>
+        </ul>
+      </div>
+      <div class="skip">
+        <div class="hd">Do it yourself</div>
+        <ul>
+          <li>Deciding what CN says on record</li>
+          <li>Confirming facts AI hasn't been given</li>
+          <li>Crafting apologies without Legal review</li>
+          <li>Anything about ongoing legal proceedings</li>
+          <li>Making commitments on timelines or costs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>The hostile question generator.</h2><p class="sub">Surface what the journalist is already thinking</p></div>
+  <div class="body">
+    <p>Before any media interaction, run this prompt to find the questions you most need to be ready for. The goal is not to see them coming, it's to prepare an answer that will hold up.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="media-p1">Copy</button><span id="media-p1">You are a <span class="var">[beat]</span> reporter at <span class="var">[outlet]</span>. You've received a tip about <span class="var">[topic]</span>.
+
+Generate the 10 hardest questions you would ask CN's spokesperson. For each:
+- The question (exact words you'd use on camera or in print)
+- Why it's hard (what assumption it probes, what weakness it exposes)
+- What answer would satisfy you enough to move on
+
+Rules:
+- At least 3 questions should be ones CN would rather not answer
+- At least 1 should be a "gotcha" that sounds reasonable but is a trap
+- Include 1 about what CN hasn't said yet
+- No softball questions</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>The 40-word statement pattern.</h2><p class="sub">Short enough to read aloud. Tight enough to defend.</p></div>
+  <div class="body">
+    <p>Forty words is not a constraint, it's a quality filter. If you can't say it in 40 words, you don't know what you're trying to say yet.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="media-p2">Copy</button><span id="media-p2">Draft a media statement about <span class="var">[topic]</span>. Max 40 words.
+
+Structure (in this order):
+1. Acknowledge what happened or what's being asked about (one sentence)
+2. State CN's position or action (one sentence)
+3. Bridge to what comes next (one phrase)
+
+Rules:
+- No speculation on cause
+- No commitment to timeline unless Legal has approved
+- Every word must be defensible in print
+- Read it aloud, if it sounds robotic, rewrite it
+- Do not use "at this time", "going forward", or "we take X seriously"</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">04</div><h2>Red-team your statement.</h2><p class="sub">Find the damage before the journalist does</p></div>
+  <div class="body">
+    <p>Once you have a draft, run it through a hostile read. This catches the out-of-context quote, the implied admission, the missing fact, before they appear in print.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="media-p3">Copy</button><span id="media-p3">Read this media statement as a hostile journalist. Tell me:
+1. The sentence you'd quote out of context for maximum damage
+2. The follow-up question this statement practically begs for
+3. The one thing it doesn't address that a journalist will notice
+4. Whether it sounds like a human said it or a lawyer wrote it
+
+Statement: <span class="var">[paste]</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">05</div><h2>Before &amp; after.</h2><p class="sub">The prompt makes the difference</p></div>
+  <div class="body">
+    <div class="ba">
+      <div class="bad">
+        <div class="hd">Without a structured prompt</div>
+        <p><b>Prompt:</b> "Write a media statement about the derailment."</p>
+        <p><b>Output:</b> "CN takes the safety of our communities and employees very seriously. We are aware of the incident and are working closely with relevant authorities. Further updates will be provided as information becomes available."</p>
+        <p class="label" style="color:var(--danger); margin-top:10px;">Vague. Defensive. Zero information.</p>
+      </div>
+      <div class="good">
+        <div class="hd">With topic, position, and constraints</div>
+        <p><b>Prompt:</b> Structured prompt with 40-word limit, three-part structure, and explicit rule against speculation.</p>
+        <p><b>Output:</b> "A freight train carrying non-hazardous goods derailed near Jasper at approximately 3am MT. No injuries reported. Our response team is on site and the corridor is expected to reopen by tomorrow morning."</p>
+        <p class="label" style="color:var(--sage-deep); margin-top:10px;">Specific. Defensible. Actually useful.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">06</div><h2>Pre-send checklist.</h2><p class="sub">Run this before anything goes out</p></div>
+  <div class="body">
+    <ul class="check">
+      <li>Every fact in the statement can be verified right now</li>
+      <li>No cause speculation, not even "preliminary indications"</li>
+      <li>No commitment to a timeline unless Operations has confirmed it</li>
+      <li>Legal has reviewed it (or will review before release)</li>
+      <li>It reads naturally when spoken aloud</li>
+      <li>Under 50 words, if longer, find the sentence that can go</li>
+      <li>You have not used: "we take this seriously", "thoughts and prayers", "at this time"</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-media-qa -->
+
+<!-- ============================================================
+     GUIDE 07: Crisis
+     ============================================================ -->
+<section class="guide-page" id="guide-crisis">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Crisis comms</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Crisis comms &middot; 4 min read</div>
+  <h1>Holding statements <em>when the clock is ticking.</em></h1>
+  <p class="lede">What AI is good for in a crisis, and exactly where to stop and call Legal.</p>
+  <div class="meta">
+    <span class="tag">For: Crisis comms</span>
+    <span class="tag">Time: 5 min</span>
+    <span class="tag signal">Sensitivity: high</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>The 60-minute drill.</h2><p class="sub">What AI can do while you're waiting for facts</p></div>
+  <div class="body">
+    <div class="dual">
+      <div class="use">
+        <div class="hd">Great for</div>
+        <ul>
+          <li>First holding statement (while you wait for facts)</li>
+          <li>Employee "we know, we're on it" note</li>
+          <li>Social media initial response</li>
+          <li>Generating the journalist questions that are coming</li>
+          <li>Drafting initial stakeholder notifications</li>
+        </ul>
+      </div>
+      <div class="skip">
+        <div class="hd">Stop and do it yourself</div>
+        <ul>
+          <li>Anything about cause or blame</li>
+          <li>Injury or fatality details</li>
+          <li>Regulatory commitments</li>
+          <li>Statements that admit liability</li>
+          <li>Anything Legal hasn't reviewed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>Holding statement in 90 seconds.</h2><p class="sub">For when you know something, but not everything</p></div>
+  <div class="body">
+    <p>A holding statement does one job: buy time without saying anything you'll regret. Fill in only what you know for certain. Leave everything else blank.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="crisis-p1">Copy</button><span id="crisis-p1">Draft a holding statement. The situation: <span class="var">[describe what happened, what you know for certain, what you don't know yet]</span>.
+
+Structure:
+1. Acknowledge (what we know)
+2. Show concern (if applicable, injuries, community impact)
+3. State action (what CN is doing right now)
+4. Promise update (when the next statement is coming)
+5. Stop. Do not add anything else.
+
+Hard rules:
+- Under 40 words
+- No speculation on cause ("we are investigating" is fine)
+- No timeline promises unless Operations has confirmed
+- No "thoughts and prayers", show action, not sentiment
+- Use present tense for actions ("our team is on site")
+- Canadian spelling</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>The legal stop.</h2><p class="sub">These conditions override everything else</p></div>
+  <div class="body">
+    <div class="callout danger">
+      <span class="label">The Legal Stop</span>
+      <p style="margin-bottom:12px;">If any of these are true, stop prompting and call Legal:</p>
+      <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6;">
+        <li>Someone was injured or killed</li>
+        <li>There is environmental contamination</li>
+        <li>A regulator (TSB, TC, Environment Canada) is involved</li>
+        <li>Media is reporting something CN has not confirmed</li>
+        <li>The statement could be read as admitting fault</li>
+      </ul>
+    </div>
+    <p style="margin-top:16px;">You can use AI for the employee note and social post while Legal reviews the external statement. But the external statement does not go out without Legal sign-off.</p>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">04</div><h2>Employee note &amp; social post.</h2><p class="sub">Two audiences. Two prompts. Both safe to draft now.</p></div>
+  <div class="body">
+    <h4 class="display" style="font-size:22px; margin:0 0 6px;">Employee note</h4>
+    <p>This goes out before or simultaneously with the external statement. Employees should not hear about a crisis from the news.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="crisis-p2">Copy</button><span id="crisis-p2">Draft a brief internal note for CN employees. Situation: <span class="var">[describe]</span>.
+
+Structure: One paragraph. What happened (as we know it), what we're doing, what employees should do (or not do, e.g., "refer media inquiries to Communications"). Under 80 words. Direct, not corporate.
+
+Rules: No speculation. No blame. Do not discuss cause. Canadian spelling.</span>
+    </div>
+
+    <h4 class="display" style="font-size:22px; margin:26px 0 6px;">Social post</h4>
+    <p>First and only for now. Facts only. Give a time for the next update if you can keep it.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="crisis-p3">Copy</button><span id="crisis-p3">Draft a social media post (Twitter/X) about <span class="var">[situation]</span>. Max 200 characters.
+
+Rules: Facts only. No speculation. Link to full statement if available. No "stay tuned", give a specific time for the next update if possible.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">05</div><h2>Before you release.</h2><p class="sub">Nine checks. All of them matter.</p></div>
+  <div class="body">
+    <ul class="check">
+      <li>Every fact can be confirmed right now by someone on site</li>
+      <li>No cause speculation, not "preliminary indications," not "appears to be"</li>
+      <li>No blame, not even implied</li>
+      <li>No timeline promise you can't keep (say "we will provide an update by [time]" only if you will)</li>
+      <li>Legal has seen the external statement</li>
+      <li>The employee note went out before or simultaneously with the external statement</li>
+      <li>Someone has checked social media for what's already out there</li>
+      <li>The statement reads naturally aloud in under 15 seconds</li>
+      <li>You have a named person (or role) for media to contact</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-crisis -->
+
+<!-- ============================================================
+     GUIDE 08: Summarize
+     ============================================================ -->
+<section class="guide-page" id="guide-summarize">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Summarise a long document</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Research &amp; prep &middot; 3 min read</div>
+  <h1>Summarise a long <em>document.</em></h1>
+  <p class="lede">Three summary types, executive, skim, deep, and when to ask for each.</p>
+  <div class="meta">
+    <span class="tag">For: everyone</span>
+    <span class="tag">Tool: ChatGPT + file upload</span>
+    <span class="tag">Time: 5 min</span>
+  </div>
+</header>
+
+<section class="two-col">
+  <div class="hd"><div class="n">01</div><h2>Three levels of summary.</h2><p class="sub">Pick the one that matches how it will be used</p></div>
+  <div class="body">
+    <p class="big">The prompt that gives you a summary you'll actually use is the one that names the level before it asks for anything else.</p>
+    <div class="rules-stack">
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">EXEC</span><b>Executive.</b></div>
+        <div class="rr">3-5 bullets. Decision-ready. What changed, what it means, what to do next.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">SKIM</span><b>Skim.</b></div>
+        <div class="rr">One-page overview. Key themes, standout data, gaps. For briefing packs.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rl"><span class="lvl">DEEP</span><b>Deep.</b></div>
+        <div class="rr">Section-by-section. Strengths, weaknesses, what's missing. For SME review.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">02</div><h2>The prompt patterns.</h2><p class="sub">One for each level</p></div>
+  <div class="body">
+    <h4 class="display" style="font-size:22px; margin:0 0 6px;">Executive summary</h4>
+    <p>Upload the document first, then paste this prompt. The "so what" at the end of each bullet is what separates a useful summary from a table of contents.</p>
+    <div class="prompt" style="margin-bottom:22px;">
+<button class="copy-btn" data-copy="sum-p1">Copy</button><span id="sum-p1">Summarise this document in 3-5 bullet points for a senior executive.
+
+For each bullet:
+- Lead with what changed or what matters
+- Include one supporting number if available
+- End with the "so what", what this means for CN
+
+Do not include background the reader already knows. Do not pad with filler. If the document doesn't contain enough information to make 5 meaningful bullets, give fewer.</span>
+    </div>
+
+    <h4 class="display" style="font-size:22px; margin:0 0 6px;">Skim summary</h4>
+    <p>For briefing packs and prep reads. The gaps section is the part most people skip in their prompt, and it's usually the most useful output.</p>
+    <div class="prompt" style="margin-bottom:22px;">
+<button class="copy-btn" data-copy="sum-p2">Copy</button><span id="sum-p2">Write a one-page summary of this document for someone preparing a briefing pack.
+
+Structure:
+1. One-sentence thesis (what this document is arguing or reporting)
+2. Key themes (3-4, with one supporting detail each)
+3. Notable data points (any numbers, dates, or findings worth highlighting)
+4. Gaps or questions (what the document doesn't address that the reader might want)
+5. Recommendation (if the document makes one, or note that it doesn't)
+
+Under 400 words.</span>
+    </div>
+
+    <h4 class="display" style="font-size:22px; margin:0 0 6px;">Deep summary</h4>
+    <p>For SME review and due diligence. The "weakest part" instruction forces AI to actually critique the document rather than summarise it charitably.</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="sum-p3">Copy</button><span id="sum-p3">Analyse this document section by section.
+
+For each section:
+- What it covers (one sentence)
+- The strongest claim or finding
+- Any unsupported claims or missing evidence
+- One question a critical reader would ask
+
+End with: "The single most important thing in this document is..." and "The weakest part is..."</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">03</div><h2>Upload, don't paste.</h2><p class="sub">File upload preserves what copy-paste destroys</p></div>
+  <div class="body">
+    <p>Pasting a document loses tables, headers, footnotes, and formatting. The file upload feature reads the document as it was meant to be read.</p>
+    <ul style="padding-left: 20px; margin: 0 0 16px 0;">
+      <li style="margin-bottom:8px; font-size:15px;">Click the paperclip or attachment icon in the ChatGPT message bar</li>
+      <li style="margin-bottom:8px; font-size:15px;">Upload PDF, DOCX, PPTX, XLSX, or images directly</li>
+      <li style="margin-bottom:8px; font-size:15px;">Better than pasting because formatting, tables, and headers are preserved</li>
+      <li style="margin-bottom:8px; font-size:15px;">For documents over 100 pages, tell ChatGPT which sections matter most, or break into chunks</li>
+    </ul>
+    <div class="callout danger">
+      <span class="label">Before you upload</span>
+      <p>Check the confidentiality traffic-light guide before uploading any document. If a document is marked Confidential or Restricted, do not upload it to ChatGPT's public interface.</p>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd"><div class="n">04</div><h2>Before &amp; after.</h2><p class="sub">The level matters as much as the prompt</p></div>
+  <div class="body">
+    <div class="ba">
+      <div class="bad">
+        <div class="hd">Vague prompt</div>
+        <p><b>Prompt:</b> "Summarise this."</p>
+        <p><b>Output:</b> Generic wall of text that restates the table of contents. Each section gets one sentence. No "so what." No prioritisation. You still have to read the whole document to decide what matters.</p>
+        <p class="label" style="color:var(--danger); margin-top:10px;">You could have skimmed the doc yourself in the same time.</p>
+      </div>
+      <div class="good">
+        <div class="hd">Structured prompt</div>
+        <p><b>Prompt:</b> "Exec summary, 5 bullets, each with a supporting number and a 'so what.'"</p>
+        <p><b>Output:</b> Five tight bullets. Each leads with the finding, includes a number, and ends with what it means for CN. You know what matters before you open the document.</p>
+        <p class="label" style="color:var(--sage-deep); margin-top:10px;">Decision-ready in 30 seconds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="background: var(--paper-2);">
+  <div class="hd"><div class="n">05</div><h2>The verification habit.</h2><p class="sub">Summaries can be wrong. Here's how to check.</p></div>
+  <div class="body">
+    <p>AI summarises confidently whether it is right or not. A summary that invents a number or conflates two claims is worse than no summary. Run these checks before using the output.</p>
+    <ul class="check">
+      <li>Does the summary mention anything not in the original document?</li>
+      <li>Are the numbers and dates from the summary actually in the source? (Check 2-3)</li>
+      <li>Did AI combine two separate claims into one? (Common hallucination)</li>
+      <li>Is the "so what" actually supported by the document, or did AI editorialise?</li>
+      <li>Did you read the sections AI flagged as most important?</li>
+      <li>If there's a recommendation, is it the document's recommendation or AI's?</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-summarize -->
+
+<!-- ============================================================
+     GUIDE 09: Stakeholder Map
+     ============================================================ -->
+<section class="guide-page" id="guide-stakeholder-map">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Stakeholder &amp; audience analysis</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">PAGA &middot; Research &middot; 4 min</div>
+  <h1>Stakeholder &amp; <em>audience analysis.</em></h1>
+  <p class="lede">Before a consultation, a minister meeting, or a community engagement, spend 10 minutes mapping who cares and why. AI accelerates the mapping. Your judgment stays in the loop.</p>
+  <div class="meta"><span class="tag">For: PAGA, Government Affairs</span><span class="tag">Time: 10 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>When this is worth doing.</h2>
+    <p class="sub">And when it isn't</p>
+  </div>
+  <div class="body">
+    <p class="big">Every stakeholder engagement has a map. Usually it's in someone's head. Write it down once, and every subsequent meeting, letter, and talking-point doc gets easier.</p>
+    <div class="dual">
+      <div class="use"><div class="hd">✓ AI is great for this</div><ul><li>Pre-meeting prep for MP, MPP, or minister engagements</li><li>Sketching out a consultation plan</li><li>Identifying who to brief first before an announcement</li><li>Anticipating opposition ahead of a regulatory filing</li><li>Tiering media outlets for a launch</li></ul></div>
+      <div class="skip"><div class="hd">✗ Do it yourself</div><ul><li>Making commitments about what CN will do for any stakeholder</li><li>Guessing at what an individual stakeholder has privately said</li><li>Using AI to draft stakeholder-specific positions without Government Affairs review</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">Map the field in one page</p>
+  </div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="smap-p1">Copy</button><span id="smap-p1">JOB: Map the stakeholders for the initiative below. Identify each stakeholder's likely position, the strongest argument for their position, and what they need from CN. Do not invent organizations or individuals, only include stakeholders I listed or clearly-named categories.
+AUDIENCE &amp; OUTCOME: CN PAGA team preparing for engagement. They should come away knowing: who to brief first, who to brief last, and what each group will want to hear.
+FORMAT: Table with columns: Stakeholder | Influence (high / medium / low) | Likely position (support / neutral / oppose / unknown) | Their core concern | What they want from CN | Risk if ignored. End with a 3-bullet "who to brief in what order" recommendation.
+INFO:
+• Initiative: [describe the announcement, project, or ask]
+• Geography: [specific corridor, province, municipality]
+• Known stakeholders: [list the ones you already know of]
+• CN's primary objective: [what we need from this engagement]
+RULES: Canadian spelling. No em dashes. If you don't have enough information to place a stakeholder, mark them "unknown, needs Government Affairs input." Do not fabricate positions. Do not invent organization names.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The tiers that actually matter.</h2>
+    <p class="sub">Four buckets, not fifteen</p>
+  </div>
+  <div class="body">
+    <p>Don't let AI give you a 40-row table. Four tiers force prioritization.</p>
+    <div class="rules-stack">
+      <div class="rule-row"><div class="rl"><span class="lvl">TIER 1</span></div><div class="rr"><b>Must brief before announcement.</b> Direct relationship to the initiative. Will be first call a journalist makes if they're surprised.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">TIER 2</span></div><div class="rr"><b>Brief day-of, within hours.</b> Will notice, but not likely to react first. Typically elected officials outside the directly-affected riding.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">TIER 3</span></div><div class="rr"><b>Inform via standard channels.</b> Would want to know, won't feel slighted if they learn the same way as the public. Industry groups, most media.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">TIER 4</span></div><div class="rr"><b>Monitor for reaction.</b> No pre-brief. Track their response for next steps.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Pressure-test with the inverse.</h2>
+    <p class="sub">Who benefits from opposing us</p>
+  </div>
+  <div class="body">
+    <p>The strongest map thinks about incentives, not just interests. Second prompt:</p>
+    <div class="prompt">
+<button class="copy-btn" data-copy="smap-p2">Copy</button><span id="smap-p2">JOB: For the same initiative and stakeholder list, identify who has an incentive to oppose this publicly, even if privately indifferent. Why would opposing benefit them? What would they say?
+FORMAT: For each stakeholder with an opposition incentive: name, what they gain by opposing, the specific line they're likely to take, the first journalist they'd likely talk to.
+RULES: Canadian spelling. This is a red-team exercise. Don't soften. If no one has an opposition incentive, say so, that's useful.</span>
+    </div>
+    <p style="margin-top:22px;">This is how you build a Q&amp;A pack that actually holds up. Most stakeholder maps fail because they assume goodwill.</p>
+  </div>
+</section>
+
+</section><!-- /guide-stakeholder-map -->
+
+<!-- ============================================================
+     GUIDE 10: Tone Shift
+     ============================================================ -->
+<section class="guide-page" id="guide-tone-shift">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Tone-shift</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Editing &middot; 3 min read</div>
+  <h1>Translate tone <em>across audiences.</em></h1>
+  <p class="lede">The same message, rewritten for executives, front-line supervisors, unionized crews, and media, without losing what it actually says.</p>
+  <div class="meta"><span class="tag">Works on: drafts already in hand</span><span class="tag">Time: 3 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>When to use this.</h2>
+    <p class="sub">Cascading a single message</p>
+  </div>
+  <div class="body">
+    <p class="big">A service change, a policy update, an operational decision, one fact, many audiences. Writing four versions from scratch takes an hour. Asking AI to translate one well-drafted version takes three minutes.</p>
+    <div class="dual">
+      <div class="use"><div class="hd">✓ AI is great for this</div><ul><li>Cascading one policy change across exec, management, FLS, crew, union notes</li><li>Turning a press release into an employee bulletin</li><li>Turning an all-hands script into a customer-facing post</li><li>Rewriting a briefing note as a media line</li></ul></div>
+      <div class="skip"><div class="hd">✗ Do it yourself</div><ul><li>Translating news of layoffs, terminations, fatalities, or discipline</li><li>Shifting tone on anything going to regulators or Legal</li><li>Re-attributing quotes to a different spokesperson</li><li>Softening content Legal has already signed off on verbatim</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The six CN tones.</h2>
+    <p class="sub">Voice rungs</p>
+  </div>
+  <div class="body">
+    <div class="toneladder">
+      <div class="lbl">EXECS</div><div class="ex">Four sentences max. Numbers first. No preamble. End with the decision.</div>
+      <div class="lbl">MANAGEMENT</div><div class="ex">Context, then what changed, then what they need to do. Plain, practical.</div>
+      <div class="lbl">FLS</div><div class="ex">Direct. Short sentences. The words they'll say to their crews. No corporate softening.</div>
+      <div class="lbl">UNIONIZED</div><div class="ex">Respectful, clear, no euphemisms. Explain why it matters to them. Never talk down.</div>
+      <div class="lbl">MEDIA</div><div class="ex">Third-person. News-shaped: what, when, where, why, who. Every word defensible.</div>
+      <div class="lbl">INVESTORS</div><div class="ex">Precise. Source every claim. Nothing unreleased. Nothing forward-looking without a disclaimer.</div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">One source, many voices</p>
+  </div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="tone-p1">Copy</button><span id="tone-p1">JOB: Translate the tone of the message below for the audience listed. Preserve every fact. Do not add new information. Do not soften or intensify, match CN's established voice for that audience.
+AUDIENCE &amp; OUTCOME: [one of: executives / management / front-line supervisors / unionized employees / media / investors]. They should understand the message as well as the original audience would, without confusion about what changed.
+FORMAT: Same format as source, unless impractical. Preserve any direct quotes exactly. State word count target: [number].
+SOURCE MESSAGE:
+"""
+[paste the approved, signed-off source message]
+"""
+AUDIENCE-SPECIFIC RULES:
+• Executives: 4 sentences max, numbers first, no preamble
+• Management: context → change → action
+• FLS: short sentences, practical, no euphemisms
+• Unionized: respectful, direct, explain why it matters to them
+• Media: third-person, news structure, every word defensible
+• Investors: source every claim, nothing unreleased, no forward-looking without disclaimer
+HOUSE RULES: Canadian spelling. No em dashes. No emoji. If a fact isn't in source, don't introduce it.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>The test.</h2>
+    <p class="sub">Read all versions side by side</p>
+  </div>
+  <div class="body">
+    <ul class="check">
+      <li>Same facts in every version? (Scan dates, numbers, named people, named places.)</li>
+      <li>No version introduces a claim the source doesn't make.</li>
+      <li>No version softens a legally-relevant word. "Effective April 15" stays "effective April 15," not "starting around mid-April."</li>
+      <li>The FLS version sounds like a supervisor briefing a crew. If it sounds like a memo, redo.</li>
+      <li>The executive version has one sentence you could screenshot and post online.</li>
+      <li>The union version does not contain the words "empower," "align," or "synergies."</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-tone-shift -->
+
+<!-- ============================================================
+     GUIDE 11: Internal Memo
+     ============================================================ -->
+<section class="guide-page" id="guide-internal-memo">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Memos &amp; all-employee notes</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Internal comms &middot; 3 min read</div>
+  <h1>Memos &amp; <em>all-employee notes.</em></h1>
+  <p class="lede">Announcing a change without sounding like HR. The workhorse internal format, with the bits AI always gets wrong.</p>
+  <div class="meta"><span class="tag">Audience: CN employees</span><span class="tag">Time: 10 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>When an internal memo is the right format.</h2>
+    <p class="sub">And when something else is</p>
+  </div>
+  <div class="body">
+    <p class="big">Memos are for information that everyone needs and no one will ask for. If a manager can cover it in a team meeting, don't write a memo. If one group is affected, write them directly. Memos are for company-wide, non-urgent, factual changes.</p>
+    <div class="dual">
+      <div class="use"><div class="hd">✓ AI is great for this</div><ul><li>Policy updates everyone needs to know</li><li>Structural changes ("X now reports to Y")</li><li>Milestones worth marking (quarter close, safety record)</li><li>Process rollouts with a clear start date</li></ul></div>
+      <div class="skip"><div class="hd">✗ Do it yourself</div><ul><li>Condolences or grief</li><li>Legally binding terminations or discipline</li><li>Responses to breaking media stories (use a different vehicle)</li><li>Information that's actually confidential to a subset</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">Built for an all-employee audience</p>
+  </div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="memo-p1">Copy</button><span id="memo-p1">JOB: Draft an all-employee memo. Do not use the phrases "excited to announce," "going forward," "moving forward," "at the end of the day," or "leveraging." Do not start with "As you may know."
+AUDIENCE &amp; OUTCOME: All CN employees, from board administrators to conductors. They should finish reading knowing: what changed, when it takes effect, what it means for them, and where to go with questions. Nothing more.
+FORMAT: 220-280 words. Structure:
+  1. Subject line (under 8 words, states the change)
+  2. One-line opener (what changed, in plain language)
+  3. Context paragraph (why this matters, 2-3 sentences)
+  4. What it means for employees (bullets, 3 max)
+  5. What happens next (dates, milestones)
+  6. Closing line with who to contact
+INFO:
+• Change: [what]
+• Effective date: [when]
+• Scope: [who is affected, be specific]
+• Why now: [the honest reason]
+• Contact for questions: [name, role]
+• Background (for your eyes only, not for the memo): [anything sensitive the AI should avoid mentioning]
+RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. Spell out acronyms on first use. If a fact isn't in INFO, write [confirm], never invent. Do not speculate on related topics (cost, headcount impact, timeline beyond what INFO says).</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The four edits you always make.</h2>
+    <p class="sub">Before it goes to the CEO's office</p>
+  </div>
+  <div class="body">
+    <ol class="steps">
+      <li><div><h4>Cut the opening adjective.</h4><p>AI always opens with "I'm excited" / "I'm pleased" / "I'm thrilled." Delete. Start with the fact.</p></div></li>
+      <li><div><h4>Compress the "why now."</h4><p>AI writes three sentences of context. Usually one will do. Readers will scroll if you don't get to the point by line 3.</p></div></li>
+      <li><div><h4>Rewrite the "what it means for you" bullets.</h4><p>These are almost always vague in the AI draft. Name the specific thing a specific person has to do differently.</p></div></li>
+      <li><div><h4>Put a real name at the bottom.</h4><p>AI loves "contact your manager" or "reach out to HR." Name a person or a specific inbox. If you can't name one, you're not ready to send.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Pre-send checklist.</h2>
+    <p class="sub">Before the all-staff list</p>
+  </div>
+  <div class="body">
+    <ul class="check">
+      <li>The subject line states the change. It's not clickbait.</li>
+      <li>The first sentence could stand alone as a company-wide Slack post.</li>
+      <li>Every "[confirm]" placeholder has been filled or removed.</li>
+      <li>No em dashes. No "excited to announce." No emoji.</li>
+      <li>A named person (or a monitored inbox) is listed for questions.</li>
+      <li>The signatory has read it in their email client, not in a Google doc.</li>
+      <li>It's scheduled for a time employees will actually read it (not 6 PM Friday).</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-internal-memo -->
+
+<!-- ============================================================
+     GUIDE 12: Meeting Brief
+     ============================================================ -->
+<section class="guide-page" id="guide-meeting-brief">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Briefing notes for meetings</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Research &middot; 4 min read</div>
+  <h1>Briefing notes <em>for meetings.</em></h1>
+  <p class="lede">A one-pager that turns a 90-minute meeting into a 10-minute read. What to hold, what to concede, what to never say out loud.</p>
+  <div class="meta"><span class="tag">For: executives, VPs, ministerial meetings</span><span class="tag">Time: 15 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>The anatomy of a useful brief.</h2>
+    <p class="sub">Principal-ready in one page</p>
+  </div>
+  <div class="body">
+    <p class="big">A principal walking into a meeting does not need context. They need: what's at stake, what they're here to achieve, what the other side wants, and the three things they can't afford to say.</p>
+    <div class="dual">
+      <div class="use"><div class="hd">✓ AI is great for this</div><ul><li>Compiling the participants list with roles</li><li>Surfacing positions from public statements, prior meetings, stakeholder letters</li><li>Drafting a first pass of talking points</li><li>Anticipating the three questions the principal will be asked</li><li>Structuring the page</li></ul></div>
+      <div class="skip"><div class="hd">✗ Do it yourself</div><ul><li>Inferring what someone privately believes</li><li>Writing the principal's commitments without Government Affairs sign-off</li><li>Including confidential or speculative internal positioning</li><li>Pasting unredacted participant information (see the confidentiality guide)</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">Built for a 10-minute pre-read</p>
+  </div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="brief-p1">Copy</button><span id="brief-p1">JOB: Draft a one-page meeting brief. Do not invent attendees' positions. Only reflect what is in the INFO below or explicitly marked as a known public position.
+AUDIENCE &amp; OUTCOME: A CN senior executive reading this on the way into the meeting. They should know: who is in the room, what each person wants, our ask, likely traps, and three agreed lines.
+FORMAT: One page. Exact structure:
+  1. MEETING, title, date, 1-line purpose
+  2. ATTENDEES, name, role, affiliation, known relationship to CN (warm / neutral / critical)
+  3. WHAT THEY WANT, single sentence per attendee or bloc
+  4. WHAT CN WANTS, the ask, in one sentence
+  5. THREE LINES, three short statements the principal can use verbatim
+  6. TRAPS, two or three topics to steer away from, with why
+  7. ASKS, specific action the principal is seeking from the meeting
+INFO:
+• Meeting topic: [describe]
+• Participants (names, roles, affiliations): [list]
+• Any prior CN positions shared with them: [list]
+• Known public positions of attendees: [paste or link]
+• Known sensitivities: [what CN cannot commit to or discuss]
+• Outcome we're aiming for: [the ask]
+RULES: Canadian spelling. No em dashes. If you don't have enough information about an attendee, mark them "position unknown, Government Affairs to confirm." Never fabricate quotes or positions. Keep the whole document to one page.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The "three lines" discipline.</h2>
+    <p class="sub">The most-used part of the brief</p>
+  </div>
+  <div class="body">
+    <p>Principals rarely use talking points verbatim. They use lines. A line is a short, self-contained sentence that encapsulates a position and survives being quoted.</p>
+    <p>Three is the magic number. Two is too few (principal runs out and improvises). Four is too many (principal forgets or mixes them).</p>
+    <div class="ba" style="margin-top:16px;">
+      <div class="bad"><div class="hd">✗ A talking point</div><p>"CN is committed to supporting Canadian supply chains through ongoing investment in network capacity, safety, and the communities we operate in, while working closely with regulators and stakeholders to ensure a sustainable future."</p><p style="font-family:var(--mono); font-size:11px; color:var(--danger); margin-top:10px;">35 words &middot; unusable verbatim</p></div>
+      <div class="good"><div class="hd">✓ A line</div><p>"We move 300 million tonnes of Canadian goods a year. Safety is the reason we get to do it."</p><p style="font-family:var(--mono); font-size:11px; color:var(--sage-deep); margin-top:10px;">19 words &middot; quotable, true, defensible</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Pre-meeting handoff.</h2>
+    <p class="sub">Before the principal sees it</p>
+  </div>
+  <div class="body">
+    <ul class="check">
+      <li>Every attendee position is either sourced or flagged "unknown."</li>
+      <li>The "three lines" are pressure-tested: read them aloud. If any one sounds like a press release, rewrite.</li>
+      <li>The traps section names specific topics, not general themes. "Don't commit to a timeline on the Kamloops siding", not "be careful about commitments."</li>
+      <li>The ask is specific. "We want them to sign the letter by April 30", not "we want their support."</li>
+      <li>Government Affairs has reviewed anything involving elected officials.</li>
+      <li>It fits on one page in the principal's preferred reading font and size. Not on the assistant's screen.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-meeting-brief -->
+
+<!-- ============================================================
+     GUIDE 13: Social
+     ============================================================ -->
+<section class="guide-page" id="guide-social">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">Social posts</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Media &middot; 3 min read</div>
+  <h1><em>Social posts.</em></h1>
+  <p class="lede">LinkedIn, X, internal Viva Engage. Platform-native tone, with a "does this sound human?" test.</p>
+  <div class="meta"><span class="tag">Audiences: LinkedIn, X, internal</span><span class="tag">Time: 10 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>The three CN voices on social.</h2>
+    <p class="sub">Platform, not personality</p>
+  </div>
+  <div class="body">
+    <p class="big">CN's tone shifts per platform, not per writer. Get the platform right and everything else follows.</p>
+    <div class="toneladder">
+      <div class="lbl">LINKEDIN</div><div class="ex">Business-first. Celebrate milestones and partnerships. Tag specific people sparingly. No sarcasm.</div>
+      <div class="lbl">X</div><div class="ex">Short, factual, news-shaped. Primary use: service updates, media-adjacent news. Not for banter.</div>
+      <div class="lbl">INTERNAL</div><div class="ex">Employee-first. Celebrates the people, not the corporation. Warmer, less polished.</div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">One message, per-platform</p>
+  </div>
+  <div class="body">
+    <div class="prompt">
+<button class="copy-btn" data-copy="social-p1">Copy</button><span id="social-p1">JOB: Draft three social posts for the event below, one for LinkedIn, one for X, one for internal Viva Engage. Each must feel native to its platform. Do not recycle the same sentence across all three. Do not use emoji. Do not use hashtags unless the INFO specifies them.
+AUDIENCE &amp; OUTCOME:
+• LinkedIn: CN customers, investors, industry peers. They should feel CN is serious and active.
+• X: Journalists, transportation-watchers, and the general public. They should get the news quickly.
+• Internal: CN employees. They should feel proud without it sounding manufactured.
+FORMAT:
+• LinkedIn: 80-120 words, one paragraph, may include one link.
+• X: Two posts, under 280 characters each. First is news-shaped, second can be a thread-starter.
+• Internal: 60-90 words, may mention specific CN teams by name.
+INFO:
+• Event: [what happened / is happening]
+• Date / location: [when, where]
+• Why it matters: [the news peg, customer benefit, safety, investment, partnership]
+• Named people or teams to credit: [if any]
+RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "excited to share" / "thrilled to announce." Spell out acronyms on first use. If a fact isn't in INFO, write [confirm], don't invent.</span>
+    </div>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The "sound human" test.</h2>
+    <p class="sub">Before scheduling</p>
+  </div>
+  <div class="body">
+    <p>Read the post out loud. If any of these phrases appear, rewrite.</p>
+    <div class="ba">
+      <div class="bad"><div class="hd">✗ AI tells</div>
+        <p>"We're excited to announce..."</p>
+        <p>"Proud to partner with..."</p>
+        <p>"At CN, we believe..."</p>
+        <p>"Together, we can..."</p>
+        <p>"A testament to our commitment..."</p>
+        <p>"This milestone represents..."</p>
+      </div>
+      <div class="good"><div class="hd">✓ Replace with</div>
+        <p>Start with the fact: "CN is extending..."</p>
+        <p>Start with the partner's name.</p>
+        <p>Cut. Start with what we actually did.</p>
+        <p>Cut. Say what specifically was done.</p>
+        <p>Cut. The fact speaks for itself.</p>
+        <p>Start with the specific result: "300 new..."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>The scheduling rules.</h2>
+    <p class="sub">CN-specific</p>
+  </div>
+  <div class="body">
+    <ul class="check">
+      <li>Check the day's news. Never post a celebratory LinkedIn during an ongoing incident.</li>
+      <li>Check the CN incident dashboard. If there's a service disruption, delay non-urgent posts.</li>
+      <li>Never schedule a post to X unless a live human is available to respond within 30 minutes. X replies age badly fast.</li>
+      <li>Do not schedule posts for Friday after 3 PM unless the content is time-sensitive. They sink.</li>
+      <li>Internal posts coordinate with HR and the internal comms calendar. Don't land on top of another team's announcement.</li>
+      <li>Any post mentioning specific customers or partners has been reviewed by Corporate Communications and the relationship owner.</li>
+    </ul>
+  </div>
+</section>
+
+</section><!-- /guide-social -->
+
         </div>
       </div>
 
@@ -542,6 +2283,17 @@ function hideGuide() {
   document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = '';
   document.getElementById('guide-detail').style.display = 'none';
 }
+
+// Copy-prompt buttons
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('copy-btn')) {
+    const prompt = e.target.closest('.prompt');
+    const text = prompt.textContent.replace(/Copy|Copied/, '').trim();
+    navigator.clipboard.writeText(text);
+    e.target.textContent = 'Copied';
+    setTimeout(() => e.target.textContent = 'Copy', 2000);
+  }
+});
 </script>
 </body>
 </html>
