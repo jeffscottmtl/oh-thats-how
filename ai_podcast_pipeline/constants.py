@@ -8,7 +8,7 @@ INTRO_TEXT = (
     "for our work. Let's get into it."
 )
 
-ENDING_TOKEN = "Food for Thought"
+ENDING_TOKEN = "One More Thing"
 OUTRO_TEXT = (
     "That's it for this week. If you've got a topic you'd like me to explore, "
     "or you tried something that worked, drop it in the CN GPT Teams channel. "
@@ -40,6 +40,7 @@ BANNED_BOILERPLATE = [
     "this story originally appeared",
     "read more",
     "click here",
+    "food for thought",
 ]
 
 BANNED_TEMPLATE_MARKERS = ["Source:", "What happened:", "Why this matters:"]

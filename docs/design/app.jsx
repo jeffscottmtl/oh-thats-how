@@ -526,7 +526,7 @@ const ArticlesStage = ({ selected, setSelected, onContinue, onBack }) => {
 const ScriptStage = ({ onContinue, onBack }) => {
   const [focused, setFocused] = useState(null);
   const s = D.script;
-  const allText = [s.intro, ...s.body.map(b => b.text), s.foodForThought, s.outro].join(" ");
+  const allText = [s.intro, ...s.body.map(b => b.text), s.oneMoreThing, s.outro].join(" ");
   const wc = allText.split(/\s+/).filter(Boolean).length;
   const target = { min: 580, max: 720 };
   const pct = Math.min(100, (wc / target.max) * 100);
@@ -585,7 +585,7 @@ const ScriptStage = ({ onContinue, onBack }) => {
             <div className="editor-content">
               {section("intro", "Intro · fixed", s.intro)}
               {s.body.map((b, i) => section(`body-${i}`, b.label, b.text, b.citation))}
-              {section("fot", "Food for Thought", s.foodForThought)}
+              {section("omt", "One More Thing", s.oneMoreThing)}
               {section("outro", "Outro · fixed", s.outro)}
             </div>
           </div>

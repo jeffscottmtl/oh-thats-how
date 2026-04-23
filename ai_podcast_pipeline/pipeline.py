@@ -74,31 +74,32 @@ class PipelineError(RuntimeError):
 
 
 # ---------------------------------------------------------------------------
-# Food for Thought history — avoid repeating past topics
+# One More Thing history — avoid repeating past topics
 # ---------------------------------------------------------------------------
 
 def _load_previous_food_for_thought(output_dir: Path) -> list[str]:
-    """Scan output_dir for previous Script.json files and extract food_for_thought values."""
+    """Scan output_dir for previous Script.json files and extract one_more_thing/food_for_thought values."""
     import json
 
-    fot_list: list[str] = []
+    omt_list: list[str] = []
     for script_json in sorted(output_dir.glob("*Script.json")):
         try:
             data = json.loads(script_json.read_text(encoding="utf-8"))
-            fot = data.get("food_for_thought", "")
-            if isinstance(fot, str) and fot.strip():
-                fot_list.append(fot.strip())
+            # Support both new key and legacy key
+            omt = data.get("food_for_thought", "")
+            if isinstance(omt, str) and omt.strip():
+                omt_list.append(omt.strip())
         except Exception:
             continue
     # Deduplicate while preserving order
     seen: set[str] = set()
     unique: list[str] = []
-    for item in fot_list:
+    for item in omt_list:
         key = item[:100].lower()
         if key not in seen:
             seen.add(key)
             unique.append(item)
-    logger.info("Loaded %d unique previous Food for Thought entries from %s.", len(unique), output_dir)
+    logger.info("Loaded %d unique previous One More Thing entries from %s.", len(unique), output_dir)
     return unique
 
 
@@ -108,11 +109,11 @@ def _load_previous_food_for_thought(output_dir: Path) -> list[str]:
 
 import re as _re
 
-# Canonical spoken opener used as the structural marker for the FoT section.
-# Pipeline functions use this to locate the FoT segment — never a heading.
-_FOT_OPENER = "Here's some food for thought."
+# Canonical spoken opener used as the structural marker for the One More Thing section.
+# Pipeline functions use this to locate the segment — never a heading.
+_FOT_OPENER = "One more thing."
 
-_FFT_RE = _re.compile(r"Food for Thought\.?", _re.IGNORECASE)
+_FFT_RE = _re.compile(r"(?:Food\s+for\s+Thought|One\s+[Mm]ore\s+[Tt]hing)\.?", _re.IGNORECASE)
 
 
 def _enforce_intro_text(script_markdown: str) -> tuple[str, bool]:
@@ -133,16 +134,18 @@ def _enforce_intro_text(script_markdown: str) -> tuple[str, bool]:
 
 
 def _normalise_food_for_thought(script_markdown: str) -> str:
-    """Remove any stray 'Food for Thought' headings that the rewrite model injects.
+    """Remove any stray segment headings that the rewrite model injects.
 
-    The FoT section should begin with the spoken opener
-    'Here's some food for thought.' — never a standalone heading.
-    This function strips heading-style occurrences and deduplicates the opener.
+    The closing segment should begin with the spoken opener 'One more thing.'
+    — never a standalone heading. This function strips heading-style occurrences
+    and deduplicates the opener. Also strips legacy 'Food for Thought' headings.
     """
-    # Remove standalone "Food for Thought" headings (on their own line)
-    text = _re.sub(r'\n\s*Food\s+for\s+Thought[.:\-]?\s*\n', '\n', script_markdown, flags=_re.IGNORECASE)
-    # Remove "Food for Thought" that appears right before "Here's some food for thought"
-    text = _re.sub(r'Food\s+for\s+Thought[.:\-]?\s*\n*\s*(?=Here\'s some food for thought)', '', text, flags=_re.IGNORECASE)
+    # Remove standalone "Food for Thought" or "One More Thing" headings (on their own line)
+    text = _re.sub(r'\n\s*(?:Food\s+for\s+Thought|One\s+[Mm]ore\s+[Tt]hing)[.:\-]?\s*\n', '\n', script_markdown, flags=_re.IGNORECASE)
+    # Remove legacy "Here's some food for thought" opener, replaced by "One more thing."
+    text = _re.sub(r"Here'?s\s+some\s+food\s+for\s+thought\.", 'One more thing.', text, flags=_re.IGNORECASE)
+    # Remove heading that appears right before the opener
+    text = _re.sub(r'(?:Food\s+for\s+Thought|One\s+[Mm]ore\s+[Tt]hing)[.:\-]?\s*\n*\s*(?=One more thing\.)', '', text, flags=_re.IGNORECASE)
     # Deduplicate the spoken opener: keep only the last occurrence
     marker = _FOT_OPENER
     parts = text.split(marker)
@@ -154,19 +157,19 @@ def _normalise_food_for_thought(script_markdown: str) -> str:
 
 
 def _insert_before_food_for_thought(script_markdown: str, paragraph: str) -> str:
-    """Insert a paragraph before the FoT section (identified by the spoken opener)."""
+    """Insert a paragraph before the closing segment (identified by the spoken opener)."""
     marker = _FOT_OPENER
     if marker not in script_markdown:
-        # No FoT section found — append paragraph then FoT placeholder
+        # No closing segment found — append paragraph then closing placeholder
         return script_markdown.rstrip() + "\n\n" + paragraph.strip() + "\n"
     head, tail = script_markdown.split(marker, 1)
     return head.rstrip() + "\n\n" + paragraph.strip() + "\n\n" + marker + tail
 
 
 def _ensure_food_for_thought_text(script_markdown: str, fallback_text: str) -> str:
-    """Ensure the FoT section has content. If the spoken opener is missing entirely,
-    append a clean FoT section using the fallback text."""
-    from .script_writer import _clean_food_for_thought
+    """Ensure the closing segment has content. If the spoken opener is missing entirely,
+    append a clean closing section using the fallback text."""
+    from .script_writer import _clean_one_more_thing as _clean_food_for_thought
     marker = _FOT_OPENER
     if marker not in script_markdown:
         clean_fot = _clean_food_for_thought(fallback_text)

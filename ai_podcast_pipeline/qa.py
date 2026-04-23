@@ -210,12 +210,15 @@ def run_qa(
         # generation. A mismatch here would mean the auto-correction itself failed.
         logger.warning("QA: intro text does not match canonical INTRO_TEXT (auto-correction may not have applied)")
 
-    # Check that the food for thought segment is present exactly once via its spoken opener.
-    fot_count = script_text.lower().count("here's some food for thought")
-    checks["ending_token_exact_once"] = fot_count == 1
+    # Check that the closing segment is present exactly once via its spoken opener.
+    # Support both the new opener and legacy episodes that used the old opener.
+    omt_count = script_text.lower().count("one more thing.")
+    legacy_count = script_text.lower().count("here's some food for thought")
+    segment_count = omt_count + legacy_count
+    checks["ending_token_exact_once"] = segment_count == 1
     if not checks["ending_token_exact_once"]:
         failures.append(
-            f"Food for Thought opener appears {fot_count} time(s) — expected exactly once"
+            f"Closing segment opener appears {segment_count} time(s) — expected exactly once"
         )
 
     sources_list = script_json.get("sources", [])

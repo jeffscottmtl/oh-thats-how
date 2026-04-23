@@ -229,23 +229,23 @@ def _fallback_parts(selected: list[ScoredStory]) -> ScriptParts:
             "the meaningful takeaway is how this can reduce repetitive work, improve message quality, "
             "and create more time for judgment-heavy decisions that still require human context."
         )
-    food = (
+    omt = (
         "The pattern across these stories is practical, not theoretical: teams that pair AI speed with "
         "human judgment communicate faster and more clearly. The opportunity now is to pick the right "
         "workflows for automation while protecting tone, trust, and accountability."
     )
-    return ScriptParts(story_narratives=narratives, cn_relevance=None, food_for_thought=food)
+    return ScriptParts(story_narratives=narratives, cn_relevance=None, food_for_thought=omt)
 
 
-def _build_fot_history_block(previous_fot: list[str] | None) -> str:
-    """Return a prompt block listing previous Food for Thought topics to avoid repeats."""
-    if not previous_fot:
+def _build_omt_history_block(previous_omt: list[str] | None) -> str:
+    """Return a prompt block listing previous One More Thing topics to avoid repeats."""
+    if not previous_omt:
         return ""
-    items = "\n".join(f"  - {fot[:200]}" for fot in previous_fot[-10:])
+    items = "\n".join(f"  - {omt[:200]}" for omt in previous_omt[-10:])
     return f"""
-IMPORTANT — Previous Food for Thought topics (DO NOT repeat or closely paraphrase any of these):
+IMPORTANT — Previous One More Thing topics (DO NOT repeat or closely paraphrase any of these):
 {items}
-Your food_for_thought MUST be original — a genuinely new topic, angle, or idea that does not overlap with any of the above.
+Your one_more_thing MUST be original — a genuinely new topic, angle, or idea that does not overlap with any of the above.
 """
 
 
@@ -259,7 +259,7 @@ def generate_script_parts(
     previous_food_for_thought: list[str] | None = None,
 ) -> ScriptParts:
     story_blob = _stories_prompt_blob(selected)
-    fot_history = _build_fot_history_block(previous_food_for_thought)
+    fot_history = _build_omt_history_block(previous_food_for_thought)
 
     prompt = f"""
 You are the host of a friendly, upbeat weekly podcast called The Signal. Your audience is your colleagues — communications professionals who spend their days building presentations for executives, drafting speeches for leaders to deliver at town halls and events, writing emails and newsletters, and managing digital signage. They want to know how AI can make their daily work better — not enterprise deployment strategy. Keep it practical, specific, and useful.
@@ -349,7 +349,7 @@ Fish Audio expression tags — use these THROUGHOUT the script for natural TTS d
 
 Perspective rules — this is critical:
 - When covering a story, you are the narrator summarizing an article for your listeners. Always write in third person about the article, its author, and its subject matter. Use attribution: "the author argues", "she describes", "they found", "the piece explains", "according to the report". Never slip into the article author's voice.
-- First person ("I", "I've", "I found") is ONLY for: (a) your own editorial reaction to a story ("I found this one really striking"), (b) the intro, (c) the food for thought segment, and (d) the outro. It is never used to describe what an article says or what someone in an article experienced.
+- First person ("I", "I've", "I found") is ONLY for: (a) your own editorial reaction to a story ("I found this one really striking"), (b) the intro, (c) the "One more thing" closing segment, and (d) the outro. It is never used to describe what an article says or what someone in an article experienced.
 - Bad: "I was a newcomer, negotiating all of the usual classroom difficulties." (this is the article author's voice, not yours)
 - Good: "The author describes being a complete newcomer — navigating all the usual classroom challenges while also trying to figure out what to do about the AI in every student's pocket."
 - Bad: "I couldn't believe how quickly things changed." (ambiguous — whose experience?)
@@ -358,7 +358,7 @@ Perspective rules — this is critical:
 Return ONLY valid JSON with exactly these keys:
 - story_narratives: array of exactly {len(selected)} strings, one per story, in the exact order provided
 - cn_relevance: string or null
-- food_for_thought: string
+- one_more_thing: string
 
 Story narrative guidelines:
 - Write {len(selected)} narratives. Each narrative should naturally cover:
@@ -422,28 +422,28 @@ cn_relevance guidelines:
 - Write in first person. Keep it to 2–3 sentences max.
 - Skip it if the connection is generic or obvious.
 
-food_for_thought guidelines:
+one_more_thing guidelines:
 - This is a standalone closing segment — it doesn't need to connect to the week's stories at all.
 - Topic: something about AI and communications work that's novel, curious, funny, insightful, or practically useful — a workflow tip, a prompting trick, a "try this on Monday" idea. Something the listener probably hasn't heard before and could use right away.
-- Begin the string with exactly the words "Here's some food for thought." followed by a space, then straight into the content. Do NOT add a "Food for Thought" heading or label before or after — just start with those words. Never start with "Across these stories" or any callback to the stories above.
+- Begin the string with exactly the words "One more thing." followed by a space, then straight into the content. Do NOT add a heading or label before or after — just start with those words. Never start with "Across these stories" or any callback to the stories above.
 - It can be a surprising fact, a counterintuitive idea, a workflow tip, a thought experiment, a bit of history, or something genuinely funny — as long as it earns the listener's attention.
 - Write in first person. Aim for 3–5 sentences. No filler, no generic observations.
 {fot_history}
 Length and pacing:
 - The full assembled episode (including the fixed intro and outro) should run about {round(target_total_words / 130)} minutes when read aloud at a natural pace — roughly {target_total_words} words total.
-- The intro and outro together account for about 70 words, so aim for your generated content (story_narratives + cn_relevance + food_for_thought combined) to total around {target_total_words - 70} words.
+- The intro and outro together account for about 70 words, so aim for your generated content (story_narratives + cn_relevance + one_more_thing combined) to total around {target_total_words - 70} words.
 - Prioritize quality and natural flow over hitting an exact count. If a story needs a bit more room to land properly, take it.
 
 Self-validation (check BEFORE returning JSON):
 - OPENING CHECK (do this first): Read the first sentence of each story narrative. Does any of them contain a publication name, company name, or source attribution? If yes, rewrite that narrative's opening — move the attribution to mid-sentence or later, and lead with the substance instead. This check must pass before you run any other validation.
 - Verify story_narratives has exactly {len(selected)} entries — one per story, same order as provided.
-- Verify food_for_thought starts with exactly "Here's some food for thought." (including the period and trailing space before the content).
+- Verify one_more_thing starts with exactly "One more thing." (including the period and trailing space before the content).
 - Verify no raw domain names appear anywhere (e.g. "nytimes.com") — only proper publication names.
-- Verify none of these banned phrases appear: "subscribe", "newsletter", "sign up", "continue reading", "in your inbox", "read more", "click here", "this story originally appeared", "Source:", "What happened:", "Why this matters:".
+- Verify none of these banned phrases appear: "subscribe", "newsletter", "sign up", "continue reading", "in your inbox", "read more", "click here", "this story originally appeared", "Source:", "What happened:", "Why this matters:", "food for thought".
 - Verify no 4+ word phrase is repeated within 30 words of itself.
 - Verify no single word appears 3+ times within 2 consecutive sentences. If it does, rewrite to vary the language.
 - Verify the word "actually" does not appear anywhere in the output. If it does, remove it — the sentence is always better without it.
-- Verify the total word count of story_narratives + cn_relevance + food_for_thought is roughly {target_total_words - 70} words (between {round((target_total_words - 70) * 0.9)} and {round((target_total_words - 70) * 1.1)}).
+- Verify the total word count of story_narratives + cn_relevance + one_more_thing is roughly {target_total_words - 70} words (between {round((target_total_words - 70) * 0.9)} and {round((target_total_words - 70) * 1.1)}).
 - DELIVERY CUE CHECKS (mandatory — rewrite any narrative that fails):
   * Each story narrative must contain at least 2 em dashes (—). Count them.
   * Each story narrative must contain at least 1 rhetorical question (sentence ending with ?).
@@ -488,7 +488,7 @@ Each story includes a suggested_opening_approach — use it as a starting point 
         data = parse_json_response(content)
         narratives = data.get("story_narratives", [])
         cn_relevance = data.get("cn_relevance")
-        food = data.get("food_for_thought", "")
+        food = data.get("one_more_thing", "") or data.get("food_for_thought", "")
 
         if not isinstance(narratives, list) or len(narratives) != len(selected):
             raise OpenAIError(
@@ -499,10 +499,10 @@ Each story includes a suggested_opening_approach — use it as a starting point 
         if cn_relevance is not None and not isinstance(cn_relevance, str):
             raise OpenAIError("cn_relevance must be string or null")
         if not isinstance(food, str) or not food.strip():
-            raise OpenAIError("food_for_thought must be non-empty string")
+            raise OpenAIError("one_more_thing must be non-empty string")
 
-        # Clean FoT immediately — don't trust GPT's formatting
-        food = _clean_food_for_thought(food)
+        # Clean OMT immediately — don't trust GPT's formatting
+        food = _clean_one_more_thing(food)
 
         narratives = [n.strip() for n in narratives]
 
@@ -618,7 +618,7 @@ Each story includes a suggested_opening_approach — use it as a starting point 
         parts = ScriptParts(
             story_narratives=narratives,
             cn_relevance=cn_relevance.strip() if isinstance(cn_relevance, str) and cn_relevance.strip() else None,
-            food_for_thought=food.strip(),
+            food_for_thought=food.strip(),  # stored in food_for_thought field for backward compat
         )
         logger.info("Script parts generated successfully.")
         return parts
@@ -628,8 +628,8 @@ Each story includes a suggested_opening_approach — use it as a starting point 
         return _fallback_parts(selected)
 
 
-def _clean_food_for_thought(text: str) -> str:
-    """Aggressively clean food_for_thought text to ensure it starts with the
+def _clean_one_more_thing(text: str) -> str:
+    """Aggressively clean one_more_thing text to ensure it starts with the
     canonical opener and has no stray headings, regardless of how GPT formats it.
 
     This is called immediately after receiving the value from ChatGPT AND
@@ -639,33 +639,28 @@ def _clean_food_for_thought(text: str) -> str:
     # This kills any heading-on-its-own-line pattern regardless of format
     flat = " ".join(text.split())
 
-    # Step 2: Remove any occurrence of "Food for Thought" as a standalone phrase
-    # that GPT injects as a heading (with or without punctuation after it)
+    # Step 2: Remove any occurrence of "Food for Thought" or "One More Thing" as a
+    # standalone heading phrase that GPT injects (with or without punctuation after it)
     flat = re.sub(r'\bFood\s+for\s+Thought[:\-—.]?\s*', '', flat, flags=re.IGNORECASE)
+    flat = re.sub(r'\bOne\s+[Mm]ore\s+[Tt]hing[:\-—.]?\s*', '', flat, flags=re.IGNORECASE)
 
-    # Step 3: Now find the actual content start.
-    # The canonical opener is "Here's some food for thought."
-    # GPT might write "Here's some ..." (with "Food for Thought" now removed)
-    # or it might start directly with content.
+    # Step 3: Strip any leftover "Here's some" opener fragment from the old format
+    flat = re.sub(r"^Here'?s\s+some\s+(food\s+for\s+thought\.?\s*)?", '', flat, flags=re.IGNORECASE)
     flat = flat.strip()
 
-    # Step 4: Check if it starts with "Here's some food for thought" (it won't,
-    # because we removed "Food for Thought" above). Rebuild the opener.
-    # Look for a leftover "Here's some" fragment
-    leftover = re.match(r"^Here'?s\s+some\s*", flat, re.IGNORECASE)
-    if leftover:
-        # Remove the fragment and prepend the clean canonical opener
-        content = flat[leftover.end():].strip()
-        # Remove leading punctuation that was between "some" and content
-        content = re.sub(r'^[.,:;\-—]+\s*', '', content)
-    else:
-        content = flat
+    # Step 4: Remove leading punctuation that was between the removed opener and content
+    flat = re.sub(r'^[.,:;\-—]+\s*', '', flat)
 
     # Step 5: Ensure first letter of content is capitalized
-    if content and content[0].islower():
-        content = content[0].upper() + content[1:]
+    if flat and flat[0].islower():
+        flat = flat[0].upper() + flat[1:]
 
-    return f"Here's some food for thought. {content}"
+    return f"One more thing. {flat}"
+
+
+def _clean_food_for_thought(text: str) -> str:
+    """Alias for backward compatibility — delegates to _clean_one_more_thing."""
+    return _clean_one_more_thing(text)
 
 
 def build_script_markdown(parts: ScriptParts, selected: list[ScoredStory]) -> str:
@@ -680,8 +675,8 @@ def build_script_markdown(parts: ScriptParts, selected: list[ScoredStory]) -> st
         lines.append(parts.cn_relevance.strip())
         lines.append("")
 
-    fot = _clean_food_for_thought(parts.food_for_thought.strip())
-    lines.append(fot)
+    omt_segment = _clean_one_more_thing(parts.food_for_thought.strip())
+    lines.append(omt_segment)
     lines.append("")
     lines.append(OUTRO_TEXT)
     return "\n".join(lines).strip() + "\n"
@@ -727,13 +722,13 @@ Rewrite this podcast script so the generated content (everything except the fixe
 Rules:
 - Keep every fact accurate and unchanged.
 - Keep the exact intro sentence unchanged.
-- The food for thought segment must begin with exactly "Here's some food for thought." — no heading or label before it, never "Across these stories" or any callback to the stories. Do not add a "Food for Thought" heading anywhere in the script.
+- The closing segment must begin with exactly "One more thing." — no heading or label before it, never "Across these stories" or any callback to the stories. Do not add a heading anywhere before it in the script.
 - Keep the exact closing outro paragraph unchanged:
   {OUTRO_TEXT}
 - No bullet points, no story labels like "Story 1:".
 - Use contractions naturally — "it's", "you'll", "I've", "couldn't", "didn't". Avoid stiff constructions like "it is" or "I could not".
 - Never reproduce article text verbatim. Strip any redundant or boilerplate phrasing ("In a world where…", "It's more important than ever…", "As we navigate…").
-- Perspective: story narratives are always in third person about the article and its subject — "the author argues", "she describes", "the report found". First person ("I", "I've") is only for the narrator's own reactions and commentary, the intro, food for thought, and the outro. Never let the narrator speak in the voice of the article author.
+- Perspective: story narratives are always in third person about the article and its subject — "the author argues", "she describes", "the report found". First person ("I", "I've") is only for the narrator's own reactions and commentary, the intro, the "One more thing" closing segment, and the outro. Never let the narrator speak in the voice of the article author.
 - Source introductions: the audience doesn't read tech press. Every source needs a brief contextual intro on first mention — "the tech magazine Wired", "TechCrunch, a tech news site". For people: "Simon Willison, a software developer who writes about AI tools". After the first mention, just use the name.
 - Internal audience: never say "your organization", "your company", or "your workplace" — this podcast is for CN colleagues. Say "at CN" or "at work" instead. Don't say "here at CN" — just "at CN" is more natural.
 - Fish Audio expression tags: use [pause], [long pause], [emphasis], [soft] sparingly (3-5 per episode) for natural TTS delivery.
@@ -755,7 +750,7 @@ Rules:
 Self-validation before returning:
 - OPENING CHECK (do this first): Read the first sentence of each story section. If any contains a publication name or source attribution, rewrite that opening — lead with the substance and move attribution to mid-sentence or later.
 - Verify the script starts with the exact intro text (unchanged).
-- Verify food for thought starts with exactly "Here's some food for thought." — no heading before it.
+- Verify the closing segment starts with exactly "One more thing." — no heading before it.
 - Verify no raw domain names (e.g. "nytimes.com") — only publication names.
 - Verify none of these appear: "subscribe", "newsletter", "sign up", "continue reading", "in your inbox", "read more", "click here", "this story originally appeared", "Source:", "What happened:", "Why this matters:".
 - Verify no 4+ word phrase repeats within 30 words of itself.
@@ -837,7 +832,7 @@ def generate_theme_script(
 ) -> ScriptParts:
     """Generate a cohesive theme-based script from supporting articles."""
     articles_blob = _theme_articles_blob(selected)
-    fot_history = _build_fot_history_block(previous_food_for_thought or [])
+    fot_history = _build_omt_history_block(previous_food_for_thought or [])
     content_words = target_total_words - 70  # subtract intro/outro
 
     # Build previous episodes context so the LLM avoids overlap.
@@ -895,7 +890,7 @@ Voice and tone:
 - No corporate-speak, no consulting-speak, no "in today's rapidly evolving landscape."
 - NEVER use the word "actually" — it is banned entirely. Zero occurrences.
 - NEVER use religious phrasing or metaphors — no "one-message-many-doors", "gospel", "sermon", "preach", "amen", "blessing", "baptism", "congregation", "disciples", "scripture" or similar. This is a corporate podcast.
-- NEVER include a "food for thought" or "here's some food for thought" segment. The practical takeaway in try_this IS the closing content. No separate sign-off segment.
+- NEVER include a "food for thought", "one more thing", or any separate sign-off segment. The practical takeaway in try_this IS the closing content before the outro.
 
 Delivery cues (MANDATORY for text-to-speech):
 - Em dashes (—) for mid-sentence pivots and asides: 1-2 per section max. Use periods and short sentences for breathing room.
@@ -1021,7 +1016,7 @@ def build_theme_script_markdown(parts: ScriptParts) -> str:
         OUTRO_TEXT,
         "",
     ]
-    # Include food_for_thought only if non-empty (legacy episodes may have it).
+    # Include food_for_thought only if non-empty (legacy news-roundup episodes may have it).
     if parts.food_for_thought:
         sections.insert(-2, parts.food_for_thought)
         sections.insert(-2, "")

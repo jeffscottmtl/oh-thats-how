@@ -66,7 +66,8 @@ class ScriptParts:
     theme_name: str = ""
     narrative: str = ""
     try_this: str = ""
-    # Shared
+    # Shared — stores the "One more thing" closing segment content.
+    # Field name kept as food_for_thought for JSON/schema backward compatibility.
     food_for_thought: str = ""
     cn_relevance: str | None = None
     # Legacy news-roundup fields (kept for backward compat)

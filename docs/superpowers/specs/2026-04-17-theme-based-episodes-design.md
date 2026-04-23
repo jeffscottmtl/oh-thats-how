@@ -30,7 +30,7 @@ They are **not** technologists. They've heard of ChatGPT, may have tried it, but
 2. **Why it matters** — connect it to the audience's daily work
 3. **2-3 angles** — drawn from the week's sources, each illuminating a different facet of the theme. Woven into a continuous narrative, not summarized individually.
 4. **Try this** — one concrete technique or approach they can actually use at work
-5. **Food for thought** — a parting idea to sit with
+5. **One more thing** — a parting idea to sit with
 6. **Close**
 
 No per-story transitions ("To start," / "Next,"). The script flows as one continuous piece. Sources are evidence supporting the theme, not standalone segments.
@@ -54,7 +54,7 @@ After scoring and filtering articles, the pipeline:
 - **System message**: podcast host persona with cardinal opening rule (no source-first)
 - **Temperature**: 0.5 for creative synthesis
 - **cn_relevance section**: removed (the whole episode is already framed for CN communicators)
-- **Food for thought**: stays, but opener softened — no forced "Here's some food for thought." label if it doesn't fit naturally
+- **One more thing**: stays as closing segment — opener is "One more thing." (replaces the banned "food for thought" phrasing)
 - **"Try this" segment**: new, explicit in the prompt — one specific technique, not a vague takeaway
 
 ### What Stays
@@ -77,7 +77,7 @@ After scoring and filtering articles, the pipeline:
 |-----------|--------|-------|
 | Story selection UX | "Pick story indices 1-30" | "Pick a theme" (with supporting articles shown) |
 | Script prompt | Per-story summaries with transitions | Single cohesive theme narrative |
-| Script structure | Intro → Story 1 → Story 2 → ... → cn_relevance → FoT → Close | Intro → Theme → Why it matters → Angles → Try this → FoT → Close |
+| Script structure | Intro → Story 1 → Story 2 → ... → cn_relevance → OMT → Close | Intro → Theme → Why it matters → Angles → Try this → OMT → Close |
 | Transitions | Programmatic ("To start," / "Next,") | None — continuous flow |
 | cn_relevance | Separate optional section | Removed (whole episode is CN-focused) |
 | Model for script gen | gpt-5.4-mini | gpt-5.4 (full) |

@@ -36,7 +36,7 @@ TRAINING_LINES = [
     "For example: artificial intelligence, or AI, now appears in nearly every planning conversation.",
     "If you hear conflicting guidance, escalate early and align the final source of truth.",
     "Thanks for listening to The Signal; we will see you next week.",
-    "Food for thought: faster tools are only useful when they support better decisions.",
+    "One more thing: faster tools are only useful when they support better decisions.",
 ]
 
 

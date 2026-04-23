@@ -49,11 +49,11 @@ class TestBuildScriptMarkdown(unittest.TestCase):
         md = build_script_markdown(parts, selected)
         self.assertIn(OUTRO_TEXT, md)
 
-    def test_contains_food_for_thought_opener(self):
+    def test_contains_one_more_thing_opener(self):
         selected = [_scored("Story A")]
         parts = _parts(1)
         md = build_script_markdown(parts, selected)
-        self.assertIn("food for thought", md.lower())
+        self.assertIn("one more thing", md.lower())
 
     def test_no_story_labels(self):
         selected = [_scored("Story A"), _scored("Story B"), _scored("Story C")]
@@ -87,13 +87,13 @@ class TestBuildScriptMarkdown(unittest.TestCase):
         md = build_script_markdown(parts, selected)
         self.assertNotIn("This matters for CN teams.", md)
 
-    def test_food_for_thought_before_outro(self):
+    def test_one_more_thing_before_outro(self):
         selected = [_scored("Story A")]
         parts = _parts(1)
         md = build_script_markdown(parts, selected)
-        fft_pos = md.lower().index("food for thought")
+        omt_pos = md.lower().index("one more thing")
         outro_pos = md.index(OUTRO_TEXT)
-        self.assertLess(fft_pos, outro_pos)
+        self.assertLess(omt_pos, outro_pos)
 
 
 class TestBuildScriptJson(unittest.TestCase):

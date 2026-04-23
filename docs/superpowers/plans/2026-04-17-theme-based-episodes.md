@@ -467,7 +467,7 @@ Episode structure (follow this order):
 2. WHY IT MATTERS — connect it directly to the audience's daily work (writing, editing, presenting, emailing)
 3. 2-3 ANGLES — each illuminating a different facet of the theme, drawing from the supporting articles. Weave source attribution naturally mid-sentence or later — never open a paragraph with a publication name.
 4. TRY THIS — one specific, concrete technique they can use at work. Not vague advice. Something they can literally do tomorrow. Be specific about the steps.
-5. FOOD FOR THOUGHT — a parting idea to sit with. Can connect to the theme or stand alone.
+5. ONE MORE THING — a parting idea to sit with. Can connect to the theme or stand alone.
 
 Voice and tone:
 - Conversational, warm, plain language. You're a colleague sharing something useful, not a news anchor.
@@ -484,7 +484,7 @@ Delivery cues (MANDATORY for text-to-speech):
 
 Perspective:
 - Third person when referencing articles: "the author argues", "the piece describes"
-- First person for your own reactions, the try-this segment, and food for thought
+- First person for your own reactions, the try-this segment, and the "one more thing" closing
 - NEVER start a paragraph with a publication name or source attribution
 
 Return ONLY valid JSON with exactly these keys:
@@ -856,7 +856,7 @@ Replace the schema to reflect theme-based structure:
 
 - [ ] **Step 2: Update QA checks in qa.py**
 
-The `selected_order` check and `ending_token_exact_once` check need updating since we no longer have per-story indices or a mandatory "food for thought" opener. Update the relevant checks to work with the new JSON structure. Remove the `cn_relevance` reference. Keep: intro_exact, word_count_gate, schemas, no_banned_phrases, prose_quality, cover_deterministic, filename_rule, no_secrets.
+The `selected_order` check and `ending_token_exact_once` check need updating since we no longer have per-story indices or a mandatory closing segment opener. Update the relevant checks to work with the new JSON structure. Remove the `cn_relevance` reference. Keep: intro_exact, word_count_gate, schemas, no_banned_phrases, prose_quality, cover_deterministic, filename_rule, no_secrets.
 
 - [ ] **Step 3: Run full test suite**
 

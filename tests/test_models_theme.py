@@ -18,7 +18,7 @@ class TestThemeCandidate(unittest.TestCase):
             theme_name="Getting unstuck on first drafts",
             narrative="Full episode narrative here.",
             try_this="Next time you're stuck, try giving AI three bullet points...",
-            food_for_thought="Here's some food for thought. I've been thinking...",
+            food_for_thought="One more thing. I've been thinking...",
         )
         self.assertEqual(parts.theme_name, "Getting unstuck on first drafts")
         self.assertIsNotNone(parts.try_this)
