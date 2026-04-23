@@ -423,6 +423,13 @@ a { color: inherit; }
 #tab-poster .rr-t { font-family: var(--serif); font-weight: 400; font-size: 14px; letter-spacing: -0.01em; line-height: 1.15; margin-top: 4mm; }
 #tab-poster .rr-p { font-size: 10.5px; line-height: 1.45; color: var(--ink-2); margin-top: 2mm; }
 
+#tab-poster .aud-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 4mm 0; }
+#tab-poster .aud-row > div { padding: 0 3mm; border-left: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+#tab-poster .aud-row > div:first-child { border-left: 0; padding-left: 0; }
+#tab-poster .aud-row .aud-n { font-family: var(--mono); font-size: 7px; color: var(--ink-soft); letter-spacing: 0.12em; text-transform: uppercase; }
+#tab-poster .aud-row .aud-t { font-family: var(--serif); font-weight: 400; font-size: 11px; line-height: 1.2; margin-top: 1mm; }
+#tab-poster .aud-row .aud-d { font-size: 8px; color: var(--ink-2); line-height: 1.3; margin-top: 1mm; }
+
 #tab-poster .prompt-fmt { padding: 8mm 0; border-bottom: 1px solid var(--ink); }
 #tab-poster .pf-grid { display: grid; grid-template-columns: 80px 1fr; gap: 4mm; margin-bottom: 3mm; }
 #tab-poster .pf-lab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); padding-top: 1mm; }
@@ -495,6 +502,45 @@ a { color: inherit; }
         </div>
       </div>
     </header>
+
+    <!-- FIVE RULES -->
+    <section class="section" style="padding-top: 20px; padding-bottom: 0;">
+      <div class="section-head">
+        <div class="num"><em></em></div>
+        <div>
+          <div class="eyebrow">Before anything else</div>
+          <h2>Five rules for working with AI.</h2>
+          <p>Pin these. Every guide in this library assumes you already know them.</p>
+        </div>
+      </div>
+      <div class="fourq" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">1</div>
+          <h4>You're the editor, not the author.</h4>
+          <p>AI drafts. You decide what stays, what goes, and what ships. Your name is on it.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">2</div>
+          <h4>Role, reader, goal every time.</h4>
+          <p>Tell it who you are, who's reading, and what you need. Vague in, vague out.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">3</div>
+          <h4>Feed it your materials.</h4>
+          <p>Paste in your draft, your notes, your data. The better the input, the less you fix.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">4</div>
+          <h4>Never paste what you wouldn't email out.</h4>
+          <p>No passwords, no personal data, no privileged content. When in doubt, redact first.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">5</div>
+          <h4>Fact-check every name, number, claim.</h4>
+          <p>AI invents with confidence. Verify sources, dates, stats, and quotes before anything ships.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- FOUR QUESTIONS -->
     <section class="section" style="padding-top: 44px;">
@@ -3775,6 +3821,42 @@ Default assumption: unless the user specifies a period, use the most recent info
             <div class="rr-t">Fact-check every name, number, claim.</div>
             <div class="rr-p">AI invents plausible sources. If it would land you in a correction, verify.</div>
           </div>
+        </div>
+      </div>
+
+      <div style="padding: 4mm 0 2mm;">
+        <div style="font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);">Six audiences, six tones</div>
+      </div>
+      <div class="aud-row">
+        <div>
+          <div class="aud-n">01</div>
+          <div class="aud-t">Executives</div>
+          <div class="aud-d">Concise, decision-oriented. Numbers up front.</div>
+        </div>
+        <div>
+          <div class="aud-n">02</div>
+          <div class="aud-t">Management</div>
+          <div class="aud-d">Context + direction. What changed, what to do.</div>
+        </div>
+        <div>
+          <div class="aud-n">03</div>
+          <div class="aud-t">FLS</div>
+          <div class="aud-d">Practical, operational. Talking points.</div>
+        </div>
+        <div>
+          <div class="aud-n">04</div>
+          <div class="aud-t">Unionized</div>
+          <div class="aud-d">Direct, respectful, clear. No softening.</div>
+        </div>
+        <div>
+          <div class="aud-n">05</div>
+          <div class="aud-t">Media &amp; public</div>
+          <div class="aud-d">News-first. Facts, quotes, context.</div>
+        </div>
+        <div>
+          <div class="aud-n">06</div>
+          <div class="aud-t">Investors</div>
+          <div class="aud-d">Precise. Cite sources. Pre-disclosure rules.</div>
         </div>
       </div>
 
