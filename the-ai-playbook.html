@@ -41,6 +41,8 @@
 
 * { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 html, body {
   margin: 0; padding: 0;
   background: var(--paper);
@@ -258,6 +260,32 @@ a { color: inherit; }
   .strip > div + div { border-left: 0; border-top: 1px solid var(--ink); }
   .section-head { grid-template-columns: 1fr; gap: 10px; }
 }
+
+@media (max-width: 768px) {
+  .topbar { flex-direction: column; gap: 12px; padding: 12px 20px; }
+  .tabs { flex-wrap: wrap; justify-content: center; gap: 4px; }
+  .tab { padding: 6px 10px; font-size: 10px; }
+  .hero { padding: 40px 20px 30px; }
+  .hero h1 { font-size: 42px; }
+  .hero .lede { font-size: 17px; }
+  .section-head { padding: 0 20px 20px; }
+  .container { padding: 0 20px; }
+  .filters { padding: 0 20px 14px; }
+  .fourq { grid-template-columns: 1fr; }
+  .audiences { grid-template-columns: 1fr 1fr; }
+  .tool-grid { margin: 0 20px; }
+  .quickbar { padding: 14px 20px; font-size: 11px; }
+  .footer { padding: 24px 20px; flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .audiences { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 34px; }
+  .section-head .num { font-size: 48px; }
+  .section-head h2 { font-size: 32px; }
+  .guide h3 { font-size: 22px; }
+  .guide.feature h3 { font-size: 32px; }
+}
 </style>
 <style>
 /* ============================================================
@@ -271,9 +299,14 @@ a { color: inherit; }
   padding: 0 13px 2px; border-bottom: 2px solid transparent;
 }
 .tab:hover { color: var(--cn-red); }
-.tab.active { border-bottom-color: var(--cn-red); }
+.tab.active { border-bottom-color: var(--cn-red); color: var(--cn-red); font-weight: 500; }
 .tab-content { display: none; }
-.tab-content.active { display: block; }
+.tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 <style>
 /* ============================================================
@@ -320,6 +353,21 @@ a { color: inherit; }
 .toneladder .ex { font-family: var(--serif); font-size: 16px; line-height: 1.4; color: var(--ink); font-style: italic; }
 
 .guide-page { display: none; }
+
+#guide-detail.visible, #learn-detail.visible {
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#guide-detail .btn.ghost:hover, #learn-detail .btn.ghost:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
 
 @media (max-width: 900px) {
   .two-col { grid-template-columns: 1fr; gap: 18px; }
@@ -541,7 +589,7 @@ a { color: inherit; }
           <div class="guide feature" data-cat="writing editing" onclick="showGuide('email')">
             <div class="num">GUIDE / 01</div><div class="cat">Writing &middot; Most used</div>
             <h3>Draft an email in 90 seconds.</h3>
-            <p>The workhorse. A prompt pattern using the Four Questions &mdash; plus the five edits you should always make before hitting send.</p>
+            <p>The workhorse. A prompt pattern using the Four Questions, plus the five edits you should always make before hitting send.</p>
             <div class="foot"><span>4 min read &middot; 6 templates</span><span class="arrow">&rarr;</span></div>
           </div>
           <div class="guide" data-cat="editing" onclick="showGuide('proofread')">
@@ -558,7 +606,7 @@ a { color: inherit; }
           </div>
           <div class="guide" data-cat="writing stakeholder" onclick="showGuide('letters')">
             <div class="num">GUIDE / 04</div><div class="cat">Stakeholder &amp; PAGA</div>
-            <h3>Letter writing &mdash; formal &amp; firm.</h3>
+            <h3>Letter writing: formal &amp; firm.</h3>
             <p>Official letters, MP responses, stakeholder correspondence. Five tone rungs, warm to terse.</p>
             <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
           </div>
@@ -577,13 +625,13 @@ a { color: inherit; }
           <div class="guide half" data-cat="media stakeholder" onclick="showGuide('crisis')">
             <div class="num">GUIDE / 07</div><div class="cat">Crisis comms</div>
             <h3>Holding statements when the clock is ticking.</h3>
-            <p>What AI is good for in a crisis &mdash; and where to stop and call Legal.</p>
+            <p>What AI is good for in a crisis, and where to stop and call Legal.</p>
             <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
           </div>
           <div class="guide" data-cat="research" onclick="showGuide('summarize')">
             <div class="num">GUIDE / 08</div><div class="cat">Research &amp; prep</div>
             <h3>Summarize a long document.</h3>
-            <p>Three summary types &mdash; exec, skim, deep &mdash; and when to ask for each.</p>
+            <p>Three summary types (exec, skim, deep) and when to ask for each.</p>
             <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
           </div>
           <div class="guide" data-cat="research stakeholder" onclick="showGuide('stakeholder-map')">
@@ -614,6 +662,12 @@ a { color: inherit; }
             <div class="num">GUIDE / 13</div><div class="cat">Media</div>
             <h3>Social posts (LinkedIn, X, internal).</h3>
             <p>Platform-native tone, with a "does this sound human?" test.</p>
+            <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
+          </div>
+          <div class="guide" data-cat="writing stakeholder" onclick="showGuide('faqs')">
+            <div class="num">GUIDE / 14</div><div class="cat">Stakeholder &amp; PAGA</div>
+            <h3>FAQs &amp; talking-point packs.</h3>
+            <p>Anticipate 20 questions. Answer the 7 that matter.</p>
             <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
           </div>
         </div>
@@ -2312,6 +2366,96 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
 
 </section><!-- /guide-social -->
 
+<!-- ============================================================
+     GUIDE 14: FAQs
+     ============================================================ -->
+<section class="guide-page" id="guide-faqs">
+
+<header class="guide-hero">
+  <div class="crumb">Guides / <span style="color:var(--signal);">FAQs &amp; talking-point packs</span></div>
+  <div class="eyebrow" style="margin-bottom:18px;">Stakeholder &middot; 3 min read</div>
+  <h1>FAQs &amp; <em>talking-point packs.</em></h1>
+  <p class="lede">Anticipate 20 questions. Answer the 7 that matter. A pattern for building an internal FAQ that actually gets used.</p>
+  <div class="meta"><span class="tag">For: rollouts, launches, consultations</span><span class="tag">Time: 30 min</span></div>
+</header>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">01</div>
+    <h2>Why most FAQs fail.</h2>
+    <p class="sub">They answer the wrong questions</p>
+  </div>
+  <div class="body"><p class="big">Internal FAQ documents balloon to 40 questions, 12 of which nobody asked, and none of which address the one awkward thing everyone is actually wondering about. The fix: start with the hard questions, not the easy ones.</p>
+<div class="dual">
+<div class="use"><div class="hd">&#10003; AI is great for this</div><ul><li>Brainstorming 20+ likely questions from different audiences</li><li>Drafting first-pass answers you can refine</li><li>Identifying the hard questions that nobody wants to write answers for</li><li>Cross-referencing the INFO you have against the questions AI generates (gaps become your to-do list)</li></ul></div>
+<div class="skip"><div class="hd">&#10007; Do it yourself</div><ul><li>Deciding what CN will commit to</li><li>Publishing answers without SME and Legal review</li><li>Using AI-generated answers to questions about ongoing legal or safety investigations</li></ul></div>
+</div></div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">02</div>
+    <h2>The prompt pattern.</h2>
+    <p class="sub">Start with the uncomfortable ones</p>
+  </div>
+  <div class="body"><div class="prompt">
+<button class="copy-btn">Copy</button><span class="var">JOB:</span> Generate 20 questions a skeptical employee (or stakeholder, depending on audience) would ask about the change below. Order them from uncomfortable to comfortable. Do not draft answers yet. For each, write a one-line note on why it's difficult.
+<span class="var">AUDIENCE &amp; OUTCOME:</span> CN Communications team building a talking-points pack. We need to know which questions deserve a prepared answer and which can be left to improvisation.
+<span class="var">FORMAT:</span> Numbered list, ordered hardest to easiest.
+<span class="var">INFO:</span>
+&bull; Change / initiative: [describe]
+&bull; Who is affected: [specific groups]
+&bull; What's known: [facts]
+&bull; What's not yet decided: [honest list]
+&bull; Background sensitivities (not for the FAQ itself): [things that make it politically hard]
+<span class="var">RULES:</span> Canadian spelling. No em dashes. No softballs. Questions should be specific and pointed, not generic.
+</div>
+<p style="margin-top:22px;">Then filter. Pick the top 7-10 that most employees will actually ask. Draft answers for those only.</p>
+<div class="prompt">
+<button class="copy-btn">Copy</button><span class="var">JOB:</span> For each question I paste below, draft a 40-70 word answer. Do not commit CN to specific timelines, costs, or headcount figures unless they are in INFO. If a question can't be answered with the facts in INFO, say so plainly ("We will share more on this by [date]") rather than hedging.
+<span class="var">FORMAT:</span> Q: [question]. A: [answer, one short paragraph].
+<span class="var">INFO:</span>
+&bull; [paste confirmed facts]
+<span class="var">RULES:</span> Canadian spelling. No em dashes. No corporate filler ("We understand your concerns..."). No "we're committed to." Answers must be traceable to INFO.
+</div></div>
+</section>
+
+<section class="two-col">
+  <div class="hd">
+    <div class="n">03</div>
+    <h2>The 7-question test.</h2>
+    <p class="sub">If you can't get these right, stop</p>
+  </div>
+  <div class="body"><p>A useful CN FAQ pack contains short, clear answers to these seven questions, regardless of the topic.</p>
+<ol class="steps">
+<li><h4>What is changing, exactly?</h4><p>The one-sentence, un-softened version.</p></li>
+<li><h4>When does it take effect?</h4><p>A specific date, not "in the coming weeks."</p></li>
+<li><h4>Who does this affect?</h4><p>Named groups, named yards, named roles.</p></li>
+<li><h4>Why are we doing this?</h4><p>The honest reason, not the press-release reason.</p></li>
+<li><h4>What happens if I don't comply / don't like it?</h4><p>The hardest one. Answer plainly.</p></li>
+<li><h4>How will this be communicated to [union / customers / media]?</h4><p>People want to know they won't be surprised.</p></li>
+<li><h4>Where do I go with questions?</h4><p>A named person or monitored inbox.</p></li>
+</ol></div>
+</section>
+
+<section class="two-col" style="border-bottom:0;">
+  <div class="hd">
+    <div class="n">04</div>
+    <h2>Before it ships.</h2>
+    <p class="sub">The usual gates</p>
+  </div>
+  <div class="body"><ul class="check">
+<li>Every numerical or date claim has been confirmed with the SME who owns it.</li>
+<li>Legal has reviewed any answer touching on employment, discipline, regulation, or commitment.</li>
+<li>The seven core questions above have real answers, not "more information to follow."</li>
+<li>Nothing in the FAQ contradicts the all-employee memo or press release.</li>
+<li>The document has a version number and a date. Future you will thank you.</li>
+<li>It's shared in a controlled location (SharePoint, not open web) until the external version is approved.</li>
+</ul></div>
+</section>
+
+</section><!-- /guide-faqs -->
+
         </div>
       </div>
 
@@ -3751,7 +3895,11 @@ function showGuide(id) {
   document.getElementById('guide-grid').style.display = 'none';
   document.querySelector('#tab-guides .filters').style.display = 'none';
   document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = 'none';
-  document.getElementById('guide-detail').style.display = 'block';
+  const detail = document.getElementById('guide-detail');
+  detail.style.display = 'block';
+  detail.classList.remove('visible');
+  void detail.offsetWidth; // force reflow for animation restart
+  detail.classList.add('visible');
   document.querySelectorAll('.guide-page').forEach(p => p.style.display = 'none');
   const page = document.getElementById('guide-' + id);
   if (page) page.style.display = 'block';
@@ -3761,14 +3909,20 @@ function hideGuide() {
   document.getElementById('guide-grid').style.display = '';
   document.querySelector('#tab-guides .filters').style.display = '';
   document.querySelector('#tab-guides .section').querySelector('.section-head').style.display = '';
-  document.getElementById('guide-detail').style.display = 'none';
+  const detail = document.getElementById('guide-detail');
+  detail.style.display = 'none';
+  detail.classList.remove('visible');
 }
 
 // Show/hide learn detail
 function showLearn(id) {
   document.getElementById('learn-grid').style.display = 'none';
   document.querySelector('#tab-learn .section-head').style.display = 'none';
-  document.getElementById('learn-detail').style.display = 'block';
+  const detail = document.getElementById('learn-detail');
+  detail.style.display = 'block';
+  detail.classList.remove('visible');
+  void detail.offsetWidth; // force reflow for animation restart
+  detail.classList.add('visible');
   document.querySelectorAll('#learn-detail-content .guide-page').forEach(p => p.style.display = 'none');
   var page = document.getElementById('learn-' + id);
   if (page) page.style.display = 'block';
@@ -3777,7 +3931,9 @@ function showLearn(id) {
 function hideLearn() {
   document.getElementById('learn-grid').style.display = '';
   document.querySelector('#tab-learn .section-head').style.display = '';
-  document.getElementById('learn-detail').style.display = 'none';
+  const detail = document.getElementById('learn-detail');
+  detail.style.display = 'none';
+  detail.classList.remove('visible');
 }
 
 // Copy-prompt buttons
