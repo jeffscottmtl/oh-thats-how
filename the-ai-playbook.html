@@ -72,13 +72,9 @@ a { color: inherit; }
 }
 .topbar .brand { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.cn-mark {
-  display: inline-flex; align-items: center; gap: 0;
-  font-family: "Arial Black", "Helvetica Neue", sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
-.cn-mark .c { background: var(--cn-red); color: white; padding: 4px 7px 4px 7px; font-size: 14px; line-height: 1; border-radius: 2px; }
+.cn-mark { display: inline-block; vertical-align: middle; }
+.cn-mark img { height: 1.1em; width: auto; vertical-align: middle; position: relative; top: -0.05em; }
+.topbar .cn-mark img { height: 20px; }
 
 .topbar nav { display: flex; gap: 26px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
 .topbar nav a { text-decoration: none; color: var(--ink); padding-bottom: 2px; border-bottom: 1px solid transparent; }
@@ -112,7 +108,9 @@ a { color: inherit; }
 
 .prompt {
   position: relative;
-  background: #141414; color: #f3ece0;
+  background: var(--paper-2); color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--ink) 30%, transparent);
   border-radius: var(--r-md);
   padding: 20px 22px;
   font-family: var(--mono); font-size: 13px; line-height: 1.65;
@@ -120,14 +118,33 @@ a { color: inherit; }
 }
 .prompt .copy-btn {
   position: absolute; top: 10px; right: 10px;
-  background: rgba(255,255,255,0.08); color: #f3ece0;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: var(--paper); color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
   padding: 5px 10px; border-radius: 2px; cursor: pointer;
 }
-.prompt .copy-btn:hover { background: var(--cn-red); border-color: var(--cn-red); }
+.prompt .copy-btn:hover { background: var(--cn-red); border-color: var(--cn-red); color: var(--paper); }
 .prompt .var { color: var(--cn-red); font-style: italic; }
-.prompt .comment { color: #8a8577; }
+.prompt .comment { color: var(--ink-soft); }
+
+/* GPT callout card */
+.gpt-callout {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--card); border: 1px solid var(--ink);
+  border-radius: var(--r-md); padding: 16px 20px; margin-bottom: 20px;
+}
+.gpt-callout .gpt-icon { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; overflow: hidden; }
+.gpt-callout .gpt-icon img { width: 100%; height: 100%; object-fit: cover; }
+.gpt-callout .gpt-body { flex: 1; }
+.gpt-callout .gpt-body h5 { margin: 0 0 2px; font-family: var(--sans); font-size: 14px; font-weight: 600; }
+.gpt-callout .gpt-body p { margin: 0; font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
+.gpt-callout a {
+  flex-shrink: 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--cn-red); text-decoration: none;
+  border: 1px solid var(--cn-red); padding: 7px 14px; border-radius: 2px;
+  transition: all .15s ease;
+}
+.gpt-callout a:hover { background: var(--cn-red); color: white; }
 
 .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; background: var(--card); }
 .ba > div { padding: 18px 20px; }
@@ -137,12 +154,13 @@ a { color: inherit; }
 .ba .good .hd { color: var(--sage-deep); }
 .ba p { margin: 0 0 8px 0; font-size: 14px; line-height: 1.5; }
 
-.check { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.check li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-size: 14px; line-height: 1.45; }
-.check li::before { content: ""; width: 16px; height: 16px; border: 1.5px solid var(--ink); border-radius: 2px; margin-top: 3px; }
+.check { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.check li { display: flex; gap: 10px; align-items: start; font-size: 14px; line-height: 1.65; }
+.check li::before { content: ""; min-width: 16px; width: 16px; height: 16px; border: 1.5px solid var(--ink); border-radius: 2px; margin-top: 3px; flex-shrink: 0; }
+.check li code { display: inline; }
 
-.steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 22px; }
-.steps > li { counter-increment: step; display: grid; grid-template-columns: 44px 1fr; gap: 20px; }
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 22px; }
+.steps > li { counter-increment: step; display: flex; gap: 20px; }
 .steps > li::before { content: counter(step, decimal-leading-zero); font-family: var(--serif); font-size: 34px; line-height: 0.9; color: var(--cn-red); font-style: italic; }
 .steps h4 { margin: 0 0 6px 0; font-family: var(--serif); font-size: 22px; font-weight: 400; letter-spacing: -0.01em; }
 .steps p { margin: 0 0 10px 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
@@ -323,10 +341,11 @@ a { color: inherit; }
 .guide-hero .meta { display:flex; gap: 24px; margin-top: 26px; flex-wrap: wrap; }
 
 .two-col { display: grid; grid-template-columns: 220px 1fr; gap: 48px; padding: 48px 40px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
-.two-col .hd { position: sticky; top: 88px; align-self: start; }
-.two-col .hd .n { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 52px; line-height: 0.9; color: var(--signal); }
-.two-col .hd h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.015em; margin: 14px 0 0 0; line-height: 1.05; }
-.two-col .hd p.sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 10px 0 0 0; }
+.two-col > .body { min-width: 0; }
+.two-col > .hd { position: sticky; top: 88px; align-self: start; }
+.two-col > .hd .n { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 52px; line-height: 0.9; color: var(--signal); }
+.two-col > .hd h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.015em; margin: 14px 0 0 0; line-height: 1.05; }
+.two-col > .hd p.sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); margin: 10px 0 0 0; }
 .two-col .body p { font-size: 16px; line-height: 1.65; margin: 0 0 14px 0; max-width: 64ch; }
 .two-col .body p.big { font-family: var(--serif); font-size: 22px; line-height: 1.4; color: var(--ink); font-weight: 300; margin-bottom: 18px; }
 
@@ -371,7 +390,7 @@ a { color: inherit; }
 
 @media (max-width: 900px) {
   .two-col { grid-template-columns: 1fr; gap: 18px; }
-  .two-col .hd { position: static; }
+  .two-col > .hd { position: static; }
   .dual, .rule-row, .toneladder { grid-template-columns: 1fr; }
   .dual > div + div { border-left: 0; border-top: 1px solid var(--ink); }
   .rule-row .rl { border-right: 0; border-bottom: 1px solid var(--ink); }
@@ -381,6 +400,44 @@ a { color: inherit; }
 /* ============================================================
    Tab V — Your Tools (GPT inventory)
    ============================================================ */
+/* Task picker */
+.task-picker { display: grid; gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.task-card {
+  display: grid; grid-template-columns: 48px 1fr 32px; align-items: center; gap: 16px;
+  padding: 18px 28px; text-decoration: none; color: var(--ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  transition: background .15s ease;
+}
+.task-card:last-child { border-bottom: 0; }
+.task-card:hover { background: var(--paper-2); }
+.task-card .task-icon {
+  font-family: var(--serif); font-style: italic; font-size: 22px; color: var(--cn-red);
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); border-radius: 50%;
+}
+.task-card h4 { font-family: var(--serif); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; line-height: 1.15; margin: 0 0 4px 0; }
+.task-card p { font-size: 13.5px; line-height: 1.45; color: var(--ink-soft); margin: 0; }
+.task-card .arrow { font-size: 18px; color: var(--ink-soft); transition: transform .2s ease; }
+.task-card:hover .arrow { transform: translateX(4px); color: var(--cn-red); }
+
+/* Spark card */
+.spark-card {
+  margin: 0 36px; padding: 32px 36px;
+  background: var(--sage); border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  border-radius: var(--r-md);
+}
+.spark-card blockquote {
+  font-family: var(--serif); font-size: 20px; line-height: 1.45; font-weight: 300;
+  margin: 0; padding: 0; color: var(--ink-2); max-width: 60ch;
+}
+.spark-link { margin-top: 16px; }
+.spark-link a {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+}
+.spark-link a:hover { color: var(--cn-red); border-bottom-color: var(--cn-red); }
+
+.tool-card .tool-icon { width: 48px; height: 48px; border-radius: 8px; margin-bottom: 4px; }
 .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); border: 1px solid var(--ink); margin: 0 36px; }
 .tool-card { background: var(--paper); padding: 24px; display: flex; flex-direction: column; }
 .tool-card .label { margin-bottom: 4px; }
@@ -472,7 +529,7 @@ a { color: inherit; }
 
 <div class="topbar">
   <div class="brand">
-    <span class="cn-mark"><span class="c">CN</span></span>
+    <span class="cn-mark"><img src="cn-logo.png" alt="CN"></span>
     <span>The AI Playbook</span>
   </div>
   <nav class="tabs">
@@ -490,125 +547,104 @@ a { color: inherit; }
     <!-- HERO -->
     <header class="hero">
       <div class="container">
-        <div class="eyebrow" style="margin-bottom:26px;">A handbook for Communications, PAGA &amp; Strategy &middot; v2.0 &middot; April 2026</div>
         <h1>Better drafts, <em>faster</em>,<br>without losing your voice.</h1>
-        <p class="lede">A self-service library of short, practical guides for getting real work out of AI, written for CN colleagues in Communications, Public Affairs &amp; Government Affairs, Media Relations, and Strategy. Built on the Four Questions framework. No hype. No jargon. Just patterns that work.</p>
-        <div class="meta">
-          <span><b>4</b> Questions</span>
-          <span><b>13</b> Task guides</span>
-          <span><b>8</b> Literacy notes</span>
-          <span><b>15</b> Custom GPTs</span>
-          <span><b>~5 min</b> per guide</span>
-        </div>
+        <p class="lede">Practical guides for getting real work out of AI. Each one takes about five minutes and gives you something you can use today.</p>
       </div>
     </header>
 
-    <!-- FIVE RULES -->
-    <section class="section" style="padding-top: 20px; padding-bottom: 0;">
+    <!-- TASK PICKER -->
+    <section class="section" style="padding-top: 36px; padding-bottom: 0;">
       <div class="section-head">
         <div class="num"><em></em></div>
         <div>
-          <div class="eyebrow">Before anything else</div>
-          <h2>Five rules for working with AI.</h2>
-          <p>Pin these. Every guide in this library assumes you already know them.</p>
-        </div>
-      </div>
-      <div class="fourq" style="grid-template-columns: repeat(5, 1fr);">
-        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
-          <div class="qn">1</div>
-          <h4>You're the editor, not the author.</h4>
-          <p>AI drafts. You decide what stays, what goes, and what ships. Your name is on it.</p>
-        </div>
-        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
-          <div class="qn">2</div>
-          <h4>Role, reader, goal every time.</h4>
-          <p>Tell it who you are, who's reading, and what you need. Vague in, vague out.</p>
-        </div>
-        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
-          <div class="qn">3</div>
-          <h4>Feed it your materials.</h4>
-          <p>Paste in your draft, your notes, your data. The better the input, the less you fix.</p>
-        </div>
-        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
-          <div class="qn">4</div>
-          <h4>Never paste what you wouldn't email out.</h4>
-          <p>No passwords, no personal data, no privileged content. When in doubt, redact first.</p>
-        </div>
-        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
-          <div class="qn">5</div>
-          <h4>Fact-check every name, number, claim.</h4>
-          <p>AI invents with confidence. Verify sources, dates, stats, and quotes before anything ships.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOUR QUESTIONS -->
-    <section class="section" style="padding-top: 44px;">
-      <div class="section-head">
-        <div class="num"><em>I</em></div>
-        <div>
           <div class="eyebrow">Start here</div>
-          <h2>The Four Questions.</h2>
-          <p>Every prompt in this library follows the same framework. Answer these four questions before you hit Enter, and 80% of bad AI output disappears.</p>
+          <h2>What are you working on?</h2>
+          <p>Pick the thing that's on your desk right now.</p>
         </div>
       </div>
-      <div class="fourq">
-        <div class="fq">
-          <div class="qn">1</div>
-          <h4>What job am I asking AI to do?</h4>
-          <p>Pick the job: draft, edit, summarize, translate, brainstorm. Set the focus. Set the red lines, what NOT to mention.</p>
-          <div class="ex">e.g. "Draft an internal message. Do not speculate on cause or restoration date."</div>
-        </div>
-        <div class="fq">
-          <div class="qn">2</div>
-          <h4>Who is it for, and what should it achieve?</h4>
-          <p>Name the audience. Set the tone. State the desired outcome, what you want the reader to do, feel, or decide.</p>
-          <div class="ex">e.g. "For unionized employees. Direct, respectful tone. Build understanding, not speculation."</div>
-        </div>
-        <div class="fq">
-          <div class="qn">3</div>
-          <h4>What format should it use?</h4>
-          <p>Specify the deliverable. Set the length. Set the structure, headers, bullets, word counts, order of information.</p>
-          <div class="ex">e.g. "Email. 150&ndash;180 words. Subject line, opening, three bullets, closing."</div>
-        </div>
-        <div class="fq">
-          <div class="qn">4</div>
-          <h4>What info &amp; rules does AI need?</h4>
-          <p>Give it the facts, background, and reference examples. State house rules: Canadian spelling, no acronyms, no em dashes, placeholders for missing facts.</p>
-          <div class="ex">e.g. "Change takes effect April 15, Montreal yard only. Use Canadian spelling."</div>
-        </div>
+      <div class="task-picker">
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('proofread')">
+          <div class="task-icon">01</div>
+          <div>
+            <h4>Something I need to proofread or rewrite</h4>
+            <p>Catch errors and tighten language without losing your voice.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('email')">
+          <div class="task-icon">02</div>
+          <div>
+            <h4>An email I can't get started</h4>
+            <p>From blank page to a clean draft in 90 seconds.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('speechwriting')">
+          <div class="task-icon">03</div>
+          <div>
+            <h4>A speech or talking points</h4>
+            <p>Turn bullets into something a person can actually say out loud.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('meeting-brief')">
+          <div class="task-icon">04</div>
+          <div>
+            <h4>A briefing note for a meeting</h4>
+            <p>Context, positions, traps, and asks on one page.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('letters')">
+          <div class="task-icon">05</div>
+          <div>
+            <h4>A letter to a stakeholder or MP</h4>
+            <p>Formal, firm, and human. Five tone rungs from warm to terse.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('media-qa')">
+          <div class="task-icon">06</div>
+          <div>
+            <h4>A media statement or Q&amp;A prep</h4>
+            <p>Surface the hostile questions before the journalist does.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="task-card" href="javascript:void(0)" onclick="goToGuide('presentations')">
+          <div class="task-icon">07</div>
+          <div>
+            <h4>A presentation or slide deck</h4>
+            <p>Turn a 30-page report into a 10-slide story.</p>
+          </div>
+          <span class="arrow">&rarr;</span>
+        </a>
       </div>
-      <div style="padding: 22px 36px 0;">
-        <p style="margin:0; font-size:14px; color:var(--ink-2);">Head to the Learn tab for the full explainer and worked example.</p>
+      <div style="padding: 20px 36px 0;">
+        <p style="margin:0; font-size: 13.5px; color: var(--ink-soft);">Not seeing your task? <a href="javascript:void(0)" onclick="document.querySelector('[data-tab=guides]').click()" style="color: var(--cn-red); text-decoration: underline;">Browse all 14 guides</a></p>
       </div>
     </section>
 
-    <!-- SIX AUDIENCES -->
-    <section class="section" style="padding-top: 20px;">
-      <div class="section-head">
-        <div class="num"><em>II</em></div>
-        <div>
-          <div class="eyebrow">Know who you're writing for</div>
-          <h2>Six CN audiences, six tones.</h2>
-          <p>The same message hits differently depending on who's reading it. Name the audience in your prompt, every time.</p>
+    <!-- SPARK -->
+    <section class="section" style="padding-top: 44px; padding-bottom: 0;">
+      <div class="spark-card">
+        <div class="eyebrow" style="color: var(--sage-deep); margin-bottom: 14px;">From the team</div>
+        <blockquote>
+          &ldquo;Three of us used the briefing note guide to prep for a stakeholder meeting last month. What used to take a full afternoon took about 40 minutes, and the principal said it was the tightest brief she'd had in a while.&rdquo;
+        </blockquote>
+        <div class="spark-link">
+          <a href="javascript:void(0)" onclick="goToGuide('meeting-brief')">See the briefing note guide &rarr;</a>
         </div>
-      </div>
-      <div class="audiences">
-        <div class="aud"><div class="n">AUDIENCE 01</div><h5>Executives</h5><p>Concise, decision-oriented. Numbers up front. No preamble.</p></div>
-        <div class="aud"><div class="n">AUDIENCE 02</div><h5>Management employees</h5><p>Context + direction. What changed, what to do.</p></div>
-        <div class="aud"><div class="n">AUDIENCE 03</div><h5>Front-line supervisors (FLS)</h5><p>Practical, operational. Talking points they can use.</p></div>
-        <div class="aud"><div class="n">AUDIENCE 04</div><h5>Unionized employees</h5><p>Direct, respectful, clear. No corporate softening.</p></div>
-        <div class="aud"><div class="n">AUDIENCE 05</div><h5>Media &amp; public</h5><p>News-first. Facts, quotes, context. Every word defensible.</p></div>
-        <div class="aud"><div class="n">AUDIENCE 06</div><h5>Investors</h5><p>Precise. Cite sources. Nothing market-sensitive pre-disclosure.</p></div>
       </div>
     </section>
 
-    <!-- QUICKBAR CTA -->
+    <!-- QUIET FOOTER -->
     <div class="quickbar">
-      <div>Ready? Pick a task from <a href="javascript:void(0)" onclick="document.querySelector('[data-tab=guides]').click()">Guides</a>, or explore your custom GPTs in <a href="javascript:void(0)" onclick="document.querySelector('[data-tab=tools]').click()">Your Tools</a>.</div>
+      <div><a href="javascript:void(0)" onclick="document.querySelector('[data-tab=learn]').click()">Understand the method behind the guides</a></div>
+      <div><a href="javascript:void(0)" onclick="document.querySelector('[data-tab=tools]').click()">Use a ready-made tool built for your job</a></div>
     </div>
 
-  </div>
+  </div></div>
   <div class="tab-content" id="tab-guides">
     <section class="section" style="padding-top: 44px;">
       <div class="section-head">
@@ -734,13 +770,24 @@ a { color: inherit; }
   <div class="crumb">Guides / <span style="color:var(--signal);">Guide 01</span></div>
   <div class="eyebrow" style="margin-bottom:18px;">Writing &middot; Most used &middot; 4 min read</div>
   <h1>Draft an email <em>in 90 seconds.</em></h1>
-  <p class="lede">The workhorse guide. A prompt pattern that produces a clear, appropriately-toned email on the first try, and the five edits you should always make before hitting send.</p>
+  <p class="lede">The workhorse guide. How to get a clear, appropriately-toned email on the first try, and the five edits you should always make before hitting send.</p>
   <div class="meta">
     <span class="tag">Audience: anyone</span>
-    <span class="tag">Tool: any chat AI</span>
-    <span class="tag">Time: 2 min prompt &middot; 1 min edit</span>
+    <span class="tag">Time: 3 min</span>
   </div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/prompt-builder.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Prompt Builder</h5>
+      <p>Walks you through the Four Questions to build any email prompt.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd">
@@ -779,7 +826,7 @@ a { color: inherit; }
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">Copy, adapt, paste</p>
   </div>
   <div class="body">
@@ -832,15 +879,15 @@ Then stop. Do not add commentary.</span>
     <div class="ba">
       <div class="bad">
         <div class="hd">✗ Vague prompt</div>
-        <p style="font-family:var(--mono); font-size:12px; background:#111; color:#f3ece0; padding:14px; border-radius:4px;">"Write an email to our MP about the bridge project."</p>
+        <p style="font-family:var(--mono); font-size:12px; background:var(--paper-2); color:var(--ink); border:1px solid color-mix(in srgb, var(--ink) 15%, transparent); padding:14px; border-radius:4px;">"Write an email to FLS about the schedule change."</p>
         <div class="hd" style="margin-top:14px;">Output (generic)</div>
-        <p>Dear Honourable Member,<br><br>I hope this email finds you well. I am writing to you today regarding the ongoing bridge project in our community. As you may be aware, this project represents a significant investment...</p>
+        <p>Dear Team,<br><br>I hope this message finds you well. I am writing to inform you about an upcoming change to the schedule that will be taking effect in the near future. As you may be aware, operational requirements have necessitated certain adjustments...</p>
       </div>
       <div class="good">
         <div class="hd">✓ Pattern prompt</div>
-        <p style="font-family:var(--mono); font-size:12px; background:#111; color:#f3ece0; padding:14px; border-radius:4px;">Role, goal, bullets, tone "diplomatic-firm", 120 words, voice sample attached.</p>
+        <p style="font-family:var(--mono); font-size:12px; background:var(--paper-2); color:var(--ink); border:1px solid color-mix(in srgb, var(--ink) 15%, transparent); padding:14px; border-radius:4px;">Role, goal, bullets, tone "diplomatic-firm", 120 words, voice sample attached.</p>
         <div class="hd" style="margin-top:14px;">Output (usable first draft)</div>
-        <p>Subject: Bridge project, timing question before Thursday<br><br>Priya,<br><br>A quick note ahead of Thursday's constituency meeting. We've had three delivery dates slip since January, and residents on the east side are asking pointed questions I can't keep fielding without an update from your office.<br><br>Could you confirm by Wednesday whether the June window still holds? If it doesn't, I'd rather know now so we can manage expectations together.<br><br>Happy to jump on a call.<br><br>-- Sam</p>
+        <p>Subject: Yard reporting process changes, effective May 1<br><br>Starting May 1, all yard incident reports go through the new SafeTrack system instead of the paper form.<br><br>What you need to know:<br>&bull; The paper form is retired. SafeTrack is the only accepted method after May 1.<br>&bull; Training sessions run April 22 to 28 at each terminal. Your superintendent has the schedule.<br>&bull; If you have questions before then, contact your local safety coordinator.<br><br>This change applies to all terminals in the Western region. Nothing else about the reporting process changes.<br><br>Stay safe,<br>[Your name]</p>
       </div>
     </div>
   </div>
@@ -1005,6 +1052,18 @@ Under 100 words.</span>
   </div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/review-revise.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Review, Revise, and Adapt</h5>
+      <p>Paste your draft. Pick your audience. Get a revision with tracked changes and coaching notes.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-ZMRGmTuJ4-review-revise-and-adapt" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>Three levels of review.</h2><p class="sub">Ask for the right one</p></div>
   <div class="body">
@@ -1027,7 +1086,7 @@ Under 100 words.</span>
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">02</div><h2>The prompt.</h2><p class="sub">For L1 + L2, the ones you'll use 90% of the time</p></div>
+  <div class="hd"><div class="n">02</div><h2>What to have ready.</h2><p class="sub">For L1 + L2, the ones you'll use 90% of the time</p></div>
   <div class="body">
     <div class="prompt">
 <button class="copy-btn" data-copy="proof-p1">Copy</button><span id="proof-p1">Proofread the text below. Do a Level 2 edit:
@@ -1144,6 +1203,18 @@ Text: <span class="var">[paste]</span></span>
     <span class="tag">Time: 10&ndash;30 min</span>
   </div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/speaking-notes.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Speaking Notes Generator</h5>
+      <p>Asks about audience, topics, tone, and logistics, then drafts a speech you can actually deliver.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-68c776180d68819188aa21895e043cc9-speaking-notes-generator" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>Start with structure.</h2><p class="sub">Pick a shape before you write a word</p></div>
@@ -1285,6 +1356,18 @@ Speech: <span class="var">[paste]</span></span>
   <p class="lede">Letters are the slowest, most considered form of business correspondence. Tone is everything. Here's how to move a letter up and down the tone ladder without losing the point.</p>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/stakeholder-letters.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Stakeholder Letters</h5>
+      <p>Eight letter types, from advocacy to condolences. Built for federal politicians and senior public servants.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>The tone ladder.</h2><p class="sub">Same message, five registers</p></div>
   <div class="body">
@@ -1305,7 +1388,7 @@ Speech: <span class="var">[paste]</span></span>
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">02</div><h2>The prompt.</h2><p class="sub">Name the rung explicitly</p></div>
+  <div class="hd"><div class="n">02</div><h2>What to have ready.</h2><p class="sub">Name the rung explicitly</p></div>
   <div class="body">
     <div class="prompt">
 <button class="copy-btn" data-copy="letters-p1">Copy</button><span id="letters-p1">Draft a formal letter.
@@ -1420,6 +1503,18 @@ B) One clicks firmer (Rung 4.5), in case legal wants it pointier</span>
   <h1>30-page report to a <em>10-slide story.</em></h1>
   <p class="lede">AI is brilliant for the outline. Mediocre for the slides themselves. The trick is to stop at the right moment and take over.</p>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/prompt-builder.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Prompt Builder</h5>
+      <p>Structure your deck outline step by step before filling slides.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>Outline first. Always.</h2><p class="sub">Never ask for slides straight away</p></div>
@@ -1543,10 +1638,21 @@ Deck: <span class="var">[paste]</span></span>
   <p class="lede">Surface the hostile questions before the journalist does. Draft a 40-word statement you can actually defend.</p>
   <div class="meta">
     <span class="tag">For: Media Relations</span>
-    <span class="tag">Tool: ChatGPT</span>
     <span class="tag">Time: 15 min</span>
   </div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/paga-gpt.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>PAGA GPT</h5>
+      <p>Draft incident statements and Q&A prep for public affairs managers.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-67e05e95f22c81918b5052a961cd1775-paga-gpt" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>Use AI for this. Don't for that.</h2><p class="sub">Know the line before you start</p></div>
@@ -1636,7 +1742,7 @@ Statement: <span class="var">[paste]</span></span>
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">05</div><h2>Before &amp; after.</h2><p class="sub">The prompt makes the difference</p></div>
+  <div class="hd"><div class="n">05</div><h2>Before &amp; after.</h2><p class="sub">The input makes the difference</p></div>
   <div class="body">
     <div class="ba">
       <div class="bad">
@@ -1648,7 +1754,7 @@ Statement: <span class="var">[paste]</span></span>
       <div class="good">
         <div class="hd">With topic, position, and constraints</div>
         <p><b>Prompt:</b> Structured prompt with 40-word limit, three-part structure, and explicit rule against speculation.</p>
-        <p><b>Output:</b> "A freight train carrying non-hazardous goods derailed near Jasper at approximately 3am MT. No injuries reported. Our response team is on site and the corridor is expected to reopen by tomorrow morning."</p>
+        <p><b>Output:</b> "A freight train carrying non-hazardous goods derailed near Jasper at approximately 3am MT. No injuries reported. Our response team is on site and We will provide an update on corridor status as information becomes available."</p>
         <p class="label" style="color:var(--sage-deep); margin-top:10px;">Specific. Defensible. Actually useful.</p>
       </div>
     </div>
@@ -1688,6 +1794,18 @@ Statement: <span class="var">[paste]</span></span>
     <span class="tag signal">Sensitivity: high</span>
   </div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/paga-gpt.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>PAGA GPT</h5>
+      <p>Draft initial, updated, and close-out incident statements under time pressure.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-67e05e95f22c81918b5052a961cd1775-paga-gpt" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>The 60-minute drill.</h2><p class="sub">What AI can do while you're waiting for facts</p></div>
@@ -1814,10 +1932,21 @@ Rules: Facts only. No speculation. Link to full statement if available. No "stay
   <p class="lede">Three summary types, executive, skim, deep, and when to ask for each.</p>
   <div class="meta">
     <span class="tag">For: everyone</span>
-    <span class="tag">Tool: ChatGPT + file upload</span>
     <span class="tag">Time: 5 min</span>
   </div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/news-clippings.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Summarize CN News Clippings</h5>
+      <p>Upload a clippings file. Get structured summaries with CN relevance for each article.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-68bee66b32b08191bffdfa127a7a80c9-summarize-cn-news-clippings" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>Three levels of summary.</h2><p class="sub">Pick the one that matches how it will be used</p></div>
@@ -1841,7 +1970,7 @@ Rules: Facts only. No speculation. Link to full statement if available. No "stay
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">02</div><h2>The prompt patterns.</h2><p class="sub">One for each level</p></div>
+  <div class="hd"><div class="n">02</div><h2>What to have ready.</h2><p class="sub">One for each level</p></div>
   <div class="body">
     <h4 class="display" style="font-size:22px; margin:0 0 6px;">Executive summary</h4>
     <p>Upload the document first, then paste this prompt. The "so what" at the end of each bullet is what separates a useful summary from a table of contents.</p>
@@ -1954,6 +2083,18 @@ End with: "The single most important thing in this document is..." and "The weak
   <div class="meta"><span class="tag">For: PAGA, Government Affairs</span><span class="tag">Time: 10 min</span></div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/briefing-note.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Briefing Note Generator</h5>
+      <p>Meeting prep with stakeholder maps, positions, risks, and asks built in.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-689b53b15e8c8191b0a82052c4d3ee55-briefing-note-generator" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd">
     <div class="n">01</div>
@@ -1972,7 +2113,7 @@ End with: "The single most important thing in this document is..." and "The weak
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">Map the field in one page</p>
   </div>
   <div class="body">
@@ -2039,6 +2180,18 @@ RULES: Canadian spelling. This is a red-team exercise. Don't soften. If no one h
   <div class="meta"><span class="tag">Works on: drafts already in hand</span><span class="tag">Time: 3 min</span></div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/review-revise.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Review, Revise, and Adapt</h5>
+      <p>Pick the target audience and get a rewrite matched to their tone.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-ZMRGmTuJ4-review-revise-and-adapt" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd">
     <div class="n">01</div>
@@ -2075,7 +2228,7 @@ RULES: Canadian spelling. This is a red-team exercise. Don't soften. If no one h
 <section class="two-col">
   <div class="hd">
     <div class="n">03</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">One source, many voices</p>
   </div>
   <div class="body">
@@ -2132,6 +2285,18 @@ HOUSE RULES: Canadian spelling. No em dashes. No emoji. If a fact isn't in sourc
   <div class="meta"><span class="tag">Audience: CN employees</span><span class="tag">Time: 10 min</span></div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/prompt-builder.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Prompt Builder</h5>
+      <p>Build your memo prompt step by step: audience, tone, format, rules.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd">
     <div class="n">01</div>
@@ -2150,7 +2315,7 @@ HOUSE RULES: Canadian spelling. No em dashes. No emoji. If a fact isn't in sourc
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">Built for an all-employee audience</p>
   </div>
   <div class="body">
@@ -2226,6 +2391,18 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. Spell ou
   <div class="meta"><span class="tag">For: executives, VPs, ministerial meetings</span><span class="tag">Time: 15 min</span></div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/briefing-note.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Briefing Note Generator</h5>
+      <p>Eight note types: meeting prep, issue overview, event briefing, trip notes, decision notes, and more.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-689b53b15e8c8191b0a82052c4d3ee55-briefing-note-generator" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd">
     <div class="n">01</div>
@@ -2244,7 +2421,7 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. Spell ou
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">Built for a 10-minute pre-read</p>
   </div>
   <div class="body">
@@ -2320,6 +2497,18 @@ RULES: Canadian spelling. No em dashes. If you don't have enough information abo
   <div class="meta"><span class="tag">Audiences: LinkedIn, X, internal</span><span class="tag">Time: 10 min</span></div>
 </header>
 
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/exec-linkedin.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Exec LinkedIn Shares</h5>
+      <p>Generates tailored LinkedIn share updates for each CN executive.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-x5LJwsdbA-exec-linkedin-shares" target="_blank">Open tool</a>
+  </div>
+</div>
+
 <section class="two-col">
   <div class="hd">
     <div class="n">01</div>
@@ -2339,7 +2528,7 @@ RULES: Canadian spelling. No em dashes. If you don't have enough information abo
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">One message, per-platform</p>
   </div>
   <div class="body">
@@ -2421,9 +2610,21 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
   <div class="crumb">Guides / <span style="color:var(--signal);">FAQs &amp; talking-point packs</span></div>
   <div class="eyebrow" style="margin-bottom:18px;">Stakeholder &middot; 3 min read</div>
   <h1>FAQs &amp; <em>talking-point packs.</em></h1>
-  <p class="lede">Anticipate 20 questions. Answer the 7 that matter. A pattern for building an internal FAQ that actually gets used.</p>
+  <p class="lede">Anticipate 20 questions. Answer the 7 that matter. How to build an internal FAQ that actually gets used.</p>
   <div class="meta"><span class="tag">For: rollouts, launches, consultations</span><span class="tag">Time: 30 min</span></div>
 </header>
+
+<!-- GPT callout at top -->
+<div style="padding: 24px 40px 0;">
+  <div class="gpt-callout">
+    <div class="gpt-icon"><img src="gpt-icons/prompt-builder.png" alt=""></div>
+    <div class="gpt-body">
+      <h5>Prompt Builder</h5>
+      <p>Structure your FAQ to anticipate the right questions for any rollout or consultation.</p>
+    </div>
+    <a href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open tool</a>
+  </div>
+</div>
 
 <section class="two-col">
   <div class="hd">
@@ -2441,7 +2642,7 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
 <section class="two-col">
   <div class="hd">
     <div class="n">02</div>
-    <h2>The prompt pattern.</h2>
+    <h2>What to have ready.</h2>
     <p class="sub">Start with the uncomfortable ones</p>
   </div>
   <div class="body"><div class="prompt">
@@ -2508,6 +2709,65 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
     </section>
   </div>
   <div class="tab-content" id="tab-learn">
+
+    <!-- FIVE RULES (moved from Start Here) -->
+    <section class="section" style="padding-top: 36px; padding-bottom: 0;">
+      <div class="section-head">
+        <div class="num"><em></em></div>
+        <div>
+          <div class="eyebrow">Before anything else</div>
+          <h2>Five rules for working with AI.</h2>
+          <p>Pin these. Every guide in this library assumes you already know them.</p>
+        </div>
+      </div>
+      <div class="fourq" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">1</div>
+          <h4>You're the editor, not the author.</h4>
+          <p>AI drafts. You decide what stays, what goes, and what ships. Your name is on it.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">2</div>
+          <h4>Role, reader, goal every time.</h4>
+          <p>Tell it who you are, who's reading, and what you need. Vague in, vague out.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">3</div>
+          <h4>Feed it your materials.</h4>
+          <p>Paste in your draft, your notes, your data. The better the input, the less you fix.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">4</div>
+          <h4>Never paste what you wouldn't email out.</h4>
+          <p>No passwords, no personal data, no privileged content. When in doubt, redact first.</p>
+        </div>
+        <div class="fq" style="min-height: auto; padding: 24px 20px 22px;">
+          <div class="qn">5</div>
+          <h4>Fact-check every name, number, claim.</h4>
+          <p>AI invents with confidence. Verify sources, dates, stats, and quotes before anything ships.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIX AUDIENCES (moved from Start Here) -->
+    <section class="section" style="padding-top: 20px; padding-bottom: 0;">
+      <div class="section-head">
+        <div class="num"><em></em></div>
+        <div>
+          <div class="eyebrow">Know who you're writing for</div>
+          <h2>Six CN audiences, six tones.</h2>
+          <p>The same message hits differently depending on who's reading it. Name the audience in your prompt, every time.</p>
+        </div>
+      </div>
+      <div class="audiences">
+        <div class="aud"><div class="n">AUDIENCE 01</div><h5>Executives</h5><p>Concise, decision-oriented. Numbers up front. No preamble.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 02</div><h5>Management employees</h5><p>Context + direction. What changed, what to do.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 03</div><h5>Front-line supervisors (FLS)</h5><p>Practical, operational. Talking points they can use.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 04</div><h5>Unionized employees</h5><p>Direct, respectful, clear. No corporate softening.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 05</div><h5>Media &amp; public</h5><p>News-first. Facts, quotes, context. Every word defensible.</p></div>
+        <div class="aud"><div class="n">AUDIENCE 06</div><h5>Investors</h5><p>Precise. Cite sources. Nothing market-sensitive pre-disclosure.</p></div>
+      </div>
+    </section>
 
     <section class="section" style="padding-top: 44px;">
       <div class="section-head">
@@ -2599,7 +2859,7 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
 .walk .row + .row { border-top: 1px solid var(--ink); }
 .walk .row { display: contents; }
 .walk .walk-body p { margin: 0 0 10px 0; font-size: 14.5px; line-height: 1.55; }
-.walk .walk-body p.prompt-ex { font-family: var(--mono); font-size: 12.5px; background: #141414; color: #f3ece0; padding: 14px 16px; border-radius: 3px; line-height: 1.55; margin-top: 8px; white-space: pre-wrap; }
+.walk .walk-body p.prompt-ex { font-family: var(--mono); font-size: 12.5px; background: var(--paper-2); color: var(--ink); border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); padding: 14px 16px; border-radius: 3px; line-height: 1.55; margin-top: 8px; white-space: pre-wrap; }
 .walk .walk-body p.prompt-ex .var { color: var(--cn-red); font-style: italic; }
 .walk .walk-body .verdict { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 10px; }
 .walk .walk-body .verdict.bad { color: var(--danger); }
@@ -3670,37 +3930,43 @@ Default assumption: unless the user specifies a period, use the most recent info
     <div class="tool-grid">
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
+        <img src="gpt-icons/prompt-builder.png" alt="" class="tool-icon">
         <h4>Prompt builder</h4>
         <p>Walks you through the Four Questions step by step to build a ready-to-use prompt for any task.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
+        <img src="gpt-icons/speaking-notes.png" alt="" class="tool-icon">
         <h4>Speaking notes generator</h4>
         <p>Prepares draft speeches for CN speakers at events. Asks about audience, topics, tone, and logistics one step at a time.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-68c776180d68819188aa21895e043cc9-speaking-notes-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
+        <img src="gpt-icons/stakeholder-letters.png" alt="" class="tool-icon">
         <h4>Stakeholder letters</h4>
         <p>Drafts polished letters for senior CN leaders to send to politicians, public servants, and stakeholders. Eight letter types.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
+        <img src="gpt-icons/briefing-note.png" alt="" class="tool-icon">
         <h4>Briefing note generator</h4>
         <p>Drafts executive-ready briefing notes: meeting prep, issue overviews, event briefings, trip notes, decision notes, and more.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-689b53b15e8c8191b0a82052c4d3ee55-briefing-note-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
-        <h4>CN Magazine Editorial Partner</h4>
+        <img src="gpt-icons/cn-magazine.png" alt="" class="tool-icon">
+        <h4><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> Magazine Editorial Partner</h4>
         <p>Creates structured, frontline-focused CN Magazine content: features, profiles, safety stories, exec letters, Q&amp;A.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-699fcf06f8188191ac5869010a5a8d06-cn-magazine-editorial-partner" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
-        <h4>CN customer comms</h4>
+        <img src="gpt-icons/customer-comms.png" alt="" class="tool-icon">
+        <h4><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> customer comms</h4>
         <p>Drafts customer-facing communications: operational updates, safety advisories, tariff changes, service planning, and more.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-67a289be46f48191b716e7f65aa964d5-cn-customer-comms" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
@@ -3711,12 +3977,14 @@ Default assumption: unless the user specifies a period, use the most recent info
     <div class="tool-grid">
       <div class="tool-card">
         <span class="label">CEO &amp; Executive Comms</span>
+        <img src="gpt-icons/tracy-robinson.png" alt="" class="tool-icon">
         <h4>Tracy Robinson comms</h4>
         <p>Speeches, investor updates, conference remarks, and LinkedIn posts for the CEO. Distinct external voice guidance.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-694173718a808191a4dea86378331857-tracy-robinson-comms" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">CEO &amp; Executive Comms</span>
+        <img src="gpt-icons/exec-linkedin.png" alt="" class="tool-icon">
         <h4>Exec LinkedIn shares</h4>
         <p>Generates LinkedIn share updates for CN&rsquo;s executive team when they share corporate posts.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-x5LJwsdbA-exec-linkedin-shares" target="_blank">Open in ChatGPT &rarr;</a>
@@ -3728,19 +3996,22 @@ Default assumption: unless the user specifies a period, use the most recent info
     <div class="tool-grid">
       <div class="tool-card">
         <span class="label">Review &amp; Research</span>
+        <img src="gpt-icons/review-revise.png" alt="" class="tool-icon">
         <h4>Review, revise, and adapt</h4>
         <p>Reviews and revises content for employees, customers, or investors. Acts as a writing coach with detailed feedback.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-ZMRGmTuJ4-review-revise-and-adapt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Review &amp; Research</span>
-        <h4>Summarize CN news clippings</h4>
+        <img src="gpt-icons/news-clippings.png" alt="" class="tool-icon">
+        <h4>Summarize <span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> News Clippings</h4>
         <p>Summarizes news clippings for executive review with consistent formatting and full coverage tracking.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-68bee66b32b08191bffdfa127a7a80c9-summarize-cn-news-clippings" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Review &amp; Research</span>
-        <h4>CN Strategy Insights</h4>
+        <img src="gpt-icons/strategy-insights.png" alt="" class="tool-icon">
+        <h4><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> Strategy Insights</h4>
         <p>Analytical strategy manager for researching trends, aggregating data, and framing strategic scenarios.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-68cc5c6b70c88191bffd0acb93ee67d9-cn-strategy-insights" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
@@ -3751,25 +4022,29 @@ Default assumption: unless the user specifies a period, use the most recent info
     <div class="tool-grid" style="margin-bottom: 56px;">
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
+        <img src="gpt-icons/paga-gpt.png" alt="" class="tool-icon">
         <h4>PAGA GPT</h4>
         <p>Drafts incident statements during railway incidents. Three types: initial, updated, and close-out.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-67e05e95f22c81918b5052a961cd1775-paga-gpt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
+        <img src="gpt-icons/rsw-gpt.png" alt="" class="tool-icon">
         <h4>RSW GPT</h4>
         <p>Creates Rail Safety Week content for the public, communities, officials, employees, and customers.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-6819315218348191a60b92b995e3242a-rsw-gpt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
-        <h4>CN Alt Text Generator</h4>
+        <img src="gpt-icons/alt-text.png" alt="" class="tool-icon">
+        <h4><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> Alt Text Generator</h4>
         <p>Generates bilingual alt text (EN-CA, FR-CA, and combined) for CN social media images.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-69e917325d108191aae1564289f6b529-cn-alt-text-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
-        <h4>CN translator and glossary</h4>
+        <img src="gpt-icons/translator.png" alt="" class="tool-icon">
+        <h4><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> translator and glossary</h4>
         <p>Translates between EN-CA and FR-CA using CN&rsquo;s official glossary. Also searches the glossary by keyword.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-6760b4779a988191886d463d2371cfeb-cn-translator-and-glossary-search" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
@@ -3944,7 +4219,7 @@ Default assumption: unless the user specifies a period, use the most recent info
 </main>
 
 <footer class="footer">
-  <div>The AI Playbook &middot; Self-service library &middot; Maintained by Communications</div>
+  <div><span class="cn-mark"><img src="cn-logo.png" alt="CN"></span> &nbsp;The AI Playbook &middot; Maintained by Communications</div>
   <div>v2.0 &middot; April 2026</div>
 </footer>
 
@@ -3955,6 +4230,8 @@ document.querySelectorAll('.tab').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (typeof hideGuide === 'function') hideGuide();
+    if (typeof hideLearn === 'function') hideLearn();
     window.scrollTo(0, 0);
   });
 });
@@ -3971,6 +4248,15 @@ document.querySelectorAll('#tab-guides .chip').forEach(c => {
     });
   });
 });
+
+// Navigate from Start Here to a specific guide
+function goToGuide(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-tab=guides]').classList.add('active');
+  document.getElementById('tab-guides').classList.add('active');
+  showGuide(id);
+}
 
 // Show/hide guide detail
 function showGuide(id) {
@@ -3999,7 +4285,7 @@ function hideGuide() {
 // Show/hide learn detail
 function showLearn(id) {
   document.getElementById('learn-grid').style.display = 'none';
-  document.querySelector('#tab-learn .section-head').style.display = 'none';
+  document.querySelectorAll('#tab-learn > section').forEach(s => s.style.display = 'none');
   const detail = document.getElementById('learn-detail');
   detail.style.display = 'block';
   detail.classList.remove('visible');
@@ -4012,7 +4298,7 @@ function showLearn(id) {
 }
 function hideLearn() {
   document.getElementById('learn-grid').style.display = '';
-  document.querySelector('#tab-learn .section-head').style.display = '';
+  document.querySelectorAll('#tab-learn > section').forEach(s => s.style.display = '');
   const detail = document.getElementById('learn-detail');
   detail.style.display = 'none';
   detail.classList.remove('visible');

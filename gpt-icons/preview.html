@@ -1,0 +1,1985 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CN GPT Icons — Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cn-red: #c8102e;
+  --cn-red-deep: #9a0c24;
+  --ink: #1a1a1a;
+  --ink-2: #2c2c2c;
+  --paper: #f6f3ec;
+  --paper-2: #ebe5d5;
+  --sage: #c8d3b8;
+  --sage-deep: #6b7a5a;
+  --navy: #1e3a5f;
+  --warn: #d4a017;
+  --danger: #b33a2b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #e8e4dc;
+  font-family: "Instrument Sans", sans-serif;
+  padding: 40px;
+}
+
+h1 {
+  font-family: "Newsreader", serif;
+  font-weight: 300;
+  font-size: 42px;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.subtitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 36px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-wrap {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.icon-name {
+  font-family: "Newsreader", serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: center;
+  max-width: 180px;
+}
+.icon-file {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  color: #999;
+  letter-spacing: 0.05em;
+}
+
+/* === Shared icon internals === */
+.icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Noise grain overlay for texture */
+.icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 128px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* === 1. Prompt Builder === */
+.icon-prompt-builder {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+.icon-prompt-builder .mark {
+  font-family: "DM Serif Display", serif;
+  font-size: 92px;
+  font-style: italic;
+  color: var(--cn-red);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-52%, -54%);
+  z-index: 1;
+}
+.icon-prompt-builder .accent { display: none; }
+
+/* === 2. Speaking Notes === */
+.icon-speaking-notes {
+  background: var(--ink);
+}
+.icon-speaking-notes .lectern {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-speaking-notes .lectern-top {
+  width: 80px;
+  height: 50px;
+  background: var(--paper);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+}
+.icon-speaking-notes .lectern-top::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  background: var(--cn-red);
+  border-radius: 2px;
+  box-shadow: 0 8px 0 rgba(0,0,0,0.08), 0 16px 0 rgba(0,0,0,0.06);
+}
+.icon-speaking-notes .lectern-stem {
+  width: 8px;
+  height: 24px;
+  background: var(--paper);
+}
+.icon-speaking-notes .lectern-base {
+  width: 48px;
+  height: 6px;
+  background: var(--paper);
+  border-radius: 0 0 2px 2px;
+}
+
+/* === 3. Stakeholder Letters === */
+.icon-stakeholder-letters {
+  background: var(--navy);
+}
+.icon-stakeholder-letters .envelope {
+  width: 100px;
+  height: 70px;
+  background: var(--paper);
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+}
+.icon-stakeholder-letters .envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-top: 36px solid var(--navy);
+}
+.icon-stakeholder-letters .envelope::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-top: 34px solid var(--paper-2);
+}
+.icon-stakeholder-letters .seal {
+  position: absolute;
+  bottom: 30%;
+  right: 32%;
+  width: 24px;
+  height: 24px;
+  background: var(--cn-red);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* === 4. Briefing Note — matches News style === */
+.icon-briefing-note {
+  background: var(--ink);
+  border: 3px solid var(--ink);
+}
+.icon-briefing-note .memo-word {
+  font-family: "DM Serif Display", serif;
+  font-size: 54px;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -54%);
+  z-index: 1;
+}
+
+/* === 5. CN Magazine === */
+.icon-cn-magazine {
+  background: var(--cn-red);
+}
+.icon-cn-magazine .spread {
+  display: flex;
+  gap: 3px;
+  z-index: 1;
+  transform: perspective(300px) rotateY(-8deg);
+}
+.icon-cn-magazine .page {
+  width: 54px;
+  height: 76px;
+  background: white;
+  border-radius: 2px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.icon-cn-magazine .page .l {
+  height: 2px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 1px;
+}
+.icon-cn-magazine .page .l.hd {
+  height: 5px;
+  background: var(--cn-red);
+  width: 60%;
+  opacity: 0.6;
+  margin-bottom: 2px;
+}
+.icon-cn-magazine .page:first-child .l.hd { width: 70%; }
+.icon-cn-magazine .label-mark {
+  position: absolute;
+  bottom: 24%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  z-index: 1;
+}
+
+/* === 6. Customer Comms variations === */
+
+/* A: Megaphone / broadcast */
+.icon-cc-v4 {
+  background: var(--ink);
+}
+.icon-cc-v4 .mega {
+  z-index: 1;
+}
+.icon-cc-v4 .mega svg { width: 120px; height: 120px; }
+
+/* B: Send / paper plane */
+.icon-cc-v5 {
+  background: var(--ink);
+}
+.icon-cc-v5 .plane {
+  z-index: 1;
+}
+.icon-cc-v5 .plane svg { width: 88px; height: 88px; }
+
+/* C: Signal tower / broadcast waves */
+.icon-cc-v6 {
+  background: var(--ink);
+}
+.icon-cc-v6 .tower {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.icon-cc-v6 .tower-mast {
+  width: 6px;
+  height: 50px;
+  background: var(--paper);
+  border-radius: 3px;
+  z-index: 1;
+}
+.icon-cc-v6 .tower-base {
+  width: 30px;
+  height: 6px;
+  background: var(--paper);
+  border-radius: 0 0 3px 3px;
+  margin-top: -1px;
+}
+.icon-cc-v6 .wave {
+  position: absolute;
+  border: 3px solid var(--cn-red);
+  border-radius: 50%;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  top: 8px;
+}
+.icon-cc-v6 .wave.w1 { width: 40px; height: 20px; top: 4px; }
+.icon-cc-v6 .wave.w2 { width: 64px; height: 32px; top: -6px; }
+.icon-cc-v6 .wave.w3 { width: 88px; height: 44px; top: -16px; opacity: 0.5; }
+
+/* D: Alert bell with red dot */
+.icon-cc-v7 {
+  background: var(--ink);
+}
+.icon-cc-v7 .bell-wrap {
+  z-index: 1;
+  position: relative;
+}
+.icon-cc-v7 .bell-wrap svg { width: 80px; height: 80px; }
+.icon-cc-v7 .bell-dot {
+  position: absolute;
+  top: -2px; right: 2px;
+  width: 18px; height: 18px;
+  background: var(--cn-red);
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+}
+
+/* === 7. Tracy Robinson === */
+.icon-tracy-robinson {
+  background: var(--cn-red);
+  position: relative;
+}
+.icon-tracy-robinson::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+.icon-tracy-robinson .monogram {
+  font-family: "DM Serif Display", serif;
+  font-size: 76px;
+  font-weight: 400;
+  color: white;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* === 8. Exec LinkedIn === */
+.icon-exec-linkedin {
+  background: var(--navy);
+}
+.icon-exec-linkedin .share-icon {
+  z-index: 1;
+  position: relative;
+}
+.icon-exec-linkedin .node {
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+  border-radius: 50%;
+  position: absolute;
+}
+.icon-exec-linkedin .node.a { top: 0; left: 50%; transform: translateX(-50%); }
+.icon-exec-linkedin .node.b { bottom: 0; left: 8px; }
+.icon-exec-linkedin .node.c { bottom: 0; right: 8px; }
+.icon-exec-linkedin .share-icon svg {
+  width: 70px;
+  height: 70px;
+}
+
+/* === 9. Review Revise === */
+.icon-review-revise {
+  background: var(--sage);
+}
+.icon-review-revise .pencil {
+  width: 8px;
+  height: 70px;
+  background: var(--ink);
+  border-radius: 2px 2px 0 0;
+  transform: rotate(-30deg);
+  position: relative;
+  z-index: 1;
+  left: -12px;
+  top: -4px;
+}
+.icon-review-revise .pencil::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 12px solid var(--ink);
+}
+.icon-review-revise .check {
+  position: absolute;
+  right: 28%;
+  bottom: 32%;
+  z-index: 2;
+  font-size: 44px;
+  color: var(--cn-red);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* === 10. News Clippings === */
+.icon-news-clippings {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+.icon-news-clippings .news-text {
+  font-family: "DM Serif Display", serif;
+  font-size: 58px;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  z-index: 1;
+  line-height: 1;
+}
+.icon-news-clippings .news-rule {
+  position: absolute;
+  top: 30%;
+  left: 18%;
+  right: 18%;
+  height: 2px;
+  background: var(--cn-red);
+  z-index: 1;
+}
+.icon-news-clippings .news-rule-bottom {
+  position: absolute;
+  bottom: 30%;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  background: var(--ink);
+  opacity: 0.2;
+  z-index: 1;
+}
+
+/* === 11. Strategy Insights === */
+.icon-strategy-insights {
+  background: var(--navy);
+}
+.icon-strategy-insights .chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 1;
+  height: 80px;
+}
+.icon-strategy-insights .bar {
+  width: 16px;
+  background: var(--paper);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.5;
+}
+.icon-strategy-insights .bar:nth-child(1) { height: 30px; }
+.icon-strategy-insights .bar:nth-child(2) { height: 48px; }
+.icon-strategy-insights .bar:nth-child(3) { height: 38px; opacity: 0.3; }
+.icon-strategy-insights .bar:nth-child(4) { height: 62px; }
+.icon-strategy-insights .bar:nth-child(5) { height: 78px; background: var(--cn-red); opacity: 1; }
+.icon-strategy-insights .trend {
+  position: absolute;
+  z-index: 2;
+}
+
+/* === 12. PAGA GPT === */
+.icon-paga-gpt {
+  background: var(--navy);
+}
+.icon-paga-gpt .building {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.icon-paga-gpt .dome {
+  width: 40px;
+  height: 22px;
+  background: var(--paper);
+  border-radius: 40px 40px 0 0;
+}
+.icon-paga-gpt .dome::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 14px;
+  background: var(--paper);
+  border-radius: 2px;
+}
+.icon-paga-gpt .pediment {
+  width: 100px;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 14px solid var(--paper);
+}
+.icon-paga-gpt .columns {
+  display: flex;
+  gap: 10px;
+  padding: 0 6px;
+}
+.icon-paga-gpt .col {
+  width: 8px;
+  height: 40px;
+  background: var(--paper);
+  border-radius: 2px 2px 0 0;
+}
+.icon-paga-gpt .base-line {
+  width: 100px;
+  height: 6px;
+  background: var(--paper);
+  border-radius: 0 0 2px 2px;
+}
+.icon-paga-gpt .paga-label {
+  position: absolute;
+  bottom: 20%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cn-red);
+  z-index: 2;
+}
+
+/* === 13. RSW GPT === */
+.icon-rsw-gpt {
+  background: var(--cn-red);
+}
+.icon-rsw-gpt .rsw-inner {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.icon-rsw-gpt .rsw-sign {
+  width: 80px;
+  height: 80px;
+  border: 4px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.icon-rsw-gpt .rsw-sign .bar1,
+.icon-rsw-gpt .rsw-sign .bar2 {
+  position: absolute;
+  width: 56px;
+  height: 8px;
+  background: white;
+  border-radius: 2px;
+}
+.icon-rsw-gpt .rsw-sign .bar1 { transform: rotate(45deg); }
+.icon-rsw-gpt .rsw-sign .bar2 { transform: rotate(-45deg); }
+.icon-rsw-gpt .rsw-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.8);
+  text-transform: uppercase;
+}
+
+/* === 14. Alt Text === */
+.icon-alt-text {
+  background: var(--sage);
+}
+.icon-alt-text .img-frame {
+  width: 110px;
+  height: 82px;
+  background: white;
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.icon-alt-text .img-frame .mountain {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  background: var(--sage-deep);
+  clip-path: polygon(0% 100%, 28% 25%, 48% 60%, 68% 15%, 100% 100%);
+}
+.icon-alt-text .img-frame .sun {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 16px;
+  height: 16px;
+  background: var(--warn);
+  border-radius: 50%;
+}
+.icon-alt-text .alt-badge {
+  position: absolute;
+  bottom: 22%;
+  right: 22%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 3px;
+  z-index: 2;
+}
+
+/* === 15. Translator === */
+.icon-translator {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+.icon-translator .lang-pair {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
+}
+.icon-translator .lang {
+  font-family: "DM Serif Display", serif;
+  font-size: 42px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+}
+.icon-translator .arrow-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--cn-red);
+}
+.icon-translator .arrow-pair span {
+  display: block;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* === 16. Draft Social Post === */
+.icon-social-post {
+  background: var(--navy);
+}
+.icon-social-post .bubble {
+  z-index: 1;
+  position: relative;
+}
+.icon-social-post .bubble svg { width: 110px; height: 110px; }
+
+/* Small preview row */
+.smalls {
+  display: flex;
+  gap: 16px;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+}
+.smalls h3 {
+  width: 100%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 4px;
+}
+.small-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.small-icon .icon { font-size: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Custom GPT Icons</h1>
+<p class="subtitle">CN Communications Hub &middot; 15 icons &middot; Preview at 200px and 36px</p>
+
+<div class="grid">
+
+  <!-- 1. Prompt Builder -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-prompt-builder">
+        <span class="mark">4Q</span>
+        <span class="accent"></span>
+      </div>
+    </div>
+    <span class="icon-name">Prompt builder</span>
+  </div>
+
+  <!-- 2. Speaking Notes -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-speak-v2">
+        <div class="speaker">
+          <div class="head"></div>
+          <div class="body-shape"></div>
+          <div class="podium"></div>
+          <div class="podium-stem"></div>
+          <div class="podium-base"></div>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">Speaking notes generator</span>
+  </div>
+
+  <!-- 3. Stakeholder Letters -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-letters-v6">
+        <div class="lv6-wrap">
+          <div class="lv6-env">
+            <div class="lv6-letter">
+              <div class="lv6-red-bar"></div>
+              <div class="lv6-lines"><div></div><div></div><div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">Stakeholder letters</span>
+  </div>
+
+  <!-- 4. Briefing Note -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-briefing-note">
+        <span class="memo-word">Memo</span>
+      </div>
+    </div>
+    <span class="icon-name">Briefing note generator</span>
+  </div>
+
+  <!-- 5. CN Magazine -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-cn-magazine">
+        <div class="spread">
+          <div class="page">
+            <div class="l hd"></div>
+            <div class="l"></div><div class="l"></div><div class="l"></div>
+            <div class="l"></div><div class="l"></div>
+          </div>
+          <div class="page">
+            <div class="l hd"></div>
+            <div class="l"></div><div class="l"></div><div class="l"></div>
+            <div class="l"></div>
+          </div>
+        </div>
+        <span class="label-mark">Magazine</span>
+      </div>
+    </div>
+    <span class="icon-name">CN Magazine Editorial Partner</span>
+  </div>
+
+  <!-- 6. Customer Comms -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-cc-v4">
+        <div class="mega">
+          <svg viewBox="0 0 90 90" fill="none">
+            <path d="M22 34 L22 56 L34 56 L34 34 Z" fill="#f6f3ec"/>
+            <path d="M34 30 L72 16 L72 74 L34 60 Z" fill="#f6f3ec"/>
+            <rect x="72" y="34" width="8" height="22" rx="2" fill="#c8102e"/>
+            <rect x="26" y="56" width="4" height="14" rx="1" fill="#f6f3ec" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">CN customer comms</span>
+  </div>
+
+  <!-- 7. Tracy Robinson -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-tracy-robinson">
+        <span class="monogram">CEO</span>
+      </div>
+    </div>
+    <span class="icon-name">Tracy Robinson comms</span>
+  </div>
+
+  <!-- 8. Exec LinkedIn -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-exec-v2">
+        <svg viewBox="0 0 100 100" width="150" height="150" fill="none" style="z-index:1;">
+          <line x1="50" y1="50" x2="50" y2="12" stroke="#f6f3ec" stroke-width="2.5"/>
+          <line x1="50" y1="50" x2="82" y2="28" stroke="#f6f3ec" stroke-width="2.5"/>
+          <line x1="50" y1="50" x2="82" y2="72" stroke="#f6f3ec" stroke-width="2.5"/>
+          <line x1="50" y1="50" x2="50" y2="88" stroke="#f6f3ec" stroke-width="2.5"/>
+          <line x1="50" y1="50" x2="18" y2="72" stroke="#f6f3ec" stroke-width="2.5"/>
+          <line x1="50" y1="50" x2="18" y2="28" stroke="#f6f3ec" stroke-width="2.5"/>
+          <circle cx="50" cy="12" r="8" fill="#f6f3ec"/>
+          <circle cx="82" cy="28" r="8" fill="#f6f3ec"/>
+          <circle cx="82" cy="72" r="8" fill="#f6f3ec"/>
+          <circle cx="50" cy="88" r="8" fill="#f6f3ec"/>
+          <circle cx="18" cy="72" r="8" fill="#f6f3ec"/>
+          <circle cx="18" cy="28" r="8" fill="#f6f3ec"/>
+          <circle cx="50" cy="50" r="12" fill="#c8102e"/>
+          <polygon points="76,30 82,24 84,34" fill="#f6f3ec"/>
+        </svg>
+      </div>
+    </div>
+    <span class="icon-name">Exec LinkedIn shares</span>
+  </div>
+
+  <!-- 9. Review Revise -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-review-v4">
+        <span class="rv4-draft">A</span>
+        <svg class="rv4-arrow" viewBox="0 0 30 16" width="30" height="16" style="z-index:1;">
+          <line x1="2" y1="8" x2="24" y2="8" stroke="#c8102e" stroke-width="3" stroke-linecap="round"/>
+          <polyline points="19,3 26,8 19,13" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="rv4-final">B</span>
+      </div>
+    </div>
+    <span class="icon-name">Review, revise, and adapt</span>
+  </div>
+
+  <!-- 10. News Clippings -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-news-v2">
+        <span class="news-word">News</span>
+      </div>
+    </div>
+    <span class="icon-name">Summarize CN news clippings</span>
+  </div>
+
+  <!-- 11. Strategy Insights -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-strategy-insights">
+        <div class="chart">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <svg class="trend" viewBox="0 0 100 60" width="100" height="60" style="position:absolute; z-index:2;">
+          <polyline points="5,50 25,35 45,42 65,22 95,8" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="95" cy="8" r="5" fill="#c8102e"/>
+        </svg>
+      </div>
+    </div>
+    <span class="icon-name">CN Strategy Insights</span>
+  </div>
+
+  <!-- 12. PAGA GPT -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-paga-gpt">
+        <div class="building">
+          <div class="dome"></div>
+          <div class="pediment"></div>
+          <div class="columns">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+          </div>
+          <div class="base-line"></div>
+        </div>
+        <span class="paga-label">PAGA</span>
+      </div>
+    </div>
+    <span class="icon-name">PAGA GPT</span>
+  </div>
+
+  <!-- 13. RSW GPT -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-rsw-v3">
+        <div class="rsw-type">
+          <span class="rsw-big">RSW</span>
+          <span class="rsw-sub">Rail Safety</span>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">RSW GPT</span>
+  </div>
+
+  <!-- 14. Alt Text -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-alt-text">
+        <div class="img-frame">
+          <div class="sun"></div>
+          <div class="mountain"></div>
+        </div>
+        <span class="alt-badge">ALT</span>
+      </div>
+    </div>
+    <span class="icon-name">CN Alt Text Generator</span>
+  </div>
+
+  <!-- 15. Translator -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-translator">
+        <div class="lang-pair">
+          <span class="lang">EN</span>
+          <div class="arrow-pair">
+            <span>&rarr;</span>
+            <span>&larr;</span>
+          </div>
+          <span class="lang">FR</span>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">CN translator and glossary</span>
+  </div>
+
+  <!-- 16. Draft Social Post -->
+  <div class="cell">
+    <div class="icon-wrap">
+      <div class="icon icon-social-post">
+        <div class="bubble">
+          <svg viewBox="0 0 110 118" fill="none">
+            <!-- Chat bubble -->
+            <rect x="10" y="16" width="90" height="68" rx="8" fill="#f6f3ec"/>
+            <!-- Tail -->
+            <polygon points="24,84 38,84 26,100" fill="#f6f3ec"/>
+            <!-- Hash symbol -->
+            <text x="55" y="50" font-family="Arial Black, Helvetica Neue, sans-serif" font-weight="900" font-size="40" fill="#c8102e" text-anchor="middle" dominant-baseline="central">#</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <span class="icon-name">Draft social post</span>
+  </div>
+
+</div>
+
+<!-- Small size preview -->
+<div class="smalls">
+  <h3>Sidebar preview (36px)</h3>
+</div>
+
+<!-- ============================================================ -->
+<!-- VARIATIONS — pick favorites from these                       -->
+<!-- ============================================================ -->
+<div style="margin-top:80px; padding-top:40px; border-top: 2px solid var(--ink);">
+  <h1>Variations</h1>
+  <p class="subtitle">Pick one per row. The rest get deleted.</p>
+</div>
+
+<style>
+.var-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin: 32px 0;
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.var-row .var-label {
+  width: 160px;
+  flex-shrink: 0;
+  padding-top: 40px;
+}
+.var-row .var-label h3 {
+  font-family: "Newsreader", serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0 0 4px;
+}
+.var-row .var-label p {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+.var-options { display: flex; gap: 24px; flex-wrap: wrap; }
+.var-option { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.var-option .var-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  background: rgba(0,0,0,0.04);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+/* === SPEAKING NOTES VARIATIONS === */
+.icon-speak-v2 {
+  background: var(--ink);
+}
+.icon-speak-v2 .speaker {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.icon-speak-v2 .head {
+  width: 24px;
+  height: 24px;
+  background: var(--paper);
+  border-radius: 50%;
+  margin-bottom: -2px;
+}
+.icon-speak-v2 .body-shape {
+  width: 40px;
+  height: 28px;
+  background: var(--paper);
+  border-radius: 20px 20px 4px 4px;
+}
+.icon-speak-v2 .podium {
+  width: 64px;
+  height: 36px;
+  background: var(--paper);
+  border-radius: 3px 3px 0 0;
+  margin-top: -6px;
+  position: relative;
+}
+.icon-speak-v2 .podium::after {
+  content: "";
+  position: absolute;
+  top: 10px; left: 10px; right: 10px;
+  height: 2px;
+  background: var(--cn-red);
+  border-radius: 1px;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.06);
+}
+.icon-speak-v2 .podium-stem {
+  width: 6px;
+  height: 14px;
+  background: var(--paper);
+}
+.icon-speak-v2 .podium-base {
+  width: 36px;
+  height: 4px;
+  background: var(--paper);
+  border-radius: 0 0 2px 2px;
+}
+
+.icon-speak-v3 {
+  background: var(--ink);
+}
+.icon-speak-v3 .quote-mark {
+  font-family: "DM Serif Display", serif;
+  font-size: 120px;
+  font-style: italic;
+  color: var(--cn-red);
+  line-height: 0.7;
+  z-index: 1;
+  margin-top: -10px;
+}
+.icon-speak-v3 .speak-label {
+  position: absolute;
+  bottom: 26%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--paper);
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+/* === STAKEHOLDER LETTERS VARIATIONS === */
+.icon-letters-v2 {
+  background: var(--navy);
+}
+.icon-letters-v2 .env-back {
+  width: 100px;
+  height: 66px;
+  background: var(--paper);
+  border-radius: 3px;
+  position: relative;
+  z-index: 1;
+}
+.icon-letters-v2 .env-flap {
+  position: absolute;
+  top: -28px;
+  left: 0; right: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 30px solid var(--paper-2);
+}
+.icon-letters-v2 .stamp {
+  position: absolute;
+  top: -18px;
+  right: 8px;
+  width: 22px;
+  height: 26px;
+  background: var(--cn-red);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.icon-letters-v3 {
+  background: var(--navy);
+}
+.icon-letters-v3 .letter-sheet {
+  width: 80px;
+  height: 100px;
+  background: var(--paper);
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+  padding: 14px 12px;
+}
+.icon-letters-v3 .letter-sheet .ltr-line {
+  height: 2px;
+  background: rgba(0,0,0,0.1);
+  margin-bottom: 6px;
+  border-radius: 1px;
+}
+.icon-letters-v3 .letter-sheet .ltr-line:first-child {
+  width: 50%;
+  height: 3px;
+  background: var(--cn-red);
+  margin-bottom: 10px;
+}
+.icon-letters-v3 .letter-sheet .ltr-sig {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  width: 30px;
+  height: 2px;
+  background: var(--ink);
+  opacity: 0.4;
+}
+.icon-letters-v3 .wax-seal {
+  position: absolute;
+  bottom: 20%;
+  left: 55%;
+  width: 30px;
+  height: 30px;
+  background: var(--cn-red);
+  border-radius: 50%;
+  z-index: 2;
+  border: 2px solid var(--cn-red-deep);
+}
+.icon-letters-v3 .wax-seal::after {
+  content: "CN";
+  font-family: "Arial Black", sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  color: white;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* === EXEC LINKEDIN VARIATIONS === */
+.icon-exec-v2 {
+  background: var(--navy);
+}
+.icon-exec-v2 svg { z-index: 1; }
+
+.icon-exec-v3 {
+  background: var(--navy);
+}
+.icon-exec-v3 .network {
+  z-index: 1;
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.icon-exec-v3 .nnode {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  border-radius: 50%;
+}
+.icon-exec-v3 .nnode.center {
+  width: 22px;
+  height: 22px;
+  background: var(--cn-red);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.icon-exec-v3 .nnode.n1 { top: 6px; left: 50%; transform: translateX(-50%); }
+.icon-exec-v3 .nnode.n2 { top: 22px; right: 8px; }
+.icon-exec-v3 .nnode.n3 { bottom: 22px; right: 8px; }
+.icon-exec-v3 .nnode.n4 { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.icon-exec-v3 .nnode.n5 { bottom: 22px; left: 8px; }
+.icon-exec-v3 .nnode.n6 { top: 22px; left: 8px; }
+
+/* === REVIEW REVISE VARIATIONS === */
+.icon-review-v2 {
+  background: var(--sage);
+}
+.icon-review-v2 .redline {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 90px;
+}
+.icon-review-v2 .rl-line {
+  height: 3px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 2px;
+  position: relative;
+}
+.icon-review-v2 .rl-line.struck {
+  background: rgba(0,0,0,0.08);
+}
+.icon-review-v2 .rl-line.struck::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--cn-red);
+  transform: translateY(-50%);
+}
+.icon-review-v2 .rl-line:nth-child(1) { width: 70%; }
+.icon-review-v2 .rl-line:nth-child(2) { width: 100%; }
+.icon-review-v2 .rl-line:nth-child(3) { width: 85%; }
+.icon-review-v2 .rl-line:nth-child(4) { width: 60%; }
+.icon-review-v2 .rl-line:nth-child(5) { width: 90%; }
+.icon-review-v2 .rl-line:nth-child(6) { width: 75%; }
+.icon-review-v2 .rl-insert {
+  font-family: "DM Serif Display", serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--cn-red);
+  margin-top: -4px;
+  margin-left: 20px;
+}
+
+.icon-review-v3 {
+  background: var(--sage);
+}
+.icon-review-v3 .loop-arrows {
+  z-index: 1;
+  position: relative;
+}
+.icon-review-v3 .loop-arrows svg { width: 90px; height: 90px; }
+
+/* === NEWS VARIATIONS === */
+.icon-news-v2 {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+}
+.icon-news-v2 .news-word {
+  font-family: "DM Serif Display", serif;
+  font-size: 58px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -54%);
+  z-index: 1;
+}
+
+.icon-news-v3 {
+  background: var(--ink);
+}
+.icon-news-v3 .news-dark {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-news-v3 .nd-rule { width: 76px; height: 2px; background: var(--cn-red); }
+.icon-news-v3 .nd-text {
+  font-family: "DM Serif Display", serif;
+  font-size: 50px;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.icon-news-v3 .nd-rule2 { width: 76px; height: 1px; background: rgba(255,255,255,0.2); }
+
+/* === REVIEW REVISE NEW VARIATIONS === */
+.icon-review-v4 {
+  background: var(--sage);
+  gap: 8px;
+}
+.icon-review-v4 .rv4-draft {
+  font-family: "DM Serif Display", serif;
+  font-size: 62px;
+  color: var(--ink);
+  opacity: 0.25;
+  line-height: 1;
+  z-index: 1;
+  text-decoration: line-through;
+  text-decoration-color: var(--cn-red);
+  text-decoration-thickness: 3px;
+}
+.icon-review-v4 .rv4-arrow { z-index: 1; }
+.icon-review-v4 .rv4-final {
+  font-family: "DM Serif Display", serif;
+  font-size: 62px;
+  color: var(--ink);
+  line-height: 1;
+  z-index: 1;
+}
+
+.icon-review-v5 {
+  background: var(--sage);
+}
+.icon-review-v5 .rv5-stack {
+  position: relative;
+  width: 72px;
+  height: 88px;
+  z-index: 1;
+}
+.icon-review-v5 .rv5-page {
+  position: absolute;
+  width: 68px;
+  height: 84px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+}
+.icon-review-v5 .rv5-back {
+  top: 0; left: 0;
+  opacity: 0.3;
+  transform: rotate(-4deg);
+}
+.icon-review-v5 .rv5-mid {
+  top: 2px; left: 4px;
+  opacity: 0.5;
+  transform: rotate(-1.5deg);
+}
+.icon-review-v5 .rv5-front {
+  top: 4px; left: 8px;
+  background: white;
+}
+.icon-review-v5 .rv5-check-wrap {
+  position: absolute;
+  bottom: 10px;
+  right: 8px;
+}
+
+.icon-review-v6 {
+  background: var(--sage);
+}
+.icon-review-v6 .rv6-caret {
+  font-family: "DM Serif Display", serif;
+  font-size: 100px;
+  color: var(--cn-red);
+  line-height: 0.6;
+  z-index: 1;
+  margin-top: -16px;
+}
+.icon-review-v6 .rv6-label {
+  position: absolute;
+  bottom: 26%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  z-index: 1;
+}
+
+/* === STAKEHOLDER LETTERS NEW VARIATIONS === */
+.icon-letters-v4 {
+  background: var(--navy);
+}
+.icon-letters-v4 .lv4-doc {
+  width: 76px;
+  height: 96px;
+  background: var(--paper);
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+  padding: 14px 12px;
+}
+.icon-letters-v4 .lv4-header {
+  width: 40%;
+  height: 4px;
+  background: var(--cn-red);
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+.icon-letters-v4 .lv4-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.icon-letters-v4 .lv4-lines div {
+  height: 2px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 1px;
+}
+.icon-letters-v4 .lv4-lines div:nth-child(1) { width: 100%; }
+.icon-letters-v4 .lv4-lines div:nth-child(2) { width: 88%; }
+.icon-letters-v4 .lv4-lines div:nth-child(3) { width: 94%; }
+.icon-letters-v4 .lv4-lines div:nth-child(4) { width: 70%; }
+.icon-letters-v4 .lv4-sig {
+  position: absolute;
+  bottom: 14px;
+  left: 12px;
+  width: 28px;
+  height: 2px;
+  background: var(--ink);
+  opacity: 0.3;
+}
+.icon-letters-v4 .lv4-seal {
+  position: absolute;
+  bottom: 24%;
+  right: 28%;
+  width: 34px;
+  height: 34px;
+  background: var(--cn-red);
+  border-radius: 50%;
+  z-index: 2;
+  border: 3px solid var(--cn-red-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-letters-v4 .lv4-seal::after {
+  content: "CN";
+  font-family: "Arial Black", sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 0.04em;
+}
+
+.icon-letters-v5 {
+  background: var(--navy);
+}
+.icon-letters-v5 .lv5-text {
+  font-family: "DM Serif Display", serif;
+  font-size: 72px;
+  font-style: italic;
+  color: var(--paper);
+  z-index: 1;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.icon-letters-v6 {
+  background: var(--navy);
+}
+.icon-letters-v6 .lv6-wrap {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -36%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-letters-v6 .lv6-env {
+  width: 100px;
+  height: 54px;
+  background: var(--paper-2);
+  border-radius: 3px;
+  position: relative;
+  overflow: visible;
+}
+.icon-letters-v6 .lv6-letter {
+  position: absolute;
+  top: -38px;
+  left: 10px;
+  right: 10px;
+  height: 56px;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  padding: 10px;
+}
+.icon-letters-v6 .lv6-red-bar {
+  width: 35%;
+  height: 3px;
+  background: var(--cn-red);
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+.icon-letters-v6 .lv6-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.icon-letters-v6 .lv6-lines div {
+  height: 2px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 1px;
+}
+.icon-letters-v6 .lv6-lines div:nth-child(1) { width: 100%; }
+.icon-letters-v6 .lv6-lines div:nth-child(2) { width: 85%; }
+.icon-letters-v6 .lv6-lines div:nth-child(3) { width: 60%; }
+
+/* === RSW VARIATIONS === */
+.icon-rsw-v2 {
+  background: var(--warn);
+}
+.icon-rsw-v2 .rr-crossing {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.icon-rsw-v2 .rr-circle {
+  width: 74px;
+  height: 74px;
+  border: 5px solid var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: white;
+}
+.icon-rsw-v2 .rr-x {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+.icon-rsw-v2 .rr-x .xb {
+  position: absolute;
+  width: 50px;
+  height: 7px;
+  background: var(--ink);
+  top: 50%;
+  left: 50%;
+  border-radius: 2px;
+}
+.icon-rsw-v2 .rr-x .xb:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.icon-rsw-v2 .rr-x .xb:last-child { transform: translate(-50%, -50%) rotate(-45deg); }
+.icon-rsw-v2 .rr-letters {
+  font-family: "Arial Black", sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 0.3em;
+}
+
+.icon-rsw-v3 {
+  background: var(--cn-red);
+}
+.icon-rsw-v3 .rsw-type {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-rsw-v3 .rsw-big {
+  font-family: "DM Serif Display", serif;
+  font-size: 60px;
+  font-style: italic;
+  color: white;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.icon-rsw-v3 .rsw-sub {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4px;
+}
+
+/* RSW V4: Locomotive bell */
+.icon-rsw-v4 {
+  background: var(--warn);
+}
+.icon-rsw-v4 .bell-icon {
+  z-index: 1;
+}
+.icon-rsw-v4 .bell-icon svg { width: 90px; height: 90px; }
+</style>
+
+<!-- CUSTOMER COMMS -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>Customer comms</h3>
+    <p>Info + updates</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-cc-v4">
+          <div class="mega">
+            <svg viewBox="0 0 90 90" fill="none">
+              <path d="M22 34 L22 56 L34 56 L34 34 Z" fill="#f6f3ec"/>
+              <path d="M34 30 L72 16 L72 74 L34 60 Z" fill="#f6f3ec"/>
+              <rect x="72" y="34" width="8" height="22" rx="2" fill="#c8102e"/>
+              <rect x="26" y="56" width="4" height="14" rx="1" fill="#f6f3ec" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">A: Megaphone</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-cc-v5">
+          <div class="plane">
+            <svg viewBox="0 0 88 88" fill="none">
+              <path d="M12 48 L76 20 L52 76 L44 52 Z" fill="#f6f3ec"/>
+              <line x1="76" y1="20" x2="44" y2="52" stroke="#c8102e" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M44 52 L36 72 L52 76" fill="none" stroke="#f6f3ec" stroke-width="2" opacity="0.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">B: Paper plane (send)</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-cc-v6">
+          <div class="tower">
+            <div class="wave w3"></div>
+            <div class="wave w2"></div>
+            <div class="wave w1"></div>
+            <div class="tower-mast"></div>
+            <div class="tower-base"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">C: Broadcast tower</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-cc-v7">
+          <div class="bell-wrap">
+            <svg viewBox="0 0 80 80" fill="none">
+              <path d="M40 10 C40 10 22 16 22 38 C22 54 18 58 14 60 L66 60 C62 58 58 54 58 38 C58 16 40 10 40 10Z" fill="#f6f3ec"/>
+              <circle cx="40" cy="68" r="7" fill="#f6f3ec"/>
+            </svg>
+            <div class="bell-dot"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">D: Notification bell</span>
+    </div>
+  </div>
+</div>
+
+<!-- RSW -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>RSW GPT</h3>
+    <p>Rail Safety Week</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-rsw-v2">
+          <div class="rr-crossing">
+            <div class="rr-circle">
+              <div class="rr-x"><div class="xb"></div><div class="xb"></div></div>
+            </div>
+            <span class="rr-letters">R R</span>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">A: RR crossing sign</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-rsw-v3">
+          <div class="rsw-type">
+            <span class="rsw-big">RSW</span>
+            <span class="rsw-sub">Rail Safety</span>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">B: Typographic</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-rsw-v4">
+          <div class="bell-icon">
+            <svg viewBox="0 0 90 90" fill="none">
+              <!-- Bell body -->
+              <path d="M45 14 C45 14 24 20 24 46 C24 58 22 62 20 64 L70 64 C68 62 66 58 66 46 C66 20 45 14 45 14Z" fill="#1a1a1a"/>
+              <!-- Clapper -->
+              <circle cx="45" cy="72" r="6" fill="#1a1a1a"/>
+              <!-- Mounting bracket -->
+              <rect x="38" y="6" width="14" height="10" rx="3" fill="#1a1a1a"/>
+              <!-- Highlight ring -->
+              <path d="M30 48 Q30 26 45 20 Q60 26 60 48" fill="none" stroke="#c8102e" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">C: Locomotive bell</span>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>News clippings</h3>
+    <p>Symmetry fix</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-news-v2">
+          <div class="news-centered">
+            <div class="news-rule-top"></div>
+            <span class="news-word">News</span>
+            <div class="news-rule-bot"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">A: Centered, light</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-news-v3">
+          <div class="news-dark">
+            <div class="nd-rule"></div>
+            <span class="nd-text">News</span>
+            <div class="nd-rule2"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">B: Dark, editorial</span>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW REVISE -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>Review, revise</h3>
+    <p>Round 2</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-review-v4">
+          <span class="rv4-draft">A</span>
+          <svg class="rv4-arrow" viewBox="0 0 30 16" width="30" height="16" style="z-index:1;">
+            <line x1="2" y1="8" x2="24" y2="8" stroke="#c8102e" stroke-width="3" stroke-linecap="round"/>
+            <polyline points="19,3 26,8 19,13" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="rv4-final">B</span>
+        </div>
+      </div>
+      <span class="var-tag">A: Draft → Final</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-review-v5">
+          <div class="rv5-stack">
+            <div class="rv5-page rv5-back"></div>
+            <div class="rv5-page rv5-mid"></div>
+            <div class="rv5-page rv5-front">
+              <div class="rv5-check-wrap">
+                <svg viewBox="0 0 24 24" width="24" height="24"><polyline points="4,12 10,18 20,6" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">B: Refined stack</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-review-v6">
+          <span class="rv6-caret">&#x2038;</span>
+          <span class="rv6-label">Edit</span>
+        </div>
+      </div>
+      <span class="var-tag">C: Caret + Edit</span>
+    </div>
+  </div>
+</div>
+
+<!-- EXEC LINKEDIN -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>Exec LinkedIn</h3>
+    <p>More nodes</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-exec-v2">
+          <svg viewBox="0 0 100 100" width="120" height="120" fill="none" style="z-index:1;">
+            <!-- Lines first -->
+            <line x1="50" y1="50" x2="50" y2="12" stroke="#f6f3ec" stroke-width="2.5"/>
+            <line x1="50" y1="50" x2="82" y2="28" stroke="#f6f3ec" stroke-width="2.5"/>
+            <line x1="50" y1="50" x2="82" y2="72" stroke="#f6f3ec" stroke-width="2.5"/>
+            <line x1="50" y1="50" x2="50" y2="88" stroke="#f6f3ec" stroke-width="2.5"/>
+            <line x1="50" y1="50" x2="18" y2="72" stroke="#f6f3ec" stroke-width="2.5"/>
+            <line x1="50" y1="50" x2="18" y2="28" stroke="#f6f3ec" stroke-width="2.5"/>
+            <!-- Outer nodes -->
+            <circle cx="50" cy="12" r="8" fill="#f6f3ec"/>
+            <circle cx="82" cy="28" r="8" fill="#f6f3ec"/>
+            <circle cx="82" cy="72" r="8" fill="#f6f3ec"/>
+            <circle cx="50" cy="88" r="8" fill="#f6f3ec"/>
+            <circle cx="18" cy="72" r="8" fill="#f6f3ec"/>
+            <circle cx="18" cy="28" r="8" fill="#f6f3ec"/>
+            <!-- Center node -->
+            <circle cx="50" cy="50" r="12" fill="#c8102e"/>
+            <!-- Arrow on one spoke -->
+            <polygon points="76,30 82,24 84,34" fill="#f6f3ec"/>
+          </svg>
+        </div>
+      </div>
+      <span class="var-tag">A: Hub + 6 spokes</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-exec-v3">
+          <div class="network">
+            <svg viewBox="0 0 120 120" width="120" height="120" fill="none" style="position:absolute; inset:0; z-index:0;">
+              <line x1="60" y1="60" x2="60" y2="14" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+              <line x1="60" y1="60" x2="102" y2="32" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+              <line x1="60" y1="60" x2="102" y2="88" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+              <line x1="60" y1="60" x2="60" y2="106" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+              <line x1="60" y1="60" x2="18" y2="88" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+              <line x1="60" y1="60" x2="18" y2="32" stroke="#f6f3ec" stroke-width="2" opacity="0.4"/>
+            </svg>
+            <div class="nnode n1"></div>
+            <div class="nnode n2"></div>
+            <div class="nnode n3"></div>
+            <div class="nnode n4"></div>
+            <div class="nnode n5"></div>
+            <div class="nnode n6"></div>
+            <div class="nnode center"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">B: Network mesh</span>
+    </div>
+  </div>
+</div>
+
+<!-- STAKEHOLDER LETTERS -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>Stakeholder letters</h3>
+    <p>Round 2</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-letters-v4">
+          <div class="lv4-doc">
+            <div class="lv4-header"></div>
+            <div class="lv4-lines">
+              <div></div><div></div><div></div><div></div>
+            </div>
+            <div class="lv4-sig"></div>
+          </div>
+          <div class="lv4-seal"></div>
+        </div>
+      </div>
+      <span class="var-tag">A: Formal doc + seal</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-letters-v5">
+          <span class="lv5-text">Hon.</span>
+        </div>
+      </div>
+      <span class="var-tag">B: Typographic "Hon."</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-letters-v6">
+          <div class="lv6-env">
+            <div class="lv6-letter">
+              <div class="lv6-red-bar"></div>
+              <div class="lv6-lines"><div></div><div></div><div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">C: Letter emerging</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPEAKING NOTES -->
+<div class="var-row">
+  <div class="var-label">
+    <h3>Speaking notes</h3>
+    <p>Person + lectern</p>
+  </div>
+  <div class="var-options">
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-speak-v2">
+          <div class="speaker">
+            <div class="head"></div>
+            <div class="body-shape"></div>
+            <div class="podium"></div>
+            <div class="podium-stem"></div>
+            <div class="podium-base"></div>
+          </div>
+        </div>
+      </div>
+      <span class="var-tag">A: Person at podium</span>
+    </div>
+    <div class="var-option">
+      <div class="icon-wrap">
+        <div class="icon icon-speak-v3">
+          <span class="quote-mark">&ldquo;</span>
+          <span class="speak-label">Speech</span>
+        </div>
+      </div>
+      <span class="var-tag">B: Quote mark</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Clone icons at small size for sidebar preview
+const grid = document.querySelector('.grid');
+const smalls = document.querySelector('.smalls');
+document.querySelectorAll('.grid > .cell .icon-wrap').forEach(wrap => {
+  const small = document.createElement('div');
+  small.className = 'small-icon';
+  small.innerHTML = wrap.innerHTML;
+  smalls.appendChild(small);
+});
+</script>
+
+</body>
+</html>
