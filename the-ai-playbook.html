@@ -235,7 +235,7 @@ a { color: inherit; }
 .strip p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 48ch; }
 
 .quickbar { background: var(--ink); color: var(--paper); padding: 16px 36px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
-.quickbar a { color: var(--paper); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 2px; }
+.quickbar a { color: var(--paper); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 2px; }
 .quickbar a:hover { border-bottom-color: var(--cn-red); }
 .quickbar .pulse { display: inline-block; width: 8px; height: 8px; background: var(--cn-red); border-radius: 50%; margin-right: 10px; animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -2494,31 +2494,31 @@ RULES: Canadian spelling. No em dashes. No emoji. No exclamation marks. No "exci
           <p>Traffic-light guide. Plus the safe-redaction trick that unlocks 90% of real work.</p>
           <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('when-not-to')" style="cursor:pointer;">
+        <div class="guide" data-cat="literacy" onclick="showLearn('when-not-to')" style="background:#f3d7cf; cursor:pointer;">
           <div class="num">LITERACY / 04</div><div class="cat">Judgment</div>
           <h3>When <em>not</em> to use AI.</h3>
           <p>Condolences, legally-binding language, safeguarding, real-time facts. Shorter list than you'd think.</p>
           <div class="foot"><span>3 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('iterating')" style="cursor:pointer;">
+        <div class="guide" data-cat="literacy" onclick="showLearn('iterating')" style="background:var(--sage); cursor:pointer;">
           <div class="num">LITERACY / 05</div><div class="cat">Technique</div>
           <h3>Iterating: the follow-up is the skill.</h3>
           <p>One-shot prompts fail. The four-turn conversation that gets you there.</p>
           <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('models')" style="cursor:pointer;">
+        <div class="guide" data-cat="literacy" onclick="showLearn('models')" style="background:var(--paper-2); cursor:pointer;">
           <div class="num">LITERACY / 06</div><div class="cat">Reference</div>
           <h3>Which tool for which job.</h3>
           <p>ChatGPT modes, custom GPTs, Thinking mode, Copilot, what each one is good at.</p>
           <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('custom-gpts')" style="cursor:pointer;">
+        <div class="guide" data-cat="literacy" onclick="showLearn('custom-gpts')" style="background:var(--paper-2); cursor:pointer;">
           <div class="num">LITERACY / 07</div><div class="cat">Advanced</div>
           <h3>Build a reliable custom GPT.</h3>
           <p>The three moves: define the job, lock the sources, standardize the output.</p>
           <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('house-rules')" style="cursor:pointer;">
+        <div class="guide" data-cat="literacy" onclick="showLearn('house-rules')" style="background:#f5e3b8; cursor:pointer;">
           <div class="num">LITERACY / 08</div><div class="cat">CN rules</div>
           <h3>CN house rules for AI output.</h3>
           <p>Canadian spelling, no acronyms, no em dashes, no emoji, placeholders for missing facts. Copy-paste into any prompt.</p>
@@ -3626,37 +3626,37 @@ Default assumption: unless the user specifies a period, use the most recent info
         <span class="label">Drafting &amp; Writing</span>
         <h4>Prompt builder</h4>
         <p>Walks you through the Four Questions step by step to build a ready-to-use prompt for any task.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-69c2d81926c081918cac90b78ca6c161-prompt-builder" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
         <h4>Speaking notes generator</h4>
         <p>Prepares draft speeches for CN speakers at events. Asks about audience, topics, tone, and logistics one step at a time.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-68c776180d68819188aa21895e043cc9-speaking-notes-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
         <h4>Stakeholder letters</h4>
         <p>Drafts polished letters for senior CN leaders to send to politicians, public servants, and stakeholders. Eight letter types.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
         <h4>Briefing note generator</h4>
         <p>Drafts executive-ready briefing notes: meeting prep, issue overviews, event briefings, trip notes, decision notes, and more.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-689b53b15e8c8191b0a82052c4d3ee55-briefing-note-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
         <h4>CN Magazine Editorial Partner</h4>
         <p>Creates structured, frontline-focused CN Magazine content: features, profiles, safety stories, exec letters, Q&amp;A.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-699fcf06f8188191ac5869010a5a8d06-cn-magazine-editorial-partner" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Drafting &amp; Writing</span>
         <h4>CN customer comms</h4>
         <p>Drafts customer-facing communications: operational updates, safety advisories, tariff changes, service planning, and more.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-67a289be46f48191b716e7f65aa964d5-cn-customer-comms" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
     </div>
 
@@ -3667,13 +3667,13 @@ Default assumption: unless the user specifies a period, use the most recent info
         <span class="label">CEO &amp; Executive Comms</span>
         <h4>Tracy Robinson comms</h4>
         <p>Speeches, investor updates, conference remarks, and LinkedIn posts for the CEO. Distinct external voice guidance.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-694173718a808191a4dea86378331857-tracy-robinson-comms" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">CEO &amp; Executive Comms</span>
         <h4>Exec LinkedIn shares</h4>
         <p>Generates LinkedIn share updates for CN&rsquo;s executive team when they share corporate posts.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-x5LJwsdbA-exec-linkedin-shares" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
     </div>
 
@@ -3684,19 +3684,19 @@ Default assumption: unless the user specifies a period, use the most recent info
         <span class="label">Review &amp; Research</span>
         <h4>Review, revise, and adapt</h4>
         <p>Reviews and revises content for employees, customers, or investors. Acts as a writing coach with detailed feedback.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-ZMRGmTuJ4-review-revise-and-adapt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Review &amp; Research</span>
         <h4>Summarize CN news clippings</h4>
         <p>Summarizes news clippings for executive review with consistent formatting and full coverage tracking.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-68bee66b32b08191bffdfa127a7a80c9-summarize-cn-news-clippings" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Review &amp; Research</span>
         <h4>CN Strategy Insights</h4>
         <p>Analytical strategy manager for researching trends, aggregating data, and framing strategic scenarios.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-68cc5c6b70c88191bffd0acb93ee67d9-cn-strategy-insights" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
     </div>
 
@@ -3707,25 +3707,25 @@ Default assumption: unless the user specifies a period, use the most recent info
         <span class="label">Specialized Tools</span>
         <h4>PAGA GPT</h4>
         <p>Drafts incident statements during railway incidents. Three types: initial, updated, and close-out.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-67e05e95f22c81918b5052a961cd1775-paga-gpt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
         <h4>RSW GPT</h4>
         <p>Creates Rail Safety Week content for the public, communities, officials, employees, and customers.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-6819315218348191a60b92b995e3242a-rsw-gpt" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
         <h4>CN Alt Text Generator</h4>
         <p>Generates bilingual alt text (EN-CA, FR-CA, and combined) for CN social media images.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-69e917325d108191aae1564289f6b529-cn-alt-text-generator" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
         <span class="label">Specialized Tools</span>
         <h4>CN translator and glossary</h4>
         <p>Translates between EN-CA and FR-CA using CN&rsquo;s official glossary. Also searches the glossary by keyword.</p>
-        <a class="tool-link" href="https://chat.com" target="_blank">Open in ChatGPT &rarr;</a>
+        <a class="tool-link" href="https://chatgpt.com/g/g-6760b4779a988191886d463d2371cfeb-cn-translator-and-glossary-search" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
     </div>
 
