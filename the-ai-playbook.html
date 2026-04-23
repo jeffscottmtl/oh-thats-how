@@ -836,37 +836,16 @@ a { color: inherit; }
   </div>
   <div class="body">
     <p>Fill in the <span style="color:var(--signal); font-style:italic;">italic bits</span>. Keep the structure. This pattern works in Claude, ChatGPT, Copilot, or Gemini.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="email-p1">Copy</button><span id="email-p1">You are helping me draft an email.
-
-<span class="comment">// Context</span>
-I am <span class="var">[your role]</span> at <span class="var">[org]</span>.
-I am writing to <span class="var">[recipient, name, role, how well you know them]</span>.
-Our relationship: <span class="var">[first contact / ongoing / tense / warm]</span>.
-
-<span class="comment">// Goal</span>
-The single thing this email needs to achieve: <span class="var">[the ONE outcome]</span>.
-
-<span class="comment">// Inputs</span>
-Here is what I want to say, in rough bullets:
-- <span class="var">[point 1]</span>
-- <span class="var">[point 2]</span>
-- <span class="var">[ask]</span>
-
-<span class="comment">// Constraints</span>
-- Tone: <span class="var">[warm / professional / diplomatic-firm / apologetic]</span>
-- Length: under <span class="var">[120]</span> words
-- Do NOT use: "I hope this finds you well", "circle back", "touch base", exclamation marks
-- Match this voice sample from my past writing: <span class="var">[paste 2-3 of your previous emails]</span>
-
-<span class="comment">// Output</span>
-Give me:
-1. A subject line (under 8 words, specific)
-2. The email body
-3. One alternate version with a firmer tone
-
-Then stop. Do not add commentary.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to have ready</span>
+  <ul style="margin:8px 0 0; padding-left:18px; font-size:14px; line-height:1.6;">
+    <li>Who you're writing to and what you need them to do, feel, or understand</li>
+    <li>The key facts (dates, names, decisions, next steps)</li>
+    <li>The tone: direct, diplomatic, firm, warm, neutral</li>
+    <li>Any house rules: Canadian spelling, no em dashes, no jargon</li>
+    <li>A voice sample if you have one (paste 2-3 past emails you're happy with)</li>
+  </ul>
+</div>
     <div class="callout info" style="margin-top: 20px;">
       <span class="label">Why the voice sample matters</span>
       <p>Without it, every email comes out sounding like a LinkedIn post. Two or three of <em>your</em> past emails teach the model your rhythm, your sign-offs, your hedges. This single addition is the difference between usable and uncanny.</p>
@@ -908,61 +887,31 @@ Then stop. Do not add commentary.</span>
 
     <h4 class="display" style="font-size:24px; margin: 0 0 6px;">a. The "I disagree, politely"</h4>
     <p>When you need to push back without burning the relationship.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="email-p2">Copy</button><span id="email-p2">Rewrite this email so it:
-- Clearly registers that I disagree with <span class="var">[specific point]</span>
-- Keeps the door open for next steps
-- Avoids passive-aggressive phrasing ("as previously discussed", "per my last email")
-- Ends with a concrete proposal, not a complaint
-
-Original: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Tell the tool you need to push back on a specific point while keeping the door open. Paste the original email and ask for a version that registers disagreement clearly, avoids passive-aggressive phrasing, and ends with a concrete proposal.</p>
+</div>
 
     <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">b. The chaser</h4>
     <p>Second or third follow-up. The trick: acknowledge the silence rather than ignoring it.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="email-p3">Copy</button><span id="email-p3">Draft a follow-up email. This is my <span class="var">[second / third]</span> chase.
-
-Rules:
-- Under 60 words
-- Acknowledge the silence briefly, without guilt-tripping
-- Restate the ask in one sentence
-- Offer an out ("if this has been deprioritised, just tell me")
-- No "gentle reminder", no "per my last email"
-
-Thread so far: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Tell the tool this is a follow-up (second or third). Ask for under 60 words that acknowledge the silence without guilt-tripping, restate the ask in one sentence, and offer an out.</p>
+</div>
 
     <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">c. The stakeholder update</h4>
     <p>Monthly/quarterly note to a list. The risk: sounding like a newsletter no one asked for.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="email-p4">Copy</button><span id="email-p4">Write a stakeholder update email based on these bullets: <span class="var">[paste]</span>
-
-Format:
-- Subject: what changed, not "Monthly update"
-- Opening line: the one thing they need to know
-- 3 bullet points, max 15 words each
-- One clear ask or next step
-- Sign-off: my name, nothing else
-
-Tone: peer-to-peer, not broadcast.
-Length: under 150 words. Cut ruthlessly.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste the original email you're escalating. Tell the tool to keep the recipient in cc, summarize the history in one paragraph, state what you need from the new person, and set a deadline.</p>
+</div>
 
     <h4 class="display" style="font-size:24px; margin: 26px 0 6px;">d. The "thanks, but no"</h4>
     <p>Declining an invitation, request, or proposal without closing the door.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="email-p5">Copy</button><span id="email-p5">Draft a polite decline. Context: <span class="var">[who is asking, what they want, why I am saying no, our relationship]</span>.
-
-Structure:
-1. Thank them specifically (name the thing)
-2. Say no clearly, no euphemisms ("unfortunately not" is fine; "at this time we are unable to accommodate" is not)
-3. Give one honest reason if I have one; otherwise don't invent one
-4. Offer something small if possible: a referral, a future window, an introduction
-5. Close warmly
-
-Under 100 words.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Tell the tool the good news and who it's for. Ask it to lead with the result, credit the people involved, and keep it under 80 words. Good-news emails that run long stop feeling like good news.</p>
+</div>
 
   </div>
 </section>
@@ -1199,24 +1148,10 @@ Under 100 words.</span>
   <div class="hd"><div class="n">01</div><h2>Start with structure.</h2><p class="sub">Pick a shape before you write a word</p></div>
   <div class="body">
     <p class="big">Most bad speeches fail at the outline, not the sentences. Ask AI for three outline options, pick one, <em>then</em> draft.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="speech-p1">Copy</button><span id="speech-p1">I need a speech outline. Give me THREE different structural options before I pick one.
-
-CONTEXT
-- Speaker: <span class="var">[name, role, speaking style if known]</span>
-- Audience: <span class="var">[who, how many, what they care about, what they're sceptical of]</span>
-- Occasion: <span class="var">[event, time of day, tone expected]</span>
-- Length: <span class="var">[minutes] -- roughly [words] at speaking pace</span>
-- The ONE thing the audience should remember tomorrow: <span class="var">[message]</span>
-
-For each of the 3 options, give me:
-- The structural logic in one sentence (e.g. "problem → pivot → promise")
-- An opener (first 2 sentences, ready to speak)
-- 4-6 section headers with one line each
-- A closer (last 2 sentences)
-
-Do NOT draft the whole speech yet. Just the three outlines.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Ask the tool for three different structural options for the speech before you start drafting. For each, ask for the structural logic in one sentence (e.g., "problem, pivot, promise"), four to six section headings, and where the single strongest audience moment would land.</p>
+</div>
     <div class="callout info" style="margin-top:18px;">
       <span class="label">Why three</span>
       <p>One outline is a suggestion; three is a choice. Seeing three side-by-side tells you what each structure costs, and usually makes the right one obvious.</p>
@@ -1228,24 +1163,10 @@ Do NOT draft the whole speech yet. Just the three outlines.</span>
   <div class="hd"><div class="n">02</div><h2>Draft for the ear.</h2><p class="sub">Different rules from writing for the eye</p></div>
   <div class="body">
     <p>Once you've picked an outline, draft one section at a time. Long prompts get flabby outputs; short ones stay tight.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="speech-p2">Copy</button><span id="speech-p2">Draft the <span class="var">[section name]</span> section of a speech for <span class="var">[speaker]</span>.
-
-SPOKEN-WORD RULES (hard):
-- Average sentence: under 14 words. Cap at 22.
-- No semicolons. No dashes used as pauses. Use a full stop.
-- No words the speaker would pause before: "notwithstanding", "concomitant", "paradigm"
-- Read aloud test: if it needs a breath mid-sentence, cut it
-- Contractions: yes ("we're", "won't")
-- No lists of more than three. Three beats. Always three.
-- Repetition is fine. Repetition lands. Repetition is how speeches work.
-
-CONTENT TO WORK FROM
-<span class="var">[paste bullets, quotes, stats]</span>
-
-Draft ~<span class="var">[N]</span> words. Format with line breaks between paragraphs.
-At the end, flag any stat or quote I need to verify.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Draft one section at a time, not the whole speech at once. Tell the tool to cap sentences at 22 words, avoid semicolons, use three-beat lists, and write for someone standing at a lectern, not sitting at a desk.</p>
+</div>
   </div>
 </section>
 
@@ -1255,34 +1176,16 @@ At the end, flag any stat or quote I need to verify.</span>
     <p>The first 30 seconds and the last 30 seconds are 80% of what the room remembers. Worth 10 prompts, not one.</p>
 
     <h4 class="display" style="font-size:22px; margin: 14px 0 6px;">Opener generator</h4>
-    <div class="prompt">
-<button class="copy-btn" data-copy="speech-p3">Copy</button><span id="speech-p3">Give me FIVE different openers for a speech by <span class="var">[speaker]</span> to <span class="var">[audience]</span> about <span class="var">[topic]</span>.
-
-Try five different shapes:
-1. A specific moment (a scene, a date, a person)
-2. A direct acknowledgment of the room (why we're here, who's missing)
-3. A surprising number or fact
-4. A question the audience is already asking themselves
-5. A short, honest admission
-
-Each opener: 2-3 sentences, under 40 words. No "Good morning and thank you for having me."</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Ask the tool for five opener options: a scene, a room acknowledgment, a surprising number, a question the audience is already asking, and a short honest admission. Pick the one that sounds most like your speaker.</p>
+</div>
 
     <h4 class="display" style="font-size:22px; margin: 22px 0 6px;">Closer generator</h4>
-    <div class="prompt">
-<button class="copy-btn" data-copy="speech-p4">Copy</button><span id="speech-p4">Give me THREE closers for the speech below. The audience should leave with one clear feeling and one clear action.
-
-One feeling: <span class="var">[e.g., urgency / pride / clarity]</span>
-One action: <span class="var">[e.g., write to their MP / read the report / show up Thursday]</span>
-
-Rules:
-- Under 60 words each
-- Last sentence must be speakable in one breath
-- No "in conclusion", "thank you for your time", "I'll now take questions"
-- Return to an image or phrase from the opener if one fits, but only if it fits
-
-Speech draft: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste your draft and ask for three closer options. Tell the tool the one feeling and the one action you want the audience to leave with. Each closer should be under 60 words and speakable in a single breath.</p>
+</div>
   </div>
 </section>
 
@@ -1290,19 +1193,10 @@ Speech draft: <span class="var">[paste]</span></span>
   <div class="hd"><div class="n">04</div><h2>Anticipate the Q&amp;A.</h2><p class="sub">Before the speech, not after</p></div>
   <div class="body">
     <p>If the speech will be followed by questions, and most are, rehearse them before you write the closer.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="speech-p5">Copy</button><span id="speech-p5">Act as three different people in the audience for this speech. For each, give me:
-- The single hardest question they would ask
-- Why it's hard (what assumption or weakness it probes)
-- A 40-word answer the speaker could actually give
-
-Three people:
-1. A friendly journalist looking for a headline
-2. A sceptic in the room who disagrees with the premise
-3. A bureaucrat who wants to know about cost and timing
-
-Speech: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste the speech draft and ask the tool to role-play three audience members: a journalist hunting a headline, a sceptic who disagrees with the premise, and a bureaucrat asking about cost and timing. Ask for the hardest question each would ask and a 40-word answer.</p>
+</div>
   </div>
 </section>
 
@@ -1454,26 +1348,10 @@ Speech: <span class="var">[paste]</span></span>
   <div class="hd"><div class="n">01</div><h2>Outline first. Always.</h2><p class="sub">Never ask for slides straight away</p></div>
   <div class="body">
     <p class="big">If you ask AI "make me a 10-slide deck", you get ten generic slides. If you ask for an outline, you get a spine you can defend.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="pres-p1">Copy</button><span id="pres-p1">I have source material for a presentation. BEFORE drafting slides, build me an outline.
-
-AUDIENCE: <span class="var">[who, what they already know, what they want from this meeting]</span>
-LENGTH: <span class="var">[N] slides, [M] minutes</span>
-ONE-SENTENCE GOAL: at the end of this meeting, the audience will <span class="var">[do / decide / understand]</span>.
-
-SOURCE: <span class="var">[paste the report / briefing / bullets]</span>
-
-Give me:
-1. A one-sentence thesis for the whole deck
-2. A slide-by-slide outline, for each slide:
-   · a short title (under 8 words, stating the POINT, not the topic)
-   · the single sentence that slide must prove
-   · 1-3 supporting facts from the source
-3. A list of anything in the source that I am NOT using, and why
-4. The single slide the audience will remember, which one? why?
-
-Do not draft the slides themselves yet.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Upload or paste your source document and ask the tool for a 10-slide outline. Each slide should be a point, not a topic (e.g., "Revenue grew 12% because of intermodal volume" not "Revenue update"). Ask for three structural options before committing.</p>
+</div>
     <div class="callout info" style="margin-top:18px;">
       <span class="label">The "point, not topic" rule</span>
       <p>"Q3 Results" is a topic. "Revenue grew 14% despite policy headwinds" is a point. Audiences remember points. They forget topics. Force this in every slide title.</p>
@@ -1485,21 +1363,10 @@ Do not draft the slides themselves yet.</span>
   <div class="hd"><div class="n">02</div><h2>Draft one slide at a time.</h2><p class="sub">Resist batch mode</p></div>
   <div class="body">
     <p>Once you've approved the outline, ask for one slide's content at a time. Slower, but the output is usable.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="pres-p2">Copy</button><span id="pres-p2">Draft the content for slide <span class="var">[N]</span>.
-
-TITLE (from the outline): <span class="var">[paste]</span>
-THIS SLIDE MUST PROVE: <span class="var">[the sentence]</span>
-
-Give me:
-- A tightened version of the title (under 8 words, active verb if possible)
-- ONE big-number or big-quote I can place visually prominent, if the source supports one
-- 3 bullet points, max 12 words each, but only if bullets genuinely help. If a single sentence is stronger, return one sentence.
-- Speaker notes: ~50 words of what the presenter would say while this slide is up. Conversational, not scripted.
-- A note on what NOT to put on this slide (things the presenter should say out loud instead)
-
-Source for this slide: <span class="var">[paste the relevant section]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Draft one slide at a time, not the whole deck. For each slide, give the tool the outline point, tell it the maximum number of bullets (three to five), and specify whether the slide needs a chart, a quote, or a full-bleed visual.</p>
+</div>
   </div>
 </section>
 
@@ -1507,19 +1374,10 @@ Source for this slide: <span class="var">[paste the relevant section]</span></sp
   <div class="hd"><div class="n">03</div><h2>The density audit.</h2><p class="sub">AI overfills slides. Trim.</p></div>
   <div class="body">
     <p>Run this at the end, once the full deck exists.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="pres-p3">Copy</button><span id="pres-p3">Audit this slide deck for density. Go slide by slide. For each:
-
-1. Count words on the slide (headline + bullets + labels, not speaker notes)
-2. Flag any slide over 40 words as overloaded
-3. Identify the weakest word on each slide, the one that adds the least
-4. Identify any slide whose title is a topic instead of a point, rewrite as a point
-5. Spot duplicate concepts across slides, two slides making the same argument
-
-Return a table with columns: slide #, word count, verdict (lean / okay / overloaded), one specific cut to make.
-
-Deck: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste a finished slide and ask the tool to cut it to half the word count without losing the point. If the slide still works after the cut, the original was too dense.</p>
+</div>
   </div>
 </section>
 
@@ -1527,19 +1385,10 @@ Deck: <span class="var">[paste]</span></span>
   <div class="hd"><div class="n">04</div><h2>Visual suggestions.</h2><p class="sub">What to put next to the words</p></div>
   <div class="body">
     <p>AI can't design your slide. It can tell you what kind of image or chart each slide wants.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="pres-p4">Copy</button><span id="pres-p4">For each slide in this deck, suggest the visual. Pick from:
-- Big number (one huge figure, one label)
-- Chart (say what kind, what it shows, what shape it should have if the data supports the argument)
-- Photograph (say who/what is in it; a specific scene, not "people collaborating")
-- Pull quote (say who said it and why it belongs on this slide)
-- Diagram (describe the shape in 1 sentence)
-- Nothing, words only
-
-Rule: if a slide doesn't have a clear visual idea, that's a sign the slide doesn't have a clear point. Flag those.
-
-Deck: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste each slide's text and ask the tool what visual would make the point land faster: a chart, a photo, a comparison table, a timeline, or nothing (let the words breathe). Ask it to explain why.</p>
+</div>
   </div>
 </section>
 
@@ -1626,20 +1475,10 @@ Deck: <span class="var">[paste]</span></span>
   <div class="hd"><div class="n">02</div><h2>The hostile question generator.</h2><p class="sub">Surface what the journalist is already thinking</p></div>
   <div class="body">
     <p>Before any media interaction, run this prompt to find the questions you most need to be ready for. The goal is not to see them coming, it's to prepare an answer that will hold up.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="media-p1">Copy</button><span id="media-p1">You are a <span class="var">[beat]</span> reporter at <span class="var">[outlet]</span>. You've received a tip about <span class="var">[topic]</span>.
-
-Generate the 10 hardest questions you would ask CN's spokesperson. For each:
-- The question (exact words you'd use on camera or in print)
-- Why it's hard (what assumption it probes, what weakness it exposes)
-- What answer would satisfy you enough to move on
-
-Rules:
-- At least 3 questions should be ones CN would rather not answer
-- At least 1 should be a "gotcha" that sounds reasonable but is a trap
-- Include 1 about what CN hasn't said yet
-- No softball questions</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste your draft statement or briefing and ask any ChatGPT conversation to generate the 10 hardest questions a journalist could ask. For each, ask why it's hard to answer and what response would satisfy the reporter without creating a new headline.</p>
+</div>
   </div>
 </section>
 
@@ -1647,21 +1486,10 @@ Rules:
   <div class="hd"><div class="n">03</div><h2>The 40-word statement pattern.</h2><p class="sub">Short enough to read aloud. Tight enough to defend.</p></div>
   <div class="body">
     <p>Forty words is not a constraint, it's a quality filter. If you can't say it in 40 words, you don't know what you're trying to say yet.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="media-p2">Copy</button><span id="media-p2">Draft a media statement about <span class="var">[topic]</span>. Max 40 words.
-
-Structure (in this order):
-1. Acknowledge what happened or what's being asked about (one sentence)
-2. State CN's position or action (one sentence)
-3. Bridge to what comes next (one phrase)
-
-Rules:
-- No speculation on cause
-- No commitment to timeline unless Legal has approved
-- Every word must be defensible in print
-- Read it aloud, if it sounds robotic, rewrite it
-- Do not use "at this time", "going forward", or "we take X seriously"</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Open the PAGA GPT for incident statements. For general media statements, tell any ChatGPT conversation the three confirmed facts and ask for a statement under 40 words with the structure: acknowledge what happened, state CN's position, bridge to next steps.</p>
+</div>
   </div>
 </section>
 
@@ -1669,15 +1497,10 @@ Rules:
   <div class="hd"><div class="n">04</div><h2>Red-team your statement.</h2><p class="sub">Find the damage before the journalist does</p></div>
   <div class="body">
     <p>Once you have a draft, run it through a hostile read. This catches the out-of-context quote, the implied admission, the missing fact, before they appear in print.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="media-p3">Copy</button><span id="media-p3">Read this media statement as a hostile journalist. Tell me:
-1. The sentence you'd quote out of context for maximum damage
-2. The follow-up question this statement practically begs for
-3. The one thing it doesn't address that a journalist will notice
-4. Whether it sounds like a human said it or a lawyer wrote it
-
-Statement: <span class="var">[paste]</span></span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Paste your finished statement and ask: "Read this as a hostile journalist. Give me the sentence you would quote out of context, the follow-up question it begs, and the one thing it doesn't address that you would ask about."</p>
+</div>
   </div>
 </section>
 
@@ -1779,24 +1602,10 @@ Statement: <span class="var">[paste]</span></span>
   <div class="hd"><div class="n">02</div><h2>Holding statement in 90 seconds.</h2><p class="sub">For when you know something, but not everything</p></div>
   <div class="body">
     <p>A holding statement does one job: buy time without saying anything you'll regret. Fill in only what you know for certain. Leave everything else blank.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="crisis-p1">Copy</button><span id="crisis-p1">Draft a holding statement. The situation: <span class="var">[describe what happened, what you know for certain, what you don't know yet]</span>.
-
-Structure:
-1. Acknowledge (what we know)
-2. Show concern (if applicable, injuries, community impact)
-3. State action (what CN is doing right now)
-4. Promise update (when the next statement is coming)
-5. Stop. Do not add anything else.
-
-Hard rules:
-- Under 40 words
-- No speculation on cause ("we are investigating" is fine)
-- No timeline promises unless Operations has confirmed
-- No "thoughts and prayers", show action, not sentiment
-- Use present tense for actions ("our team is on site")
-- Canadian spelling</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Open the PAGA GPT and tell it you need an initial incident statement. It will walk you through the details: incident type, location, time, injuries, dangerous goods, public crossings, and danger to the public. It produces a statement you can issue while waiting for more information.</p>
+</div>
   </div>
 </section>
 
@@ -1823,21 +1632,17 @@ Hard rules:
   <div class="body">
     <h4 class="display" style="font-size:22px; margin:0 0 6px;">Employee note</h4>
     <p>This goes out before or simultaneously with the external statement. Employees should not hear about a crisis from the news.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="crisis-p2">Copy</button><span id="crisis-p2">Draft a brief internal note for CN employees. Situation: <span class="var">[describe]</span>.
-
-Structure: One paragraph. What happened (as we know it), what we're doing, what employees should do (or not do, e.g., "refer media inquiries to Communications"). Under 80 words. Direct, not corporate.
-
-Rules: No speculation. No blame. Do not discuss cause. Canadian spelling.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>While Legal reviews the public statement, draft an internal note for employees. Tell any ChatGPT conversation the confirmed facts, that the audience is CN employees, and ask for under 100 words: what happened, what we're doing, and where to direct questions.</p>
+</div>
 
     <h4 class="display" style="font-size:22px; margin:26px 0 6px;">Social post</h4>
     <p>First and only for now. Facts only. Give a time for the next update if you can keep it.</p>
-    <div class="prompt">
-<button class="copy-btn" data-copy="crisis-p3">Copy</button><span id="crisis-p3">Draft a social media post (Twitter/X) about <span class="var">[situation]</span>. Max 200 characters.
-
-Rules: Facts only. No speculation. Link to full statement if available. No "stay tuned", give a specific time for the next update if possible.</span>
-    </div>
+    <div class="callout info" style="margin-top:12px;">
+  <span class="label">What to ask for</span>
+  <p>Once Legal has approved the public statement, ask any ChatGPT conversation to adapt it for social media. Specify the platform (LinkedIn or X) and ask it to lead with the fact, not the apology. Under 200 characters for X.</p>
+</div>
   </div>
 </section>
 
