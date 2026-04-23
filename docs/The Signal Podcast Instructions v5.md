@@ -1,4 +1,4 @@
-# The Signal Podcast Instructions v5
+# The Signal Podcast Instructions v6
 
 ## Purpose
 Create a weekly AI podcast episode for CN communications and strategy professionals.
@@ -21,6 +21,19 @@ Additional requirements:
 - Use expressive voice delivery settings (pace, emphasis, emotional variation) so narration sounds engaging rather than monotone.
 - Introduce each selected story with natural transitions; do not use numbered labels like `Story 1`, `Story 2`, etc.
 - End each episode with a short closing that thanks listeners, invites feedback in the CN GPT Teams channel, and invites them back next week.
+
+## Voice Rules
+- Write in a warm, direct, collegial tone — a colleague sharing something useful, not a presenter performing.
+- First person "we" and "us" — the narrator is part of the team.
+- No corporate-speak, no jargon left unexplained.
+- Banned phrases: "food for thought", "actually", "dive in", "dive deep", "it's worth noting", "at the end of the day", "game-changer", "transformative", "revolutionary", "seamlessly".
+
+## Playbook Integration
+The Signal reinforces the same approach taught in the AI Playbook:
+- Reference the Five Rules naturally when relevant (e.g., "you're the editor, not the author" when discussing AI-generated content)
+- Reference the Four Questions framework when discussing prompting or AI workflow
+- Mention specific custom GPTs by name when a story relates to a tool the team already has
+- The outro references the AI Playbook as a companion resource
 
 ## Source and Full-List Policy
 - Build a broad, ranked full article list on every run.

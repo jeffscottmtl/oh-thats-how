@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 INTRO_TEXT = (
-    "Welcome to The Signal, a short podcast for communicators at CN — the people "
-    "who write the stories, build the presentations, draft the speeches, and send "
-    "the emails that connect us. I'm Jeff Scott, and each episode, I'll pick one "
-    "topic where AI and communications overlap to dig into what's useful "
-    "for our work. Let's get into it."
+    "Welcome to The Signal, a short podcast for communicators at CN, "
+    "the people who write the stories, build the presentations, draft the speeches, "
+    "and send the emails that connect us. I'm Jeff Scott, and each episode, "
+    "we look at what's changing in AI and communications, and what it means for our work. "
+    "Let's get into it."
 )
 
 ENDING_TOKEN = "One More Thing"
 OUTRO_TEXT = (
-    "That's it for this week. If you've got a topic you'd like me to explore, "
-    "or you tried something that worked, drop it in the CN GPT Teams channel. "
-    "I'm Jeff Scott, and this has been The Signal."
+    "That's it for this week. If you want to dig deeper, check out the AI Playbook, "
+    "our self-service guide with practical prompts, tools, and techniques for communications work. "
+    "And if you've got a topic you'd like me to explore, or you tried something that worked, "
+    "drop it in the CN GPT Teams channel. I'm Jeff Scott, and this has been The Signal."
 )
 
 # Paragraphs used to pad a script that falls below TARGET_MIN_WORDS.
@@ -333,15 +334,7 @@ RSS_FEEDS = [
     "https://allinchamathjason.libsyn.com/rss",                # All-In Podcast
 ]
 
-COVER_PALETTE = [
-    "#005f73",
-    "#0a9396",
-    "#94d2bd",
-    "#ee9b00",
-    "#ca6702",
-    "#bb3e03",
-    "#ae2012",
-]
+COVER_PALETTE = ["#c8102e", "#9a0c24", "#1a1a1a", "#5a5a5a", "#c8d3b8", "#1e3a5f", "#d4a017"]
 
 DEFAULT_STORY_COUNT = 3
 MIN_STORY_COUNT = 1

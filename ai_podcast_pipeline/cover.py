@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # Colour values from the CN identity guides:
 # CN Red (Pantone 485 CVC) via extracted CMYK approximation.
 # Petroleum Black via RGB values found in the guide PDF metadata.
-CN_RED = (237, 5, 0)
+CN_RED = (200, 16, 46)
 CN_PETROLEUM_BLACK = (33, 38, 43)
 CN_BLACK_DEEP = (17, 20, 24)
 CN_WHITE = (255, 255, 255)
@@ -35,15 +35,35 @@ def _blend(
 
 def _font_candidates(style: str) -> tuple[str, ...]:
     home_fonts = Path.home() / "Library" / "Fonts"
+
+    # Playbook-aligned fonts: Newsreader (serif/display) and Instrument Sans (sans).
+    # Newsreader is preferred for title/theme (display) roles; Instrument Sans for meta.
+    # Falls back to Averta (CN brand font) then system fonts if neither is installed.
+    newsreader_files = {
+        "regular": "Newsreader-Regular.ttf",
+        "semibold": "Newsreader-Medium.ttf",
+        "bold": "Newsreader-SemiBold.ttf",
+        "extrabold": "Newsreader-Bold.ttf",
+    }
+    instrument_sans_files = {
+        "regular": "InstrumentSans-Regular.ttf",
+        "semibold": "InstrumentSans-Medium.ttf",
+        "bold": "InstrumentSans-SemiBold.ttf",
+        "extrabold": "InstrumentSans-Bold.ttf",
+    }
     averta_files = {
         "regular": "Intelligent Design - Averta-Regular.otf",
         "semibold": "Intelligent Design - Averta-Semibold.otf",
         "bold": "Intelligent Design - Averta-Bold.otf",
         "extrabold": "Intelligent Design - Averta-ExtraBold.otf",
     }
-    preferred = home_fonts / averta_files.get(style, averta_files["regular"])
+    newsreader = home_fonts / newsreader_files.get(style, newsreader_files["regular"])
+    instrument_sans = home_fonts / instrument_sans_files.get(style, instrument_sans_files["regular"])
+    averta = home_fonts / averta_files.get(style, averta_files["regular"])
     return (
-        str(preferred),
+        str(newsreader),
+        str(instrument_sans),
+        str(averta),
         # macOS system fonts
         "/System/Library/Fonts/Supplemental/HelveticaNeue.ttc",
         "/System/Library/Fonts/Supplemental/Helvetica.ttc",
@@ -87,8 +107,8 @@ def render_cover(
 
     W = 3000
     H = 3000
-    PAPER = (253, 252, 249)      # warm off-white
-    INK = (11, 13, 16)           # near-black
+    PAPER = (246, 243, 236)      # warm off-white (#f6f3ec)
+    INK = (26, 26, 26)           # near-black (#1a1a1a)
     INK_MID = (90, 102, 116)     # grey for meta text
     RED = CN_RED
 

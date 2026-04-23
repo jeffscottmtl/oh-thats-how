@@ -1,0 +1,11 @@
+Context for AI resource library and podcast
+
+The audience: A small team of professionals who build presentations for executives, draft speeches for leaders to deliver at town halls and events, write emails and newsletters, and manage digital signage content. They are not technologists. They’ve heard of ChatGPT, they may have tried it, but they think in terms of “I have a draft due Thursday and I’m stuck on the opening” — not models or prompts.
+
+The objective: Help this team feel confident about AI, give them practical techniques they can use in their daily work, and keep them aware of what’s changing in the AI + communications space — in that order. Confidence first, then practical skills, then awareness.
+
+What it’s not: It’s not about enterprise AI strategy, deployment, or transformation. It’s not about marketing, sales, or HR. It’s not about the technology itself. It’s about a communicator sitting at their desk wondering “can AI help me get this done faster and better?” — and the answer being yes, here’s how.
+
+The voice: A colleague sharing something useful over coffee. First person “we” and “us” — the narrator is one of the team. Warm, direct, no corporate-speak. Sources get brief introductions because the audience doesn’t read tech press. No religious metaphors, no “actually,” no “food for thought.” Every episode ends with something the listener can try tomorrow.
+
+The connection: The podcast and the resource library are companions. The Signal keeps the team aware of what’s changing; the AI Playbook gives them the tools and techniques to act on it. The podcast should reference the Playbook naturally, and the Playbook links to the podcast’s custom GPTs.
