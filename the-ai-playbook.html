@@ -292,7 +292,12 @@ a { color: inherit; }
   .fourq { grid-template-columns: 1fr; }
   .audiences { grid-template-columns: 1fr 1fr; }
   .tool-grid { margin: 0 20px; }
-  .quickbar { padding: 14px 20px; font-size: 11px; }
+  .quickbar { padding: 14px 20px; font-size: 11px; flex-direction: column; gap: 10px; text-align: center; }
+  .task-card { grid-template-columns: 40px 1fr 24px; padding: 16px 20px; gap: 12px; }
+  .task-card h4 { font-size: 17px; }
+  .task-card .task-icon { width: 36px; height: 36px; font-size: 18px; }
+  .spark-card { margin: 0 20px; padding: 24px 22px; }
+  .spark-card blockquote { font-size: 17px; }
   .footer { padding: 24px 20px; flex-direction: column; gap: 8px; }
 }
 
@@ -652,7 +657,7 @@ a { color: inherit; }
         <div>
           <div class="eyebrow">The guides</div>
           <h2>Pick a task. Get a pattern.</h2>
-          <p>Each guide shows when to use AI, when not to, a prompt pattern, before/after examples, and a pre-send checklist. All built on the Four Questions.</p>
+          <p>Each guide shows when to use AI, when not to, tips for using the tool, before/after examples, and a pre-send checklist.</p>
         </div>
       </div>
 
@@ -671,7 +676,7 @@ a { color: inherit; }
           <div class="guide feature" data-cat="writing editing" onclick="showGuide('email')">
             <div class="num">GUIDE / 01</div><div class="cat">Writing &middot; Most used</div>
             <h3>Draft an email in 90 seconds.</h3>
-            <p>The workhorse. A prompt pattern using the Four Questions, plus the five edits you should always make before hitting send.</p>
+            <p>The workhorse. How to get a clean draft on the first try, plus the five edits you should always make before hitting send.</p>
             <div class="foot"><span>4 min read &middot; 6 templates</span><span class="arrow">&rarr;</span></div>
           </div>
           <div class="guide" data-cat="editing" onclick="showGuide('proofread')">
@@ -1047,7 +1052,6 @@ Under 100 words.</span>
   <h1>Proofread without losing <em>your voice.</em></h1>
   <p class="lede">The trap: you ask AI to "polish" your draft and it hands back something that reads like a trade-journal editorial. Here's how to ask for corrections, not a rewrite.</p>
   <div class="meta">
-    <span class="tag">Tool: any chat AI</span>
     <span class="tag">Time: 2 min</span>
   </div>
 </header>
@@ -3597,7 +3601,6 @@ Tone: Rung 3 official, firm.</pre>
   <h1>Which tool for <em>which job.</em></h1>
   <p class="lede">ChatGPT has more modes, models, and features than you probably know about. Most of them are useful. Here's a practical map of what each one does and when to reach for it.</p>
   <div class="meta">
-    <span class="tag">Tool: ChatGPT</span>
     <span class="tag">Updated: April 2026</span>
     <span class="tag">For: everyone</span>
   </div>
@@ -4136,7 +4139,7 @@ Default assumption: unless the user specifies a period, use the most recent info
       </div>
 
       <div class="prompt-fmt">
-        <div class="eyebrow" style="margin-bottom: 5mm;">The prompt pattern, every task</div>
+        <div class="eyebrow" style="margin-bottom: 5mm;">The framework, every task</div>
         <div class="pf-grid">
           <div class="pf-lab">Role</div>
           <div class="pf-tx"><b>I am a&hellip;</b> Tell it who you are and who you speak for.</div>
