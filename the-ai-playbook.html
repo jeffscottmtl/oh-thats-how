@@ -3211,198 +3211,60 @@ Tone: Rung 3 official, firm.</pre>
         <!-- LITERACY 06: MODELS -->
         <section class="guide-page" id="learn-models" style="display:none;">
 
-<style>
-.ui-mock {
-  border: 1px solid var(--ink); border-radius: var(--r-lg); overflow: hidden;
-  background: #212121; color: #e8e8e8;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px; margin: 16px 0;
-}
-.ui-mock .ui-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; border-bottom: 1px solid #3a3a3a; background: #2a2a2a;
-}
-.ui-mock .ui-bar .model-sel {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #3a3a3a; padding: 6px 12px; border-radius: 20px;
-  font-size: 13px; font-weight: 600; cursor: default;
-}
-.ui-mock .ui-bar .model-sel .chev { font-size: 10px; opacity: 0.5; }
-.ui-mock .ui-body { padding: 20px 18px; min-height: 80px; }
-.ui-dropdown {
-  background: #2f2f2f; border: 1px solid #4a4a4a; border-radius: 12px;
-  padding: 8px 0; margin: 8px 0 0 0; display: inline-block; min-width: 220px;
-}
-.ui-dropdown .ui-opt {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; font-size: 13px; cursor: default;
-}
-.ui-dropdown .ui-opt.active { background: #3a3a3a; }
-.ui-dropdown .ui-opt .check-m { color: #10a37f; font-weight: bold; }
-.ui-dropdown .ui-opt .desc { font-size: 11px; color: #888; margin-left: 8px; }
-.ui-dropdown .ui-sep { height: 1px; background: #3a3a3a; margin: 4px 0; }
-.ui-think-toggle {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #3a3a3a; padding: 6px 14px; border-radius: 20px;
-  font-size: 12px; color: #e8e8e8; margin: 4px 0;
-}
-.ui-think-toggle .sw {
-  width: 34px; height: 18px; background: #555; border-radius: 10px;
-  position: relative; display: inline-block;
-}
-.ui-think-toggle .sw .dot {
-  width: 14px; height: 14px; background: #ccc; border-radius: 50%;
-  position: absolute; top: 2px; left: 2px;
-}
-.ui-think-toggle.on .sw { background: #10a37f; }
-.ui-think-toggle.on .sw .dot { left: 18px; background: white; }
-.ui-step-anim { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 14px 0; align-items: start; }
-.ui-step-anim .step-n {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--cn-red); color: white;
-  display: grid; place-items: center;
-  font-family: var(--mono); font-size: 11px; font-weight: 600;
-}
-.ui-step-anim .step-body { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
-.ui-step-anim .step-body b { color: var(--ink); }
-.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; margin-top: 16px; }
-.feat-card { background: var(--card); padding: 22px 20px; }
-.feat-card h4 { font-family: var(--serif); font-weight: 400; font-size: 20px; letter-spacing: -0.01em; margin: 0 0 8px; line-height: 1.1; }
-.feat-card p { font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: 0; }
-.feat-card .fc-use { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage-deep); margin-top: 10px; }
-@media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr; } }
-</style>
-
 <header class="guide-hero">
-  <div class="eyebrow" style="margin-bottom:18px;">Reference &middot; 6 min read</div>
+  <div class="eyebrow" style="margin-bottom:18px;">Reference &middot; 3 min read</div>
   <h1>Which tool for <em>which job.</em></h1>
-  <p class="lede">ChatGPT has more modes, models, and features than you probably know about. Most of them are useful. Here's a practical map of what each one does and when to reach for it.</p>
+  <p class="lede">Most of the time, you'll open one of the team's custom GPTs and start working. For everything else, here's what to know.</p>
   <div class="meta">
     <span class="tag">Updated: April 2026</span>
-    <span class="tag">For: everyone</span>
   </div>
 </header>
 
 <section class="two-col">
-  <div class="hd"><div class="n">01</div><h2>Choosing a model.</h2><p class="sub">The dropdown at the top</p></div>
+  <div class="hd"><div class="n">01</div><h2>Start with a custom GPT.</h2><p class="sub">Your first move, every time</p></div>
   <div class="body">
-    <p class="big">Not all models are equal. The model selector at the top of every ChatGPT conversation lets you pick the right engine for the job.</p>
-    <p>Click the model name at the top-centre of the chat window to open the selector. Here's what you'll see:</p>
-    <div class="ui-mock">
-      <div class="ui-bar">
-        <div class="model-sel">ChatGPT <span class="chev">&#9662;</span></div>
-        <div style="font-size:12px; color:#888;">Temporary chat</div>
-      </div>
-      <div class="ui-body" style="padding: 12px 18px;">
-        <div class="ui-dropdown">
-          <div class="ui-opt active"><div><b>GPT-4o</b> <span class="desc">Great for most tasks</span></div><span class="check-m">&#10003;</span></div>
-          <div class="ui-opt"><div><b>GPT-4o mini</b> <span class="desc">Faster, lighter tasks</span></div></div>
-          <div class="ui-sep"></div>
-          <div class="ui-opt"><div><b>o3</b> <span class="desc">Reasoning &middot; Best for complex analysis</span></div></div>
-          <div class="ui-opt"><div><b>o4-mini</b> <span class="desc">Reasoning &middot; Fast + smart</span></div></div>
-          <div class="ui-sep"></div>
-          <div class="ui-opt"><div><b>GPT-4.5</b> <span class="desc">Research preview</span></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="rules-stack" style="margin-top:20px;">
-      <div class="rule-row"><div class="rl"><span class="lvl">GPT-4o</span><b>Your default.</b></div><div class="rr">Fast, capable, good at writing, editing, and general tasks. Use this for 90% of your work: emails, memos, summaries, brainstorming. Handles file uploads, images, and web search.</div></div>
-      <div class="rule-row"><div class="rl"><span class="lvl">o3 / o4-mini</span><b>Reasoning.</b></div><div class="rr">These models "think before answering." They take longer but produce better results for complex analysis, multi-step problems, and anything requiring careful logic. Use for: stakeholder analysis, comparing policy options, critiquing a draft for logical gaps.</div></div>
-      <div class="rule-row"><div class="rl"><span class="lvl">4o mini</span><b>Quick tasks.</b></div><div class="rr">Fastest response. Good for simple reformatting, quick translations, or when you need a fast first draft you plan to heavily edit anyway.</div></div>
-    </div>
-    <div class="callout info" style="margin-top: 20px;">
-      <span class="label">Rule of thumb</span>
-      <p>If the task requires <b>speed and fluency</b> (drafting, editing, tone-shifting), use <b>GPT-4o</b>. If it requires <b>careful analysis</b> (finding gaps in an argument, comparing options, red-teaming a position), switch to <b>o3</b> or <b>o4-mini</b>.</p>
+    <p class="big">The team has 15 custom GPTs, each built for a specific job. They already know CN's voice, house rules, and audience expectations. Open the right one and start talking.</p>
+    <p>Go to <a href="javascript:void(0)" onclick="document.querySelector('[data-tab=tools]').click()" style="color:var(--cn-red); text-decoration:underline;">Your Tools</a> to see all 15 and what each one does.</p>
+    <div class="callout info" style="margin-top:18px;">
+      <span class="label">How to access</span>
+      <p>Sign in at <b>chat.com</b> with your CN account. Your custom GPTs appear in the sidebar. Click one to start a conversation.</p>
     </div>
   </div>
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">02</div><h2>Thinking mode.</h2><p class="sub">When you need it to reason</p></div>
+  <div class="hd"><div class="n">02</div><h2>File uploads.</h2><p class="sub">Give it the source material</p></div>
   <div class="body">
-    <p class="big">Thinking mode makes ChatGPT pause and reason through the problem before answering. The output takes longer but is more thorough, more accurate, and better at complex tasks.</p>
-    <h4 class="display" style="font-size:22px; margin: 14px 0 10px;">How to turn it on</h4>
-    <div class="ui-step-anim"><div class="step-n">1</div><div class="step-body"><b>Click the lightbulb icon</b> in the message input area (bottom of the chat). It appears to the left of the send button. In some versions, you may also see a "Think" toggle below the model selector.</div></div>
-    <div class="ui-step-anim"><div class="step-n">2</div><div class="step-body"><b>Choose your level.</b> Standard thinking adds a brief reasoning step. <b>Extended thinking</b> gives the model much more time to work through complex problems. For most comms work, standard is enough. Use extended for multi-stakeholder analysis or document comparison.</div></div>
-    <div class="ui-step-anim"><div class="step-n">3</div><div class="step-body"><b>Send your prompt.</b> You'll see a "Thinking..." indicator while the model reasons. When it finishes, you can expand the thinking block to see its reasoning process.</div></div>
-    <div style="margin: 18px 0; display:flex; gap: 18px; align-items:center;">
-      <div class="ui-think-toggle"><span>&#128161;</span> Thinking <span class="sw"><span class="dot"></span></span></div>
-      <span style="font-size:13px; color:var(--ink-soft);">Off</span>
-      <span style="margin: 0 8px; color: var(--ink-soft);">&rarr;</span>
-      <div class="ui-think-toggle on"><span>&#128161;</span> Thinking <span class="sw"><span class="dot"></span></span></div>
-      <span style="font-size:13px; color:var(--sage-deep);">On</span>
-    </div>
-    <div class="callout" style="margin-top:16px;">
-      <span class="label">When to use thinking</span>
-      <p><b>Yes:</b> Stakeholder analysis, comparing two draft strategies, finding logical gaps in a briefing note, red-teaming a public statement, anything where "think harder" would be your instruction to a human colleague.</p>
-      <p style="margin-top:8px;"><b>Skip it:</b> Simple emails, reformatting, translation, anything where speed matters more than depth.</p>
-    </div>
-  </div>
-</section>
-
-<section class="two-col">
-  <div class="hd"><div class="n">03</div><h2>Canvas.</h2><p class="sub">Side-by-side editing</p></div>
-  <div class="body">
-    <p class="big">Canvas opens a full document editor next to the chat. You can edit the text directly while continuing to ask ChatGPT to revise specific sections.</p>
-    <p>Canvas appears automatically when ChatGPT produces a long piece of writing, or you can trigger it by saying "open this in Canvas" or "use Canvas for this."</p>
-    <div class="feat-grid">
-      <div class="feat-card"><h4>Direct editing</h4><p>Click anywhere in the Canvas text to edit it yourself. Your changes stick. Then ask ChatGPT to revise a different section without losing your edits.</p><div class="fc-use">Best for: speeches, memos, long-form</div></div>
-      <div class="feat-card"><h4>Highlight and instruct</h4><p>Select a specific passage and tell ChatGPT what to do with it: "Make this paragraph more direct" or "Cut this to 40 words." Only the selection changes.</p><div class="fc-use">Best for: targeted tone shifts</div></div>
-      <div class="feat-card"><h4>Version control</h4><p>Canvas keeps a version history. You can undo changes or restore an earlier version if a revision goes too far.</p><div class="fc-use">Best for: iterating safely</div></div>
-      <div class="feat-card"><h4>Built-in tools</h4><p>Toolbar options include: adjust reading level, shorten/lengthen, add polish, suggest edits (tracked-changes style), and translate.</p><div class="fc-use">Best for: quick polish passes</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="two-col">
-  <div class="hd"><div class="n">04</div><h2>File uploads.</h2><p class="sub">Give it the source material</p></div>
-  <div class="body">
-    <p class="big">Click the paperclip icon (or the "+" button) in the message bar to upload files directly into the conversation. ChatGPT reads them and can summarize, analyse, compare, or extract information.</p>
+    <p class="big">Click the paperclip icon in the message bar to upload files. ChatGPT reads them and can summarize, analyse, compare, or extract information.</p>
     <div class="rules-stack">
-      <div class="rule-row"><div class="rl"><span class="lvl">PDF</span><b>Reports, filings</b></div><div class="rr">Annual reports, regulatory filings, policy documents. ChatGPT reads the full text including tables. Upload rather than pasting to preserve structure.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">PDF</span><b>Reports, filings</b></div><div class="rr">Annual reports, regulatory filings, policy documents. Upload rather than pasting to preserve tables and structure.</div></div>
       <div class="rule-row"><div class="rl"><span class="lvl">DOCX</span><b>Drafts, briefs</b></div><div class="rr">Word documents with formatting intact. Good for "proofread this" or "summarize the key recommendations."</div></div>
       <div class="rule-row"><div class="rl"><span class="lvl">PPTX</span><b>Presentations</b></div><div class="rr">Slide decks. ChatGPT reads slide text and can suggest restructuring, write speaker notes, or extract the core narrative.</div></div>
-      <div class="rule-row"><div class="rl"><span class="lvl">XLSX</span><b>Data, tables</b></div><div class="rr">Spreadsheets. ChatGPT can analyse data, create charts, find patterns, and summarize findings. Good for pulling highlights from operational reports.</div></div>
-      <div class="rule-row"><div class="rl"><span class="lvl">Images</span><b>Screenshots, charts</b></div><div class="rr">Photos, screenshots, charts, diagrams. ChatGPT can describe, transcribe, or analyse visual content. Useful for "what does this chart show?"</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">XLSX</span><b>Data, tables</b></div><div class="rr">Spreadsheets. Good for pulling highlights from operational reports, finding patterns, and summarizing findings.</div></div>
+      <div class="rule-row"><div class="rl"><span class="lvl">Images</span><b>Screenshots, charts</b></div><div class="rr">Photos, charts, diagrams. Useful for "what does this chart show?" or transcribing text from a screenshot.</div></div>
     </div>
     <div class="callout danger" style="margin-top:18px;">
       <span class="label">Before you upload</span>
-      <p>Check the confidentiality traffic-light guide first. Never upload board papers, unredacted employee data, pre-disclosure financial information, or anything marked Confidential or Restricted. When in doubt, redact names and numbers before uploading.</p>
-    </div>
-  </div>
-</section>
-
-<section class="two-col">
-  <div class="hd"><div class="n">05</div><h2>Custom GPTs.</h2><p class="sub">One job, locked and loaded</p></div>
-  <div class="body">
-    <p class="big">A custom GPT is a version of ChatGPT configured for one specific job, with its own instructions and reference documents baked in. You don't need to re-explain the context every time.</p>
-    <ol class="steps">
-      <li><div><h4>Open the GPT library.</h4><p>Click "Explore GPTs" in the left sidebar of ChatGPT, or go directly to <b>chatgpt.com/gpts</b>. You'll see featured GPTs and a search bar.</p></div></li>
-      <li><div><h4>Search or browse.</h4><p>Search for the CN Prompt Builder GPT or any other team-shared GPTs. GPTs shared by colleagues appear in the "Shared with you" section or via direct link.</p></div></li>
-      <li><div><h4>Start a conversation.</h4><p>Click the GPT to open it. It behaves like a normal ChatGPT chat, but with pre-loaded instructions and documents. Just type your prompt as usual.</p></div></li>
-    </ol>
-    <div class="callout" style="margin-top:18px;">
-      <span class="label">CN's custom GPTs</span>
-      <p>The <b>CN Prompt Builder GPT</b> walks you through the Four Questions and generates a ready-to-use prompt. Start there if you're new to prompting.</p>
+      <p>Check the confidentiality traffic-light guide first. Never upload board papers, unredacted employee data, pre-disclosure financial information, or anything marked Confidential or Restricted. When in doubt, redact first.</p>
     </div>
   </div>
 </section>
 
 <section class="two-col" style="background: var(--paper-2); border-bottom: 0;">
-  <div class="hd"><div class="n">06</div><h2>The cheat sheet.</h2><p class="sub">Task &rarr; tool</p></div>
+  <div class="hd"><div class="n">03</div><h2>The cheat sheet.</h2><p class="sub">Task &rarr; tool</p></div>
   <div class="body">
     <p class="big">Don't overthink it. Here's the shortcut.</p>
     <div class="rules-stack">
-      <div class="rule-row"><div class="rl"><b>Draft an email</b></div><div class="rr">GPT-4o, standard mode.</div></div>
-      <div class="rule-row"><div class="rl"><b>Proofread a draft</b></div><div class="rr">GPT-4o + Canvas. Open in Canvas, highlight and instruct.</div></div>
-      <div class="rule-row"><div class="rl"><b>Summarize a long report</b></div><div class="rr">GPT-4o, upload the PDF.</div></div>
-      <div class="rule-row"><div class="rl"><b>Stakeholder analysis</b></div><div class="rr">o3 or o4-mini with Thinking on. Needs careful reasoning.</div></div>
-      <div class="rule-row"><div class="rl"><b>Q&amp;A prep for media</b></div><div class="rr">GPT-4o, then switch to o3 to red-team your answers.</div></div>
-      <div class="rule-row"><div class="rl"><b>Speech first draft</b></div><div class="rr">GPT-4o for outline + drafting, Canvas for editing.</div></div>
-      <div class="rule-row"><div class="rl"><b>Compare two documents</b></div><div class="rr">Upload both files. Use Thinking mode for thorough comparison.</div></div>
-      <div class="rule-row"><div class="rl"><b>Recurring task (same format every time)</b></div><div class="rr">Use one of the team's custom GPTs in the Your Tools tab.</div></div>
-      <div class="rule-row"><div class="rl"><b>Check recent news/facts</b></div><div class="rr">GPT-4o with web search. Always verify the sources it cites.</div></div>
-      <div class="rule-row"><div class="rl"><b>Crisis holding statement</b></div><div class="rr">GPT-4o, standard mode, fast.</div></div>
+      <div class="rule-row"><div class="rl"><b>Draft an email</b></div><div class="rr">Open the Prompt Builder GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Proofread a draft</b></div><div class="rr">Open the Review, Revise, and Adapt GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Summarize news clippings</b></div><div class="rr">Open the Summarize CN News Clippings GPT. Upload the file.</div></div>
+      <div class="rule-row"><div class="rl"><b>Speech or talking points</b></div><div class="rr">Open the Speaking Notes Generator GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Stakeholder letter</b></div><div class="rr">Open the Stakeholder Letters GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Briefing note</b></div><div class="rr">Open the Briefing Note Generator GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Incident statement</b></div><div class="rr">Open the PAGA GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>CEO speech or LinkedIn</b></div><div class="rr">Open the Tracy Robinson Comms GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Exec LinkedIn shares</b></div><div class="rr">Open the Exec LinkedIn Shares GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Something else</b></div><div class="rr">Open the Prompt Builder GPT. It helps you figure out the right prompt for any task.</div></div>
     </div>
   </div>
 </section>
