@@ -453,12 +453,12 @@ a { color: inherit; }
 .tool-card .tool-link { margin-top: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cn-red); text-decoration: none; }
 .tool-card .tool-link:hover { text-decoration: underline; }
 
-.tool-grid-2 { grid-template-columns: 1fr 1fr !important; }
-.tool-grid-4 .tool-card:last-child { grid-column: span 3; }
-.tool-grid-1 .tool-card:last-child { grid-column: span 3; }
-
-@media (max-width: 1000px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
+@media (min-width: 1001px) {
+  .tool-grid-2 { grid-template-columns: 1fr 1fr; }
+  .tool-grid-4 .tool-card:last-child { grid-column: span 3; }
+}
+@media (max-width: 1000px) { .tool-grid, .tool-grid-2, .tool-grid-4 { grid-template-columns: 1fr 1fr; } .tool-grid-4 .tool-card:last-child { grid-column: auto; } }
+@media (max-width: 600px) { .tool-grid, .tool-grid-2, .tool-grid-4 { grid-template-columns: 1fr; } }
 </style>
 <style>
 /* ============================================================
