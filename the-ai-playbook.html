@@ -303,6 +303,13 @@ a { color: inherit; }
   .section-head h2 { font-size: 32px; }
   .guide h3 { font-size: 22px; }
   .guide.feature h3 { font-size: 32px; }
+  .two-col { padding: 24px 16px; }
+  .guide-hero { padding: 28px 16px 20px; }
+  .guide-hero h1 { font-size: 28px; }
+  .gpt-callout { gap: 10px; padding: 12px 14px; }
+  .gpt-callout a { padding: 6px 10px; font-size: 9px; }
+  .callout { padding: 14px 16px; }
+  .rules-stack { margin-top: 10px; }
 }
 </style>
 <style>
@@ -389,11 +396,23 @@ a { color: inherit; }
 }
 
 @media (max-width: 900px) {
-  .two-col { grid-template-columns: 1fr; gap: 18px; }
+  .two-col { grid-template-columns: 1fr; gap: 18px; padding: 32px 20px; }
   .two-col > .hd { position: static; }
+  .two-col > .hd .n { font-size: 36px; }
+  .two-col > .hd h2 { font-size: 22px; }
   .dual, .rule-row, .toneladder { grid-template-columns: 1fr; }
   .dual > div + div { border-left: 0; border-top: 1px solid var(--ink); }
   .rule-row .rl { border-right: 0; border-bottom: 1px solid var(--ink); }
+  .guide-hero { padding: 36px 20px 28px; }
+  .guide-hero h1 { font-size: clamp(32px, 6vw, 56px); }
+  .guide-hero .lede { font-size: 17px; }
+  .gpt-callout { margin: 0; flex-wrap: wrap; }
+  div[style*="padding: 24px 40px 0"] { padding: 24px 20px 0 !important; }
+  div[style*="padding: 0 40px"] { padding: 0 20px !important; }
+  .redaction { grid-template-columns: 1fr; }
+  .redaction > div + div { border-left: 0; border-top: 1px solid var(--ink); }
+  .ba { grid-template-columns: 1fr; }
+  .ba > div + div { border-left: 0; border-top: 1px solid var(--ink); }
 }
 </style>
 <style>
