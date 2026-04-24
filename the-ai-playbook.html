@@ -2855,10 +2855,10 @@ Draft now.
 .light li { margin-bottom: 8px; }
 
 .redaction { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
-.redaction > div { padding: 22px; }
+.redaction > div { padding: 22px; min-width: 0; }
 .redaction > div + div { border-left: 1px solid var(--ink); }
 .redaction .hd { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; color: var(--ink-soft); }
-.redaction pre { font-family: var(--mono); font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; margin: 0; background: var(--paper-2); padding: 14px; border-radius: 4px; }
+.redaction pre { font-family: var(--mono); font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; margin: 0; background: var(--paper-2); padding: 14px; border-radius: 4px; }
 .redaction .safe { background: var(--sage); }
 .redaction .unsafe { background: #f3d7cf; }
 @media (max-width: 900px) {
