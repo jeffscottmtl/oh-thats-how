@@ -444,6 +444,10 @@ a { color: inherit; }
 }
 .spark-link a:hover { color: var(--cn-red); border-bottom-color: var(--cn-red); }
 
+.spark-quote { display: none; transition: opacity 0.4s ease; }
+.spark-quote.active { display: block; }
+
+
 .tool-card .tool-icon { width: 48px; height: 48px; margin-bottom: 4px; border-radius: 50%; }
 .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--paper); border: 1px solid var(--ink); margin: 0 36px; }
 .tool-card { background: var(--paper); padding: 24px; display: flex; flex-direction: column; border-right: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
@@ -634,16 +638,28 @@ a { color: inherit; }
       </div>
     </section>
 
-    <!-- SPARK -->
+    <!-- SPARK (rotating quotes from team survey) -->
     <section class="section" style="padding-top: 44px; padding-bottom: 0;">
       <div class="spark-card">
         <div class="eyebrow" style="color: var(--sage-deep); margin-bottom: 14px;">From the team</div>
-        <blockquote>
-          &ldquo;Three of us used the briefing note guide to prep for a stakeholder meeting last month. What used to take a full afternoon took about 40 minutes, and the principal said it was the tightest brief she'd had in a while.&rdquo;
+        <blockquote class="spark-quote active">
+          &ldquo;It's essential for urgent announcements. ChatGPT helps us format consistently, catches mistakes in high-pressure moments, and significantly speeds up our process. Where launches were once delayed for hours waiting for translations, we can now translate and review content in less than an hour.&rdquo;
         </blockquote>
-        <div class="spark-link">
-          <a href="javascript:void(0)" onclick="goToGuide('meeting-brief')">See the briefing note guide &rarr;</a>
-        </div>
+        <blockquote class="spark-quote">
+          &ldquo;The ability to summarize long, 100-plus page documents into themes and focus areas helped me create the foundation for communications strategies faster and more efficiently.&rdquo;
+        </blockquote>
+        <blockquote class="spark-quote">
+          &ldquo;It helped take a video and turn it into a short web story using previous examples as inspiration. This work would have normally taken me more than a day and was completed in just under two hours.&rdquo;
+        </blockquote>
+        <blockquote class="spark-quote">
+          &ldquo;So much easier to write memos. Has saved us hours and hours, truly.&rdquo;
+        </blockquote>
+        <blockquote class="spark-quote">
+          &ldquo;It has been very useful for drafting letters, reducing the time significantly.&rdquo;
+        </blockquote>
+        <blockquote class="spark-quote">
+          &ldquo;ChatGPT was a life saver for translating the podcast SRT files with timestamps. While the translation is not always perfect, the fact that it keeps the layout saves the team a lot of time.&rdquo;
+        </blockquote>
       </div>
     </section>
 
@@ -3759,6 +3775,18 @@ document.addEventListener('click', e => {
     setTimeout(() => e.target.textContent = 'Copy', 2000);
   }
 });
+
+// Rotate spark quotes
+(function() {
+  var quotes = document.querySelectorAll('.spark-quote');
+  if (quotes.length < 2) return;
+  var current = 0;
+  setInterval(function() {
+    quotes[current].classList.remove('active');
+    current = (current + 1) % quotes.length;
+    quotes[current].classList.add('active');
+  }, 8000);
+})();
 </script>
 </body>
 </html>
