@@ -169,7 +169,6 @@ a { color: inherit; }
 .tag.signal { background: var(--cn-red); color: white; border-color: var(--cn-red); }
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 36px; }
-.container-narrow { max-width: 860px; margin: 0 auto; padding: 0 36px; }
 
 .footer { margin-top: 80px; padding: 36px; border-top: 1px solid var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); display: flex; justify-content: space-between; }
 
@@ -198,7 +197,7 @@ a { color: inherit; }
   max-width: 15ch;
 }
 .hero h1 em { font-style: italic; font-weight: 400; color: var(--cn-red); }
-.hero .lede { font-family: var(--serif); font-size: 21px; line-height: 1.4; max-width: 62ch; margin: 0; color: var(--ink-2); font-weight: 300; }
+.hero .lede { font-family: var(--serif); font-size: 20px; line-height: 1.4; max-width: 62ch; margin: 0; color: var(--ink-2); font-weight: 300; }
 .hero .meta { display: flex; gap: 24px; margin-top: 30px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); flex-wrap: wrap; }
 .hero .meta span b { color: var(--ink); font-weight: 500; }
 
@@ -248,11 +247,7 @@ a { color: inherit; }
 .guide.wide { grid-column: span 6; }
 .guide.half { grid-column: span 6; }
 
-.strip { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
-.strip > div { padding: 36px; }
 .strip > div + div { border-left: 1px solid var(--ink); }
-.strip h4 { font-family: var(--serif); font-weight: 400; font-size: 28px; margin: 8px 0 12px; letter-spacing: -0.015em; }
-.strip p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 48ch; }
 
 .quickbar { background: var(--ink); color: var(--paper); padding: 16px 36px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 .quickbar a { color: var(--paper); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 2px; }
@@ -276,8 +271,6 @@ a { color: inherit; }
   .fourq { grid-template-columns: 1fr 1fr; }
   .audiences { grid-template-columns: 1fr 1fr 1fr; }
   .guide, .guide.feature, .guide.wide, .guide.half { grid-column: span 12; }
-  .strip { grid-template-columns: 1fr; }
-  .strip > div + div { border-left: 0; border-top: 1px solid var(--ink); }
   .section-head { grid-template-columns: 1fr; gap: 10px; }
 }
 
@@ -411,7 +404,7 @@ a { color: inherit; }
 .task-picker { display: grid; gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
 .task-card {
   display: grid; grid-template-columns: 48px 1fr 32px; align-items: center; gap: 16px;
-  padding: 18px 28px; text-decoration: none; color: var(--ink);
+  padding: 18px 36px; text-decoration: none; color: var(--ink);
   border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
   transition: background .15s ease;
 }
@@ -479,7 +472,6 @@ a { color: inherit; }
 #tab-poster .sheet-top h1 { font-family: var(--serif); font-weight: 300; font-size: 56px; letter-spacing: -0.03em; line-height: 0.92; margin: 0; }
 #tab-poster .sheet-top h1 em { font-style: italic; color: var(--signal); }
 
-#tab-poster .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-bottom: 1px solid var(--ink); }
 #tab-poster .grid3 > div { padding: 8mm 6mm; border-right: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
 #tab-poster .grid3 > div:last-child { border-right: 0; }
 #tab-poster .block h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.015em; margin: 0 0 6mm 0; line-height: 1; }
@@ -559,16 +551,13 @@ a { color: inherit; }
 
     <!-- HERO -->
     <header class="hero">
-      <div class="container">
         <h1>Better drafts, <em>faster</em>,<br>without losing your voice.</h1>
         <p class="lede">Practical guides for getting real work out of AI. Each one takes about five minutes and gives you something you can use today.</p>
-      </div>
     </header>
 
     <!-- TASK PICKER -->
     <section class="section" style="padding-top: 36px; padding-bottom: 0;">
-      <div class="section-head">
-        <div class="num"><em></em></div>
+      <div class="section-head" style="grid-template-columns: 1fr;">
         <div>
           <div class="eyebrow">Start here</div>
           <h2>What are you working on?</h2>
@@ -684,7 +673,7 @@ a { color: inherit; }
       <div><a href="javascript:void(0)" onclick="document.querySelector('[data-tab=tools]').click()">Use a ready-made tool built for your job</a></div>
     </div>
 
-  </div></div>
+  </div>
   <div class="tab-content" id="tab-guides">
     <section class="section" style="padding-top: 44px;">
       <div class="section-head">
@@ -2273,7 +2262,7 @@ a { color: inherit; }
     <li>Tone (factual, celebratory, service update) and target length</li>
     <li>Audience (customers, employees, media, investors)</li>
   </ul>
-  <p style="margin:10px 0 0; font-size:13px; color:var(--text-secondary);">Minimal emoji are acceptable for LinkedIn and Instagram. No emoji for X or formal content.</p>
+  <p style="margin:10px 0 0; font-size:13px; color:var(--ink-soft);">Minimal emoji are acceptable for LinkedIn and Instagram. No emoji for X or formal content.</p>
 </div>
   </div>
 </section>
@@ -2429,8 +2418,7 @@ a { color: inherit; }
 
     <!-- FIVE RULES (moved from Start Here) -->
     <section class="section" style="padding-top: 36px; padding-bottom: 0;">
-      <div class="section-head">
-        <div class="num"><em></em></div>
+      <div class="section-head" style="grid-template-columns: 1fr;">
         <div>
           <div class="eyebrow">Before anything else</div>
           <h2>Five rules for working with AI.</h2>
@@ -2467,9 +2455,8 @@ a { color: inherit; }
     </section>
 
     <!-- SIX AUDIENCES (moved from Start Here) -->
-    <section class="section" style="padding-top: 20px; padding-bottom: 0;">
-      <div class="section-head">
-        <div class="num"><em></em></div>
+    <section class="section" style="padding-top: 36px; padding-bottom: 0;">
+      <div class="section-head" style="grid-template-columns: 1fr;">
         <div>
           <div class="eyebrow">Know who you're writing for</div>
           <h2>Seven CN audiences, seven tones.</h2>
@@ -2499,7 +2486,7 @@ a { color: inherit; }
     </section>
 
     <div id="learn-grid">
-      <div class="guides" style="padding: 0 36px 36px;">
+      <div class="guides">
         <div class="guide wide" data-cat="literacy" onclick="showLearn('four-questions')" style="background:var(--sage); cursor:pointer;">
           <div class="num">LITERACY / 01</div><div class="cat" style="color:var(--sage-deep);">The one you reread</div>
           <h3>The Four Questions, in depth.</h3>
@@ -3289,7 +3276,7 @@ Draft now.
         </section><!-- /learn-models -->
 
 
-        <!-- LITERACY 08: HOUSE RULES -->
+        <!-- LITERACY 07: HOUSE RULES -->
         <section class="guide-page" id="learn-house-rules" style="display:none;">
 
 <style>
