@@ -2503,14 +2503,8 @@ a { color: inherit; }
           <p>ChatGPT modes, custom GPTs, Thinking mode, Copilot, what each one is good at.</p>
           <div class="foot"><span>4 min read</span><span class="arrow">&rarr;</span></div>
         </div>
-        <div class="guide" data-cat="literacy" onclick="showLearn('custom-gpts')" style="background:var(--paper-2); cursor:pointer;">
-          <div class="num">LITERACY / 07</div><div class="cat">Advanced</div>
-          <h3>Build a reliable custom GPT.</h3>
-          <p>The three moves: define the job, lock the sources, standardize the output.</p>
-          <div class="foot"><span>5 min read</span><span class="arrow">&rarr;</span></div>
-        </div>
         <div class="guide" data-cat="literacy" onclick="showLearn('house-rules')" style="background:#f5e3b8; cursor:pointer;">
-          <div class="num">LITERACY / 08</div><div class="cat">CN rules</div>
+          <div class="num">LITERACY / 07</div><div class="cat">CN rules</div>
           <h3>CN house rules for AI output.</h3>
           <p>Canadian spelling, no acronyms, no em dashes, no emoji, placeholders for missing facts. Copy-paste into any prompt.</p>
           <div class="foot"><span>2 min read</span><span class="arrow">&rarr;</span></div>
@@ -3404,7 +3398,7 @@ Tone: Rung 3 official, firm.</pre>
       <div class="rule-row"><div class="rl"><b>Q&amp;A prep for media</b></div><div class="rr">GPT-4o, then switch to o3 to red-team your answers.</div></div>
       <div class="rule-row"><div class="rl"><b>Speech first draft</b></div><div class="rr">GPT-4o for outline + drafting, Canvas for editing.</div></div>
       <div class="rule-row"><div class="rl"><b>Compare two documents</b></div><div class="rr">Upload both files. Use Thinking mode for thorough comparison.</div></div>
-      <div class="rule-row"><div class="rl"><b>Recurring task (same format every time)</b></div><div class="rr">Build a custom GPT.</div></div>
+      <div class="rule-row"><div class="rl"><b>Recurring task (same format every time)</b></div><div class="rr">Use one of the team's custom GPTs in the Your Tools tab.</div></div>
       <div class="rule-row"><div class="rl"><b>Check recent news/facts</b></div><div class="rr">GPT-4o with web search. Always verify the sources it cites.</div></div>
       <div class="rule-row"><div class="rl"><b>Crisis holding statement</b></div><div class="rr">GPT-4o, standard mode, fast.</div></div>
     </div>
@@ -3413,94 +3407,6 @@ Tone: Rung 3 official, firm.</pre>
 
         </section><!-- /learn-models -->
 
-        <!-- LITERACY 07: CUSTOM GPTS -->
-        <section class="guide-page" id="learn-custom-gpts" style="display:none;">
-
-<header class="guide-hero">
-  <div class="eyebrow" style="margin-bottom:18px;">Literacy &middot; Advanced &middot; 5 min</div>
-  <h1>Build a reliable <em>custom GPT.</em></h1>
-  <p class="lede">A custom GPT is a ChatGPT configured for one job, locked to a specific set of documents, that produces the same shape of output every time. Three moves get you there.</p>
-  <div class="meta">
-    <span class="tag">For recurring tasks</span>
-    <span class="tag">Team-shareable</span>
-  </div>
-</header>
-
-<section class="two-col">
-  <div class="hd"><div class="n">01</div><h2>What "good" looks like.</h2><p class="sub">Two words</p></div>
-  <div class="body">
-    <p class="big"><b>Reliability:</b> same question in, same structure out.<br><b>Accuracy:</b> uses approved documents first, cites them, and says "Not found in the sources" when the documents don't support an answer.</p>
-    <p>A custom GPT that fails either of these is worse than no custom GPT. It produces a confident-looking document with invented facts, at scale. Build for these two properties or don't build.</p>
-  </div>
-</section>
-
-<section class="two-col">
-  <div class="hd"><div class="n">02</div><h2>Three moves.</h2><p class="sub">In order</p></div>
-  <div class="body">
-    <ol class="steps">
-      <li>
-        <h4>Define the job in one sentence.</h4>
-        <p>No custom GPT should try to do more than one thing. Write the single sentence that describes its job, including the audience.</p>
-        <div class="prompt" style="margin-top:10px;">
-<button class="copy-btn">Copy</button><span class="comment"># Example job sentence</span>
-"This GPT gives executives a sourced overview of CN's business, strategy, and performance, using only approved corporate documents."
-        </div>
-        <p style="margin-top:12px;">If the sentence has an "and" that could be split, split it into two custom GPTs.</p>
-      </li>
-      <li>
-        <h4>Lock the sources and require citations.</h4>
-        <p>Upload the approved documents. In the GPT's instructions, say this verbatim:</p>
-        <div class="prompt" style="margin-top:10px;">
-<button class="copy-btn">Copy</button>"Use these as the primary sources. Any fact, number, date, KPI, or claim must be cited to one of these documents. If it cannot be cited, do not include it. Say 'Not found in the sources' instead of inventing an answer."
-
-Sources:
-&bull; 2024 CN annual report (financial reporting)
-&bull; 2025 investor fact book (network, KPIs)
-&bull; CN investor presentation (current investor narrative)
-&bull; Delivering responsibly 2024 (sustainability)
-&bull; Management information circular 2025 (governance)
-
-Default assumption: unless the user specifies a period, use the most recent information reflected in the uploaded documents.
-        </div>
-        <p style="margin-top:12px;">The citation requirement is the safety net. Without it, the GPT pattern-matches from its general training data, and you lose accuracy.</p>
-      </li>
-      <li>
-        <h4>Standardize the output.</h4>
-        <p>Give it the exact template. Every output should look the same.</p>
-        <div class="prompt" style="margin-top:10px;">
-<button class="copy-btn">Copy</button>Always use this template in this order:
-
-1. Key takeaways (3 bullets)
-2. Business overview (what CN does, network footprint, revenue mix)
-3. Performance snapshot (top KPIs, year, currency)
-4. Strategy and priorities (as described in investor materials)
-5. Delivering responsibly (only what is supported by the sustainability report)
-6. Sources used (bullet list, cite specific documents)
-        </div>
-        <p style="margin-top:12px;">Reliability comes from format consistency. Executives skim in the same pattern every time, give them that.</p>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<section class="two-col" style="border-bottom:0;">
-  <div class="hd"><div class="n">03</div><h2>Test before you share.</h2><p class="sub">Five questions that break bad GPTs</p></div>
-  <div class="body">
-    <ul class="check">
-      <li>Ask it a question <b>not</b> in the documents. It should say "Not found in the sources." If it answers anyway, tighten the instructions.</li>
-      <li>Ask the same question twice in different chats. If the structure differs, tighten the template.</li>
-      <li>Ask a question that requires a number. Confirm the number is real, and the citation points to the right document.</li>
-      <li>Ask a leading question ("Why is CN the best operator in North America?"). It should pull sourced claims or decline. If it editorializes, tighten.</li>
-      <li>Ask about last week. It should say it only has the documents you loaded. If it pulls recent-sounding facts, tighten.</li>
-    </ul>
-    <div class="callout" style="margin-top:22px;">
-      <span class="label">Governance</span>
-      <p>Before sharing a custom GPT with a team, make sure the uploaded documents are approved for the use. If one source is confidential, the whole GPT is confidential, treat it accordingly.</p>
-    </div>
-  </div>
-</section>
-
-        </section><!-- /learn-custom-gpts -->
 
         <!-- LITERACY 08: HOUSE RULES -->
         <section class="guide-page" id="learn-house-rules" style="display:none;">
