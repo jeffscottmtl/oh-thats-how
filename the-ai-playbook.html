@@ -217,13 +217,15 @@ a { color: inherit; }
 .fq .ex { font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); line-height: 1.45; border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); padding-top: 10px; }
 
 /* Guides grid */
-.guides { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1px; background: var(--ink); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.guides { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0; background: var(--paper); border-top: 1px solid var(--ink); }
 .guide {
   grid-column: span 4; background: var(--paper);
   padding: 26px 24px 22px;
   text-decoration: none; color: var(--ink);
   display: flex; flex-direction: column; min-height: 240px;
   transition: background .18s ease; cursor: pointer;
+  border-bottom: 1px solid var(--ink);
+  border-right: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
 }
 .guide:hover { background: var(--card); }
 .guide .num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--ink-soft); }
@@ -1235,7 +1237,7 @@ a { color: inherit; }
     <div class="gpt-icon"><img src="gpt-icons/stakeholder-letters.png" alt=""></div>
     <div class="gpt-body">
       <h5>Stakeholder Letters</h5>
-      <p>Eight letter types, from advocacy to condolences. Built for federal politicians and senior public servants.</p>
+      <p>Seven letter types, from advocacy to condolences. Built for federal politicians and senior public servants.</p>
     </div>
     <a href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open tool</a>
   </div>
@@ -1247,7 +1249,7 @@ a { color: inherit; }
     <p class="big">Before you prompt, decide which rung. Most "letter" prompts default to rung 3, which is neither warm enough for a constituent nor firm enough for a regulator.</p>
     <div class="toneladder">
       <div class="lbl">Rung 1</div>
-      <div class="ex">"Warmly personal." Thank-you letters, condolences (only if hand-edited), invitations to people you know.</div>
+      <div class="ex">"Warmly personal." Thank-you letters, invitations to people you know.</div>
       <div class="lbl">Rung 2</div>
       <div class="ex">"Considerate official." Constituent replies, responses to public inquiries, appreciative stakeholder notes.</div>
       <div class="lbl">Rung 3</div>
@@ -1266,7 +1268,7 @@ a { color: inherit; }
     <div class="callout info" style="margin-top:12px;">
   <span class="label">What to have ready</span>
   <ul style="margin:8px 0 0; padding-left:18px; font-size:14px; line-height:1.6;">
-    <li>Letter type: advocacy, thank you, invitation, partnership, congratulations, retirement, condolences, or other</li>
+    <li>Letter type: advocacy, thank you, invitation, partnership, congratulations, retirement, or other</li>
     <li>The tone rung you need (1 = warm/personal through 5 = formal-terse/legal-adjacent)</li>
     <li>Full recipient details: name, title, organisation, postal address</li>
     <li>Your key points and the explicit ask or position</li>
@@ -3628,7 +3630,7 @@ Default assumption: unless the user specifies a period, use the most recent info
         <span class="label">Drafting &amp; Writing</span>
         <img src="gpt-icons/stakeholder-letters.png" alt="" class="tool-icon">
         <h4>Stakeholder letters</h4>
-        <p>Drafts polished letters for senior CN leaders to send to politicians, public servants, and stakeholders. Eight letter types.</p>
+        <p>Drafts polished letters for senior CN leaders to send to politicians, public servants, and stakeholders. Seven letter types.</p>
         <a class="tool-link" href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open in ChatGPT &rarr;</a>
       </div>
       <div class="tool-card">
