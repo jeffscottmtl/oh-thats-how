@@ -445,14 +445,14 @@ a { color: inherit; }
 .spark-link a:hover { color: var(--cn-red); border-bottom-color: var(--cn-red); }
 
 .tool-card .tool-icon { width: 48px; height: 48px; margin-bottom: 4px; border-radius: 50%; }
-.tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--paper); border: 1px solid var(--ink); margin: 0 36px; }
+.tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0; background: var(--paper); border: 1px solid var(--ink); margin: 0 36px; }
 .tool-card { background: var(--paper); padding: 24px; display: flex; flex-direction: column; border-right: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
 .tool-card .label { margin-bottom: 4px; }
 .tool-card h4 { font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.01em; margin: 6px 0 8px; line-height: 1.15; }
 .tool-card p { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin: 0; flex: 1; }
 .tool-card .tool-link { margin-top: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cn-red); text-decoration: none; }
 .tool-card .tool-link:hover { text-decoration: underline; }
-@media (max-width: 1000px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 1000px) { .tool-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
 @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr; } }
 </style>
 <style>
