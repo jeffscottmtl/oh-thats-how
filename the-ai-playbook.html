@@ -235,7 +235,7 @@ a { color: inherit; }
 .guide .foot .arrow { width: 26px; height: 26px; border: 1px solid var(--ink); border-radius: 50%; display: grid; place-items: center; transition: all .2s ease; }
 .guide:hover .foot .arrow { background: var(--cn-red); border-color: var(--cn-red); color: white; transform: rotate(-45deg); }
 
-.guide.feature { grid-column: span 8; background: var(--paper); color: var(--ink); min-height: 300px; border-left: 4px solid var(--cn-red); }
+.guide.feature { grid-column: span 8; background: var(--paper); color: var(--ink); min-height: 300px; }
 .guide.feature:hover { background: var(--card); }
 .guide.feature .num { color: var(--ink-soft); }
 .guide.feature .cat { color: var(--cn-red); }
@@ -375,7 +375,7 @@ a { color: inherit; }
 .toneladder { display:grid; grid-template-columns: 120px 1fr; gap:0; border:1px solid var(--ink); border-radius: var(--r-md); overflow: hidden; }
 .toneladder > div { padding: 14px 16px; border-top: 1px solid var(--ink); }
 .toneladder > div:nth-child(-n+2) { border-top: 0; }
-.toneladder .lbl { background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; border-right: 1px solid var(--ink); display:flex; align-items:center; }
+.toneladder .lbl { background: var(--paper-2); color: var(--ink); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; border-right: 1px solid var(--ink); display:flex; align-items:center; }
 .toneladder .ex { font-family: var(--serif); font-size: 16px; line-height: 1.4; color: var(--ink); font-style: italic; }
 
 .guide-page { display: none; }
@@ -1138,19 +1138,6 @@ a { color: inherit; }
   </div>
 </section>
 
-<section class="two-col">
-  <div class="hd"><div class="n">05</div><h2>Things AI should not touch.</h2><p class="sub">Protect these in your prompt</p></div>
-  <div class="body">
-    <ul class="check">
-      <li><b>Quoted speech.</b> If you're quoting someone, AI will "tidy" the quote. Add: "Do not modify anything between quotation marks."</li>
-      <li><b>Names and titles.</b> Add: "Do not change any proper nouns, titles, or honorifics."</li>
-      <li><b>Legal phrasing.</b> "Without prejudice", "on a confidential basis", specific regulatory language, flag them in the prompt as do-not-touch.</li>
-      <li><b>Deliberate repetition.</b> If you repeated a word for rhetorical effect, AI will "fix" it. Tell it the repetition is intentional.</li>
-      <li><b>Technical terms your audience expects.</b> "Stakeholder capitalism", "material change", "in-camera", add a glossary of terms to preserve.</li>
-    </ul>
-  </div>
-</section>
-
 </section><!-- /guide-proofread -->
 
 <!-- ============================================================
@@ -1270,6 +1257,10 @@ a { color: inherit; }
   <div class="eyebrow" style="margin-bottom:18px;">Stakeholder relations &middot; 5 min read</div>
   <h1>Letters: <em>formal,</em> firm, &amp; human.</h1>
   <p class="lede">Letters are the slowest, most considered form of business correspondence. Tone is everything. Here's how to move a letter up and down the tone ladder without losing the point.</p>
+  <div class="meta">
+    <span class="tag">For: PAGA, Government Affairs</span>
+    <span class="tag">Time: 10 min</span>
+  </div>
 </header>
 
 <!-- GPT callout at top -->
@@ -1278,7 +1269,7 @@ a { color: inherit; }
     <div class="gpt-icon"><img src="gpt-icons/stakeholder-letters.png" alt=""></div>
     <div class="gpt-body">
       <h5>Stakeholder Letters</h5>
-      <p>Seven letter types, from advocacy to condolences. Built for federal politicians and senior public servants.</p>
+      <p>Seven letter types, from advocacy to retirement. Built for senior stakeholder correspondence.</p>
     </div>
     <a href="https://chatgpt.com/g/g-689b57cbe3f08191bb3b9c8be9ff412e-stakeholder-letters" target="_blank">Open tool</a>
   </div>
@@ -1287,12 +1278,12 @@ a { color: inherit; }
 <section class="two-col">
   <div class="hd"><div class="n">01</div><h2>The tone ladder.</h2><p class="sub">Same message, five registers</p></div>
   <div class="body">
-    <p class="big">Before you prompt, decide which rung. Most "letter" prompts default to rung 3, which is neither warm enough for a constituent nor firm enough for a regulator.</p>
+    <p class="big">Before you prompt, decide which rung. Most "letter" prompts default to rung 3, which is neither warm enough for a stakeholder nor firm enough for a regulator.</p>
     <div class="toneladder">
       <div class="lbl">Rung 1</div>
       <div class="ex">"Warmly personal." Thank-you letters, invitations to people you know.</div>
       <div class="lbl">Rung 2</div>
-      <div class="ex">"Considerate official." Constituent replies, responses to public inquiries, appreciative stakeholder notes.</div>
+      <div class="ex">"Considerate official." Stakeholder replies, responses to public inquiries, appreciative stakeholder notes.</div>
       <div class="lbl">Rung 3</div>
       <div class="ex">"Neutral official." Standard correspondence, confirmations, procedural notices.</div>
       <div class="lbl">Rung 4</div>
@@ -1320,33 +1311,26 @@ a { color: inherit; }
 </section>
 
 <section class="two-col">
-  <div class="hd"><div class="n">03</div><h2>Constituent &amp; public replies.</h2><p class="sub">Scale without feeling form-lettered</p></div>
+  <div class="hd"><div class="n">03</div><h2>Stakeholder &amp; public replies.</h2><p class="sub">Scale without feeling form-lettered</p></div>
   <div class="body">
     <p>The trick: AI writes the body; you hand-write two sentences acknowledging <em>their specific</em> case.</p>
     <div class="callout info" style="margin-top:12px;">
   <span class="label">What to ask for</span>
-  <p>Paste the constituent's letter and your position note into the Stakeholder Letters tool. Tell it Rung 2 (considerate official) and ask it to name their specific concern, address their ask directly, and leave a placeholder before the sign-off for your two hand-written sentences.</p>
+  <p>Paste the stakeholder's letter and your position note into the Stakeholder Letters tool. Tell it Rung 2 (considerate official) and ask it to name their specific concern, address their ask directly, and leave a placeholder before the sign-off for your two hand-written sentences.</p>
 </div>
     <div class="callout warn" style="margin-top:20px;">
       <span class="label">Never do this</span>
-      <p>Don't paste constituent data (names, addresses, case numbers, sensitive details) into a consumer AI tool. Redact to "[CONSTITUENT NAME]" and "[ADDRESS]", or use an approved enterprise tool.</p>
+      <p>Don't paste stakeholder data (names, addresses, case numbers, sensitive details) into a consumer AI tool. Redact to "[STAKEHOLDER NAME]" and "[ADDRESS]", or use an approved enterprise tool.</p>
+    </div>
+    <div class="callout info" style="margin-top:20px;">
+      <span class="label">Rung 4 tip</span>
+      <p>The diplomatic-firm letter is the hardest to get right. AI tends to over-soften. Tell the tool to state the disagreement plainly, provide data that supports your position, and specify whether the close should leave the door open or signal finality.</p>
     </div>
   </div>
 </section>
 
-<section class="two-col" style="background: var(--paper-2);">
-  <div class="hd"><div class="n">04</div><h2>The "diplomatic-firm" letter.</h2><p class="sub">Rung 4, the hardest rung</p></div>
-  <div class="body">
-    <p>The letter that records a disagreement, formally, without closing the relationship. AI tends to over-soften. You want clarity without contempt.</p>
-    <div class="callout info" style="margin-top:12px;">
-  <span class="label">What to ask for</span>
-  <p>Tell the tool you need a Rung 4 letter. State the disagreement plainly, provide any data that supports your position, and specify whether the close should leave the door open or signal finality. The tool will give you two alternate closings to choose from.</p>
-</div>
-  </div>
-</section>
-
 <section class="two-col">
-  <div class="hd"><div class="n">05</div><h2>Pre-mail checklist.</h2><p class="sub">A letter goes on the record</p></div>
+  <div class="hd"><div class="n">04</div><h2>Pre-mail checklist.</h2><p class="sub">A letter goes on the record</p></div>
   <div class="body">
     <ul class="check">
       <li><b>Address correct?</b> Name, title, honorific, organisation. AI gets these wrong constantly.</li>
@@ -1356,8 +1340,7 @@ a { color: inherit; }
       <li><b>Signed off by the right person.</b> AI doesn't know your delegation limits. You do.</li>
       <li><b>Copied to the right people.</b> CC line matches the politics.</li>
       <li><b>Legal review if Rung 5.</b> Non-negotiable.</li>
-            <li>Language preference: English, French, or bilingual</li>
-      </ul>
+    </ul>
   </div>
 </section>
 
@@ -2938,7 +2921,7 @@ Draft now.
       <li>Meeting minutes (redact attendees, specific statements, decisions)</li>
       <li>Internal strategy that will be public eventually</li>
       <li>Board papers (heavy redaction, or just don't)</li>
-      <li>Constituent letters (always redact names, addresses, case numbers)</li>
+      <li>Stakeholder letters (always redact names, addresses, case numbers)</li>
     </ul>
   </div>
   <div class="light red">
@@ -2982,7 +2965,7 @@ Draft now.
   <div class="hd"><div class="n">02</div><h2>Five redaction patterns.</h2><p class="sub">Memorise these</p></div>
   <div class="body">
     <ul class="check">
-      <li><b>People:</b> <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[PERSON]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[SENIOR OFFICIAL]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[CONSTITUENT]</code>. Include their role or relationship so tone is right.</li>
+      <li><b>People:</b> <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[PERSON]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[SENIOR OFFICIAL]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[STAKEHOLDER]</code>. Include their role or relationship so tone is right.</li>
       <li><b>Organisations:</b> <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[COMPANY]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[REGULATOR]</code>, <code style="font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 2px 6px; border-radius: 2px;">[NGO]</code>. Include the sector: "[COMPANY, a regional food processor]".</li>
       <li><b>Numbers:</b> round them, or replace with "[X]". "Revenues fell by [X]%" is enough.</li>
       <li><b>Dates:</b> "[DATE]" or relative ("last quarter"). Exact dates can tie to published events.</li>
@@ -3657,7 +3640,7 @@ Draft now.
             <li>Internal drafts (remove names, numbers)</li>
             <li>Stakeholder letters (names, addresses)</li>
             <li>Meeting minutes and positions</li>
-            <li>Constituent correspondence</li>
+            <li>Stakeholder correspondence</li>
           </ul>
         </div>
         <div class="lr red">
