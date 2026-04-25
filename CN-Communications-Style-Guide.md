@@ -84,6 +84,14 @@ Do not start a sentence with "I" when writing in CN's organizational voice. Use 
 ### The golden rule
 If a fact is not provided by the user or confirmed in source material, use **[confirm with SME]** as a placeholder. Never fabricate quotes, statistics, dates, names, titles, locations, or sources. This is the most important rule in this guide. AI invents with confidence. Verify everything.
 
+### Why AI fabricates
+AI generates the most statistically likely next word, not the most accurate one. It does not check a database of facts. When asked about something specific to CN, something recent, or something niche, the "most likely" path often leads somewhere plausible but fictional. This is not occasional. It is structural. Every output must be verified.
+
+### Three-step verification habit
+1. **Provide the facts yourself.** Paste the source material, the data, the names. Don't make AI guess.
+2. **Use [confirm with SME]** for anything you didn't provide. A visible placeholder is always better than a plausible invention.
+3. **Verify before sending.** Every name, number, date, quote, and claim in the output must be checked against reality, not just against the prompt.
+
 ### Speculation
 Do not speculate on cause, restoration time, legal outcomes, investigation findings, or market-sensitive matters. "Investigation is underway. More information will follow." is always the right answer until it isn't.
 
@@ -236,16 +244,128 @@ Use safety-focused closings: "Stay safe," or "Yours in safety," or "Thank you fo
 
 ---
 
-## Confidentiality reminder
+## Confidentiality traffic light
 
-This GPT operates on a non-enterprise ChatGPT account. Do not paste:
+This GPT operates on a non-enterprise ChatGPT account. Use this guide before pasting anything:
+
+### Green — safe to paste
+- Published content (press releases, annual reports, public web pages)
+- Anonymized or fictional examples
+- General questions about writing, formatting, or approach
+- Content the user created themselves (their own drafts, notes, outlines)
+
+### Amber — redact first, then paste
+- Internal emails or memos (redact names, dates, specifics that identify individuals)
+- Stakeholder correspondence (use [STAKEHOLDER NAME], [COMPANY], [ADDRESS])
+- Draft briefing notes (redact sensitive positions, names, case numbers)
+- Operational details (round numbers, use [X] for exact figures)
+
+### Red — never paste
 - Board papers or pre-disclosure financial information
 - Unredacted employee data (names, addresses, case numbers, personnel files)
 - Anything marked Confidential or Restricted
 - Content from active legal proceedings
 - Market-sensitive information before public disclosure
+- Passwords, credentials, or system access details
 
-When in doubt, redact. Use placeholders: [STAKEHOLDER NAME], [COMPANY], [DATE], [FACILITY]. The AI doesn't need to know who. It needs to know the shape.
+When in doubt, redact. The AI doesn't need to know who. It needs to know the shape.
+
+---
+
+## What AI is good for — and what it isn't
+
+### AI is great for
+- First drafts of emails, memos, and updates
+- Translating bullet points into prose
+- Softening or firming a tone
+- Summarizing long documents
+- Brainstorming ideas and angles
+- Generating Q&A and anticipating tough questions
+- Writing in a language you're rusty in
+- "Say this nicely" rewrites
+
+### Stop and write it yourself
+- Condolences or sympathy (see hard stops)
+- Performance or HR conversations
+- Legally binding commitments
+- Anything involving a specific person's confidential situation
+- Apologies on behalf of the organization
+- Real-time operational decisions
+
+### The intern test
+If you wouldn't hand this task to a polite but inexperienced intern and trust the result, don't hand it to AI. AI is that intern: fast, willing, confident, and sometimes wrong in ways that matter.
+
+---
+
+## Channel formatting rules
+
+When adapting content for specific channels, follow these rules:
+
+### Email
+- Include a subject line (sentence case)
+- Standard salutation ("Dear [Name]," or audience-appropriate opener)
+- Structured body with clear purpose, details, and next steps
+- Professional closing with safety-focused salutation for internal comms
+
+### LinkedIn
+- Two to four paragraphs maximum
+- Minimal emoji are acceptable where appropriate
+- Suggest up to three hashtags if they add value
+- First person "I" is acceptable for personal posts; "we" for corporate
+
+### X (Twitter)
+- Maximum 280 characters
+- If a URL will be included, reserve 25 characters for it and write within the remaining 255
+- Emoji acceptable if appropriate
+- Maximum two hashtags if they add value
+
+### Instagram and Facebook
+- Two paragraphs maximum
+- Emoji are encouraged where appropriate
+- Suggest up to three hashtags
+
+### Viva Engage (internal)
+- Conversational, inclusive tone
+- Shorter than LinkedIn
+- Can reference internal context the reader would know
+
+---
+
+## Writing for the ear (spoken content)
+
+When producing speeches, talking points, remarks, or anything that will be read aloud:
+
+- **Cap sentences at 22 words.** Shorter is better for spoken delivery.
+- **Avoid semicolons.** Use periods. A speaker needs breath points.
+- **Use three-beat lists** for rhythm: "safety, service, and growth" — not four or five.
+- **Write for someone standing at a lectern,** not sitting at a desk. If it reads like a memo, rewrite it.
+- **Mark breath points** with slashes or line breaks where the speaker should pause.
+- **Replace any word the speaker hasn't said in a real conversation this month.** If it's not in their vocabulary, it won't sound like them.
+
+---
+
+## Iterating — the follow-up is the skill
+
+One-shot prompts rarely produce the best output. The real skill is the follow-up conversation.
+
+### The four-turn pattern
+1. **Brief:** Give the GPT your request using the Four Questions.
+2. **Redirect:** The first output is rarely right. Say what's wrong specifically: "Too formal," "The opening is weak," "Cut this in half."
+3. **Sharpen:** Get precise: "Make the third paragraph more direct," "The ask should be in the first sentence."
+4. **Final check:** "Read this as [audience]. What would they object to?"
+
+### Follow-up phrases that work
+- "Make it shorter."
+- "Make the tone more direct."
+- "This sounds like AI wrote it. Which phrases are the tell?"
+- "Now rewrite the opening as if you're starting mid-thought."
+- "Cut everything that doesn't serve the ask."
+- "What would a skeptic say about this?"
+- "Rewrite for [different audience]."
+- "The second paragraph is the real opening. Delete everything before it."
+
+### Same chat, not new chat
+ChatGPT remembers the conversation within a single session. Build on what you have rather than starting over. Each follow-up refines the context. A new chat loses everything.
 
 ---
 
