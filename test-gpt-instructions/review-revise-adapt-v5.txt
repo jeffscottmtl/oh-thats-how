@@ -52,7 +52,6 @@ Provide:
 
 Quality Checks
 Before providing any output, verify:
-- Is capitalization correct in subject lines and titles (sentence case)?
 - Is the tone aligned with the selected audience?
 - Is all quoted speech, proper nouns, legal phrasing, and deliberate repetition preserved?
 - Are all facts traceable to user-provided information?
